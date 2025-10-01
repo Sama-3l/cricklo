@@ -60,18 +60,26 @@ dependencies:
   path_provider: ^2.1.5
   connectivity_plus: ^7.0.0
 
-  rename: ^3.1.0
   flutter_native_splash: ^2.4.6
+  flutter_launcher_icons: "^0.14.4"
 
-  flutter_native_splash:
-    image: assets/images/ic_launcher.png
-    color: "#F8D2C5"
+
+# SPLASH LOGO SHOULD BE OFF DIM: 1152x1152 and the logo inside should fit in a circle of 960x960
+# Check the Android 12+ support thing in the documentation
+flutter_native_splash:
+  image: assets/images/splash_logo.png
+  color: "#FFFFFF"
+  icon_background_color: null
+
+  android_12:
+    image: assets/images/splash_logo.png
+    color: "#FFFFFF"
     icon_background_color: null
 
-    android_12:
-      image: assets/images/ic_launcher.png
-      color: "#F8D2C5"
-      icon_background_color: null
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/splash_logo.png"
 
 dev_dependencies:
   flutter_test:
