@@ -1,0 +1,201 @@
+import 'dart:ui';
+import 'package:cricklo/core/utils/constants/theme.dart';
+import 'package:cricklo/core/utils/constants/widget_decider.dart';
+import 'package:cricklo/features/home/presentation/widgets/home_profile_header.dart';
+import 'package:cricklo/features/home/presentation/widgets/section_header.dart';
+import 'package:cricklo/features/login/domain/entities/user_entitiy.dart';
+import 'package:flutter/material.dart';
+
+class HomePage extends StatefulWidget {
+  const HomePage({super.key, this.userEntity});
+
+  final UserEntity? userEntity;
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
+  bool showOptions = false;
+  late final AnimationController _controller;
+  late final Animation<double> _rotation;
+  late final Animation<double> _opacity;
+  late final Animation<Offset> _slide;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+
+    _rotation = Tween<double>(
+      begin: 0,
+      end: 0.125,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+
+    _opacity = Tween<double>(
+      begin: 0,
+      end: 1,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn));
+
+    _slide = Tween<Offset>(
+      begin: const Offset(0, 0.5),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void toggleShowOptions() {
+    setState(() {
+      showOptions = !showOptions;
+    });
+    if (showOptions) {
+      _controller.forward();
+    } else {
+      _controller.reverse();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: ColorsConstants.defaultWhite,
+      body: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: ListView(
+              children: [
+                // if (widget.userEntity != null)
+                const SizedBox(height: 24),
+                HomeProfileHeader(userEntity: widget.userEntity),
+                const SizedBox(height: 24),
+                SectionHeader(title: "Ongoing Matches"),
+                Container(
+                  height: 200,
+                  margin: EdgeInsets.only(top: 12),
+                  padding: EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    color: ColorsConstants.defaultBlack.withValues(alpha: 0.07),
+                  ),
+                  child: Center(
+                    child: Text(
+                      "No Matches Yet",
+                      style: TextStyles.poppinsRegular.copyWith(
+                        fontSize: 16,
+                        letterSpacing: -0.8,
+                        color: ColorsConstants.defaultBlack.withValues(
+                          alpha: 0.5,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                SectionHeader(title: "Live Tournaments"),
+                Container(
+                  height: 200,
+                  margin: EdgeInsets.only(top: 12),
+                  padding: EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    color: ColorsConstants.defaultBlack.withValues(alpha: 0.07),
+                  ),
+                  child: Center(
+                    child: Text(
+                      "No Tournaments Yet",
+                      style: TextStyles.poppinsRegular.copyWith(
+                        fontSize: 16,
+                        letterSpacing: -0.8,
+                        color: ColorsConstants.defaultBlack.withValues(
+                          alpha: 0.5,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 40),
+              ],
+            ),
+          ),
+
+          if (showOptions)
+            Positioned.fill(
+              child: GestureDetector(
+                onTap: () {
+                  toggleShowOptions();
+                },
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                  child: Container(
+                    color: ColorsConstants.defaultBlack.withValues(alpha: 0.2),
+                  ),
+                ),
+              ),
+            ),
+
+          Positioned(
+            bottom: 24,
+            right: 16,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                if (showOptions) ...[
+                  WidgetDecider.buildOptionButton(
+                    "Create Match",
+                    () {},
+                    _slide,
+                    _opacity,
+                  ),
+                  WidgetDecider.buildOptionButton(
+                    "Create Team",
+                    () {},
+                    _slide,
+                    _opacity,
+                  ),
+                  WidgetDecider.buildOptionButton(
+                    "Create Tournament",
+                    () {},
+                    _slide,
+                    _opacity,
+                  ),
+                  const SizedBox(height: 12),
+                ],
+
+                FloatingActionButton(
+                  backgroundColor: ColorsConstants.accentOrange,
+                  onPressed: () => toggleShowOptions(),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadiusGeometry.circular(40),
+                  ),
+                  child: AnimatedBuilder(
+                    builder: (context, child) {
+                      return Transform.rotate(
+                        angle: _rotation.value * 2 * 3.141592,
+                        child: Icon(
+                          Icons.add,
+                          color: ColorsConstants.defaultWhite,
+                        ),
+                      );
+                    },
+                    animation: _rotation,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
