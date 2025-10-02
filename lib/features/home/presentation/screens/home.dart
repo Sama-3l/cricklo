@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/core/utils/constants/widget_decider.dart';
 import 'package:cricklo/features/home/presentation/widgets/home_profile_header.dart';
+import 'package:cricklo/features/home/presentation/widgets/match_tile.dart';
 import 'package:cricklo/features/home/presentation/widgets/section_header.dart';
 import 'package:cricklo/features/login/domain/entities/user_entitiy.dart';
 import 'package:flutter/material.dart';
@@ -80,47 +81,46 @@ class _HomePageState extends State<HomePage>
                 const SizedBox(height: 24),
                 SectionHeader(title: "Ongoing Matches"),
                 Container(
-                  height: 200,
+                  // height: 200,
                   margin: EdgeInsets.only(top: 12),
-                  padding: EdgeInsets.all(16),
+                  // padding: EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
-                    color: ColorsConstants.defaultBlack.withValues(alpha: 0.07),
+                    // color: ColorsConstants.defaultBlack.withValues(alpha: 0.07),
                   ),
-                  child: Center(
-                    child: Text(
-                      "No Matches Yet",
-                      style: TextStyles.poppinsRegular.copyWith(
-                        fontSize: 16,
-                        letterSpacing: -0.8,
-                        color: ColorsConstants.defaultBlack.withValues(
-                          alpha: 0.5,
-                        ),
-                      ),
-                    ),
+                  child: MatchTile(
+                    team1Name: "Super Strikers",
+                    team1Image: "assets/images/team_1.png",
+                    team2Name: "Delhi Capitals",
+                    team2Image: "assets/images/team_2.png",
+                    matchStatus: "live",
+                    stats: "91-0",
                   ),
                 ),
                 const SizedBox(height: 24),
                 SectionHeader(title: "Live Tournaments"),
                 Container(
-                  height: 200,
+                  // height: 200,
                   margin: EdgeInsets.only(top: 12),
-                  padding: EdgeInsets.all(16),
+                  // padding: EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
                     color: ColorsConstants.defaultBlack.withValues(alpha: 0.07),
                   ),
                   child: Center(
-                    child: Text(
-                      "No Tournaments Yet",
-                      style: TextStyles.poppinsRegular.copyWith(
-                        fontSize: 16,
-                        letterSpacing: -0.8,
-                        color: ColorsConstants.defaultBlack.withValues(
-                          alpha: 0.5,
-                        ),
-                      ),
+                    child: Image.asset(
+                      "assets/images/tournament_Dummy_Image.png",
                     ),
+                    // child: Text(
+                    //   "No Tournaments Yet",
+                    //   style: TextStyles.poppinsRegular.copyWith(
+                    //     fontSize: 16,
+                    //     letterSpacing: -0.8,
+                    //     color: ColorsConstants.defaultBlack.withValues(
+                    //       alpha: 0.5,
+                    //     ),
+                    //   ),
+                    // ),
                   ),
                 ),
                 const SizedBox(height: 40),
