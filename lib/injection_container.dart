@@ -10,7 +10,7 @@ import 'package:cricklo/features/login/domain/repo/auth_repo.dart';
 import 'package:cricklo/features/login/presentation/blocs/cubits/LoginPageCubit/login_page_cubit.dart';
 import 'package:cricklo/features/login/presentation/blocs/cubits/OtpPageCubit/otp_page_cubit.dart';
 import 'package:cricklo/features/login/presentation/blocs/cubits/SetPinCubit/set_pin_cubit.dart';
-import 'package:cricklo/features/login/presentation/blocs/cubits/cubit/onboarding_page_cubit.dart';
+import 'package:cricklo/features/login/presentation/blocs/cubits/OnboardingPageCubit/onboarding_page_cubit.dart';
 import 'package:cricklo/features/mainapp/data/datasource/main_app_remote_datasource.dart';
 import 'package:cricklo/features/mainapp/data/repo/main_app_repo_impl.dart';
 import 'package:cricklo/features/mainapp/data/usecases/get_current_user_usecase.dart';

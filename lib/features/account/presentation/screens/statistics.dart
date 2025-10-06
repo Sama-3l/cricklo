@@ -1,7 +1,6 @@
-import 'package:cricklo/core/utils/constants/theme.dart';
-import 'package:cricklo/features/account/presentation/blocs/cubits/cubit/account_page_cubit.dart';
-import 'package:cricklo/features/account/presentation/widgets/stat_tab.dart';
+import 'package:cricklo/features/account/presentation/blocs/cubits/AccountPageCubit/account_page_cubit.dart';
 import 'package:cricklo/features/account/presentation/widgets/stats_table.dart';
+import 'package:cricklo/features/account/presentation/widgets/stats_table_filter_tab_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -10,68 +9,19 @@ class StatisticsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<AccountCubit>();
     final state = context.read<AccountCubit>().state;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0).copyWith(top: 24),
       child: Column(
         children: [
           // Sub tabs
-          Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: ColorsConstants.accentOrange),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                StatTab(
-                  label: 'Bat',
-                  selected: state.selectedStatisticsTab == 0,
-                  index: 0,
-                ),
-                Container(
-                  color: ColorsConstants.accentOrange,
-                  width:
-                      state.selectedStatisticsTab == 0 ||
-                          state.selectedStatisticsTab == 1
-                      ? 0
-                      : 0.5,
-                  height: 16,
-                ),
-                StatTab(
-                  label: 'Bowl',
-                  selected: state.selectedStatisticsTab == 1,
-                  index: 1,
-                ),
-                Container(
-                  color: ColorsConstants.accentOrange,
-                  width:
-                      state.selectedStatisticsTab == 1 ||
-                          state.selectedStatisticsTab == 2
-                      ? 0
-                      : 0.5,
-                  height: 16,
-                ),
-                StatTab(
-                  label: 'Field',
-                  selected: state.selectedStatisticsTab == 2,
-                  index: 2,
-                ),
-                Container(
-                  color: ColorsConstants.accentOrange,
-                  width:
-                      state.selectedStatisticsTab == 2 ||
-                          state.selectedStatisticsTab == 3
-                      ? 0
-                      : 0.5,
-                  height: 16,
-                ),
-                StatTab(
-                  label: 'Match-wise',
-                  selected: state.selectedStatisticsTab == 3,
-                  index: 3,
-                ),
-              ],
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: StatsTableFilterTabBar(
+              selectedTab: state.selectedStatisticsTab,
+              selectTab: (index) => cubit.changeStatisticsTab(index),
+              options: ["Bat", "Bowl", "Field", "Match-wise"],
             ),
           ),
 

@@ -5,7 +5,9 @@ import 'package:cricklo/features/home/presentation/widgets/home_profile_header.d
 import 'package:cricklo/features/home/presentation/widgets/match_tile.dart';
 import 'package:cricklo/features/home/presentation/widgets/section_header.dart';
 import 'package:cricklo/features/login/domain/entities/user_entitiy.dart';
+import 'package:cricklo/routes/app_route_constants.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, this.userEntity});
@@ -23,6 +25,8 @@ class _HomePageState extends State<HomePage>
   late final Animation<double> _rotation;
   late final Animation<double> _opacity;
   late final Animation<Offset> _slide;
+  final matches = [];
+  final tournaments = [];
 
   @override
   void initState() {
@@ -77,52 +81,105 @@ class _HomePageState extends State<HomePage>
               children: [
                 // if (widget.userEntity != null)
                 const SizedBox(height: 24),
-                HomeProfileHeader(userEntity: widget.userEntity),
-                const SizedBox(height: 24),
-                SectionHeader(title: "Ongoing Matches"),
-                Container(
-                  // height: 200,
-                  margin: EdgeInsets.only(top: 12),
-                  // padding: EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    // color: ColorsConstants.defaultBlack.withValues(alpha: 0.07),
-                  ),
-                  child: MatchTile(
-                    team1Name: "Super Strikers",
-                    team1Image: "assets/images/team_1.png",
-                    team2Name: "Delhi Capitals",
-                    team2Image: "assets/images/team_2.png",
-                    matchStatus: "live",
-                    stats: "91-0",
-                  ),
-                ),
+                SectionHeader(title: "Matches"),
+                matches.isEmpty
+                    ? Container(
+                        height: 200,
+                        margin: EdgeInsets.only(top: 12),
+                        padding: EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          color: ColorsConstants.defaultBlack.withValues(
+                            alpha: 0.07,
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            "No Matches Yet",
+                            style: TextStyles.poppinsRegular.copyWith(
+                              fontSize: 16,
+                              letterSpacing: -0.8,
+                              color: ColorsConstants.defaultBlack.withValues(
+                                alpha: 0.5,
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    : Container(
+                        // height: 200,
+                        margin: EdgeInsets.only(top: 12),
+                        // padding: EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          // color: ColorsConstants.defaultBlack.withValues(alpha: 0.07),
+                        ),
+                        child: MatchTile(
+                          team1Name: "Super Strikers",
+                          team1Image: "assets/images/team_1.png",
+                          team2Name: "Delhi Capitals",
+                          team2Image: "assets/images/team_2.png",
+                          matchStatus: "live",
+                          stats: "91-0",
+                        ),
+                      ),
+                if (widget.userEntity != null) ...[
+                  const SizedBox(height: 24),
+                  HomeProfileHeader(userEntity: widget.userEntity),
+                ],
+
                 const SizedBox(height: 24),
                 SectionHeader(title: "Live Tournaments"),
-                Container(
-                  // height: 200,
-                  margin: EdgeInsets.only(top: 12),
-                  // padding: EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    color: ColorsConstants.defaultBlack.withValues(alpha: 0.07),
-                  ),
-                  child: Center(
-                    child: Image.asset(
-                      "assets/images/tournament_Dummy_Image.png",
-                    ),
-                    // child: Text(
-                    //   "No Tournaments Yet",
-                    //   style: TextStyles.poppinsRegular.copyWith(
-                    //     fontSize: 16,
-                    //     letterSpacing: -0.8,
-                    //     color: ColorsConstants.defaultBlack.withValues(
-                    //       alpha: 0.5,
-                    //     ),
-                    //   ),
-                    // ),
-                  ),
-                ),
+                tournaments.isEmpty
+                    ? Container(
+                        height: 200,
+                        margin: EdgeInsets.only(top: 12),
+                        padding: EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          color: ColorsConstants.defaultBlack.withValues(
+                            alpha: 0.07,
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            "No Tournaments Yet",
+                            style: TextStyles.poppinsRegular.copyWith(
+                              fontSize: 16,
+                              letterSpacing: -0.8,
+                              color: ColorsConstants.defaultBlack.withValues(
+                                alpha: 0.5,
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    : Container(
+                        // height: 200,
+                        margin: EdgeInsets.only(top: 12),
+                        // padding: EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          color: ColorsConstants.defaultBlack.withValues(
+                            alpha: 0.07,
+                          ),
+                        ),
+                        child: Center(
+                          child: Image.asset(
+                            "assets/images/tournament_Dummy_Image.png",
+                          ),
+                          // child: Text(
+                          //   "No Tournaments Yet",
+                          //   style: TextStyles.poppinsRegular.copyWith(
+                          //     fontSize: 16,
+                          //     letterSpacing: -0.8,
+                          //     color: ColorsConstants.defaultBlack.withValues(
+                          //       alpha: 0.5,
+                          //     ),
+                          //   ),
+                          // ),
+                        ),
+                      ),
                 const SizedBox(height: 40),
               ],
             ),
@@ -159,7 +216,37 @@ class _HomePageState extends State<HomePage>
                   ),
                   WidgetDecider.buildOptionButton(
                     "Create Team",
-                    () {},
+                    () async {
+                      toggleShowOptions();
+                      final done = await GoRouter.of(
+                        context,
+                      ).pushNamed(Routes.createTeam, extra: widget.userEntity);
+                      if (done != null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            behavior: SnackBarBehavior.floating,
+                            backgroundColor: ColorsConstants.defaultWhite,
+                            shape: RoundedRectangleBorder(
+                              side: BorderSide(
+                                color: ColorsConstants.accentOrange,
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadiusGeometry.circular(8),
+                            ),
+                            content: Center(
+                              child: Text(
+                                "Invites sent to all players",
+                                style: TextStyles.poppinsSemiBold.copyWith(
+                                  fontSize: 12,
+                                  color: ColorsConstants.accentOrange,
+                                  letterSpacing: -0.5,
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+                    },
                     _slide,
                     _opacity,
                   ),

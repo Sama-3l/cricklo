@@ -17,3 +17,14 @@ enum BowlerType {
   final String title;
   const BowlerType(this.title);
 }
+
+enum TeamRole {
+  invited("Invited"),
+  member("Member"),
+  captain("Captain"),
+  active("Active Squad"),
+  sub("Substitute");
+
+  final String roleTitle;
+  const TeamRole(this.roleTitle);
+}

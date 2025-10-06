@@ -2,9 +2,16 @@ import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:flutter/material.dart';
 
 class StatsTable extends StatelessWidget {
-  const StatsTable({super.key, required this.stats});
+  const StatsTable({
+    super.key,
+    required this.stats,
+    this.horizontalLine = false,
+    this.verticalLine = true,
+  });
 
   final Map<String, List<String>> stats;
+  final bool horizontalLine;
+  final bool verticalLine;
 
   @override
   Widget build(BuildContext context) {
@@ -21,15 +28,16 @@ class StatsTable extends StatelessWidget {
         },
 
         border: TableBorder(
-          horizontalInside: BorderSide.none,
+          horizontalInside: horizontalLine
+              ? BorderSide(color: ColorsConstants.onSurfaceGrey, width: 0.5)
+              : BorderSide.none,
           top: BorderSide.none,
           bottom: BorderSide.none,
           left: BorderSide.none,
           right: BorderSide.none,
-          verticalInside: BorderSide(
-            color: ColorsConstants.onSurfaceGrey,
-            width: 0.5,
-          ),
+          verticalInside: verticalLine
+              ? BorderSide(color: ColorsConstants.onSurfaceGrey, width: 0.5)
+              : BorderSide.none,
         ),
         children: [
           // Header row

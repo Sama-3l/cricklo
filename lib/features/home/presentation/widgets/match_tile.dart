@@ -8,6 +8,7 @@ class MatchTile extends StatelessWidget {
   final String team2Image;
   final String matchStatus; // e.g., "LIVE"
   final String stats; // e.g., "India 120/3 (15 overs)"
+  final bool live;
 
   const MatchTile({
     super.key,
@@ -17,6 +18,7 @@ class MatchTile extends StatelessWidget {
     required this.team2Image,
     required this.matchStatus,
     required this.stats,
+    this.live = false,
   });
 
   @override
@@ -33,6 +35,7 @@ class MatchTile extends StatelessWidget {
             // Top row: Team images + VS + LIVE
             if (matchStatus.toUpperCase() == "LIVE")
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     "Dummy Match",
@@ -45,24 +48,33 @@ class MatchTile extends StatelessWidget {
                     ),
                   ),
                   const Spacer(),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 4,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.red,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      "LIVE",
-                      style: TextStyles.poppinsSemiBold.copyWith(
-                        color: ColorsConstants.defaultWhite,
-                        fontSize: 12,
-                        letterSpacing: 0.5,
-                      ),
-                    ),
-                  ),
+                  live
+                      ? Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(
+                            "LIVE",
+                            style: TextStyles.poppinsSemiBold.copyWith(
+                              color: ColorsConstants.defaultWhite,
+                              fontSize: 12,
+                              letterSpacing: 0.5,
+                            ),
+                          ),
+                        )
+                      : Text(
+                          "1st October, 2025",
+                          style: TextStyles.poppinsSemiBold.copyWith(
+                            color: ColorsConstants.defaultBlack,
+                            fontSize: 12,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
                 ],
               ),
             const SizedBox(height: 12),

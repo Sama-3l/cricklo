@@ -1,12 +1,17 @@
+import 'package:cricklo/core/utils/constants/dummy_data.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
-import 'package:cricklo/features/account/presentation/blocs/cubits/cubit/account_page_cubit.dart';
+import 'package:cricklo/features/account/presentation/blocs/cubits/AccountPageCubit/account_page_cubit.dart';
 import 'package:cricklo/features/account/presentation/screens/player_overview.dart';
 import 'package:cricklo/features/account/presentation/screens/statistics.dart';
+import 'package:cricklo/features/account/presentation/screens/teams_grid.dart';
+import 'package:cricklo/features/account/presentation/widgets/profile_tab_bar.dart';
 import 'package:cricklo/features/login/domain/entities/user_entitiy.dart';
+import 'package:cricklo/routes/app_route_constants.dart';
 
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class AccountPage extends StatelessWidget {
   const AccountPage({super.key, required this.userEntity});
@@ -25,8 +30,8 @@ class AccountPage extends StatelessWidget {
           final mainTabs = [
             'Player Overview',
             'Statistics',
-            'Matches',
             'Teams',
+            'Matches',
             'Tournaments',
           ];
           if (state.userEntity == null) {
@@ -46,48 +51,10 @@ class AccountPage extends StatelessWidget {
             padding: const EdgeInsets.only(top: 24.0),
             child: Column(
               children: [
-                SizedBox(
-                  height: 40,
-                  child: ListView.separated(
-                    separatorBuilder: (context, index) =>
-                        const SizedBox(width: 8),
-                    scrollDirection: Axis.horizontal,
-                    itemCount: mainTabs.length,
-                    itemBuilder: (context, index) {
-                      final selected = state.selectedMainTab == index;
-                      return Padding(
-                        padding: EdgeInsets.only(left: index == 0 ? 8.0 : 0),
-                        child: InkWell(
-                          onTap: () => cubit.changeMainTab(index),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            decoration: BoxDecoration(
-                              color: selected
-                                  ? ColorsConstants.accentOrange
-                                  : ColorsConstants.defaultBlack.withValues(
-                                      alpha: 0.3,
-                                    ),
-                              borderRadius: BorderRadius.circular(32),
-                            ),
-                            child: Center(
-                              child: Text(
-                                mainTabs[index],
-                                style:
-                                    (selected
-                                            ? TextStyles.poppinsBold
-                                            : TextStyles.poppinsRegular)
-                                        .copyWith(
-                                          color: ColorsConstants.defaultWhite,
-                                          fontSize: 12,
-                                          letterSpacing: -0.5,
-                                        ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
+                ProfileTabBar(
+                  onTap: (index) => cubit.changeMainTab(index),
+                  mainTabs: mainTabs,
+                  selectedMainTab: state.selectedMainTab,
                 ),
 
                 // CONTENT
@@ -100,8 +67,13 @@ class AccountPage extends StatelessWidget {
 
                       StatisticsPage(),
 
+                      TeamsGrid(
+                        teams: [dummyTeam, dummyTeam, dummyTeam],
+                        onTap: (team) => GoRouter.of(
+                          context,
+                        ).pushNamed(Routes.teamPage, extra: team),
+                      ),
                       const Center(child: Text("Matches Page")),
-                      const Center(child: Text("Teams Page")),
                       const Center(child: Text("Tournaments Page")),
                     ],
                   ),

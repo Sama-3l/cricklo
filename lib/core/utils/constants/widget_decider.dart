@@ -1,5 +1,8 @@
 import 'package:cricklo/core/utils/common/primary_button.dart';
+import 'package:cricklo/core/utils/constants/enums.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
+import 'package:cricklo/features/teams/domain/entities/player_entity.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class WidgetDecider {
@@ -76,6 +79,432 @@ class WidgetDecider {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  static Widget buildPlayerList(
+    List<PlayerEntity> players, {
+    bool showInvited = false,
+  }) {
+    final invited = players
+        .where((p) => p.teamRole == TeamRole.invited)
+        .toList();
+
+    final nonInvited = players
+        .where((p) => p.teamRole != TeamRole.invited)
+        .toList();
+
+    final effectiveList = showInvited ? invited : nonInvited;
+
+    final captain = !showInvited && nonInvited.any((p) => p.captain)
+        ? nonInvited.firstWhere((p) => p.captain)
+        : null;
+
+    final remaining = !showInvited
+        ? nonInvited
+              .where((p) => captain == null || p.id != captain.id)
+              .toList()
+        : invited;
+
+    final batters = remaining
+        .where((p) => p.playerType == PlayerType.batter)
+        .toList();
+    final bowlers = remaining
+        .where((p) => p.playerType == PlayerType.bowler)
+        .toList();
+    final allRounders = remaining
+        .where((p) => p.playerType == PlayerType.allRounder)
+        .toList();
+
+    if (effectiveList.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              showInvited ? "No Players Added" : "No Team Members Yet",
+              style: TextStyles.poppinsSemiBold.copyWith(
+                fontSize: 16,
+                letterSpacing: -0.8,
+                color: ColorsConstants.defaultBlack.withValues(alpha: 0.5),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    Widget buildSection(String title, List<PlayerEntity> sectionPlayers) {
+      if (sectionPlayers.isEmpty) return const SizedBox.shrink();
+
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Text(
+                  title,
+                  style: TextStyles.poppinsBold.copyWith(
+                    fontSize: 16,
+                    color: ColorsConstants.defaultBlack,
+                    letterSpacing: -0.8,
+                  ),
+                ),
+                const Spacer(),
+                Text(
+                  "${sectionPlayers.length}",
+                  style: TextStyles.poppinsSemiBold.copyWith(
+                    fontSize: 16,
+                    color: ColorsConstants.defaultBlack,
+                    letterSpacing: -0.8,
+                  ),
+                ),
+              ],
+            ),
+            const Divider(thickness: 1, height: 12),
+
+            Column(
+              children: sectionPlayers.map((p) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 24,
+                        backgroundColor: ColorsConstants.accentOrange
+                            .withValues(alpha: 0.2),
+                        child: Icon(
+                          CupertinoIcons.person_fill,
+                          size: 16,
+                          color: ColorsConstants.defaultBlack,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "${p.name} ${p.captain ? "(C)" : ""}",
+                              style: TextStyles.poppinsMedium.copyWith(
+                                fontSize: 16,
+                                color: ColorsConstants.defaultBlack,
+                                letterSpacing: -0.8,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              p.playerType == PlayerType.batter
+                                  ? "${p.batterType?.title ?? ""} Batsman"
+                                  : p.playerType == PlayerType.bowler
+                                  ? p.bowlerType?.title ?? "Bowler"
+                                  : "${p.batterType?.title ?? ""} • ${p.bowlerType?.title ?? ""}",
+                              style: TextStyles.poppinsRegular.copyWith(
+                                fontSize: 10,
+                                color: ColorsConstants.defaultBlack,
+                                letterSpacing: -0.4,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      Text(
+                        p.playerId,
+                        style: TextStyles.poppinsMedium.copyWith(
+                          fontSize: 12,
+                          color: ColorsConstants.defaultBlack,
+                          letterSpacing: -0.5,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }).toList(),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 32.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      showInvited ? "Total Invites" : "Total Players",
+                      style: TextStyles.poppinsBold.copyWith(
+                        fontSize: 20,
+                        color: ColorsConstants.defaultBlack,
+                        letterSpacing: -1,
+                      ),
+                    ),
+                    const Spacer(),
+                    Text(
+                      "${effectiveList.length}",
+                      style: TextStyles.poppinsSemiBold.copyWith(
+                        fontSize: 20,
+                        color: ColorsConstants.defaultBlack,
+                        letterSpacing: -1,
+                      ),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 4, bottom: 12.0),
+                  child: const Divider(thickness: 1, height: 1),
+                ),
+              ],
+            ),
+          ),
+
+          if (!showInvited && captain != null)
+            buildSection("Captain", [captain]),
+
+          if (batters.isNotEmpty) buildSection("Batsmen", batters),
+          if (bowlers.isNotEmpty) buildSection("Bowlers", bowlers),
+          if (allRounders.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 48.0),
+              child: buildSection("All-Rounders", allRounders),
+            ),
+        ],
+      ),
+    );
+  }
+
+  static Widget buildAlphabeticalList(List<PlayerEntity> players) {
+    players = players.where((e) => e.teamRole != TeamRole.invited).toList();
+    if (players.isEmpty) {
+      return Center(
+        child: Text(
+          "No Team Members Yet",
+          style: TextStyles.poppinsSemiBold.copyWith(
+            fontSize: 16,
+            letterSpacing: -0.8,
+            color: ColorsConstants.defaultBlack.withValues(alpha: 0.5),
+          ),
+        ),
+      );
+    }
+
+    final sorted = [...players]..sort((a, b) => a.name.compareTo(b.name));
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 32.0),
+          child: Row(
+            children: [
+              Text(
+                "All Players (A–Z)",
+                style: TextStyles.poppinsBold.copyWith(
+                  fontSize: 20,
+                  color: ColorsConstants.defaultBlack,
+                  letterSpacing: -1,
+                ),
+              ),
+              const Spacer(),
+              Text(
+                "${sorted.length}",
+                style: TextStyles.poppinsSemiBold.copyWith(
+                  fontSize: 20,
+                  letterSpacing: -1,
+                  color: ColorsConstants.defaultBlack,
+                ),
+              ),
+            ],
+          ),
+        ),
+        const Divider(thickness: 1, height: 12),
+
+        Column(
+          children: sorted.map((p) {
+            return _playerRow(p);
+          }).toList(),
+        ),
+      ],
+    );
+  }
+
+  static Widget buildActivePlayersList(List<PlayerEntity> players) {
+    players = players.where((e) => e.teamRole != TeamRole.invited).toList();
+
+    if (players.isEmpty) {
+      return Center(
+        child: Text(
+          "No Team Members Yet",
+          style: TextStyles.poppinsSemiBold.copyWith(
+            fontSize: 16,
+            color: ColorsConstants.defaultBlack.withValues(alpha: 0.5),
+            letterSpacing: -0.8,
+          ),
+        ),
+      );
+    }
+
+    final captain = players.any((p) => p.captain)
+        ? players.firstWhere((p) => p.captain)
+        : null;
+
+    final withoutCaptain = captain != null
+        ? players.where((p) => p.id != captain.id).toList()
+        : players;
+
+    final batters = withoutCaptain
+        .where((p) => p.playerType == PlayerType.batter)
+        .toList();
+    final bowlers = withoutCaptain
+        .where((p) => p.playerType == PlayerType.bowler)
+        .toList();
+    final allRounders = withoutCaptain
+        .where((p) => p.playerType == PlayerType.allRounder)
+        .toList();
+    final substitutes = withoutCaptain
+        .where((p) => p.teamRole == TeamRole.sub)
+        .toList();
+
+    Widget buildSection(String title, List<PlayerEntity> list) {
+      if (list.isEmpty) return const SizedBox.shrink();
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Text(
+                  title,
+                  style: TextStyles.poppinsBold.copyWith(
+                    fontSize: 16,
+                    color: ColorsConstants.defaultBlack,
+                  ),
+                ),
+                const Spacer(),
+                Text(
+                  "${list.length}",
+                  style: TextStyles.poppinsSemiBold.copyWith(
+                    fontSize: 16,
+                    color: ColorsConstants.defaultBlack,
+                  ),
+                ),
+              ],
+            ),
+            const Divider(thickness: 1, height: 12),
+            Column(children: list.map((p) => _playerRow(p)).toList()),
+          ],
+        ),
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 32),
+          child: Row(
+            children: [
+              Text(
+                "Active Players",
+                style: TextStyles.poppinsBold.copyWith(
+                  fontSize: 20,
+                  letterSpacing: -1,
+                  color: ColorsConstants.defaultBlack,
+                ),
+              ),
+              const Spacer(),
+              Text(
+                "${players.length}",
+                style: TextStyles.poppinsSemiBold.copyWith(
+                  fontSize: 20,
+                  letterSpacing: -1,
+                  color: ColorsConstants.defaultBlack,
+                ),
+              ),
+            ],
+          ),
+        ),
+        const Divider(thickness: 1, height: 12),
+
+        if (captain != null) buildSection("Captain", [captain]),
+
+        if (batters.isNotEmpty) buildSection("Batsmen", batters),
+        if (bowlers.isNotEmpty) buildSection("Bowlers", bowlers),
+        if (allRounders.isNotEmpty) buildSection("All-Rounders", allRounders),
+
+        if (substitutes.isNotEmpty) buildSection("Substitutes", substitutes),
+      ],
+    );
+  }
+
+  static Widget _playerRow(PlayerEntity p) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        children: [
+          CircleAvatar(
+            radius: 24,
+            backgroundColor: ColorsConstants.accentOrange.withValues(
+              alpha: 0.2,
+            ),
+            child: Icon(
+              CupertinoIcons.person_fill,
+              size: 16,
+              color: ColorsConstants.defaultBlack,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "${p.name} ${p.captain ? "(C)" : ""}",
+                  style: TextStyles.poppinsMedium.copyWith(
+                    fontSize: 16,
+                    letterSpacing: -0.8,
+                    color: ColorsConstants.defaultBlack,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  p.playerType == PlayerType.batter
+                      ? "${p.batterType?.title ?? ""} Batsman"
+                      : p.playerType == PlayerType.bowler
+                      ? p.bowlerType?.title ?? "Bowler"
+                      : "${p.batterType?.title ?? ""} • ${p.bowlerType?.title ?? ""}",
+                  style: TextStyles.poppinsRegular.copyWith(
+                    fontSize: 10,
+                    letterSpacing: -0.2,
+                    color: ColorsConstants.defaultBlack,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Text(
+            p.playerId,
+            style: TextStyles.poppinsMedium.copyWith(
+              fontSize: 12,
+              letterSpacing: -0.5,
+              color: ColorsConstants.defaultBlack,
+            ),
+          ),
+        ],
       ),
     );
   }

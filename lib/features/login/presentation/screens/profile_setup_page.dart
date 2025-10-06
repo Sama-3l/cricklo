@@ -145,6 +145,8 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
                       area: area.text,
                       city: city.text,
                       state: state.text,
+                      lat: 0,
+                      lng: 0,
                     ),
                   ),
                 );

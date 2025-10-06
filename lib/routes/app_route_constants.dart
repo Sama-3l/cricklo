@@ -6,6 +6,10 @@ class Routes {
   static const onboardingScreenOne = "/onboarding-screen-one";
   static const onboardingScreenTwo = "/onboarding-screen-two";
   static const setPin = "/setPin";
+
   static const mainAppScreen = "/";
-  static const tripScreen = "/trip";
+
+  static const createTeam = "/create-team";
+  static const addPlayersToTeam = "/add-players-to-team";
+  static const teamPage = "/teamPage";
 }

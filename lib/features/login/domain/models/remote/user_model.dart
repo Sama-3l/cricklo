@@ -113,7 +113,8 @@ class UserModel {
       area: '', // no area info from API
       city: '',
       state: '',
-      coordinates: null,
+      lat: 0,
+      lng: 0,
     );
 
     // PlayerType

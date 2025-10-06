@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 class InputField extends StatefulWidget {
   final String? title;
   final String hintText;
+  final bool readOnly;
+  final Function()? onTap;
   final FocusNode? focusNode;
   final Function(String currency)? onCurrencyChange;
   final String? selectedCurrency;
@@ -27,6 +29,8 @@ class InputField extends StatefulWidget {
   const InputField({
     super.key,
     this.onChanged,
+    this.readOnly = false,
+    this.onTap,
     this.title,
     this.errorText,
     this.hintText = "Samael",
@@ -83,6 +87,8 @@ class _InputFieldState extends State<InputField> with TickerProviderStateMixin {
             children: [
               Expanded(
                 child: TextField(
+                  readOnly: widget.readOnly,
+                  onTap: widget.onTap,
                   onChanged: widget.onChanged,
                   onSubmitted: widget.onSubmitted,
                   focusNode: widget.focusNode,

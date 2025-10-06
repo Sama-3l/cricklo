@@ -30,6 +30,7 @@ abstract class ColorsConstants {
   static Color get onSurfaceGrey => const Color(0xFF999999);
   static Color get surfaceOrange => const Color(0xFFFFDCD0);
   static Color get onSurfaceOrange => const Color(0xFFF4E6E3);
+  static Color get correctGreen => const Color(0xff22F662);
 }
 
 class TextStyles {
