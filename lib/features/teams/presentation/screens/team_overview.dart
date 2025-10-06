@@ -25,60 +25,90 @@ class _TeamOverviewState extends State<TeamOverview> {
   Widget build(BuildContext context) {
     // final state = context.read<TeamPageCubit>().state;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(top: 24),
+      padding: const EdgeInsets.only(top: 24),
       child: ListView(
         children: [
           Column(
             children: [
-              ProfileHeaderInformation(team: widget.team),
+              InkWell(
+                onTap: () => {},
+                child: Container(
+                  height: 150,
+                  width: double.infinity,
+                  color: ColorsConstants.accentOrange.withValues(alpha: 0.2),
+                  child: Center(
+                    child: Text(
+                      "Team Banner Here",
+                      style: TextStyles.poppinsSemiBold.copyWith(
+                        fontSize: 16,
+                        letterSpacing: -0.8,
+                        color: ColorsConstants.defaultBlack,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                ).copyWith(top: 16),
+                child: ProfileHeaderInformation(team: widget.team),
+              ),
               const SizedBox(height: 16),
-              Row(
-                children: [
-                  Expanded(
-                    child: PrimaryButton(
-                      padding: EdgeInsets.symmetric(vertical: 12),
-                      disabled: false,
-                      onPress: () {},
-                      noShadow: true,
-                      radius: 16,
-                      child: Text(
-                        "Follow Team",
-                        style: TextStyles.poppinsSemiBold.copyWith(
-                          fontSize: 10,
-                          letterSpacing: -0.5,
-                          color: ColorsConstants.defaultWhite,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: PrimaryButton(
+                        padding: EdgeInsets.symmetric(vertical: 12),
+                        disabled: false,
+                        onPress: () {},
+                        noShadow: true,
+                        radius: 16,
+                        child: Text(
+                          "Follow Team",
+                          style: TextStyles.poppinsSemiBold.copyWith(
+                            fontSize: 10,
+                            letterSpacing: -0.5,
+                            color: ColorsConstants.defaultWhite,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 4),
-                  Expanded(
-                    child: PrimaryButton(
-                      padding: EdgeInsets.symmetric(vertical: 12),
-                      color: ColorsConstants.urlBlue,
-                      disabled: false,
-                      onPress: () {},
-                      noShadow: true,
-                      radius: 16,
-                      child: Text(
-                        "Share Team Profile",
-                        style: TextStyles.poppinsSemiBold.copyWith(
-                          fontSize: 10,
-                          letterSpacing: -0.5,
-                          color: ColorsConstants.defaultWhite,
+                    const SizedBox(width: 4),
+                    Expanded(
+                      child: PrimaryButton(
+                        padding: EdgeInsets.symmetric(vertical: 12),
+                        color: ColorsConstants.urlBlue,
+                        disabled: false,
+                        onPress: () {},
+                        noShadow: true,
+                        radius: 16,
+                        child: Text(
+                          "Share Team Profile",
+                          style: TextStyles.poppinsSemiBold.copyWith(
+                            fontSize: 10,
+                            letterSpacing: -0.5,
+                            color: ColorsConstants.defaultWhite,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ],
           ),
           const SizedBox(height: 24),
-          SectionHeader(title: "Win Loss Ratio", showIcon: false),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: SectionHeader(title: "Win Loss Ratio", showIcon: false),
+          ),
           const SizedBox(height: 16),
           Container(
             padding: EdgeInsets.all(16),
+            margin: const EdgeInsets.symmetric(horizontal: 16.0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
               color: ColorsConstants.defaultBlack.withValues(alpha: 0.07),
@@ -197,10 +227,14 @@ class _TeamOverviewState extends State<TeamOverview> {
             ),
           ),
           const SizedBox(height: 24),
-          SectionHeader(title: "Top Performers", showIcon: false),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: SectionHeader(title: "Top Performers", showIcon: false),
+          ),
           const SizedBox(height: 16),
           Container(
             padding: EdgeInsets.all(8),
+            margin: const EdgeInsets.symmetric(horizontal: 16.0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
               color: ColorsConstants.defaultBlack.withValues(alpha: 0.07),
@@ -263,11 +297,20 @@ class _TeamOverviewState extends State<TeamOverview> {
             ),
           ),
           const SizedBox(height: 24),
-          SectionHeader(title: "Scheduled Matches", showIcon: false),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: SectionHeader(title: "Scheduled Matches", showIcon: false),
+          ),
           const SizedBox(height: 16),
-          ScheduledMatchesItem(),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: ScheduledMatchesItem(),
+          ),
           const SizedBox(height: 8),
-          ScheduledMatchesItem(),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: ScheduledMatchesItem(),
+          ),
         ],
       ),
     );
