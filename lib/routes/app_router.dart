@@ -7,6 +7,8 @@ import 'package:cricklo/features/login/presentation/screens/player_type_onboardi
 import 'package:cricklo/features/login/presentation/screens/profile_setup_page.dart';
 import 'package:cricklo/features/login/presentation/screens/set_pin.dart';
 import 'package:cricklo/features/mainapp/presentation/screens/main_app.dart';
+import 'package:cricklo/features/matches/presentation/screens/create_match.dart';
+import 'package:cricklo/features/notifications/presentation/screens/notifications_screens.dart';
 import 'package:cricklo/features/teams/domain/entities/team_entity.dart';
 import 'package:cricklo/features/teams/presentation/screens/add_players_screen.dart';
 import 'package:cricklo/features/teams/presentation/screens/create_team_screen.dart';
@@ -106,6 +108,20 @@ class AppRouter {
         pageBuilder: (context, state) {
           final team = state.extra as TeamEntity? ?? dummyTeam;
           return MaterialPage(child: TeamPage(team: team));
+        },
+      ),
+      GoRoute(
+        name: Routes.createMatch,
+        path: Routes.createMatch,
+        pageBuilder: (context, state) {
+          return MaterialPage(child: CreateMatch());
+        },
+      ),
+      GoRoute(
+        name: Routes.notifications,
+        path: Routes.notifications,
+        pageBuilder: (context, state) {
+          return MaterialPage(child: NotificationsScreens());
         },
       ),
     ],

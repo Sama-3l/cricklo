@@ -28,3 +28,17 @@ enum TeamRole {
   final String roleTitle;
   const TeamRole(this.roleTitle);
 }
+
+enum MatchType {
+  t10("T10"),
+  t20("T20"),
+  t30("T30"),
+  odi("ODI"),
+  test("Test"),
+  custom("Custom");
+
+  final String matchType;
+  const MatchType(this.matchType);
+}
+
+enum NotificationType { team, match, tournament }

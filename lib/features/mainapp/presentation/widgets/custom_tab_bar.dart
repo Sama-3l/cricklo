@@ -4,7 +4,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CustomTabBar extends StatelessWidget {
-  const CustomTabBar({super.key});
+  const CustomTabBar({
+    super.key,
+    required this.selectedIndex,
+    required this.selectedTab,
+  });
+
+  final Function(int index) selectedTab;
+  final int selectedIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +34,8 @@ class CustomTabBar extends StatelessWidget {
           children: [
             Expanded(
               child: CustomTab(
+                onSelectedTab: (index) => selectedTab(index),
+                selectedIndex: selectedIndex,
                 index: 0,
                 title: "Home",
                 selectedIcon: Icons.home,
@@ -35,6 +44,8 @@ class CustomTabBar extends StatelessWidget {
             ),
             Expanded(
               child: CustomTab(
+                onSelectedTab: (index) => selectedTab(index),
+                selectedIndex: selectedIndex,
                 index: 1,
                 title: "Matches",
                 selectedIcon: Icons.sports_cricket,
@@ -43,6 +54,8 @@ class CustomTabBar extends StatelessWidget {
             ),
             Expanded(
               child: CustomTab(
+                onSelectedTab: (index) => selectedTab(index),
+                selectedIndex: selectedIndex,
                 index: 2,
                 title: "Tournaments",
                 selectedIcon: Icons.emoji_events,
@@ -51,6 +64,8 @@ class CustomTabBar extends StatelessWidget {
             ),
             Expanded(
               child: CustomTab(
+                onSelectedTab: (index) => selectedTab(index),
+                selectedIndex: selectedIndex,
                 index: 3,
                 title: "Account",
                 selectedIcon: CupertinoIcons.person_circle_fill,
