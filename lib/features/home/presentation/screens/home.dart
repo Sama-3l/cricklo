@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:cricklo/core/utils/constants/dummy_data.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/core/utils/constants/widget_decider.dart';
 import 'package:cricklo/features/home/presentation/widgets/home_profile_header.dart';
@@ -114,14 +115,7 @@ class _HomePageState extends State<HomePage>
                           borderRadius: BorderRadius.circular(16),
                           // color: ColorsConstants.defaultBlack.withValues(alpha: 0.07),
                         ),
-                        child: MatchTile(
-                          team1Name: "Super Strikers",
-                          team1Image: "assets/images/team_1.png",
-                          team2Name: "Delhi Capitals",
-                          team2Image: "assets/images/team_2.png",
-                          matchStatus: "live",
-                          stats: "91-0",
-                        ),
+                        child: MatchTile(matchEntity: dummyMatchScheduled),
                       ),
                 if (widget.userEntity != null) ...[
                   const SizedBox(height: 24),
@@ -212,33 +206,38 @@ class _HomePageState extends State<HomePage>
                     "Create Team",
                     () async {
                       toggleShowOptions();
-                      final done = await GoRouter.of(
-                        context,
-                      ).pushNamed(Routes.createTeam, extra: widget.userEntity);
-                      if (done != null) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            behavior: SnackBarBehavior.floating,
-                            backgroundColor: ColorsConstants.defaultWhite,
-                            shape: RoundedRectangleBorder(
-                              side: BorderSide(
-                                color: ColorsConstants.accentOrange,
-                                width: 1,
-                              ),
-                              borderRadius: BorderRadiusGeometry.circular(8),
-                            ),
-                            content: Center(
-                              child: Text(
-                                "Invites sent to all players",
-                                style: TextStyles.poppinsSemiBold.copyWith(
-                                  fontSize: 12,
+                      if (widget.userEntity != null) {
+                        final done = await GoRouter.of(context).pushNamed(
+                          Routes.createTeam,
+                          extra: widget.userEntity,
+                        );
+                        if (done != null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              behavior: SnackBarBehavior.floating,
+                              backgroundColor: ColorsConstants.defaultWhite,
+                              shape: RoundedRectangleBorder(
+                                side: BorderSide(
                                   color: ColorsConstants.accentOrange,
-                                  letterSpacing: -0.5,
+                                  width: 1,
+                                ),
+                                borderRadius: BorderRadiusGeometry.circular(8),
+                              ),
+                              content: Center(
+                                child: Text(
+                                  "Invites sent to all players",
+                                  style: TextStyles.poppinsSemiBold.copyWith(
+                                    fontSize: 12,
+                                    color: ColorsConstants.accentOrange,
+                                    letterSpacing: -0.5,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        );
+                          );
+                        }
+                      } else {
+                        GoRouter.of(context).goNamed(Routes.loginPage);
                       }
                     },
                     _slide,

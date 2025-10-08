@@ -3,7 +3,6 @@ import 'package:cricklo/features/login/presentation/blocs/cubits/OtpPageCubit/ot
 import 'package:cricklo/features/login/presentation/blocs/cubits/SetPinCubit/set_pin_cubit.dart';
 import 'package:cricklo/features/login/presentation/blocs/cubits/OnboardingPageCubit/onboarding_page_cubit.dart';
 import 'package:cricklo/features/notifications/presentation/blocs/blocs/NotificationBloc/notification_bloc.dart';
-import 'package:cricklo/features/teams/presentation/blocs/cubits/CreateTeamCubit/create_team_cubit.dart';
 import 'package:cricklo/injection_container.dart';
 import 'package:cricklo/routes/app_router.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +49,6 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => sl<OtpPageCubit>()),
         BlocProvider(create: (context) => sl<SetPinCubit>()),
         BlocProvider(create: (_) => AccountCubit()),
-        BlocProvider(create: (_) => CreateTeamCubit()),
         BlocProvider(create: (_) => sl<OnboardingPageCubit>()),
         BlocProvider(create: (context) => NotificationBloc(fakeStream)),
       ],

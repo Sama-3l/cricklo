@@ -17,6 +17,15 @@ import 'package:cricklo/features/mainapp/data/usecases/get_current_user_usecase.
 import 'package:cricklo/features/mainapp/data/usecases/logout_usecase.dart';
 import 'package:cricklo/features/mainapp/domain/repo/main_app_repo.dart';
 import 'package:cricklo/features/mainapp/presentation/blocs/cubits/MainAppCubit/main_app_cubit.dart';
+import 'package:cricklo/features/teams/data/datasource/team_datasource_remote.dart';
+import 'package:cricklo/features/teams/data/repo/team_repo_impl.dart';
+import 'package:cricklo/features/teams/data/usecases/create_team_usecase.dart';
+import 'package:cricklo/features/teams/data/usecases/invite_player_usecase.dart';
+import 'package:cricklo/features/teams/data/usecases/search_players_usecase.dart';
+import 'package:cricklo/features/teams/domain/repo/team_repo.dart';
+import 'package:cricklo/features/teams/presentation/blocs/cubits/AddPlayersCubit/add_players_cubit.dart';
+import 'package:cricklo/features/teams/presentation/blocs/cubits/CreateTeamCubit/create_team_cubit.dart';
+import 'package:cricklo/features/teams/presentation/blocs/cubits/SearchPlayersCubit/search_players_cubit.dart';
 import 'package:cricklo/services/api_service.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
@@ -64,6 +73,7 @@ Future<void> initializeDependencies() async {
 
   _authDependencies();
   _mainAppDependencies();
+  _teamDependencies();
 }
 
 void _authDependencies() {
@@ -123,5 +133,36 @@ void _mainAppDependencies() {
   //cubits
   sl.registerFactory<MainAppCubit>(
     () => MainAppCubit(sl<GetCurrentUserUsecase>(), sl<LogoutUsecase>()),
+  );
+}
+
+void _teamDependencies() {
+  // data-source
+  sl.registerLazySingleton<TeamDatasourceRemote>(
+    () => TeamDatasourceRemoteImpl(sl<ApiService>()),
+  );
+  // repo
+  sl.registerLazySingleton<TeamRepo>(
+    () => TeamRepoImpl(sl<TeamDatasourceRemote>()),
+  );
+  //use-cases
+  sl.registerLazySingleton<CreateTeamUsecase>(
+    () => CreateTeamUsecase(sl<TeamRepo>()),
+  );
+  sl.registerLazySingleton<SearchPlayersUsecase>(
+    () => SearchPlayersUsecase(sl<TeamRepo>()),
+  );
+  sl.registerLazySingleton<InvitePlayerUsecase>(
+    () => InvitePlayerUsecase(sl<TeamRepo>()),
+  );
+  //cubits
+  sl.registerFactory<CreateTeamCubit>(
+    () => CreateTeamCubit(sl<CreateTeamUsecase>()),
+  );
+  sl.registerFactory<SearchPlayersCubit>(
+    () => SearchPlayersCubit(sl<SearchPlayersUsecase>()),
+  );
+  sl.registerFactory<AddPlayersCubit>(
+    () => AddPlayersCubit(sl<InvitePlayerUsecase>()),
   );
 }

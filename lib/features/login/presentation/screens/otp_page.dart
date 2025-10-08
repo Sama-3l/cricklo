@@ -152,9 +152,7 @@ class _OtpPageState extends State<OtpPage> {
                       color: ColorsConstants.defaultBlack,
                       letterSpacing: -0.8,
                     ),
-                    onCodeChanged: (String code) {
-                      if (code.length == 6) print(code);
-                    },
+                    onCodeChanged: (String code) {},
                     onSubmit: (String verificationCode) =>
                         cubit.updateOtp(verificationCode),
                   ),

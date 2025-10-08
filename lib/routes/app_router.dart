@@ -24,7 +24,7 @@ class AppRouter {
         name: Routes.mainAppScreen,
         path: Routes.mainAppScreen,
         pageBuilder: (context, state) {
-          final currUser = state.extra as UserEntity? ?? dummyCurrUser;
+          final currUser = state.extra as UserEntity?;
           return MaterialPage(child: ContentView(currUser: currUser));
         },
       ),

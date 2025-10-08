@@ -1,10 +1,13 @@
 import 'package:cricklo/core/utils/constants/enums.dart';
 import 'package:cricklo/features/login/domain/entities/location_entity.dart';
 import 'package:cricklo/features/login/domain/entities/user_entitiy.dart';
+import 'package:cricklo/features/matches/domain/entities/match_entity.dart';
+import 'package:cricklo/features/matches/domain/entities/overall_score_entity.dart';
 import 'package:cricklo/features/teams/domain/entities/player_entity.dart';
 import 'package:cricklo/features/teams/domain/entities/team_entity.dart';
 
 final dummyCurrUser = UserEntity(
+  profileId: "P009",
   phoneNumber: "6386291080",
   name: "Raghvedra Mishra",
   email: "raghvendramishra2002@gmail.com",
@@ -20,12 +23,109 @@ final dummyCurrUser = UserEntity(
   bowlerType: BowlerType.leftArmPace,
 );
 
+final PlayerEntity player1 = PlayerEntity(
+  teamRole: TeamRole.captain,
+  id: '3',
+  playerId: 'P003',
+  name: 'Virat Kohli',
+  captain: true,
+  playerType: PlayerType.batter,
+  batterType: BatterType.rightHand,
+  bowlerType: null,
+);
+final PlayerEntity player2 = PlayerEntity(
+  teamRole: TeamRole.member,
+  id: '4',
+  playerId: 'P004',
+  name: 'KL Rahul',
+  captain: false,
+  playerType: PlayerType.batter,
+  batterType: BatterType.rightHand,
+  bowlerType: null,
+);
+final PlayerEntity player3 = PlayerEntity(
+  teamRole: TeamRole.invited,
+  id: '5',
+  playerId: 'P005',
+  name: 'Rishabh Pant',
+  captain: false,
+  playerType: PlayerType.batter,
+  batterType: BatterType.leftHand,
+  bowlerType: null,
+);
+final PlayerEntity player4 = PlayerEntity(
+  teamRole: TeamRole.invited,
+  id: '6',
+  playerId: 'P006',
+  name: 'Hardik Pandya',
+  captain: false,
+  playerType: PlayerType.allRounder,
+  batterType: BatterType.rightHand,
+  bowlerType: BowlerType.rightArmPace,
+);
+
+final PlayerEntity player5 = PlayerEntity(
+  id: '1',
+  teamRole: TeamRole.invited,
+  playerId: 'P001',
+  name: 'Rohit Sharma',
+  captain: false,
+  playerType: PlayerType.batter,
+  batterType: BatterType.rightHand,
+  bowlerType: null,
+);
+final PlayerEntity player6 = PlayerEntity(
+  teamRole: TeamRole.invited,
+  id: '2',
+  playerId: 'P002',
+  name: 'Shikhar Dhawan',
+  captain: false,
+  playerType: PlayerType.batter,
+  batterType: BatterType.leftHand,
+  bowlerType: null,
+);
+final PlayerEntity player7 = PlayerEntity(
+  teamRole: TeamRole.invited,
+  id: '7',
+  playerId: 'P007',
+  name: 'Ravindra Jadeja',
+  captain: false,
+  playerType: PlayerType.allRounder,
+  batterType: BatterType.leftHand,
+  bowlerType: BowlerType.leftArmSpin,
+);
+final PlayerEntity player8 = PlayerEntity(
+  teamRole: TeamRole.invited,
+  id: '8',
+  playerId: 'P008',
+  name: 'Axar Patel',
+  captain: false,
+  playerType: PlayerType.allRounder,
+  batterType: BatterType.leftHand,
+  bowlerType: BowlerType.leftArmSpin,
+);
+
 final TeamEntity dummyTeam = TeamEntity(
-  id: "",
-  name: "Hello World",
-  teamLogo: "",
+  id: "t001",
+  name: "Hello World shall watch my wraith upon you",
+  teamLogo: "assets/images/team_1.png",
   teamBanner: "",
-  players: dummyPlayers.getRange(2, 5).toList(),
+  players: [player1, player2, player3, player4],
+  location: LocationEntity(
+    area: "Lakhimpur",
+    city: "Lakhimpur",
+    state: "Uttar Pradesh",
+    lat: 0,
+    lng: 0,
+  ),
+);
+
+final TeamEntity dummyTeam2 = TeamEntity(
+  id: "t002",
+  name: "Bye World",
+  teamLogo: "assets/images/team_2.png",
+  teamBanner: "",
+  players: [player5, player6, player7, player8],
   location: LocationEntity(
     area: "Lakhimpur",
     city: "Lakhimpur",
@@ -36,86 +136,6 @@ final TeamEntity dummyTeam = TeamEntity(
 );
 
 final List<PlayerEntity> dummyPlayers = [
-  PlayerEntity(
-    id: '1',
-    teamRole: TeamRole.invited,
-    playerId: 'P001',
-    name: 'Rohit Sharma',
-    captain: false,
-    playerType: PlayerType.batter,
-    batterType: BatterType.rightHand,
-    bowlerType: null,
-  ),
-  PlayerEntity(
-    teamRole: TeamRole.invited,
-    id: '2',
-    playerId: 'P002',
-    name: 'Shikhar Dhawan',
-    captain: false,
-    playerType: PlayerType.batter,
-    batterType: BatterType.leftHand,
-    bowlerType: null,
-  ),
-  PlayerEntity(
-    teamRole: TeamRole.captain,
-    id: '3',
-    playerId: 'P003',
-    name: 'Virat Kohli',
-    captain: true,
-    playerType: PlayerType.batter,
-    batterType: BatterType.rightHand,
-    bowlerType: null,
-  ),
-  PlayerEntity(
-    teamRole: TeamRole.member,
-    id: '4',
-    playerId: 'P004',
-    name: 'KL Rahul',
-    captain: false,
-    playerType: PlayerType.batter,
-    batterType: BatterType.rightHand,
-    bowlerType: null,
-  ),
-  PlayerEntity(
-    teamRole: TeamRole.invited,
-    id: '5',
-    playerId: 'P005',
-    name: 'Rishabh Pant',
-    captain: false,
-    playerType: PlayerType.batter,
-    batterType: BatterType.leftHand,
-    bowlerType: null,
-  ),
-  PlayerEntity(
-    teamRole: TeamRole.invited,
-    id: '6',
-    playerId: 'P006',
-    name: 'Hardik Pandya',
-    captain: false,
-    playerType: PlayerType.allRounder,
-    batterType: BatterType.rightHand,
-    bowlerType: BowlerType.rightArmPace,
-  ),
-  PlayerEntity(
-    teamRole: TeamRole.invited,
-    id: '7',
-    playerId: 'P007',
-    name: 'Ravindra Jadeja',
-    captain: false,
-    playerType: PlayerType.allRounder,
-    batterType: BatterType.leftHand,
-    bowlerType: BowlerType.leftArmSpin,
-  ),
-  PlayerEntity(
-    teamRole: TeamRole.invited,
-    id: '8',
-    playerId: 'P008',
-    name: 'Axar Patel',
-    captain: false,
-    playerType: PlayerType.allRounder,
-    batterType: BatterType.leftHand,
-    bowlerType: BowlerType.leftArmSpin,
-  ),
   PlayerEntity(
     teamRole: TeamRole.invited,
     id: '9',
@@ -237,3 +257,140 @@ final List<PlayerEntity> dummyPlayers = [
     bowlerType: null,
   ),
 ];
+
+final MatchEntity dummyMatchScheduled = MatchEntity(
+  id: "match-0001",
+  matchID: "match-0001",
+  dateAndTime: DateTime.now().add(Duration(days: 1)),
+  overs: 20,
+  matchType: MatchType.t20,
+  teamA: dummyTeam,
+  teamB: dummyTeam2,
+  location: LocationEntity(
+    location: "Ambedkar Park",
+    area: "Vishwas Khand",
+    city: "Lucknow",
+    state: "Uttar Pradesh",
+    lat: 0,
+    lng: 0,
+  ),
+  scorer1: player1,
+  scorer2: player2,
+);
+
+final MatchEntity dummyMatchLive = MatchEntity(
+  id: "match-0001",
+  matchID: "match-0001",
+  dateAndTime: DateTime.now(),
+  overs: 20,
+  matchType: MatchType.t20,
+  teamA: dummyTeam,
+  teamB: dummyTeam2,
+  location: LocationEntity(
+    location: "Ambedkar Park",
+    area: "Vishwas Khand",
+    city: "Lucknow",
+    state: "Uttar Pradesh",
+    lat: 0,
+    lng: 0,
+  ),
+  scorer1: player1,
+  scorer2: player2,
+);
+
+final MatchEntity dummyMatchTossDone = MatchEntity(
+  id: "match-0001",
+  matchID: "match-0001",
+  dateAndTime: DateTime.now(),
+  overs: 20,
+  matchType: MatchType.t20,
+  teamA: dummyTeam,
+  teamB: dummyTeam2,
+  tossWinner: "t002",
+  tossChoice: TossChoice.batting,
+  teamBScore: OverallScoreEntity(
+    team: dummyTeam,
+    score: 0,
+    overs: "0",
+    wickets: 0,
+  ),
+  location: LocationEntity(
+    location: "Ambedkar Park",
+    area: "Vishwas Khand",
+    city: "Lucknow",
+    state: "Uttar Pradesh",
+    lat: 0,
+    lng: 0,
+  ),
+  scorer1: player1,
+  scorer2: player2,
+);
+
+final MatchEntity dummyMatchInningsTwo = MatchEntity(
+  id: "match-0001",
+  matchID: "match-0001",
+  dateAndTime: DateTime.now(),
+  overs: 20,
+  matchType: MatchType.t20,
+  teamA: dummyTeam,
+  teamB: dummyTeam2,
+  tossWinner: "t001",
+  tossChoice: TossChoice.batting,
+  teamAScore: OverallScoreEntity(
+    team: dummyTeam,
+    score: 200,
+    overs: "19.1",
+    wickets: 10,
+  ),
+  teamBScore: OverallScoreEntity(
+    team: dummyTeam2,
+    score: 0,
+    overs: "0",
+    wickets: 0,
+  ),
+  location: LocationEntity(
+    location: "Ambedkar Park",
+    area: "Vishwas Khand",
+    city: "Lucknow",
+    state: "Uttar Pradesh",
+    lat: 0,
+    lng: 0,
+  ),
+  scorer1: player1,
+  scorer2: player2,
+);
+
+final MatchEntity dummyMatchDone = MatchEntity(
+  id: "match-0001",
+  matchID: "match-0001",
+  dateAndTime: DateTime.now(),
+  overs: 20,
+  matchType: MatchType.t20,
+  teamA: dummyTeam,
+  teamB: dummyTeam2,
+  tossWinner: "t001",
+  tossChoice: TossChoice.batting,
+  teamAScore: OverallScoreEntity(
+    team: dummyTeam,
+    score: 200,
+    overs: "19.1",
+    wickets: 10,
+  ),
+  teamBScore: OverallScoreEntity(
+    team: dummyTeam2,
+    score: 120,
+    overs: "18.3",
+    wickets: 10,
+  ),
+  location: LocationEntity(
+    location: "Ambedkar Park",
+    area: "Vishwas Khand",
+    city: "Lucknow",
+    state: "Uttar Pradesh",
+    lat: 0,
+    lng: 0,
+  ),
+  winner: "t001",
+  scorer1: player1,
+  scorer2: player2,
+);

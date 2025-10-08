@@ -28,6 +28,20 @@ class LocationModel {
     );
   }
 
+  factory LocationModel.fromEntity(LocationEntity location) {
+    return LocationModel(
+      area: location.area,
+      city: location.city,
+      state: location.state,
+      lat: location.lat,
+      lng: location.lng,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {"area": area, "city": city, "state": state};
+  }
+
   LocationEntity toEntity() {
     return LocationEntity(
       area: area,

@@ -1,5 +1,6 @@
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/home/presentation/widgets/section_header.dart';
+import 'package:cricklo/features/matches/presentation/screens/match_list.dart';
 import 'package:flutter/material.dart';
 
 class MatchesPage extends StatefulWidget {
@@ -14,77 +15,86 @@ class _MatchesPageState extends State<MatchesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorsConstants.defaultWhite,
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: ListView(
-          children: [
-            // if (widget.userEntity != null)
-            const SizedBox(height: 24),
-            SectionHeader(title: "Your Matches"),
-            Container(
-              height: 200,
-              margin: EdgeInsets.only(top: 12),
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                color: ColorsConstants.defaultBlack.withValues(alpha: 0.07),
+      body: CustomScrollView(
+        physics: const BouncingScrollPhysics(),
+        slivers: [
+          // === Padding Wrapper ===
+          SliverList(
+            delegate: SliverChildListDelegate([
+              const SizedBox(height: 24),
+
+              // === Your Matches Section ===
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: SectionHeader(title: "Your Matches"),
               ),
-              child: Center(
-                child: Text(
-                  "No Matches Yet",
-                  style: TextStyles.poppinsRegular.copyWith(
-                    fontSize: 16,
-                    letterSpacing: -0.8,
-                    color: ColorsConstants.defaultBlack.withValues(alpha: 0.5),
+              const SizedBox(height: 12),
+              MatchList(),
+
+              const SizedBox(height: 24),
+
+              // === From Your Circle Section ===
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: SectionHeader(title: "From Your Circle"),
+              ),
+              const SizedBox(height: 12),
+              Container(
+                height: 200,
+                padding: const EdgeInsets.all(16),
+                margin: const EdgeInsets.symmetric(horizontal: 16),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  color: ColorsConstants.defaultBlack.withValues(alpha: 0.07),
+                ),
+                child: Center(
+                  child: Text(
+                    "No Matches Yet",
+                    style: TextStyles.poppinsRegular.copyWith(
+                      fontSize: 16,
+                      letterSpacing: -0.8,
+                      color: ColorsConstants.defaultBlack.withValues(
+                        alpha: 0.5,
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(height: 16),
-            SectionHeader(title: "From Your Circle"),
-            Container(
-              height: 200,
-              margin: EdgeInsets.only(top: 12),
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                color: ColorsConstants.defaultBlack.withValues(alpha: 0.07),
+
+              const SizedBox(height: 24),
+
+              // === Explore Section ===
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: SectionHeader(title: "Explore"),
               ),
-              child: Center(
-                child: Text(
-                  "No Matches Yet",
-                  style: TextStyles.poppinsRegular.copyWith(
-                    fontSize: 16,
-                    letterSpacing: -0.8,
-                    color: ColorsConstants.defaultBlack.withValues(alpha: 0.5),
+              const SizedBox(height: 12),
+              Container(
+                height: 200,
+                padding: const EdgeInsets.all(16),
+                margin: const EdgeInsets.symmetric(horizontal: 16),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  color: ColorsConstants.defaultBlack.withValues(alpha: 0.07),
+                ),
+                child: Center(
+                  child: Text(
+                    "No Matches Yet",
+                    style: TextStyles.poppinsRegular.copyWith(
+                      fontSize: 16,
+                      letterSpacing: -0.8,
+                      color: ColorsConstants.defaultBlack.withValues(
+                        alpha: 0.5,
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(height: 24),
-            SectionHeader(title: "Explore"),
-            Container(
-              height: 200,
-              margin: EdgeInsets.only(top: 12),
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                color: ColorsConstants.defaultBlack.withValues(alpha: 0.07),
-              ),
-              child: Center(
-                child: Text(
-                  "No Matches Yet",
-                  style: TextStyles.poppinsRegular.copyWith(
-                    fontSize: 16,
-                    letterSpacing: -0.8,
-                    color: ColorsConstants.defaultBlack.withValues(alpha: 0.5),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 24),
-          ],
-        ),
+
+              const SizedBox(height: 24),
+            ]),
+          ),
+        ],
       ),
     );
   }

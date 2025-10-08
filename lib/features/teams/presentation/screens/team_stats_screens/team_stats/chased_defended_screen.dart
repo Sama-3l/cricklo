@@ -1,3 +1,4 @@
+import 'package:cricklo/core/utils/constants/dummy_data.dart';
 import 'package:cricklo/features/home/presentation/widgets/match_tile.dart';
 import 'package:flutter/material.dart';
 
@@ -17,15 +18,7 @@ class ChasedDefendedScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(16),
               // color: ColorsConstants.defaultBlack.withValues(alpha: 0.07),
             ),
-            child: MatchTile(
-              team1Name: "Super Strikers",
-              team1Image: "assets/images/team_1.png",
-              team2Name: "Delhi Capitals",
-              team2Image: "assets/images/team_2.png",
-              matchStatus: "live",
-              stats: "91-0",
-              live: false,
-            ),
+            child: MatchTile(matchEntity: dummyMatchScheduled, live: false),
           ),
           Container(
             // height: 200,
@@ -35,15 +28,7 @@ class ChasedDefendedScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(16),
               // color: ColorsConstants.defaultBlack.withValues(alpha: 0.07),
             ),
-            child: MatchTile(
-              team1Name: "Super Strikers",
-              team1Image: "assets/images/team_1.png",
-              team2Name: "Delhi Capitals",
-              team2Image: "assets/images/team_2.png",
-              matchStatus: "live",
-              stats: "91-0",
-              live: false,
-            ),
+            child: MatchTile(matchEntity: dummyMatchScheduled, live: false),
           ),
           Container(
             // height: 200,
@@ -52,15 +37,7 @@ class ChasedDefendedScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(16),
               // color: ColorsConstants.defaultBlack.withValues(alpha: 0.07),
             ),
-            child: MatchTile(
-              team1Name: "Super Strikers",
-              team1Image: "assets/images/team_1.png",
-              team2Name: "Delhi Capitals",
-              team2Image: "assets/images/team_2.png",
-              matchStatus: "live",
-              stats: "91-0",
-              live: false,
-            ),
+            child: MatchTile(matchEntity: dummyMatchScheduled, live: false),
           ),
         ],
       ),

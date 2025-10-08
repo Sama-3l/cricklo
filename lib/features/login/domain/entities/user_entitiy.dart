@@ -3,6 +3,7 @@ import 'package:cricklo/core/utils/constants/enums.dart';
 import 'package:cricklo/features/login/domain/entities/location_entity.dart';
 
 class UserEntity {
+  final String profileId;
   final String name;
   final String email;
   final String phoneNumber;
@@ -13,6 +14,7 @@ class UserEntity {
   final BowlerType? bowlerType;
 
   UserEntity({
+    required this.profileId,
     this.playerType = PlayerType.batter,
     this.batterType,
     this.bowlerType,
@@ -24,6 +26,7 @@ class UserEntity {
   });
 
   UserEntity copyWith({
+    String? profileId,
     String? name,
     String? email,
     String? phoneNumber,
@@ -34,6 +37,7 @@ class UserEntity {
     BowlerType? bowlerType,
   }) {
     return UserEntity(
+      profileId: profileId ?? this.profileId,
       name: name ?? this.name,
       email: email ?? this.email,
       phoneNumber: phoneNumber ?? this.phoneNumber,

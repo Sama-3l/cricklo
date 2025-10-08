@@ -104,7 +104,9 @@ class _ContentViewState extends State<ContentView> {
             bottomNavigationBar: CustomTabBar(
               selectedTab: (index) {
                 cubit.goToTab(index, context);
-                _pageController.jumpToPage(index);
+                if (!(index == 3 && state.user == null)) {
+                  _pageController.jumpToPage(index);
+                }
               },
               selectedIndex: state.currentIndex,
             ),

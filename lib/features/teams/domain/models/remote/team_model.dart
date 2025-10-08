@@ -1,0 +1,80 @@
+import 'package:cricklo/features/login/domain/models/remote/location_model.dart';
+import 'package:cricklo/features/teams/domain/entities/player_entity.dart';
+import 'package:cricklo/features/teams/domain/entities/team_entity.dart';
+
+class TeamModel {
+  final String id;
+  final String name;
+  final String teamLogo;
+  final String teamBanner;
+  final List<PlayerEntity> players;
+  final LocationModel location;
+
+  TeamModel({
+    required this.id,
+    required this.name,
+    required this.teamLogo,
+    required this.teamBanner,
+    this.players = const [],
+    required this.location,
+  });
+
+  TeamModel copyWith({
+    String? id,
+    String? name,
+    String? teamLogo,
+    String? teamBanner,
+    List<PlayerEntity>? players,
+    LocationModel? location,
+  }) {
+    return TeamModel(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      teamLogo: teamLogo ?? this.teamLogo,
+      teamBanner: teamBanner ?? this.teamBanner,
+      players: players ?? this.players,
+      location: location ?? this.location,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'name': name,
+      'logo': teamLogo,
+      'banner': teamBanner,
+      'location': location.toJson(),
+    };
+  }
+
+  factory TeamModel.fromEntity(TeamEntity team) {
+    return TeamModel(
+      id: team.id,
+      name: team.name,
+      teamLogo: team.teamLogo,
+      teamBanner: team.teamBanner,
+      location: LocationModel.fromEntity(team.location),
+    );
+  }
+
+  factory TeamModel.fromJson(Map<String, dynamic> map) {
+    return TeamModel(
+      id: map['teamId'] as String,
+      name: map['name'] as String,
+      teamLogo: map['logo'] as String,
+      teamBanner: map['banner'] as String,
+      players: [],
+      location: LocationModel.fromJson(map['location'] as Map<String, dynamic>),
+    );
+  }
+
+  TeamEntity toEntity() {
+    return TeamEntity(
+      id: id,
+      name: name,
+      teamLogo: teamLogo,
+      teamBanner: teamBanner,
+      players: players,
+      location: location.toEntity(),
+    );
+  }
+}

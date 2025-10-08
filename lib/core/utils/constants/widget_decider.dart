@@ -1,7 +1,11 @@
 import 'package:cricklo/core/utils/common/primary_button.dart';
 import 'package:cricklo/core/utils/constants/enums.dart';
+import 'package:cricklo/core/utils/constants/methods.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
+import 'package:cricklo/features/matches/domain/entities/match_entity.dart';
+import 'package:cricklo/features/matches/domain/entities/overall_score_entity.dart';
 import 'package:cricklo/features/teams/domain/entities/player_entity.dart';
+import 'package:cricklo/features/teams/domain/entities/team_entity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -86,6 +90,8 @@ class WidgetDecider {
   static Widget buildPlayerList(
     List<PlayerEntity> players, {
     bool showInvited = false,
+    bool dismissable = false,
+    required Function(String playerId) onDismiss,
   }) {
     final invited = players
         .where((p) => p.teamRole == TeamRole.invited)
@@ -170,62 +176,154 @@ class WidgetDecider {
 
             Column(
               children: sectionPlayers.map((p) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: Row(
-                    children: [
-                      CircleAvatar(
-                        radius: 24,
-                        backgroundColor: ColorsConstants.accentOrange
-                            .withValues(alpha: 0.2),
-                        child: Icon(
-                          CupertinoIcons.person_fill,
-                          size: 16,
-                          color: ColorsConstants.defaultBlack,
+                return dismissable
+                    ? Dismissible(
+                        key: ValueKey(p.playerId),
+                        direction:
+                            DismissDirection.horizontal, // swipe right only
+                        background: Container(
+                          decoration: BoxDecoration(
+                            color: ColorsConstants.accentOrange.withValues(
+                              alpha: 0.2,
+                            ),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          padding: const EdgeInsets.only(left: 24),
+                          alignment: Alignment.centerLeft,
+                          child: Icon(
+                            Icons.delete,
+                            color: ColorsConstants.accentOrange,
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 12),
+                        secondaryBackground: Container(
+                          decoration: BoxDecoration(
+                            color: ColorsConstants.accentOrange.withValues(
+                              alpha: 0.2,
+                            ),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          padding: const EdgeInsets.only(right: 24),
+                          alignment: Alignment.centerRight,
+                          child: Icon(
+                            Icons.delete,
+                            color: ColorsConstants.accentOrange,
+                          ),
+                        ),
+                        onDismissed: (_) => onDismiss(p.playerId),
 
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Row(
+                            children: [
+                              CircleAvatar(
+                                radius: 24,
+                                backgroundColor: ColorsConstants.accentOrange
+                                    .withValues(alpha: 0.2),
+                                child: Icon(
+                                  CupertinoIcons.person_fill,
+                                  size: 16,
+                                  color: ColorsConstants.defaultBlack,
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "${p.name} ${p.captain ? "(C)" : ""}",
+                                      style: TextStyles.poppinsMedium.copyWith(
+                                        fontSize: 16,
+                                        color: ColorsConstants.defaultBlack,
+                                        letterSpacing: -0.8,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      p.playerType == PlayerType.batter
+                                          ? "${p.batterType?.title ?? ""} Batsman"
+                                          : p.playerType == PlayerType.bowler
+                                          ? p.bowlerType?.title ?? "Bowler"
+                                          : "${p.batterType?.title ?? ""} • ${p.bowlerType?.title ?? ""}",
+                                      style: TextStyles.poppinsRegular.copyWith(
+                                        fontSize: 10,
+                                        color: ColorsConstants.defaultBlack,
+                                        letterSpacing: -0.4,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+                              Text(
+                                p.playerId,
+                                style: TextStyles.poppinsMedium.copyWith(
+                                  fontSize: 12,
+                                  color: ColorsConstants.defaultBlack,
+                                  letterSpacing: -0.5,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: Row(
                           children: [
-                            Text(
-                              "${p.name} ${p.captain ? "(C)" : ""}",
-                              style: TextStyles.poppinsMedium.copyWith(
-                                fontSize: 16,
+                            CircleAvatar(
+                              radius: 24,
+                              backgroundColor: ColorsConstants.accentOrange
+                                  .withValues(alpha: 0.2),
+                              child: Icon(
+                                CupertinoIcons.person_fill,
+                                size: 16,
                                 color: ColorsConstants.defaultBlack,
-                                letterSpacing: -0.8,
                               ),
                             ),
-                            const SizedBox(height: 4),
+                            const SizedBox(width: 12),
+
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "${p.name} ${p.captain ? "(C)" : ""}",
+                                    style: TextStyles.poppinsMedium.copyWith(
+                                      fontSize: 16,
+                                      color: ColorsConstants.defaultBlack,
+                                      letterSpacing: -0.8,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    p.playerType == PlayerType.batter
+                                        ? "${p.batterType?.title ?? ""} Batsman"
+                                        : p.playerType == PlayerType.bowler
+                                        ? p.bowlerType?.title ?? "Bowler"
+                                        : "${p.batterType?.title ?? ""} • ${p.bowlerType?.title ?? ""}",
+                                    style: TextStyles.poppinsRegular.copyWith(
+                                      fontSize: 10,
+                                      color: ColorsConstants.defaultBlack,
+                                      letterSpacing: -0.4,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+
                             Text(
-                              p.playerType == PlayerType.batter
-                                  ? "${p.batterType?.title ?? ""} Batsman"
-                                  : p.playerType == PlayerType.bowler
-                                  ? p.bowlerType?.title ?? "Bowler"
-                                  : "${p.batterType?.title ?? ""} • ${p.bowlerType?.title ?? ""}",
-                              style: TextStyles.poppinsRegular.copyWith(
-                                fontSize: 10,
+                              p.playerId,
+                              style: TextStyles.poppinsMedium.copyWith(
+                                fontSize: 12,
                                 color: ColorsConstants.defaultBlack,
-                                letterSpacing: -0.4,
+                                letterSpacing: -0.5,
                               ),
                             ),
                           ],
                         ),
-                      ),
-
-                      Text(
-                        p.playerId,
-                        style: TextStyles.poppinsMedium.copyWith(
-                          fontSize: 12,
-                          color: ColorsConstants.defaultBlack,
-                          letterSpacing: -0.5,
-                        ),
-                      ),
-                    ],
-                  ),
-                );
+                      );
               }).toList(),
             ),
           ],
@@ -506,6 +604,79 @@ class WidgetDecider {
           ),
         ],
       ),
+    );
+  }
+
+  static Widget buildTeamRow(
+    TeamEntity team,
+    OverallScoreEntity? score,
+    MatchEntity matchEntity,
+  ) {
+    final matchStage = Methods.getStage(matchEntity);
+
+    // Determine score text
+    String scoreText = "-";
+    double textOpacity = 1.0;
+
+    if (matchStage == MatchStage.upcoming ||
+        matchStage == MatchStage.waitingForToss) {
+      // Match not started yet or toss pending
+      scoreText = "-";
+    } else if (matchStage == MatchStage.waitingForToss) {
+      // Toss done but match yet to begin
+      scoreText = "Yet to Bat";
+    } else if (matchStage == MatchStage.firstInnings ||
+        matchStage == MatchStage.secondInnings) {
+      if (score != null) {
+        // Team currently batting or already batted
+        scoreText =
+            "${score.score}${score.wickets == 10 ? "" : "/${score.wickets}"} (${score.overs})";
+      } else {
+        // Team hasn't batted yet in this stage
+        scoreText = "Yet to Bat";
+        textOpacity = 0.5; // faded for team yet to bat
+      }
+    } else if (matchStage == MatchStage.completed) {
+      // Completed match — show both scores if available
+      if (score != null) {
+        scoreText =
+            "${score.score}${score.wickets == 10 ? "" : "/${score.wickets}"} (${score.overs})";
+      } else {
+        scoreText = "Yet to Bat";
+      }
+    }
+
+    // Dim losing team after match completion
+    final bool isWinner = matchEntity.winner == team.id;
+    final bool isCompleted = matchStage == MatchStage.completed;
+
+    final baseColor = ColorsConstants.defaultBlack;
+    final textColor = isCompleted
+        ? (isWinner ? baseColor : baseColor.withValues(alpha: 0.3))
+        : baseColor.withValues(alpha: textOpacity);
+
+    return Row(
+      children: [
+        CircleAvatar(radius: 16, backgroundImage: AssetImage(team.teamLogo)),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Text(
+            team.name,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyles.poppinsMedium.copyWith(
+              fontSize: 12,
+              letterSpacing: -0.5,
+              color: ColorsConstants.defaultBlack,
+            ),
+          ),
+        ),
+        const SizedBox(width: 16),
+        Text(
+          scoreText,
+          style: TextStyles.poppinsMedium.copyWith(color: textColor),
+        ),
+      ],
     );
   }
 }

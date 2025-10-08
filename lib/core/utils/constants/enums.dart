@@ -42,3 +42,13 @@ enum MatchType {
 }
 
 enum NotificationType { team, match, tournament }
+
+enum TossChoice { batting, bowling }
+
+enum MatchStage {
+  upcoming,
+  waitingForToss,
+  firstInnings,
+  secondInnings,
+  completed,
+}

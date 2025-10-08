@@ -66,6 +66,7 @@ dependencies:
   image_cropper: ^11.0.0
   flutter_dotenv: ^6.0.0
   socket_io_client: ^3.1.2
+  cached_network_image: ^3.4.1
 
 
 # SPLASH LOGO SHOULD BE OFF DIM: 1152x1152 and the logo inside should fit in a circle of 960x960

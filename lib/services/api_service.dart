@@ -2,6 +2,9 @@ import 'package:cricklo/features/login/domain/models/remote/login_response_model
 import 'package:cricklo/features/login/domain/models/remote/set_pin_response_model.dart';
 import 'package:cricklo/features/login/domain/models/remote/user_model.dart';
 import 'package:cricklo/features/notifications/domain/models/remote/logout_model_remote.dart';
+import 'package:cricklo/features/teams/domain/models/remote/create_team_response_model.dart';
+import 'package:cricklo/features/teams/domain/models/remote/invite_player_response_model.dart';
+import 'package:cricklo/features/teams/domain/models/remote/search_players_response_model.dart';
 import 'package:cricklo/services/api_endpoint_constants.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/error_logger.dart';
@@ -34,4 +37,20 @@ abstract class ApiService {
 
   @POST(ApiEndpointConstants.login)
   Future<LogoutModelRemote> login(@Body() Map<String, dynamic> body);
+
+  @POST(ApiEndpointConstants.createTeam)
+  Future<CreateTeamResponseModel> createTeam(@Body() Map<String, dynamic> body);
+
+  @GET(ApiEndpointConstants.searchPlayers)
+  Future<SearchPlayersResponseModel> searchPlayers(
+    @Query("query") String query,
+    @Query("page") int page,
+    @Query("limit") int limit,
+  );
+
+  @POST(ApiEndpointConstants.invitePlayers)
+  Future<InvitePlayerResponseModel> invitePlayers(
+    @Path("teamId") String teamId,
+    @Body() Map<String, dynamic> body,
+  );
 }

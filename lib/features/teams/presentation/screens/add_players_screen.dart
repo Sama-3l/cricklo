@@ -1,10 +1,11 @@
 import 'package:cricklo/core/utils/common/primary_button.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/core/utils/constants/widget_decider.dart';
-import 'package:cricklo/features/teams/domain/entities/player_entity.dart';
+import 'package:cricklo/features/teams/domain/entities/search_user_entity.dart';
 import 'package:cricklo/features/teams/domain/entities/team_entity.dart';
 import 'package:cricklo/features/teams/presentation/blocs/cubits/AddPlayersCubit/add_players_cubit.dart';
 import 'package:cricklo/features/teams/presentation/widgets/search_players_bottom_sheet.dart';
+import 'package:cricklo/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -22,7 +23,7 @@ class _AddPlayersScreenState extends State<AddPlayersScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => AddPlayersCubit()..init(widget.team.players),
+      create: (context) => sl<AddPlayersCubit>()..init(widget.team.players),
       child: BlocBuilder<AddPlayersCubit, AddPlayersState>(
         builder: (context, state) {
           final cubit = context.read<AddPlayersCubit>();
@@ -64,43 +65,32 @@ class _AddPlayersScreenState extends State<AddPlayersScreen> {
                       color: ColorsConstants.accentOrange.withValues(
                         alpha: 0.2,
                       ),
-                      child: state.loading
-                          ? SizedBox(
-                              height: 24,
-                              width: 24,
-                              child: CircularProgressIndicator(
-                                color: ColorsConstants.defaultBlack,
-                              ),
-                            )
-                          : Text(
-                              "Find Players",
-                              style: TextStyles.poppinsSemiBold.copyWith(
-                                fontSize: 16,
-                                letterSpacing: -0.6,
-                                color: ColorsConstants.defaultBlack,
-                              ),
-                            ),
+                      child: Text(
+                        "Find Players",
+                        style: TextStyles.poppinsSemiBold.copyWith(
+                          fontSize: 16,
+                          letterSpacing: -0.6,
+                          color: ColorsConstants.defaultBlack,
+                        ),
+                      ),
                       onPress: () async {
                         final players =
                             await showModalBottomSheet(
                                   context: context,
                                   isScrollControlled: true,
                                   builder: (context) => SearchPlayersBottomSheet(
-                                    initiallySelected: widget
-                                        .team
+                                    initiallySelected: state
                                         .players, // ✅ pass already added players
                                   ),
                                 )
-                                as List<PlayerEntity>?;
+                                as List<SearchUserEntity>?;
                         if (players != null) {
-                          widget.team.players.clear();
-                          widget.team.players.addAll(players);
                           cubit.playersAdded(players);
                         }
                       },
                     ),
                   ),
-                  if (widget.team.players.isNotEmpty) ...[
+                  if (state.players.isNotEmpty) ...[
                     const SizedBox(width: 8),
                     Expanded(
                       child: PrimaryButton(
@@ -121,7 +111,8 @@ class _AddPlayersScreenState extends State<AddPlayersScreen> {
                                   color: ColorsConstants.defaultWhite,
                                 ),
                               ),
-                        onPress: () {
+                        onPress: () async {
+                          await cubit.sendInvites(widget.team);
                           while (GoRouter.of(context).canPop()) {
                             GoRouter.of(context).pop(widget.team);
                           }
@@ -136,8 +127,10 @@ class _AddPlayersScreenState extends State<AddPlayersScreen> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: WidgetDecider.buildPlayerList(
-                  state.players,
+                  state.players.map((e) => e.toPlayerEntity()).toList(),
+                  onDismiss: (playerId) => cubit.removePlayer(playerId),
                   showInvited: true,
+                  dismissable: true,
                 ),
               ),
             ),

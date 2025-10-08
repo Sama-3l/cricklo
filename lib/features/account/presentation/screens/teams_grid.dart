@@ -34,11 +34,8 @@ class TeamsGrid extends StatelessWidget {
                   backgroundColor: ColorsConstants.accentOrange.withValues(
                     alpha: 0.2,
                   ),
-                  backgroundImage: team.logoFile != null
-                      ? FileImage(team.logoFile!)
-                      : (team.teamLogo.isNotEmpty
-                            ? NetworkImage(team.teamLogo) as ImageProvider
-                            : null),
+                  backgroundImage: AssetImage(team.teamLogo),
+
                   child: (team.logoFile == null && team.teamLogo.isEmpty)
                       ? Icon(
                           Icons.people,

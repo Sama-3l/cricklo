@@ -1,6 +1,10 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:cricklo/core/utils/constants/enums.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/login/domain/entities/user_entitiy.dart';
+import 'package:cricklo/features/matches/domain/entities/match_entity.dart';
 import 'package:cricklo/features/teams/domain/entities/player_entity.dart';
 import 'package:flutter/material.dart';
 
@@ -115,5 +119,108 @@ class Methods {
       },
     );
     onDatePicked(pickedDate);
+  }
+
+  static String formatDateTime(DateTime dateTime, {bool addLineBreak = true}) {
+    // Day with suffix (1st, 2nd, 3rd, 4th, etc.)
+    String getDaySuffix(int day) {
+      if (day >= 11 && day <= 13) return 'th';
+      switch (day % 10) {
+        case 1:
+          return 'st';
+        case 2:
+          return 'nd';
+        case 3:
+          return 'rd';
+        default:
+          return 'th';
+      }
+    }
+
+    final day = dateTime.day;
+    final suffix = getDaySuffix(day);
+
+    // Month and time formatting
+    const months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
+
+    final month = months[dateTime.month - 1];
+    final year = dateTime.year; // '25' for 2025
+
+    final hour = dateTime.hour % 12 == 0 ? 12 : dateTime.hour % 12;
+    final minute = dateTime.minute.toString().padLeft(2, '0');
+    final period = dateTime.hour >= 12 ? 'pm' : 'am';
+
+    return '$day$suffix $month${addLineBreak ? ", $year\n" : " at "}$hour:$minute $period';
+  }
+
+  static MatchStage getStage(MatchEntity match) {
+    final now = DateTime.now();
+
+    // 1️⃣ Match hasn’t started
+    if (match.tossWinner == null) {
+      if (now.isBefore(match.dateAndTime)) {
+        return MatchStage.upcoming;
+      } else {
+        return MatchStage.waitingForToss;
+      }
+    }
+
+    // 2️⃣ Match has started (toss done)
+    final teamAScore = match.teamAScore;
+    final teamBScore = match.teamBScore;
+
+    // Match completed
+    if (match.winner != null) return MatchStage.completed;
+
+    // Both innings done but result pending (rare edge)
+    if (teamAScore != null && teamBScore != null) {
+      return MatchStage.secondInnings;
+    }
+
+    // Only one innings active — figure out which team is batting first
+    final battingFirstId = getBattingFirstTeamId(match);
+
+    if (battingFirstId == match.teamA.id && teamAScore != null) {
+      return MatchStage.firstInnings;
+    } else if (battingFirstId == match.teamB.id && teamBScore != null) {
+      return MatchStage.firstInnings;
+    }
+
+    // If first batting team finished, second innings must be ongoing
+    if (teamAScore != null || teamBScore != null) {
+      return MatchStage.secondInnings;
+    }
+
+    return MatchStage.upcoming; // fallback
+  }
+
+  static String? getBattingFirstTeamId(MatchEntity match) {
+    if (match.tossWinner == null || match.tossChoice == null) return null;
+
+    if (match.tossChoice == TossChoice.batting) {
+      return match.tossWinner;
+    } else {
+      return match.tossWinner == match.teamA.id
+          ? match.teamB.id
+          : match.teamA.id;
+    }
+  }
+
+  static Future<String> imageToBase64(File imageFile) async {
+    final bytes = await imageFile.readAsBytes();
+    return base64Encode(bytes);
   }
 }

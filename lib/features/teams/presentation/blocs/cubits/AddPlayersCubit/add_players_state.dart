@@ -3,7 +3,7 @@ part of 'add_players_cubit.dart';
 @immutable
 sealed class AddPlayersState {
   final bool loading;
-  final List<PlayerEntity> players;
+  final List<SearchUserEntity> players;
 
   const AddPlayersState({required this.loading, required this.players});
 }

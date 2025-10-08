@@ -138,6 +138,7 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
                 GoRouter.of(context).pushNamed(
                   Routes.onboardingScreenOne,
                   extra: UserEntity(
+                    profileId: "",
                     phoneNumber: widget.phoneNumber,
                     name: name.text,
                     email: emailText,

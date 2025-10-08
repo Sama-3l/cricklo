@@ -24,6 +24,7 @@ class PlayersRolePage extends StatelessWidget {
           child: WidgetDecider.buildPlayerList(
             teamEntity.players,
             showInvited: invites,
+            onDismiss: (playerId) {},
           ),
         ),
       ),

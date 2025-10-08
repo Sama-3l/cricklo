@@ -258,29 +258,33 @@ class _TeamOverviewState extends State<TeamOverview> {
                             ),
                           ),
                           const SizedBox(width: 12),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                e.name,
-                                style: TextStyles.poppinsSemiBold.copyWith(
-                                  fontSize: 16,
-                                  letterSpacing: -0.5,
-                                  color: ColorsConstants.defaultBlack,
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  e.name,
+                                  style: TextStyles.poppinsSemiBold.copyWith(
+                                    fontSize: 16,
+                                    letterSpacing: -0.5,
+                                    color: ColorsConstants.defaultBlack,
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                Methods.getPlayerTypePlayerEntity(e),
-                                style: TextStyles.poppinsSemiBold.copyWith(
-                                  fontSize: 12,
-                                  letterSpacing: -0.6,
-                                  color: ColorsConstants.defaultBlack
-                                      .withValues(alpha: 0.5),
+                                Text(
+                                  Methods.getPlayerTypePlayerEntity(e),
+                                  maxLines: 2,
+                                  style: TextStyles.poppinsSemiBold.copyWith(
+                                    fontSize: 12,
+                                    letterSpacing: -0.6,
+
+                                    color: ColorsConstants.defaultBlack
+                                        .withValues(alpha: 0.5),
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                          const Spacer(),
+                          const SizedBox(height: 8),
                           Text(
                             "16 pts",
                             style: TextStyles.poppinsSemiBold.copyWith(
