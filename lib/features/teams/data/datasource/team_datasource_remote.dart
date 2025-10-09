@@ -7,7 +7,7 @@ import 'package:cricklo/services/api_service.dart';
 
 abstract class TeamDatasourceRemote {
   Future<CreateTeamResponseModel> createTeam(TeamModel team);
-  Future<SearchPlayersResponseModel> searchPlayers(String query);
+  Future<SearchPlayersResponseModel> searchPlayers(String query, int page);
   Future<InvitePlayerResponseModel> invitePlayers(
     String teamId,
     List<SearchUserModel> players,
@@ -25,10 +25,13 @@ class TeamDatasourceRemoteImpl extends TeamDatasourceRemote {
   }
 
   @override
-  Future<SearchPlayersResponseModel> searchPlayers(String query) async {
+  Future<SearchPlayersResponseModel> searchPlayers(
+    String query,
+    int page,
+  ) async {
     try {
       // Directly call the ApiService (Retrofit)
-      final response = await _apiService.searchPlayers(query, 1, 10);
+      final response = await _apiService.searchPlayers(query, page, 10);
       // Assuming SearchPlayersResponseModel has a field `players`
       return response;
     } catch (e) {

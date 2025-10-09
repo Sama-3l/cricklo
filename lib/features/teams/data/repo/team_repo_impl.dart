@@ -1,5 +1,6 @@
 import 'package:cricklo/core/errors/failure.dart';
 import 'package:cricklo/features/teams/data/datasource/team_datasource_remote.dart';
+import 'package:cricklo/features/teams/data/entities/search_player_usecase_entity.dart';
 import 'package:cricklo/features/teams/domain/entities/create_team_response_entity.dart';
 import 'package:cricklo/features/teams/domain/entities/invite_player_response_entity.dart';
 import 'package:cricklo/features/teams/domain/entities/search_players_response_entity.dart';
@@ -41,10 +42,13 @@ class TeamRepoImpl extends TeamRepo {
 
   @override
   Future<Either<Failure, SearchPlayersResponseEntity>> searchPlayers(
-    String query,
+    SearchPlayerUsecaseEntity query,
   ) async {
     try {
-      final response = await _teamDatasourceRemote.searchPlayers(query);
+      final response = await _teamDatasourceRemote.searchPlayers(
+        query.query,
+        query.page,
+      );
       return Right(response.toEntity());
     } catch (e) {
       return Left(ServerFailure());

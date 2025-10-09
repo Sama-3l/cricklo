@@ -118,114 +118,227 @@ class _SearchPlayersBottomSheetState extends State<SearchPlayersBottomSheet> {
                     ),
 
                     Expanded(
-                      child: state.loading
-                          ? Center(
-                              child: SizedBox(
-                                height: 24,
-                                width: 24,
-                                child: CircularProgressIndicator(
-                                  color: ColorsConstants.accentOrange,
-                                ),
-                              ),
-                            )
-                          : state.searchResults.isEmpty
-                          ? Center(
-                              child: Text(
-                                "Find Players",
-                                style: TextStyles.poppinsMedium.copyWith(
-                                  fontSize: 16,
-                                  color: ColorsConstants.defaultBlack
-                                      .withValues(alpha: 0.5),
-                                  letterSpacing: -0.8,
-                                ),
-                              ),
-                            )
-                          : ListView.separated(
-                              itemCount: state.searchResults.length,
-                              separatorBuilder: (_, __) => const Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 32.0),
-                                child: Divider(height: 1),
-                              ),
-                              itemBuilder: (context, index) {
-                                final player = state.searchResults[index];
-                                final bool selected = selectedPlayers.any(
-                                  (p) => p.playerId == player.playerId,
-                                );
-                                return Padding(
-                                  padding: EdgeInsets.only(
-                                    bottom:
-                                        index == state.searchResults.length - 1
-                                        ? 32
-                                        : 0,
+                      child: NotificationListener<ScrollNotification>(
+                        onNotification: (scrollInfo) {
+                          if (scrollInfo.metrics.pixels >=
+                                  scrollInfo.metrics.maxScrollExtent - 100 &&
+                              !state.loading) {
+                            context.read<SearchPlayersCubit>().loadMore();
+                          }
+                          return false;
+                        },
+                        child: ListView.separated(
+                          padding: const EdgeInsets.only(bottom: 80),
+                          itemCount:
+                              state.searchResults.length +
+                              (state.loading ? 1 : 0),
+                          separatorBuilder: (_, __) => const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 32.0),
+                            child: Divider(height: 1),
+                          ),
+                          itemBuilder: (context, index) {
+                            if (index == state.searchResults.length) {
+                              // 👇 This is your "Loading more..." spinner at the bottom
+                              return Padding(
+                                padding: EdgeInsets.all(16),
+                                child: Center(
+                                  child: SizedBox(
+                                    height: 24,
+                                    width: 24,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2.5,
+                                      color: ColorsConstants.accentOrange,
+                                    ),
                                   ),
-                                  child: ListTile(
-                                    selected: selected,
-                                    selectedTileColor:
-                                        ColorsConstants.accentOrange,
-                                    leading: Icon(
-                                      player.playerType == PlayerType.batter
-                                          ? Icons.sports_cricket
-                                          : player.playerType ==
-                                                PlayerType.bowler
-                                          ? Icons.sports_baseball
-                                          : Icons.star,
-                                      color: selected
-                                          ? ColorsConstants.defaultWhite
-                                          : ColorsConstants.defaultBlack,
-                                    ),
-                                    trailing: Text(
-                                      player.playerId,
-                                      style: TextStyles.poppinsMedium.copyWith(
-                                        fontSize: 12,
-                                        color: selected
-                                            ? ColorsConstants.defaultWhite
-                                            : ColorsConstants.defaultBlack,
-                                        letterSpacing: -0.5,
-                                      ),
-                                    ),
-                                    title: Text(
-                                      player.name,
-                                      style: TextStyles.poppinsSemiBold
-                                          .copyWith(
-                                            fontSize: 16,
-                                            color: selected
-                                                ? ColorsConstants.defaultWhite
-                                                : ColorsConstants.defaultBlack,
-                                            letterSpacing: -0.8,
-                                          ),
-                                    ),
-                                    subtitle: Text(
-                                      player.playerType == PlayerType.batter
-                                          ? "${player.batterType?.title ?? ""} Batsman"
-                                          : player.playerType ==
-                                                PlayerType.bowler
-                                          ? player.bowlerType?.title ?? "Bowler"
-                                          : "${player.batterType?.title ?? ""} • ${player.bowlerType?.title ?? ""}",
-                                      style: TextStyles.poppinsRegular.copyWith(
-                                        fontSize: 10,
-                                        color: selected
-                                            ? ColorsConstants.defaultWhite
-                                            : ColorsConstants.defaultBlack,
-                                        letterSpacing: -0.2,
-                                      ),
-                                    ),
-                                    onTap: () {
-                                      setState(() {
-                                        if (selected) {
-                                          selectedPlayers.removeWhere(
-                                            (p) =>
-                                                p.playerId == player.playerId,
-                                          );
-                                        } else {
-                                          selectedPlayers.add(player);
-                                        }
-                                      });
-                                    },
+                                ),
+                              );
+                            }
+
+                            final player = state.searchResults[index];
+                            final bool selected = selectedPlayers.any(
+                              (p) => p.playerId == player.playerId,
+                            );
+
+                            return Padding(
+                              padding: EdgeInsets.only(
+                                bottom: index == state.searchResults.length - 1
+                                    ? 16
+                                    : 0,
+                              ),
+                              child: ListTile(
+                                selected: selected,
+                                selectedTileColor: ColorsConstants.accentOrange,
+                                leading: Icon(
+                                  player.playerType == PlayerType.batter
+                                      ? Icons.sports_cricket
+                                      : player.playerType == PlayerType.bowler
+                                      ? Icons.sports_baseball
+                                      : Icons.star,
+                                  color: selected
+                                      ? ColorsConstants.defaultWhite
+                                      : ColorsConstants.defaultBlack,
+                                ),
+                                trailing: Text(
+                                  player.playerId,
+                                  style: TextStyles.poppinsMedium.copyWith(
+                                    fontSize: 12,
+                                    color: selected
+                                        ? ColorsConstants.defaultWhite
+                                        : ColorsConstants.defaultBlack,
+                                    letterSpacing: -0.5,
                                   ),
-                                );
-                              },
-                            ),
+                                ),
+                                title: Text(
+                                  player.name,
+                                  style: TextStyles.poppinsSemiBold.copyWith(
+                                    fontSize: 16,
+                                    color: selected
+                                        ? ColorsConstants.defaultWhite
+                                        : ColorsConstants.defaultBlack,
+                                    letterSpacing: -0.8,
+                                  ),
+                                ),
+                                subtitle: Text(
+                                  player.playerType == PlayerType.batter
+                                      ? "${player.batterType?.title ?? ""} Batsman"
+                                      : player.playerType == PlayerType.bowler
+                                      ? player.bowlerType?.title ?? "Bowler"
+                                      : "${player.batterType?.title ?? ""} • ${player.bowlerType?.title ?? ""}",
+                                  style: TextStyles.poppinsRegular.copyWith(
+                                    fontSize: 10,
+                                    color: selected
+                                        ? ColorsConstants.defaultWhite
+                                        : ColorsConstants.defaultBlack,
+                                    letterSpacing: -0.2,
+                                  ),
+                                ),
+                                onTap: () {
+                                  setState(() {
+                                    if (selected) {
+                                      selectedPlayers.removeWhere(
+                                        (p) => p.playerId == player.playerId,
+                                      );
+                                    } else {
+                                      selectedPlayers.add(player);
+                                    }
+                                  });
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                      ),
                     ),
+
+                    // Expanded(
+                    //   child: state.loading
+                    //       ? Center(
+                    //           child: SizedBox(
+                    //             height: 24,
+                    //             width: 24,
+                    //             child: CircularProgressIndicator(
+                    //               color: ColorsConstants.accentOrange,
+                    //             ),
+                    //           ),
+                    //         )
+                    //       : state.searchResults.isEmpty
+                    //       ? Center(
+                    //           child: Text(
+                    //             "Find Players",
+                    //             style: TextStyles.poppinsMedium.copyWith(
+                    //               fontSize: 16,
+                    //               color: ColorsConstants.defaultBlack
+                    //                   .withValues(alpha: 0.5),
+                    //               letterSpacing: -0.8,
+                    //             ),
+                    //           ),
+                    //         )
+                    //       : ListView.separated(
+                    //           itemCount: state.searchResults.length,
+                    //           separatorBuilder: (_, __) => const Padding(
+                    //             padding: EdgeInsets.symmetric(horizontal: 32.0),
+                    //             child: Divider(height: 1),
+                    //           ),
+                    //           itemBuilder: (context, index) {
+                    //             final player = state.searchResults[index];
+                    //             final bool selected = selectedPlayers.any(
+                    //               (p) => p.playerId == player.playerId,
+                    //             );
+                    //             return Padding(
+                    //               padding: EdgeInsets.only(
+                    //                 bottom:
+                    //                     index == state.searchResults.length - 1
+                    //                     ? 32
+                    //                     : 0,
+                    //               ),
+                    //               child: ListTile(
+                    //                 selected: selected,
+                    //                 selectedTileColor:
+                    //                     ColorsConstants.accentOrange,
+                    //                 leading: Icon(
+                    //                   player.playerType == PlayerType.batter
+                    //                       ? Icons.sports_cricket
+                    //                       : player.playerType ==
+                    //                             PlayerType.bowler
+                    //                       ? Icons.sports_baseball
+                    //                       : Icons.star,
+                    //                   color: selected
+                    //                       ? ColorsConstants.defaultWhite
+                    //                       : ColorsConstants.defaultBlack,
+                    //                 ),
+                    //                 trailing: Text(
+                    //                   player.playerId,
+                    //                   style: TextStyles.poppinsMedium.copyWith(
+                    //                     fontSize: 12,
+                    //                     color: selected
+                    //                         ? ColorsConstants.defaultWhite
+                    //                         : ColorsConstants.defaultBlack,
+                    //                     letterSpacing: -0.5,
+                    //                   ),
+                    //                 ),
+                    //                 title: Text(
+                    //                   player.name,
+                    //                   style: TextStyles.poppinsSemiBold
+                    //                       .copyWith(
+                    //                         fontSize: 16,
+                    //                         color: selected
+                    //                             ? ColorsConstants.defaultWhite
+                    //                             : ColorsConstants.defaultBlack,
+                    //                         letterSpacing: -0.8,
+                    //                       ),
+                    //                 ),
+                    //                 subtitle: Text(
+                    //                   player.playerType == PlayerType.batter
+                    //                       ? "${player.batterType?.title ?? ""} Batsman"
+                    //                       : player.playerType ==
+                    //                             PlayerType.bowler
+                    //                       ? player.bowlerType?.title ?? "Bowler"
+                    //                       : "${player.batterType?.title ?? ""} • ${player.bowlerType?.title ?? ""}",
+                    //                   style: TextStyles.poppinsRegular.copyWith(
+                    //                     fontSize: 10,
+                    //                     color: selected
+                    //                         ? ColorsConstants.defaultWhite
+                    //                         : ColorsConstants.defaultBlack,
+                    //                     letterSpacing: -0.2,
+                    //                   ),
+                    //                 ),
+                    //                 onTap: () {
+                    //                   setState(() {
+                    //                     if (selected) {
+                    //                       selectedPlayers.removeWhere(
+                    //                         (p) =>
+                    //                             p.playerId == player.playerId,
+                    //                       );
+                    //                     } else {
+                    //                       selectedPlayers.add(player);
+                    //                     }
+                    //                   });
+                    //                 },
+                    //               ),
+                    //             );
+                    //           },
+                    //         ),
+                    // ),
                   ],
                 ),
               ),

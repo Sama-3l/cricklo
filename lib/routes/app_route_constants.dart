@@ -8,10 +8,10 @@ class Routes {
   static const setPin = "/setPin";
   static const notifications = "/notifications";
 
-  static const mainAppScreen = "/";
+  static const mainAppScreen = "/m";
 
   static const createTeam = "/create-team";
-  static const addPlayersToTeam = "/add-players-to-team";
+  static const addPlayersToTeam = "/";
   static const teamPage = "/teamPage";
 
   static const createMatch = "/create-match";
