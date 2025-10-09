@@ -679,4 +679,185 @@ class WidgetDecider {
       ],
     );
   }
+
+  static Widget buildBattingTable({
+    required List<Map<String, dynamic>> batsmen,
+    required String strikerName,
+  }) {
+    if (batsmen.isEmpty) {
+      batsmen = [
+        {
+          'name': '-',
+          'runs': "-",
+          'balls': "-",
+          'fours': "-",
+          'sixes': "-",
+          'strikeRate': "-",
+        },
+        {
+          'name': '-',
+          'runs': "-",
+          'balls': "-",
+          'fours': "-",
+          'sixes': "-",
+          'strikeRate': "-",
+        },
+      ];
+    }
+    return Table(
+      columnWidths: const {
+        0: FlexColumnWidth(2.5), // Batsman name wider
+        1: FlexColumnWidth(1),
+        2: FlexColumnWidth(1),
+        3: FlexColumnWidth(1),
+        4: FlexColumnWidth(1),
+        5: FlexColumnWidth(1.2),
+      },
+      border: TableBorder(
+        horizontalInside: BorderSide(
+          color: ColorsConstants.defaultBlack.withValues(alpha: 0.1),
+          width: 1,
+        ),
+      ),
+      children: [
+        // 🟠 Header Row
+        TableRow(
+          decoration: BoxDecoration(
+            color: ColorsConstants.accentOrange.withValues(alpha: 0.15),
+          ),
+          children: [
+            _headerCell("Batsman"),
+            _headerCell("R"),
+            _headerCell("B"),
+            _headerCell("4s"),
+            _headerCell("6s"),
+            _headerCell("SR"),
+          ],
+        ),
+
+        // 🏏 Player Rows
+        for (final player in batsmen)
+          TableRow(
+            children: [
+              _batsmanNameCell(player['name'], player['name'] == strikerName),
+              _dataCell("${player['runs']}"),
+              _dataCell("${player['balls']}"),
+              _dataCell("${player['fours']}"),
+              _dataCell("${player['sixes']}"),
+              _dataCell("${player['strikeRate']}"),
+            ],
+          ),
+      ],
+    );
+  }
+
+  static Widget buildBowlingTable(List<Map<String, dynamic>> bowlers) {
+    if (bowlers.isEmpty) {
+      bowlers = [
+        {
+          'name': '-',
+          'overs': "-",
+          'runs': "-",
+          'maidens': "-",
+          'wickets': "-",
+          'economy': "-",
+        },
+      ];
+    }
+    return Table(
+      columnWidths: const {
+        0: FlexColumnWidth(2.5),
+        1: FlexColumnWidth(1),
+        2: FlexColumnWidth(1),
+        3: FlexColumnWidth(1),
+        4: FlexColumnWidth(1),
+        5: FlexColumnWidth(1.2),
+      },
+      border: TableBorder(
+        horizontalInside: BorderSide(
+          color: ColorsConstants.defaultBlack.withValues(alpha: 0.1),
+          width: 1,
+        ),
+      ),
+      children: [
+        TableRow(
+          decoration: BoxDecoration(
+            color: ColorsConstants.accentOrange.withValues(alpha: 0.15),
+          ),
+          children: [
+            _headerCell("Bowler"),
+            _headerCell("O"),
+            _headerCell("R"),
+            _headerCell("M"),
+            _headerCell("W"),
+            _headerCell("Eco"),
+          ],
+        ),
+        for (final bowler in bowlers)
+          TableRow(
+            children: [
+              _dataCell(bowler['name']),
+              _dataCell("${bowler['overs']}"),
+              _dataCell("${bowler['runs']}"),
+              _dataCell("${bowler['maidens']}"),
+              _dataCell("${bowler['wickets']}"),
+              _dataCell("${bowler['economy']}"),
+            ],
+          ),
+      ],
+    );
+  }
+
+  static Widget _headerCell(String text) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+      child: Text(
+        text,
+        style: TextStyles.poppinsSemiBold.copyWith(
+          fontSize: 12,
+          color: ColorsConstants.defaultBlack,
+          letterSpacing: -0.3,
+        ),
+      ),
+    );
+  }
+
+  static Widget _batsmanNameCell(String name, bool isStriker) {
+    if (isStriker) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
+        child: Container(
+          decoration: BoxDecoration(
+            color: ColorsConstants.accentOrange,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+          child: Text(
+            name,
+            style: TextStyles.poppinsSemiBold.copyWith(
+              fontSize: 12,
+              color: ColorsConstants.defaultWhite,
+              letterSpacing: -0.3,
+            ),
+          ),
+        ),
+      );
+    }
+
+    return _dataCell(name);
+  }
+
+  static Widget _dataCell(String text) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+      child: Text(
+        text,
+        style: TextStyles.poppinsMedium.copyWith(
+          fontSize: 12,
+          color: ColorsConstants.defaultBlack,
+          letterSpacing: -0.3,
+        ),
+      ),
+    );
+  }
 }

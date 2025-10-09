@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:cricklo/core/usecase/usecase.dart';
+import 'package:cricklo/core/utils/constants/global_variables.dart';
 import 'package:cricklo/features/login/domain/entities/user_entitiy.dart';
 import 'package:cricklo/features/mainapp/data/usecases/get_current_user_usecase.dart';
 import 'package:cricklo/features/mainapp/data/usecases/logout_usecase.dart';
@@ -105,6 +106,7 @@ class MainAppCubit extends Cubit<MainAppState> {
         final response = await _currentUserUsecase(NoParams());
         response.fold(
           (_) {
+            GlobalVariables.setUser(user);
             emit(
               UpdateIndex(
                 currentIndex: 0,
@@ -115,6 +117,8 @@ class MainAppCubit extends Cubit<MainAppState> {
             );
           },
           (response) {
+            GlobalVariables.setUser(response);
+            print(GlobalVariables.user);
             emit(
               UpdateIndex(
                 currentIndex: 0,
@@ -125,7 +129,11 @@ class MainAppCubit extends Cubit<MainAppState> {
             );
           },
         );
+      } else {
+        GlobalVariables.setUser(user);
       }
+    } else {
+      GlobalVariables.setUser(user);
     }
   }
 

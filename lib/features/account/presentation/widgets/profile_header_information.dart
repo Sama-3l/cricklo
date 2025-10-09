@@ -59,35 +59,40 @@ class ProfileHeaderInformation extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  user != null
-                      ? "${user!.location.city}, ${user!.location.state}"
-                      : team != null
-                      ? "${team!.location.city}, ${team!.location.state}"
-                      : "Guest",
-                  style: TextStyles.poppinsMedium.copyWith(
-                    fontSize: 14,
-                    letterSpacing: -0.5,
-                    color: ColorsConstants.defaultBlack.withValues(alpha: 0.7),
-                  ),
-                ),
-                if (user != null)
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   Text(
-                    Methods.getPlayerType(user!),
-                    style: TextStyles.poppinsSemiBold.copyWith(
-                      fontSize: 10,
-                      letterSpacing: -0.2,
+                    user != null
+                        ? "${user!.location.city}, ${user!.location.state}"
+                        : team != null
+                        ? "${team!.location.city}, ${team!.location.state}"
+                        : "Guest",
+                    style: TextStyles.poppinsMedium.copyWith(
+                      fontSize: 14,
+                      letterSpacing: -0.5,
                       color: ColorsConstants.defaultBlack.withValues(
-                        alpha: 0.5,
+                        alpha: 0.7,
                       ),
                     ),
                   ),
-              ],
+                  if (user != null)
+                    Text(
+                      Methods.getPlayerType(user!),
+                      maxLines: 2,
+                      style: TextStyles.poppinsSemiBold.copyWith(
+                        fontSize: 10,
+                        letterSpacing: -0.2,
+                        color: ColorsConstants.defaultBlack.withValues(
+                          alpha: 0.5,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
             ),
-            const Spacer(),
+            const SizedBox(width: 16),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
@@ -98,7 +103,7 @@ class ProfileHeaderInformation extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    "Team ID: ",
+                    user != null ? "Player ID: " : "Team ID: ",
                     style: TextStyles.poppinsRegular.copyWith(
                       fontSize: 10,
                       letterSpacing: -0.2,
@@ -106,7 +111,8 @@ class ProfileHeaderInformation extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    "1234567",
+                    user != null ? user!.profileId : team!.id,
+                    maxLines: 2,
                     style: TextStyles.poppinsSemiBold.copyWith(
                       fontSize: 10,
                       letterSpacing: -0.2,

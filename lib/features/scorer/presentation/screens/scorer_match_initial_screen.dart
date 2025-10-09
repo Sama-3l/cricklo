@@ -1,14 +1,17 @@
 import 'package:cricklo/core/utils/common/primary_button.dart';
 import 'package:cricklo/core/utils/common/textfield.dart';
-import 'package:cricklo/core/utils/constants/enums.dart';
-import 'package:cricklo/core/utils/constants/methods.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
-import 'package:cricklo/features/teams/presentation/widgets/search_players_bottom_sheet.dart';
+import 'package:cricklo/features/matches/domain/entities/match_entity.dart';
+import 'package:cricklo/features/scorer/presentation/widgets/scorer_dialogs.dart';
+import 'package:cricklo/features/scorer/presentation/widgets/scorer_initial_screen_teams_header.dart';
+import 'package:cricklo/routes/app_route_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class ScorerMatchInitialScreen extends StatefulWidget {
-  const ScorerMatchInitialScreen({super.key});
+  const ScorerMatchInitialScreen({super.key, required this.matchEntity});
+
+  final MatchEntity matchEntity;
 
   @override
   State<ScorerMatchInitialScreen> createState() =>
@@ -19,14 +22,22 @@ class _ScorerMatchInitialScreenState extends State<ScorerMatchInitialScreen> {
   final TextEditingController venueLocation = TextEditingController();
   final TextEditingController venueArea = TextEditingController();
 
-  final FocusNode venueNode = FocusNode();
-  final FocusNode areaNode = FocusNode();
-
   DateTime? _selectedDate;
   TimeOfDay? _selectedTime;
   String? _selectedFormat;
-  String? scorerA;
-  String? scorerB;
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      venueLocation.text = widget.matchEntity.location.location ?? "";
+      venueArea.text =
+          "${widget.matchEntity.location.area}, ${widget.matchEntity.location.city}, ${widget.matchEntity.location.state}";
+      _selectedDate = widget.matchEntity.dateAndTime;
+      _selectedTime = TimeOfDay.fromDateTime(widget.matchEntity.dateAndTime);
+      _selectedFormat = widget.matchEntity.matchType.matchType;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +59,7 @@ class _ScorerMatchInitialScreenState extends State<ScorerMatchInitialScreen> {
           },
         ),
         title: Text(
-          "Create Match",
+          "Start Match",
           style: TextStyles.poppinsMedium.copyWith(
             fontSize: 24,
             letterSpacing: -1.2,
@@ -64,23 +75,37 @@ class _ScorerMatchInitialScreenState extends State<ScorerMatchInitialScreen> {
         color: ColorsConstants.defaultWhite,
         width: double.infinity,
         child: PrimaryButton(
-          disabled:
-              venueLocation.text.isEmpty ||
-              venueArea.text.isEmpty ||
-              scorerA == null ||
-              scorerB == null ||
-              _selectedDate == null ||
-              _selectedTime == null ||
-              _selectedFormat == null,
+          disabled: false,
           child: Text(
-            "Create Match",
+            "Start Match",
             style: TextStyles.poppinsSemiBold.copyWith(
               fontSize: 16,
               letterSpacing: -0.6,
               color: ColorsConstants.defaultWhite,
             ),
           ),
-          onPress: () {},
+          onPress: () async {
+            final result = await showTossDialog(
+              context,
+              teamAId: widget.matchEntity.teamA.id,
+              teamBId: widget.matchEntity.teamB.id,
+              teamAName: widget.matchEntity.teamA.name,
+              teamALogo: widget.matchEntity.teamA.teamLogo,
+              teamBName: widget.matchEntity.teamB.name,
+              teamBLogo: widget.matchEntity.teamB.teamLogo,
+            );
+
+            if (result != null) {
+              final winner = result["winner"];
+              final choice = result["choice"];
+
+              print("Winner: $winner | Choice: $choice");
+
+              GoRouter.of(
+                context,
+              ).pushNamed(Routes.scorerMatchCenter, extra: widget.matchEntity);
+            }
+          },
         ),
       ),
       body: SafeArea(
@@ -89,205 +114,10 @@ class _ScorerMatchInitialScreenState extends State<ScorerMatchInitialScreen> {
             padding: const EdgeInsets.only(top: 24.0),
             child: Column(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Column(
-                      children: [
-                        Text(
-                          "SELECT TEAM",
-                          style: TextStyles.poppinsLight.copyWith(
-                            fontSize: 12,
-                            letterSpacing: 1,
-                            color: ColorsConstants.defaultBlack,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        InkWell(
-                          onTap: () async {
-                            await showModalBottomSheet(
-                              context: context,
-                              isScrollControlled: true,
-                              builder: (context) => SearchPlayersBottomSheet(
-                                initiallySelected: [],
-                              ),
-                            );
-                          },
-                          borderRadius: BorderRadius.circular(40),
-                          child: CircleAvatar(
-                            radius: 40,
-                            backgroundColor: ColorsConstants.accentOrange
-                                .withValues(alpha: 0.2),
-                            child: Icon(
-                              Icons.add,
-                              size: 24,
-                              color: ColorsConstants.defaultBlack,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Text(
-                          "SELECT TEAM",
-                          style: TextStyles.poppinsLight.copyWith(
-                            fontSize: 12,
-                            letterSpacing: 1,
-                            color: ColorsConstants.defaultBlack,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        InkWell(
-                          onTap: () async {
-                            await showModalBottomSheet(
-                              context: context,
-                              isScrollControlled: true,
-                              builder: (context) => SearchPlayersBottomSheet(
-                                initiallySelected: [],
-                              ),
-                            );
-                          },
-                          borderRadius: BorderRadius.circular(40),
-                          child: CircleAvatar(
-                            radius: 40,
-                            backgroundColor: ColorsConstants.accentOrange
-                                .withValues(alpha: 0.2),
-                            child: Icon(
-                              Icons.add,
-                              size: 24,
-                              color: ColorsConstants.defaultBlack,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                ScorerInitialScreenTeamsHeader(matchEntity: widget.matchEntity),
                 const SizedBox(height: 24),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Scorer - Team A",
-                              style: TextStyles.poppinsSemiBold.copyWith(
-                                fontSize: 12,
-                                letterSpacing: -0.5,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            DropdownButtonFormField<String>(
-                              enableFeedback: false,
-                              dropdownColor: ColorsConstants.defaultWhite,
-                              initialValue: scorerA,
-                              decoration: InputDecoration(
-                                labelText: scorerA == null ? "Scorer" : "",
-                                filled: true,
-                                labelStyle: TextStyles.poppinsMedium.copyWith(
-                                  fontSize: 16,
-                                  letterSpacing: -0.8,
-                                  color: ColorsConstants.defaultBlack
-                                      .withValues(alpha: 0.2),
-                                ),
-                                fillColor: ColorsConstants.onSurfaceGrey
-                                    .withValues(alpha: 0.2),
-                                border: OutlineInputBorder(
-                                  borderSide: BorderSide.none,
-                                ),
-                              ),
-                              items: MatchType.values
-                                  .map(
-                                    (f) => DropdownMenuItem(
-                                      value: f.matchType,
-                                      child: Text(
-                                        f.matchType,
-                                        style: TextStyles.poppinsMedium
-                                            .copyWith(
-                                              fontSize: 16,
-                                              letterSpacing: -0.8,
-                                            ),
-                                      ),
-                                    ),
-                                  )
-                                  .toList(),
-                              onChanged: (val) {
-                                setState(() {
-                                  scorerA = val;
-                                });
-                              },
-                              validator: (val) =>
-                                  val == null ? "Select a match format" : null,
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Scorer - Team B",
-                              style: TextStyles.poppinsSemiBold.copyWith(
-                                fontSize: 12,
-                                letterSpacing: -0.5,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            DropdownButtonFormField<String>(
-                              dropdownColor: ColorsConstants.defaultWhite,
-                              initialValue: scorerB,
-                              decoration: InputDecoration(
-                                labelText: scorerB == null ? "Scorer" : "",
-                                filled: true,
-                                labelStyle: TextStyles.poppinsMedium.copyWith(
-                                  fontSize: 16,
-                                  letterSpacing: -0.8,
-                                  color: ColorsConstants.defaultBlack
-                                      .withValues(alpha: 0.2),
-                                ),
-                                fillColor: ColorsConstants.onSurfaceGrey
-                                    .withValues(alpha: 0.2),
-                                border: OutlineInputBorder(
-                                  borderSide: BorderSide.none,
-                                ),
-                              ),
-                              items: MatchType.values
-                                  .map(
-                                    (f) => DropdownMenuItem(
-                                      value: f.matchType,
-                                      child: Text(
-                                        f.matchType,
-                                        style: TextStyles.poppinsMedium
-                                            .copyWith(
-                                              fontSize: 16,
-                                              letterSpacing: -0.8,
-                                            ),
-                                      ),
-                                    ),
-                                  )
-                                  .toList(),
-                              onChanged: (val) {
-                                setState(() {
-                                  scorerB = val;
-                                });
-                              },
-                              validator: (val) =>
-                                  val == null ? "Select a match format" : null,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 16),
                 InputField(
+                  readOnly: true,
                   scrollPadding: false,
                   title: "Venue Location",
                   controller: venueLocation,
@@ -304,6 +134,7 @@ class _ScorerMatchInitialScreenState extends State<ScorerMatchInitialScreen> {
                 ),
                 const SizedBox(height: 16),
                 InputField(
+                  readOnly: true,
                   scrollPadding: false,
                   title: "Venue Area",
                   controller: venueArea,
@@ -442,50 +273,73 @@ class _ScorerMatchInitialScreenState extends State<ScorerMatchInitialScreen> {
                         ),
                       ),
                       const SizedBox(height: 8),
-                      DropdownButtonFormField<String>(
-                        enableFeedback: false,
-                        dropdownColor: ColorsConstants.defaultWhite,
-                        initialValue: _selectedFormat,
-                        decoration: InputDecoration(
-                          labelText: _selectedFormat == null
-                              ? "Format of Game"
-                              : "",
-                          filled: true,
-                          labelStyle: TextStyles.poppinsMedium.copyWith(
-                            fontSize: 16,
-                            letterSpacing: -0.8,
-                            color: ColorsConstants.defaultBlack.withValues(
-                              alpha: 0.2,
-                            ),
-                          ),
-                          fillColor: ColorsConstants.onSurfaceGrey.withValues(
+                      Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: ColorsConstants.onSurfaceGrey.withValues(
                             alpha: 0.2,
                           ),
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          _selectedFormat!,
+                          style: TextStyles.poppinsMedium.copyWith(
+                            fontSize: 16,
+                            letterSpacing: -0.8,
+                            color: ColorsConstants.defaultBlack,
                           ),
                         ),
-                        items: MatchType.values
-                            .map(
-                              (f) => DropdownMenuItem(
-                                value: f.matchType,
-                                child: Text(
-                                  f.matchType,
-                                  style: TextStyles.poppinsMedium.copyWith(
-                                    fontSize: 16,
-                                    letterSpacing: -0.8,
-                                  ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Scorer",
+                        style: TextStyles.poppinsSemiBold.copyWith(
+                          fontSize: 12,
+                          letterSpacing: -0.5,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: ColorsConstants.onSurfaceGrey.withValues(
+                            alpha: 0.2,
+                          ),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              widget.matchEntity.scorer.name,
+                              style: TextStyles.poppinsMedium.copyWith(
+                                fontSize: 16,
+                                letterSpacing: -0.8,
+                                color: ColorsConstants.defaultBlack,
+                              ),
+                            ),
+                            Text(
+                              widget.matchEntity.scorer.playerId,
+                              style: TextStyles.poppinsMedium.copyWith(
+                                fontSize: 12,
+                                letterSpacing: -0.4,
+                                color: ColorsConstants.defaultBlack.withValues(
+                                  alpha: 0.5,
                                 ),
                               ),
-                            )
-                            .toList(),
-                        onChanged: (val) {
-                          setState(() {
-                            _selectedFormat = val;
-                          });
-                        },
-                        validator: (val) =>
-                            val == null ? "Select a match format" : null,
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),

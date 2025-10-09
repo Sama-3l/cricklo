@@ -27,7 +27,7 @@ class _MatchListState extends State<MatchList> {
     return Column(
       children: [
         SizedBox(
-          height: 168,
+          height: 181,
           child: PageView.builder(
             controller: _pageController,
             itemCount: matches.length,

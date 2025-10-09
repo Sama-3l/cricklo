@@ -14,8 +14,7 @@ class MatchEntity {
   final TeamEntity teamA;
   final TeamEntity teamB;
   final LocationEntity location;
-  final PlayerEntity scorer1;
-  final PlayerEntity scorer2;
+  final PlayerEntity scorer;
   final String? tossWinner; // TeamID
   final TossChoice? tossChoice;
   final String? winner;
@@ -32,8 +31,7 @@ class MatchEntity {
     required this.teamA,
     required this.teamB,
     required this.location,
-    required this.scorer1,
-    required this.scorer2,
+    required this.scorer,
     this.tossWinner,
     this.tossChoice,
     this.winner,
@@ -52,8 +50,7 @@ class MatchEntity {
     TeamEntity? teamA,
     TeamEntity? teamB,
     LocationEntity? location,
-    PlayerEntity? scorer1,
-    PlayerEntity? scorer2,
+    PlayerEntity? scorer,
   }) {
     return MatchEntity(
       id: id ?? this.id,
@@ -65,8 +62,7 @@ class MatchEntity {
       teamA: teamA ?? this.teamA,
       teamB: teamB ?? this.teamB,
       location: location ?? this.location,
-      scorer1: scorer1 ?? this.scorer1,
-      scorer2: scorer2 ?? this.scorer2,
+      scorer: scorer ?? this.scorer,
     );
   }
 }

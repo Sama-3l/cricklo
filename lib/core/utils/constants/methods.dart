@@ -142,18 +142,18 @@ class Methods {
 
     // Month and time formatting
     const months = [
-      'January',
-      'February',
+      'Jan',
+      'Feb',
       'March',
       'April',
       'May',
       'June',
       'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
+      'Aug',
+      'Sept',
+      'Oct',
+      'Nov',
+      'Dec',
     ];
 
     final month = months[dateTime.month - 1];
@@ -161,7 +161,7 @@ class Methods {
 
     final hour = dateTime.hour % 12 == 0 ? 12 : dateTime.hour % 12;
     final minute = dateTime.minute.toString().padLeft(2, '0');
-    final period = dateTime.hour >= 12 ? 'pm' : 'am';
+    final period = dateTime.hour >= 12 ? 'PM' : 'AM';
 
     return '$day$suffix $month${addLineBreak ? ", $year\n" : " at "}$hour:$minute $period';
   }

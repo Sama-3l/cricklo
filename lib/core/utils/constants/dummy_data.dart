@@ -23,6 +23,17 @@ final dummyCurrUser = UserEntity(
   bowlerType: BowlerType.leftArmPace,
 );
 
+final PlayerEntity currUser = PlayerEntity(
+  teamRole: TeamRole.captain,
+  id: 'siddhartha-0Z8jd97V1',
+  playerId: 'siddhartha-0Z8jd97V1',
+  name: 'Virat Kohli',
+  captain: true,
+  playerType: PlayerType.batter,
+  batterType: BatterType.rightHand,
+  bowlerType: null,
+);
+
 final PlayerEntity player1 = PlayerEntity(
   teamRole: TeamRole.captain,
   id: '3',
@@ -274,8 +285,7 @@ final MatchEntity dummyMatchScheduled = MatchEntity(
     lat: 0,
     lng: 0,
   ),
-  scorer1: player1,
-  scorer2: player2,
+  scorer: currUser,
 );
 
 final MatchEntity dummyMatchLive = MatchEntity(
@@ -294,8 +304,7 @@ final MatchEntity dummyMatchLive = MatchEntity(
     lat: 0,
     lng: 0,
   ),
-  scorer1: player1,
-  scorer2: player2,
+  scorer: currUser,
 );
 
 final MatchEntity dummyMatchTossDone = MatchEntity(
@@ -322,8 +331,7 @@ final MatchEntity dummyMatchTossDone = MatchEntity(
     lat: 0,
     lng: 0,
   ),
-  scorer1: player1,
-  scorer2: player2,
+  scorer: currUser,
 );
 
 final MatchEntity dummyMatchInningsTwo = MatchEntity(
@@ -356,8 +364,7 @@ final MatchEntity dummyMatchInningsTwo = MatchEntity(
     lat: 0,
     lng: 0,
   ),
-  scorer1: player1,
-  scorer2: player2,
+  scorer: currUser,
 );
 
 final MatchEntity dummyMatchDone = MatchEntity(
@@ -391,6 +398,5 @@ final MatchEntity dummyMatchDone = MatchEntity(
     lng: 0,
   ),
   winner: "t001",
-  scorer1: player1,
-  scorer2: player2,
+  scorer: currUser,
 );

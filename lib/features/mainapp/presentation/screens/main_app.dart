@@ -49,11 +49,14 @@ class _ContentViewState extends State<ContentView> {
           if (state.loading) {
             return Scaffold(
               backgroundColor: ColorsConstants.defaultWhite,
-              body: const Center(
+              body: Center(
                 child: SizedBox(
                   height: 24,
                   width: 24,
-                  child: CircularProgressIndicator(),
+                  child: CircularProgressIndicator(
+                    color: ColorsConstants.accentOrange,
+                    strokeWidth: 2.5,
+                  ),
                 ),
               ),
             );

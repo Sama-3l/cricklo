@@ -7,8 +7,11 @@ import 'package:cricklo/features/login/presentation/screens/player_type_onboardi
 import 'package:cricklo/features/login/presentation/screens/profile_setup_page.dart';
 import 'package:cricklo/features/login/presentation/screens/set_pin.dart';
 import 'package:cricklo/features/mainapp/presentation/screens/main_app.dart';
+import 'package:cricklo/features/matches/domain/entities/match_entity.dart';
 import 'package:cricklo/features/matches/presentation/screens/create_match.dart';
 import 'package:cricklo/features/notifications/presentation/screens/notifications_screens.dart';
+import 'package:cricklo/features/scorer/presentation/screens/scorer_match_center.dart';
+import 'package:cricklo/features/scorer/presentation/screens/scorer_match_initial_screen.dart';
 import 'package:cricklo/features/teams/domain/entities/team_entity.dart';
 import 'package:cricklo/features/teams/presentation/screens/add_players_screen.dart';
 import 'package:cricklo/features/teams/presentation/screens/create_team_screen.dart';
@@ -122,6 +125,24 @@ class AppRouter {
         path: Routes.notifications,
         pageBuilder: (context, state) {
           return MaterialPage(child: NotificationsScreens());
+        },
+      ),
+      GoRoute(
+        name: Routes.scorerInitialPage,
+        path: Routes.scorerInitialPage,
+        pageBuilder: (context, state) {
+          final match = state.extra as MatchEntity? ?? dummyMatchScheduled;
+          return MaterialPage(
+            child: ScorerMatchInitialScreen(matchEntity: match),
+          );
+        },
+      ),
+      GoRoute(
+        name: Routes.scorerMatchCenter,
+        path: Routes.scorerMatchCenter,
+        pageBuilder: (context, state) {
+          final match = state.extra as MatchEntity? ?? dummyMatchScheduled;
+          return MaterialPage(child: ScorerMatchCenter(match: match));
         },
       ),
     ],

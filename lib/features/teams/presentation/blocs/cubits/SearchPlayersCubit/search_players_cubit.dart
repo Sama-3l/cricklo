@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:cricklo/features/teams/data/entities/search_player_usecase_entity.dart';
 import 'package:cricklo/features/teams/data/usecases/search_players_usecase.dart';
 import 'package:cricklo/features/teams/domain/entities/search_user_entity.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter/material.dart';
 
 part 'search_players_state.dart';
 
