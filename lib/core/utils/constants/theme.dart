@@ -35,6 +35,11 @@ abstract class ColorsConstants {
   static Color get wagonWheelField => const Color(0xff419B44);
   static Color get wagonWheelPitch => const Color(0xffFFC21F);
   static Color get wagonWheelStatBackground => const Color(0xff2E3C43);
+  static Color get wagonWheelStat1s => const Color(0xffB5B6B7);
+  static Color get wagonWheelStat2s => const Color(0xff3F51B5);
+  static Color get wagonWheelStat3s => const Color(0xff9C28B1);
+  static Color get wagonWheelStat4s => const Color(0xffFFEB3C);
+  static Color get wagonWheelStat6s => const Color(0xffFE5722);
 }
 
 class TextStyles {

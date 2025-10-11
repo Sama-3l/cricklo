@@ -12,7 +12,6 @@ class InningsEntity {
   double crr;
   int extras;
   final List<OversEntity> oversData;
-  final List<PartnershipEntity> partnerships;
 
   InningsEntity({
     required this.battingTeam,
@@ -23,6 +22,6 @@ class InningsEntity {
     required this.crr,
     required this.extras,
     required this.oversData,
-    required this.partnerships,
+    // required this.partnerships,
   });
 }

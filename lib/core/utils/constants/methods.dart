@@ -5,6 +5,8 @@ import 'package:cricklo/core/utils/constants/enums.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/login/domain/entities/user_entitiy.dart';
 import 'package:cricklo/features/matches/domain/entities/match_entity.dart';
+import 'package:cricklo/features/scorer/domain/entities/match_center_entity.dart';
+import 'package:cricklo/features/scorer/domain/entities/match_player_entity.dart';
 import 'package:cricklo/features/scorer/domain/entities/overs_entity.dart';
 import 'package:cricklo/features/teams/domain/entities/player_entity.dart';
 import 'package:flutter/material.dart';
@@ -303,5 +305,85 @@ class Methods {
     final overs = int.parse(parts[0]);
     final balls = parts.length > 1 ? int.parse(parts[1]) : 0;
     return overs + (balls / 6.0);
+  }
+
+  static String decrementOver(String overs) {
+    if (!overs.contains('.')) return overs; // safety
+
+    final parts = overs.split('.');
+    int over = int.tryParse(parts[0]) ?? 0;
+    int ball = int.tryParse(parts[1]) ?? 0;
+
+    if (over == 0 && ball == 0) return "0.0"; // can't go below 0
+
+    if (ball > 0) {
+      ball--;
+    } else {
+      // ball == 0 → borrow 1 over, set balls to 5
+      if (over > 0) {
+        over--;
+        ball = 5;
+      } else {
+        ball = 0;
+      }
+    }
+
+    return "$over.$ball";
+  }
+
+  static bool validScorerOperation(
+    List<MatchPlayerEntity?> currBatsmen,
+    MatchPlayerEntity? strike,
+  ) {
+    return currBatsmen.where((e) => e != null).isNotEmpty &&
+        strike != null &&
+        (currBatsmen[0]!.playerId == strike.playerId ||
+            currBatsmen[1]!.playerId == strike.playerId);
+  }
+
+  static String getBatsmanSubtitle(
+    MatchPlayerEntity player,
+    MatchCenterEntity match,
+  ) {
+    final innings = match.innings.last;
+    final isCurrBatsman = match.battingTeam!.currBatsmen.any(
+      (b) => b?.playerId == player.playerId,
+    );
+    final matchOverOrAbandoned = match.winner != null || match.abandoned;
+
+    // Player is not out but match ended
+    if (matchOverOrAbandoned && player.stats.out == false) {
+      return "not out";
+    }
+
+    // Player still batting
+    if (!player.stats.out && isCurrBatsman) {
+      return "batting";
+    }
+
+    // Player is out
+    if (player.stats.out) {
+      switch (player.stats.wicketType) {
+        case WicketType.retired:
+          return "retired hurt";
+        case WicketType.caught:
+          return "c ${player.stats.fielder} b ${player.stats.bowler}";
+        case WicketType.stumped:
+          return "st ${player.stats.fielder} b ${player.stats.bowler}";
+        case WicketType.bowled:
+          return "b ${player.stats.bowler}";
+        case WicketType.lbw:
+          return "lbw b ${player.stats.bowler}";
+        case WicketType.hitWicket:
+          return "hit wicket b ${player.stats.bowler}";
+        case WicketType.runOut:
+          return "run out (${player.stats.fielder})";
+        default:
+          return "";
+      }
+    }
+
+    // Default fallback
+    return "";
   }
 }

@@ -23,6 +23,18 @@ class _ScorerSummaryTabState extends State<ScorerSummaryTab> {
         final cubit = context.read<ScorerMatchCenterCubit>();
         final state = cubit.state;
         final currInnings = state.matchCenterEntity!.innings.last;
+        if (state.matchCenterEntity!.abandoned) {
+          return Center(
+            child: Text(
+              "Match Abandoned",
+              style: TextStyles.poppinsSemiBold.copyWith(
+                fontSize: 24,
+                letterSpacing: -1.2,
+                color: ColorsConstants.accentOrange,
+              ),
+            ),
+          );
+        }
         return Column(
           children: [
             Padding(
@@ -91,20 +103,77 @@ class _ScorerSummaryTabState extends State<ScorerSummaryTab> {
                               title: "Overs:",
                               stat:
                                   "${currInnings.overs} / ${state.matchCenterEntity!.overs}",
-                              horizontalSpace: 20,
+                              horizontalSpace:
+                                  state.matchCenterEntity!.innings.length > 1
+                                  ? 46
+                                  : 20,
                             ),
-                            const SizedBox(height: 12),
+                            SizedBox(
+                              height:
+                                  state.matchCenterEntity!.innings.length > 1
+                                  ? 4
+                                  : 12,
+                            ),
                             SummaryStatRow(
                               title: "Extras:",
                               stat: "${currInnings.extras}",
-                              horizontalSpace: 18,
+                              horizontalSpace:
+                                  state.matchCenterEntity!.innings.length > 1
+                                  ? 46
+                                  : 18,
                             ),
-                            const SizedBox(height: 12),
+                            SizedBox(
+                              height:
+                                  state.matchCenterEntity!.innings.length > 1
+                                  ? 4
+                                  : 12,
+                            ),
                             SummaryStatRow(
                               title: "CRR:",
                               stat: currInnings.crr.toStringAsFixed(2),
-                              horizontalSpace: 32,
+                              horizontalSpace:
+                                  state.matchCenterEntity!.innings.length > 1
+                                  ? 60
+                                  : 32,
                             ),
+
+                            if (state.matchCenterEntity!.innings.length >
+                                1) ...[
+                              const SizedBox(height: 4),
+                              SummaryStatRow(
+                                title: "Target:",
+                                stat: state
+                                    .matchCenterEntity!
+                                    .innings[state
+                                            .matchCenterEntity!
+                                            .innings
+                                            .length -
+                                        2]
+                                    .runs
+                                    .toString(),
+
+                                horizontalSpace: 43,
+                              ),
+                              const SizedBox(height: 4),
+                              SummaryStatRow(
+                                title: "Req CRR",
+                                stat:
+                                    (state
+                                                .matchCenterEntity!
+                                                .innings[state
+                                                        .matchCenterEntity!
+                                                        .innings
+                                                        .length -
+                                                    2]
+                                                .runs /
+                                            (state.matchCenterEntity!.overs -
+                                                Methods.oversToDecimal(
+                                                  currInnings.overs,
+                                                )))
+                                        .toStringAsFixed(2),
+                                horizontalSpace: 32,
+                              ),
+                            ],
                           ],
                         ),
                       ),
@@ -136,9 +205,9 @@ class _ScorerSummaryTabState extends State<ScorerSummaryTab> {
                   ),
                   const SizedBox(width: 16),
                   Text(
-                    currInnings.partnerships.isEmpty
+                    state.matchCenterEntity!.battingTeam!.partnerships.isEmpty
                         ? "0 (0)"
-                        : "${currInnings.partnerships.last.runs} (${currInnings.partnerships.last.balls})",
+                        : "${state.matchCenterEntity!.battingTeam!.partnerships.last.runs} (${state.matchCenterEntity!.battingTeam!.partnerships.last.balls})",
                     style: TextStyles.poppinsBold.copyWith(
                       fontSize: 16,
                       letterSpacing: -0.8,
@@ -149,7 +218,7 @@ class _ScorerSummaryTabState extends State<ScorerSummaryTab> {
             ),
 
             WidgetDecider.buildBattingTable(
-              players: state.matchCenterEntity!.battingTeam!.currBatsmen ?? [],
+              players: state.matchCenterEntity!.battingTeam!.currBatsmen,
               onStrike: state.matchCenterEntity!.battingTeam!.onStrike,
               cubit: cubit,
             ),
@@ -166,7 +235,7 @@ class _ScorerSummaryTabState extends State<ScorerSummaryTab> {
             ),
             const SizedBox(height: 8),
             state.matchCenterEntity!.innings.last.oversData.isEmpty
-                ? Container(height: 24)
+                ? Container(height: 32)
                 : LastBallsRow(
                     overs: state.matchCenterEntity!.innings.last.oversData,
                   ),

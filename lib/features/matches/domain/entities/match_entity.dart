@@ -12,6 +12,7 @@ class MatchEntity {
   final int overs;
   final MatchType matchType;
   final TeamEntity teamA;
+  bool abandoned;
   final TeamEntity teamB;
   final LocationEntity location;
   final PlayerEntity scorer;
@@ -27,6 +28,7 @@ class MatchEntity {
     required this.matchID,
     required this.dateAndTime,
     required this.overs,
+    this.abandoned = false,
     required this.matchType,
     required this.teamA,
     required this.teamB,
@@ -49,6 +51,7 @@ class MatchEntity {
     MatchType? matchType,
     TeamEntity? teamA,
     TeamEntity? teamB,
+    bool? abandoned,
     LocationEntity? location,
     PlayerEntity? scorer,
   }) {
@@ -63,6 +66,7 @@ class MatchEntity {
       teamB: teamB ?? this.teamB,
       location: location ?? this.location,
       scorer: scorer ?? this.scorer,
+      abandoned: abandoned ?? this.abandoned,
     );
   }
 }

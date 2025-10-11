@@ -53,18 +53,23 @@ enum MatchStage {
   completed,
 }
 
-enum ExtraType { none, wide, noBall, bye, legBye }
+enum ExtraType { wide, noBall, bye, legBye, penalty, bonus, moreRuns }
 
 enum WicketType {
-  bowled,
-  caught,
-  stumped,
-  lbw,
-  runOut,
-  mankad,
-  retired,
-  overTheFence,
-  timedOut,
-  doubleHit,
-  hitWicket,
+  bowled("Bowled"),
+  caught("Caught"),
+  stumped("Stumped"),
+  lbw("LBW"),
+  runOut("Run Out"),
+  mankad("Mankad"),
+  retired("Retired"),
+  overTheFence("Over the Fence"),
+  timedOut("Timed Out"),
+  doubleHit("Double Hit"),
+  hitWicket("Hit Wicket");
+
+  final String title;
+  const WicketType(this.title);
 }
+
+enum OptionType { more, bonusRuns, moreRuns }

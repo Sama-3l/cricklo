@@ -1,4 +1,4 @@
-import 'package:cricklo/features/scorer/domain/entities/match_entities.dart';
+import 'package:cricklo/features/scorer/domain/entities/shot_entity.dart';
 import 'package:cricklo/features/scorer/presentation/widgets/wagon_wheel_painter.dart';
 import 'package:flutter/material.dart';
 

@@ -1,3 +1,6 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:cricklo/core/utils/constants/enums.dart';
+
 class MatchPlayerStatsEntity {
   int runs;
   int balls;
@@ -10,6 +13,12 @@ class MatchPlayerStatsEntity {
   int wickets;
   double eco;
   bool out;
+  String? bowler;
+  String? fielder;
+  WicketType? wicketType;
+  int caught;
+  int stumping;
+  int runout;
 
   MatchPlayerStatsEntity({
     required this.runs,
@@ -23,5 +32,11 @@ class MatchPlayerStatsEntity {
     required this.wickets,
     required this.eco,
     required this.out,
+    this.bowler,
+    this.fielder,
+    this.wicketType,
+    required this.caught,
+    required this.stumping,
+    required this.runout,
   });
 }

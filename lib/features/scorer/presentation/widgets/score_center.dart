@@ -1,4 +1,6 @@
 import 'package:cricklo/core/utils/common/secondary_button.dart';
+import 'package:cricklo/core/utils/constants/enums.dart';
+import 'package:cricklo/core/utils/constants/methods.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/core/utils/constants/widget_decider.dart';
 import 'package:cricklo/features/scorer/presentation/blocs/cubits/ScorerMatchCenter/scorer_match_center_cubit.dart';
@@ -23,11 +25,13 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
       child: BlocBuilder<ScoreCenterCubit, ScoreCenterState>(
         builder: (context, state) {
           final cubit = context.read<ScorerMatchCenterCubit>();
+          final currentCubit = context.read<ScoreCenterCubit>();
           final state = cubit.state;
           final currBatsmen = state.matchCenterEntity!.battingTeam!.currBatsmen;
-          if (currBatsmen == null ||
-              currBatsmen.isEmpty ||
-              currBatsmen.length < 2) {
+
+          final strike = state.matchCenterEntity!.battingTeam!.onStrike;
+          if (state.matchCenterEntity!.battingTeam!.currBatsmen[0] == null ||
+              state.matchCenterEntity!.battingTeam!.currBatsmen[1] == null) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -46,30 +50,28 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
                 Center(
                   child: SecondaryButton(
                     title:
-                        state.matchCenterEntity!.battingTeam!.currBatsmen ==
+                        (state.matchCenterEntity!.battingTeam!.currBatsmen[0] ==
                                 null ||
-                            (state
+                            state
                                     .matchCenterEntity!
                                     .battingTeam!
-                                    .currBatsmen!
-                                    .isNotEmpty &&
-                                state
-                                        .matchCenterEntity!
-                                        .battingTeam!
-                                        .currBatsmen!
-                                        .length <
-                                    2)
+                                    .currBatsmen[1] ==
+                                null)
                         ? "Select Batsmen"
                         : "Select Batsman",
-                    onTap: () => WidgetDecider.showSelectBatsmenBottomSheet(
-                      context,
-                      players: state.matchCenterEntity!.battingTeam!.players,
-                      maxSelection:
-                          currBatsmen != null && currBatsmen.isNotEmpty
-                          ? 2 - currBatsmen.length
-                          : 2,
-                      onConfirm: (batsmen) => cubit.addBatsman(batsmen),
-                    ),
+                    onTap: () {
+                      WidgetDecider.showSelectBatsmenBottomSheet(
+                        context,
+                        players: state.matchCenterEntity!.battingTeam!.players,
+                        currBatsmen:
+                            state.matchCenterEntity!.battingTeam!.currBatsmen,
+                        maxSelection:
+                            currBatsmen[0] == null && currBatsmen[1] == null
+                            ? 2
+                            : 1,
+                        onConfirm: (batsmen) => cubit.addBatsman(batsmen),
+                      );
+                    },
                     color: ColorsConstants.defaultWhite,
                   ),
                 ),
@@ -98,6 +100,21 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
                     title: "Select Bowler",
                     onTap: () => WidgetDecider.showSelectBatsmenBottomSheet(
                       context,
+                      bowler: true,
+                      overEntity:
+                          state
+                              .matchCenterEntity!
+                              .innings
+                              .last
+                              .oversData
+                              .isEmpty
+                          ? null
+                          : state
+                                .matchCenterEntity!
+                                .innings
+                                .last
+                                .oversData
+                                .last,
                       players: state.matchCenterEntity!.bowlingTeam!.players,
                       maxSelection: 1,
                       onConfirm: (bowler) => cubit.editBowler(bowler.first),
@@ -109,104 +126,641 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
               ],
             );
           }
-          // return Table(
-          //   defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-          //   columnWidths: const {
-          //     0: FlexColumnWidth(), // Batsman name wider
-          //     1: FlexColumnWidth(),
-          //     2: FlexColumnWidth(),
-          //     3: FlexColumnWidth(),
-          //     4: FlexColumnWidth(),
-          //     5: FlexColumnWidth(),
-          //   },
-          //   border: TableBorder(
-          //     horizontalInside: BorderSide(color: ColorsConstants.defaultWhite),
-          //     verticalInside: BorderSide(color: ColorsConstants.defaultWhite),
-          //   ),
-          //   children: [
-          //     // 🟠 Header Row
-          //     TableRow(
-          //       decoration: BoxDecoration(
-          //         color: ColorsConstants.accentOrange.withValues(alpha: 0.15),
-          //       ),
-          //       children: [
-          //         WidgetDecider.cell(
-          //           "1",
-          //           onTap: () {
-          //             WidgetDecider.showWagonWheelBottomSheet(context, 1);
-          //           },
-          //         ),
-          //         WidgetDecider.cell(
-          //           "2",
-          //           onTap: () {
-          //             WidgetDecider.showWagonWheelBottomSheet(context, 2);
-          //           },
-          //         ),
-          //         WidgetDecider.cell(
-          //           "3",
-          //           onTap: () {
-          //             WidgetDecider.showWagonWheelBottomSheet(context, 3);
-          //           },
-          //         ),
-          //         WidgetDecider.cell(
-          //           "4",
-          //           onTap: () {
-          //             WidgetDecider.showWagonWheelBottomSheet(context, 4);
-          //           },
-          //         ),
-          //         WidgetDecider.cell(
-          //           "6",
-          //           onTap: () {
-          //             WidgetDecider.showWagonWheelBottomSheet(context, 6);
-          //           },
-          //         ),
-          //       ],
-          //     ),
-          //     TableRow(
-          //       decoration: BoxDecoration(
-          //         color: ColorsConstants.accentOrange.withValues(alpha: 0.15),
-          //       ),
-          //       children: [
-          //         WidgetDecider.cell("LB"),
-          //         WidgetDecider.cell("Bye"),
-          //         WidgetDecider.cell("Wide"),
-          //         WidgetDecider.cell("NB"),
-          //         Align(
-          //           alignment: Alignment.center,
-          //           child: Container(
-          //             height: 8,
-          //             width: 8,
-          //             decoration: BoxDecoration(
-          //               borderRadius: BorderRadius.circular(8),
-          //               color: ColorsConstants.defaultWhite,
-          //             ),
-          //           ),
-          //         ),
-          //       ],
-          //     ),
-          //     TableRow(
-          //       decoration: BoxDecoration(
-          //         color: ColorsConstants.accentOrange.withValues(alpha: 0.15),
-          //       ),
-          //       children: [
-          //         WidgetDecider.cell("More"),
-          //         Center(
-          //           child: Padding(
-          //             padding: const EdgeInsets.all(16.0),
-          //             child: Icon(
-          //               Icons.sports_baseball,
-          //               color: ColorsConstants.defaultWhite,
-          //             ),
-          //           ),
-          //         ),
-          //         WidgetDecider.cell("4 5 6 7"),
-          //         WidgetDecider.cell("Undo"),
-          //         WidgetDecider.cell("Out"),
-          //       ],
-          //     ),
-          //   ],
-          // );
+          if (currentCubit.state.extraType != null) {
+            final extraType = currentCubit.state.extraType;
+            late final String title;
+            late final String short;
+            switch (extraType) {
+              case null:
+                title = "";
+                short = "";
+                break;
+              case ExtraType.penalty:
+              case ExtraType.bonus:
+              case ExtraType.moreRuns:
+                title = "";
+                short = "";
+                break;
+              case ExtraType.wide:
+                title = "Wide";
+                short = "Wd";
+                break;
+              case ExtraType.noBall:
+                title = "No Ball";
+                short = "NB";
+                break;
+              case ExtraType.bye:
+                title = "Bye";
+                short = "B";
+                break;
+              case ExtraType.legBye:
+                title = "Leg Bye";
+                short = "LB";
+                break;
+            }
+            final extraRuns =
+                extraType == ExtraType.bye || extraType == ExtraType.legBye
+                ? [1, 2, 3, 4, 5, 6]
+                : [0, 1, 2, 3, 4, 5, 6];
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 16.0, left: 16),
+                  child: Row(
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          if (Methods.validScorerOperation(
+                            currBatsmen,
+                            strike,
+                          )) {
+                            currentCubit.setExtraType(null);
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                behavior: SnackBarBehavior.floating,
+                                backgroundColor: ColorsConstants.defaultBlack,
+                                content: Center(
+                                  child: Text(
+                                    "Please select striker",
+                                    style: TextStyles.poppinsSemiBold.copyWith(
+                                      fontSize: 12,
+                                      letterSpacing: -0.5,
+                                      color: ColorsConstants.defaultWhite,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }
+                        },
+                        child: Icon(
+                          Icons.close,
+                          size: 24,
+                          color: ColorsConstants.defaultWhite,
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Text(
+                        title,
+                        style: TextStyles.poppinsSemiBold.copyWith(
+                          color: ColorsConstants.defaultWhite,
+                          fontSize: 20,
+                          letterSpacing: -1.0,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Spacer(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Center(
+                    child: Wrap(
+                      spacing: 16, // horizontal spacing between children
+                      runSpacing: 8, // vertical spacing between lines
+                      alignment: WrapAlignment.center,
+                      children: [
+                        for (final label in extraRuns)
+                          SecondaryButton(
+                            title:
+                                extraType == ExtraType.bye ||
+                                    extraType == ExtraType.legBye
+                                ? label == 0
+                                      ? short
+                                      : "$label $short"
+                                : label == 0
+                                ? short
+                                : "$short + $label",
+                            onTap: () async {
+                              if (Methods.validScorerOperation(
+                                currBatsmen,
+                                strike,
+                              )) {
+                                int? sector;
+                                if (extraType == ExtraType.noBall) {
+                                  sector =
+                                      await WidgetDecider.showWagonWheelBottomSheet(
+                                        context,
+                                        label,
+                                      );
+                                }
+                                cubit.addBall(
+                                  label,
+                                  true,
+                                  extraType: extraType,
+                                  sector: sector,
+                                  bowlerInvolved: state
+                                      .matchCenterEntity!
+                                      .bowlingTeam!
+                                      .bowler,
+                                  batsmanInvolved: state
+                                      .matchCenterEntity!
+                                      .battingTeam!
+                                      .onStrike,
+                                );
+                                currentCubit.setExtraType(null);
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    behavior: SnackBarBehavior.floating,
+                                    backgroundColor:
+                                        ColorsConstants.defaultBlack,
+                                    content: Center(
+                                      child: Text(
+                                        "Please select striker",
+                                        style: TextStyles.poppinsSemiBold
+                                            .copyWith(
+                                              fontSize: 12,
+                                              letterSpacing: -0.5,
+                                              color:
+                                                  ColorsConstants.defaultWhite,
+                                            ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }
+                            },
+                            color: ColorsConstants.defaultWhite,
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
 
+                Spacer(),
+              ],
+            );
+          }
+          if (currentCubit.state.wicket) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 16.0, left: 16),
+                  child: Row(
+                    children: [
+                      InkWell(
+                        onTap: () => currentCubit.newWicket(false),
+                        child: Icon(
+                          Icons.close,
+                          size: 24,
+                          color: ColorsConstants.defaultWhite,
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Text(
+                        "Wicket",
+                        style: TextStyles.poppinsSemiBold.copyWith(
+                          color: ColorsConstants.defaultWhite,
+                          fontSize: 20,
+                          letterSpacing: -1.0,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Spacer(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Center(
+                    child: Wrap(
+                      spacing: 16, // horizontal spacing between children
+                      runSpacing: 16, // vertical spacing between lines
+                      alignment: WrapAlignment.center,
+                      children: [
+                        for (final label in WicketType.values)
+                          SecondaryButton(
+                            title: label.title,
+                            onTap: () async {
+                              if (Methods.validScorerOperation(
+                                currBatsmen,
+                                strike,
+                              )) {
+                                if (label == WicketType.caught) {
+                                  WidgetDecider.showSelectBatsmenBottomSheet(
+                                    context,
+                                    players: state
+                                        .matchCenterEntity!
+                                        .bowlingTeam!
+                                        .players,
+                                    maxSelection: 1,
+                                    onConfirm: (player) {
+                                      if (player.isNotEmpty) {
+                                        cubit.addBall(
+                                          0,
+                                          false,
+                                          bowlingTeamPlayerInvolved:
+                                              player.last,
+                                          wicketType: label,
+                                          bowlerInvolved: state
+                                              .matchCenterEntity!
+                                              .bowlingTeam!
+                                              .bowler,
+                                          batsmanInvolved: state
+                                              .matchCenterEntity!
+                                              .battingTeam!
+                                              .onStrike,
+                                        );
+                                        currentCubit.newWicket(false);
+                                      }
+                                    },
+                                  );
+                                } else if (label == WicketType.stumped) {
+                                  WidgetDecider.showSelectBatsmenBottomSheet(
+                                    context,
+                                    players: state
+                                        .matchCenterEntity!
+                                        .bowlingTeam!
+                                        .players,
+                                    maxSelection: 1,
+                                    onConfirm: (player) {
+                                      if (player.isNotEmpty) {
+                                        cubit.addBall(
+                                          0,
+                                          false,
+                                          bowlingTeamPlayerInvolved:
+                                              player.last,
+                                          wicketType: label,
+                                          bowlerInvolved: state
+                                              .matchCenterEntity!
+                                              .bowlingTeam!
+                                              .bowler,
+                                          batsmanInvolved: state
+                                              .matchCenterEntity!
+                                              .battingTeam!
+                                              .onStrike,
+                                        );
+                                        currentCubit.newWicket(false);
+                                      }
+                                    },
+                                  );
+                                } else if (label == WicketType.runOut) {
+                                  WidgetDecider.showOnRunOut(
+                                    context,
+                                    state
+                                        .matchCenterEntity!
+                                        .battingTeam!
+                                        .currBatsmen,
+                                    state
+                                        .matchCenterEntity!
+                                        .bowlingTeam!
+                                        .players,
+                                    (batsman, fielder, runs) {
+                                      cubit.addBall(
+                                        runs,
+                                        false,
+                                        batsmanInvolved: batsman,
+                                        bowlingTeamPlayerInvolved: fielder,
+                                        wicketType: label,
+                                        bowlerInvolved: state
+                                            .matchCenterEntity!
+                                            .bowlingTeam!
+                                            .bowler,
+                                      );
+                                      currentCubit.newWicket(false);
+                                    },
+                                  );
+                                } else {
+                                  cubit.addBall(
+                                    0,
+                                    false,
+                                    wicketType: label,
+                                    bowlerInvolved: state
+                                        .matchCenterEntity!
+                                        .bowlingTeam!
+                                        .bowler,
+                                    batsmanInvolved: state
+                                        .matchCenterEntity!
+                                        .battingTeam!
+                                        .onStrike,
+                                  );
+                                  currentCubit.newWicket(false);
+                                }
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    behavior: SnackBarBehavior.floating,
+                                    backgroundColor:
+                                        ColorsConstants.defaultBlack,
+                                    content: Center(
+                                      child: Text(
+                                        "Please select striker",
+                                        style: TextStyles.poppinsSemiBold
+                                            .copyWith(
+                                              fontSize: 12,
+                                              letterSpacing: -0.5,
+                                              color:
+                                                  ColorsConstants.defaultWhite,
+                                            ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }
+                            },
+                            color: ColorsConstants.defaultWhite,
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                Spacer(),
+              ],
+            );
+          }
+          if (currentCubit.state.optionType != null) {
+            final optionType = currentCubit.state.optionType;
+            if (optionType == OptionType.more) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16.0, left: 16),
+                    child: Row(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            currentCubit.newWicket(false);
+                          },
+                          child: Icon(
+                            Icons.close,
+                            size: 24,
+                            color: ColorsConstants.defaultWhite,
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Text(
+                          "More",
+                          style: TextStyles.poppinsSemiBold.copyWith(
+                            color: ColorsConstants.defaultWhite,
+                            fontSize: 20,
+                            letterSpacing: -1.0,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Spacer(),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Center(
+                      child: Wrap(
+                        spacing: 16, // horizontal spacing between children
+                        runSpacing: 16, // vertical spacing between lines
+                        alignment: WrapAlignment.center,
+                        children: [
+                          SecondaryButton(
+                            title: "Abandon",
+                            onTap: () {
+                              cubit.showAbandonMatchDialog(context, () {});
+                            },
+                            color: ColorsConstants.defaultWhite,
+                          ),
+                          SecondaryButton(
+                            title: "End Innings",
+                            onTap: () {
+                              cubit.endInnings();
+                              currentCubit.optionType(null);
+                            },
+                            color: ColorsConstants.defaultWhite,
+                          ),
+                          // SecondaryButton(
+                          //   title: "Change Target",
+                          //   onTap: () {
+                          //     // cubit.addBall(0, false, wicketType: label);
+                          //     // currentCubit.newWicket(false);
+                          //   },
+                          //   color: ColorsConstants.defaultWhite,
+                          // ),
+                          SecondaryButton(
+                            title: "Retired Hurt",
+                            onTap: () {
+                              if (Methods.validScorerOperation(
+                                currBatsmen,
+                                strike,
+                              )) {
+                                cubit.addBall(
+                                  0,
+                                  false,
+                                  wicketType: WicketType.retired,
+                                  batsmanInvolved: state
+                                      .matchCenterEntity!
+                                      .battingTeam!
+                                      .onStrike,
+                                );
+                                currentCubit.optionType(null);
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    behavior: SnackBarBehavior.floating,
+                                    backgroundColor:
+                                        ColorsConstants.defaultBlack,
+                                    content: Center(
+                                      child: Text(
+                                        "Please select striker",
+                                        style: TextStyles.poppinsSemiBold
+                                            .copyWith(
+                                              fontSize: 12,
+                                              letterSpacing: -0.5,
+                                              color:
+                                                  ColorsConstants.defaultWhite,
+                                            ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }
+                            },
+                            color: ColorsConstants.defaultWhite,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  Spacer(),
+                ],
+              );
+            } else if (optionType == OptionType.bonusRuns) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16.0, left: 16),
+                    child: Row(
+                      children: [
+                        InkWell(
+                          onTap: () => currentCubit.newWicket(false),
+                          child: Icon(
+                            Icons.close,
+                            size: 24,
+                            color: ColorsConstants.defaultWhite,
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Text(
+                          "Bonus Runs",
+                          style: TextStyles.poppinsSemiBold.copyWith(
+                            color: ColorsConstants.defaultWhite,
+                            fontSize: 20,
+                            letterSpacing: -1.0,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Spacer(),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Center(
+                      child: Wrap(
+                        spacing: 16, // horizontal spacing between children
+                        runSpacing: 16, // vertical spacing between lines
+                        alignment: WrapAlignment.center,
+                        children: [
+                          for (var i in [1, 2, 3, 4, 5, 6, 8])
+                            SecondaryButton(
+                              title: "+$i",
+                              onTap: () {
+                                // cubit.addBall(0, false, wicketType: label);
+                                // currentCubit.newWicket(false)
+                                if (Methods.validScorerOperation(
+                                  currBatsmen,
+                                  strike,
+                                )) {
+                                  cubit.addBall(
+                                    i,
+                                    true,
+                                    extraType: ExtraType.bonus,
+                                  );
+                                  currentCubit.optionType(null);
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      behavior: SnackBarBehavior.floating,
+                                      backgroundColor:
+                                          ColorsConstants.defaultBlack,
+                                      content: Center(
+                                        child: Text(
+                                          "Please select striker",
+                                          style: TextStyles.poppinsSemiBold
+                                              .copyWith(
+                                                fontSize: 12,
+                                                letterSpacing: -0.5,
+                                                color: ColorsConstants
+                                                    .defaultWhite,
+                                              ),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                }
+                              },
+                              color: ColorsConstants.defaultWhite,
+                            ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  Spacer(),
+                ],
+              );
+            } else if (optionType == OptionType.moreRuns) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16.0, left: 16),
+                    child: Row(
+                      children: [
+                        InkWell(
+                          onTap: () => currentCubit.newWicket(false),
+                          child: Icon(
+                            Icons.close,
+                            size: 24,
+                            color: ColorsConstants.defaultWhite,
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Text(
+                          "More Runs",
+                          style: TextStyles.poppinsSemiBold.copyWith(
+                            color: ColorsConstants.defaultWhite,
+                            fontSize: 20,
+                            letterSpacing: -1.0,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Spacer(),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Center(
+                      child: Wrap(
+                        spacing: 16, // horizontal spacing between children
+                        runSpacing: 16, // vertical spacing between lines
+                        alignment: WrapAlignment.center,
+                        children: [
+                          for (var i in [4, 5, 6, 7, 8, 9, 10])
+                            SecondaryButton(
+                              title: "$i",
+                              onTap: () {
+                                // cubit.addBall(0, false, wicketType: label);
+                                // currentCubit.newWicket(false);
+                                if (Methods.validScorerOperation(
+                                  currBatsmen,
+                                  strike,
+                                )) {
+                                  cubit.addBall(
+                                    i,
+                                    true,
+                                    extraType: ExtraType.moreRuns,
+                                    batsmanInvolved: state
+                                        .matchCenterEntity!
+                                        .battingTeam!
+                                        .onStrike,
+                                  );
+                                  currentCubit.optionType(null);
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      behavior: SnackBarBehavior.floating,
+                                      backgroundColor:
+                                          ColorsConstants.defaultBlack,
+                                      content: Center(
+                                        child: Text(
+                                          "Please select striker",
+                                          style: TextStyles.poppinsSemiBold
+                                              .copyWith(
+                                                fontSize: 12,
+                                                letterSpacing: -0.5,
+                                                color: ColorsConstants
+                                                    .defaultWhite,
+                                              ),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                }
+                              },
+                              color: ColorsConstants.defaultWhite,
+                            ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  Spacer(),
+                ],
+              );
+            }
+          }
           return Container(
             width: double.infinity,
             height: double.infinity,
@@ -248,16 +802,49 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
                             child: Center(
                               child: GestureDetector(
                                 onTap: () async {
-                                  final sector =
-                                      await WidgetDecider.showWagonWheelBottomSheet(
-                                        context,
-                                        int.parse(label),
-                                      );
-                                  cubit.addBall(
-                                    int.parse(label),
-                                    false,
-                                    sector: sector,
-                                  );
+                                  if (Methods.validScorerOperation(
+                                    currBatsmen,
+                                    strike,
+                                  )) {
+                                    final sector =
+                                        await WidgetDecider.showWagonWheelBottomSheet(
+                                          context,
+                                          int.parse(label),
+                                        );
+                                    cubit.addBall(
+                                      int.parse(label),
+                                      false,
+                                      sector: sector,
+                                      bowlerInvolved: state
+                                          .matchCenterEntity!
+                                          .bowlingTeam!
+                                          .bowler,
+                                      batsmanInvolved: state
+                                          .matchCenterEntity!
+                                          .battingTeam!
+                                          .onStrike,
+                                    );
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        behavior: SnackBarBehavior.floating,
+                                        backgroundColor:
+                                            ColorsConstants.defaultBlack,
+                                        content: Center(
+                                          child: Text(
+                                            "Please select striker",
+                                            style: TextStyles.poppinsSemiBold
+                                                .copyWith(
+                                                  fontSize: 12,
+                                                  letterSpacing: -0.5,
+                                                  color: ColorsConstants
+                                                      .defaultWhite,
+                                                ),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  }
                                 },
                                 child: WidgetDecider.cell(label),
                               ),
@@ -276,17 +863,74 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
                         for (final label in ["LB", "Bye", "Wide", "NB"])
                           SizedBox(
                             height: rowHeight,
-                            child: Center(child: WidgetDecider.cell(label)),
+                            child: Center(
+                              child: GestureDetector(
+                                onTap: () {
+                                  if (Methods.validScorerOperation(
+                                    currBatsmen,
+                                    strike,
+                                  )) {
+                                    ExtraType? extraType;
+                                    switch (label) {
+                                      case "LB":
+                                        extraType = ExtraType.legBye;
+                                        break;
+                                      case "Bye":
+                                        extraType = ExtraType.bye;
+                                        break;
+                                      case "Wide":
+                                        extraType = ExtraType.wide;
+                                        break;
+                                      case "NB":
+                                        extraType = ExtraType.noBall;
+                                        break;
+                                    }
+                                    currentCubit.setExtraType(extraType);
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        behavior: SnackBarBehavior.floating,
+                                        backgroundColor:
+                                            ColorsConstants.defaultBlack,
+                                        content: Center(
+                                          child: Text(
+                                            "Please select striker",
+                                            style: TextStyles.poppinsSemiBold
+                                                .copyWith(
+                                                  fontSize: 12,
+                                                  letterSpacing: -0.5,
+                                                  color: ColorsConstants
+                                                      .defaultWhite,
+                                                ),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                },
+                                child: WidgetDecider.cell(label),
+                              ),
+                            ),
                           ),
-                        SizedBox(
-                          height: rowHeight,
-                          child: Center(
-                            child: Container(
-                              height: 8,
-                              width: 8,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: ColorsConstants.defaultWhite,
+                        InkWell(
+                          onTap: () => cubit.addBall(
+                            0,
+                            false,
+                            bowlerInvolved:
+                                state.matchCenterEntity!.bowlingTeam!.bowler,
+                            batsmanInvolved:
+                                state.matchCenterEntity!.battingTeam!.onStrike,
+                          ),
+                          child: SizedBox(
+                            height: rowHeight,
+                            child: Center(
+                              child: Container(
+                                height: 8,
+                                width: 8,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  color: ColorsConstants.defaultWhite,
+                                ),
                               ),
                             ),
                           ),
@@ -301,33 +945,50 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
                         ),
                       ),
                       children: [
-                        SizedBox(
-                          height: rowHeight,
-                          child: Center(child: WidgetDecider.cell("More")),
+                        InkWell(
+                          onTap: () => currentCubit.optionType(OptionType.more),
+                          child: SizedBox(
+                            height: rowHeight,
+                            child: Center(child: WidgetDecider.cell("More")),
+                          ),
                         ),
-                        SizedBox(
-                          height: rowHeight,
-                          child: Center(
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Icon(
-                                Icons.sports_baseball,
-                                color: ColorsConstants.defaultWhite,
+                        InkWell(
+                          onTap: () =>
+                              currentCubit.optionType(OptionType.bonusRuns),
+                          child: SizedBox(
+                            height: rowHeight,
+                            child: Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Icon(
+                                  Icons.sports_baseball,
+                                  color: ColorsConstants.defaultWhite,
+                                ),
                               ),
                             ),
                           ),
                         ),
-                        SizedBox(
-                          height: rowHeight,
-                          child: Center(child: WidgetDecider.cell("4 5 6 7")),
+                        InkWell(
+                          onTap: () =>
+                              currentCubit.optionType(OptionType.moreRuns),
+                          child: SizedBox(
+                            height: rowHeight,
+                            child: Center(child: WidgetDecider.cell("4 5 6 7")),
+                          ),
                         ),
-                        SizedBox(
-                          height: rowHeight,
-                          child: Center(child: WidgetDecider.cell("Undo")),
+                        InkWell(
+                          onTap: () => cubit.undoLastBall(),
+                          child: SizedBox(
+                            height: rowHeight,
+                            child: Center(child: WidgetDecider.cell("Undo")),
+                          ),
                         ),
-                        SizedBox(
-                          height: rowHeight,
-                          child: Center(child: WidgetDecider.cell("Out")),
+                        InkWell(
+                          onTap: () => currentCubit.newWicket(true),
+                          child: SizedBox(
+                            height: rowHeight,
+                            child: Center(child: WidgetDecider.cell("Out")),
+                          ),
                         ),
                       ],
                     ),

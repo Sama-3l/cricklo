@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:cricklo/core/utils/constants/theme.dart';
-import 'package:cricklo/features/scorer/domain/entities/match_entities.dart';
+import 'package:cricklo/features/scorer/domain/entities/shot_entity.dart';
 import 'package:flutter/material.dart';
 
 class WagonWheelPainter extends CustomPainter {

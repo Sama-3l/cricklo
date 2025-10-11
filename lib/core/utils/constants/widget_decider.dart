@@ -7,6 +7,7 @@ import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/matches/domain/entities/match_entity.dart';
 import 'package:cricklo/features/matches/domain/entities/overall_score_entity.dart';
 import 'package:cricklo/features/scorer/domain/entities/match_player_entity.dart';
+import 'package:cricklo/features/scorer/domain/entities/overs_entity.dart';
 import 'package:cricklo/features/scorer/presentation/blocs/cubits/ScorerMatchCenter/scorer_match_center_cubit.dart';
 import 'package:cricklo/features/scorer/presentation/widgets/wagon_wheel_painter.dart';
 import 'package:cricklo/features/teams/domain/entities/player_entity.dart';
@@ -694,14 +695,25 @@ class WidgetDecider {
     List<Map<String, dynamic>> batsmen = [];
 
     for (var i in players) {
-      batsmen.add({
-        'name': i!.name,
-        'runs': i.stats.runs,
-        'balls': i.stats.balls,
-        'fours': i.stats.n4s,
-        'sixes': i.stats.n6s,
-        'strikeRate': i.stats.sr.toStringAsFixed(2),
-      });
+      if (i == null) {
+        batsmen.add({
+          'name': '-',
+          'runs': "-",
+          'balls': "-",
+          'fours': "-",
+          'sixes': "-",
+          'strikeRate': "-",
+        });
+      } else {
+        batsmen.add({
+          'name': i.name,
+          'runs': i.stats.runs,
+          'balls': i.stats.balls,
+          'fours': i.stats.n4s,
+          'sixes': i.stats.n6s,
+          'strikeRate': i.stats.sr.toStringAsFixed(2),
+        });
+      }
     }
     for (int i = batsmen.length; i < 2; i++) {
       batsmen.add({
@@ -735,12 +747,12 @@ class WidgetDecider {
             color: ColorsConstants.accentOrange.withValues(alpha: 0.15),
           ),
           children: [
-            _headerCell("Batsman"),
-            _headerCell("R"),
-            _headerCell("B"),
-            _headerCell("4s"),
-            _headerCell("6s"),
-            _headerCell("SR"),
+            headerCell("Batsman"),
+            headerCell("R"),
+            headerCell("B"),
+            headerCell("4s"),
+            headerCell("6s"),
+            headerCell("SR"),
           ],
         ),
 
@@ -788,7 +800,7 @@ class WidgetDecider {
         'runs': bowlerData.stats.runsGiven,
         'maidens': bowlerData.stats.maidens,
         'wickets': bowlerData.stats.wickets,
-        'economy': bowlerData.stats.eco,
+        'economy': bowlerData.stats.eco.toStringAsFixed(2),
       };
     }
     return Table(
@@ -812,12 +824,12 @@ class WidgetDecider {
             color: ColorsConstants.accentOrange.withValues(alpha: 0.15),
           ),
           children: [
-            _headerCell("Bowler"),
-            _headerCell("O"),
-            _headerCell("R"),
-            _headerCell("M"),
-            _headerCell("W"),
-            _headerCell("Eco"),
+            headerCell("Bowler"),
+            headerCell("O"),
+            headerCell("R"),
+            headerCell("M"),
+            headerCell("W"),
+            headerCell("Eco"),
           ],
         ),
         TableRow(
@@ -834,7 +846,7 @@ class WidgetDecider {
     );
   }
 
-  static Widget _headerCell(String text) {
+  static Widget headerCell(String text) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
       child: Text(
@@ -842,7 +854,7 @@ class WidgetDecider {
         style: TextStyles.poppinsSemiBold.copyWith(
           fontSize: 12,
           color: ColorsConstants.defaultBlack,
-          letterSpacing: -0.3,
+          letterSpacing: -0.5,
         ),
       ),
     );
@@ -989,6 +1001,9 @@ class WidgetDecider {
     required List<MatchPlayerEntity> players,
     required int maxSelection, // 1 or 2
     bool bowler = false,
+    String? title,
+    List<MatchPlayerEntity?>? currBatsmen, // 👈 NEW
+    OversEntity? overEntity, // 👈 NEW
     required Function(List<MatchPlayerEntity>) onConfirm,
   }) {
     showModalBottomSheet(
@@ -996,13 +1011,38 @@ class WidgetDecider {
       isScrollControlled: true,
       backgroundColor: ColorsConstants.defaultWhite,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       builder: (context) {
         List<MatchPlayerEntity> selectedPlayers = [];
 
         return StatefulBuilder(
           builder: (context, setModalState) {
+            /// Determine if a player should be disabled
+            bool isPlayerDisabled(MatchPlayerEntity player) {
+              // 1️⃣ Batsman selection
+              if (!bowler && title == null) {
+                final isCurrentBatsman =
+                    currBatsmen?.any((p) => p?.playerId == player.playerId) ??
+                    false;
+                if (isCurrentBatsman) return true;
+                if (player.stats.out) return true;
+              }
+
+              // 2️⃣ Bowler selection
+              if (bowler && title == null) {
+                if (overEntity?.bowler.playerId == player.playerId) return true;
+              }
+
+              // 3️⃣ Generic (title != null)
+              if (title != null) {
+                if (overEntity?.bowler.playerId == player.playerId) return true;
+              }
+
+              return false;
+            }
+
+            /// Group players by type
             final grouped = {
               "Batting": players
                   .where((p) => p.playerType == PlayerType.batter)
@@ -1030,7 +1070,7 @@ class WidgetDecider {
                     child: SizedBox(
                       width: double.infinity,
                       child: PrimaryButton(
-                        disabled: false,
+                        disabled: selectedPlayers.length != maxSelection,
                         onPress: selectedPlayers.length == maxSelection
                             ? () {
                                 onConfirm(selectedPlayers);
@@ -1054,9 +1094,10 @@ class WidgetDecider {
                       Container(
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         child: Text(
-                          bowler
-                              ? "Select bowler"
-                              : "Select ${maxSelection == 1 ? 'Batsman' : 'Batsmen'}",
+                          title ??
+                              (bowler
+                                  ? "Select Bowler"
+                                  : "Select ${maxSelection == 1 ? 'Batsman' : 'Batsmen'}"),
                           style: TextStyles.poppinsSemiBold.copyWith(
                             fontSize: 16,
                             letterSpacing: -0.6,
@@ -1069,6 +1110,8 @@ class WidgetDecider {
                             final role = entry.key;
                             final rolePlayers = entry.value;
 
+                            if (rolePlayers.isEmpty) return SizedBox.shrink();
+
                             return Padding(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 16,
@@ -1077,123 +1120,146 @@ class WidgetDecider {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  if (rolePlayers.isNotEmpty) ...[
-                                    Text(
-                                      role,
-                                      style: TextStyles.poppinsSemiBold
-                                          .copyWith(
-                                            fontSize: 16,
-                                            letterSpacing: -0.8,
-                                            color: ColorsConstants.accentOrange,
-                                          ),
+                                  Text(
+                                    role,
+                                    style: TextStyles.poppinsSemiBold.copyWith(
+                                      fontSize: 16,
+                                      letterSpacing: -0.8,
+                                      color: ColorsConstants.accentOrange,
                                     ),
-                                    const SizedBox(height: 8),
-                                  ],
+                                  ),
+                                  const SizedBox(height: 8),
 
+                                  // Player list
                                   ...rolePlayers.map((player) {
                                     final isSelected = selectedPlayers.contains(
                                       player,
                                     );
+                                    final isDisabled = isPlayerDisabled(player);
 
-                                    return Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                        vertical: 6,
-                                      ),
-                                      child: InkWell(
-                                        borderRadius: BorderRadius.circular(12),
-                                        onTap: () {
-                                          setModalState(() {
-                                            if (isSelected) {
-                                              selectedPlayers.remove(player);
-                                            } else if (selectedPlayers.length <
-                                                maxSelection) {
-                                              selectedPlayers.add(player);
-                                            } else {
-                                              selectedPlayers.removeAt(0);
-                                              selectedPlayers.add(player);
-                                            }
-                                          });
-                                        },
-                                        child: Container(
-                                          padding: const EdgeInsets.all(12),
-                                          decoration: BoxDecoration(
-                                            color: isSelected
-                                                ? ColorsConstants.accentOrange
-                                                      .withValues(alpha: 0.2)
-                                                : ColorsConstants.defaultWhite,
-                                            borderRadius: BorderRadius.circular(
-                                              12,
-                                            ),
-                                            border: Border.all(
+                                    return Opacity(
+                                      opacity: isDisabled ? 0.5 : 1.0,
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 6,
+                                        ),
+                                        child: InkWell(
+                                          borderRadius: BorderRadius.circular(
+                                            12,
+                                          ),
+                                          onTap: isDisabled
+                                              ? null
+                                              : () {
+                                                  setModalState(() {
+                                                    if (isSelected) {
+                                                      selectedPlayers.remove(
+                                                        player,
+                                                      );
+                                                    } else if (selectedPlayers
+                                                            .length <
+                                                        maxSelection) {
+                                                      selectedPlayers.add(
+                                                        player,
+                                                      );
+                                                    } else {
+                                                      selectedPlayers.removeAt(
+                                                        0,
+                                                      );
+                                                      selectedPlayers.add(
+                                                        player,
+                                                      );
+                                                    }
+                                                  });
+                                                },
+                                          child: Container(
+                                            padding: const EdgeInsets.all(12),
+                                            decoration: BoxDecoration(
                                               color: isSelected
                                                   ? ColorsConstants.accentOrange
-                                                  : ColorsConstants.defaultBlack
-                                                        .withValues(alpha: 0.3),
+                                                        .withValues(alpha: 0.2)
+                                                  : ColorsConstants
+                                                        .defaultWhite,
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              border: Border.all(
+                                                color: isSelected
+                                                    ? ColorsConstants
+                                                          .accentOrange
+                                                    : ColorsConstants
+                                                          .defaultBlack
+                                                          .withValues(
+                                                            alpha: 0.3,
+                                                          ),
+                                              ),
                                             ),
-                                          ),
-                                          child: Row(
-                                            children: [
-                                              CircleAvatar(
-                                                radius: 20,
-                                                backgroundColor: ColorsConstants
-                                                    .accentOrange
-                                                    .withValues(alpha: 0.2),
-                                                child: Icon(
-                                                  Icons.person,
-                                                  color: ColorsConstants
-                                                      .defaultBlack,
-                                                ),
-                                              ),
-                                              const SizedBox(width: 12),
-                                              Expanded(
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      player.name,
-                                                      style: TextStyles
-                                                          .poppinsMedium
-                                                          .copyWith(
-                                                            fontSize: 12,
-                                                            letterSpacing: -0.5,
+                                            child: Row(
+                                              children: [
+                                                CircleAvatar(
+                                                  radius: 20,
+                                                  backgroundColor:
+                                                      ColorsConstants
+                                                          .accentOrange
+                                                          .withValues(
+                                                            alpha: 0.2,
                                                           ),
-                                                    ),
-                                                    Text(
-                                                      player.playerId,
-                                                      style: TextStyles
-                                                          .poppinsMedium
-                                                          .copyWith(
-                                                            fontSize: 10,
-                                                            letterSpacing: -0.2,
-                                                            color:
-                                                                ColorsConstants
-                                                                    .defaultBlack
-                                                                    .withValues(
-                                                                      alpha:
-                                                                          0.5,
-                                                                    ),
-                                                          ),
-                                                    ),
-                                                  ],
+                                                  child: Icon(
+                                                    Icons.person,
+                                                    color: ColorsConstants
+                                                        .defaultBlack,
+                                                  ),
                                                 ),
-                                              ),
-                                              Text(
-                                                bowler
-                                                    ? "${player.stats.wickets}-${player.stats.runsGiven} (${player.stats.overs})"
-                                                    : player.stats.out
-                                                    ? "${player.stats.runs} (${player.stats.balls})"
-                                                    : "",
-                                                style: TextStyles.poppinsRegular
-                                                    .copyWith(
-                                                      fontSize: 12,
-
-                                                      letterSpacing: -0.5,
-                                                      color: ColorsConstants
-                                                          .defaultBlack,
-                                                    ),
-                                              ),
-                                            ],
+                                                const SizedBox(width: 12),
+                                                Expanded(
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        player.name,
+                                                        style: TextStyles
+                                                            .poppinsMedium
+                                                            .copyWith(
+                                                              fontSize: 12,
+                                                              letterSpacing:
+                                                                  -0.5,
+                                                            ),
+                                                      ),
+                                                      Text(
+                                                        player.playerId,
+                                                        style: TextStyles
+                                                            .poppinsMedium
+                                                            .copyWith(
+                                                              fontSize: 10,
+                                                              letterSpacing:
+                                                                  -0.2,
+                                                              color: ColorsConstants
+                                                                  .defaultBlack
+                                                                  .withValues(
+                                                                    alpha: 0.5,
+                                                                  ),
+                                                            ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Text(
+                                                  bowler
+                                                      ? "${player.stats.wickets}-${player.stats.runsGiven} (${player.stats.overs})"
+                                                      : player.stats.out
+                                                      ? "${player.stats.runs} (${player.stats.balls})"
+                                                      : "",
+                                                  style: TextStyles
+                                                      .poppinsRegular
+                                                      .copyWith(
+                                                        fontSize: 12,
+                                                        letterSpacing: -0.5,
+                                                        color: ColorsConstants
+                                                            .defaultBlack,
+                                                      ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -1205,6 +1271,241 @@ class WidgetDecider {
                           }).toList(),
                         ),
                       ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  static Future<void> showOnRunOut(
+    BuildContext context,
+    List<MatchPlayerEntity?> batsmen,
+    List<MatchPlayerEntity> bowlingTeam,
+    Function(MatchPlayerEntity batsman, MatchPlayerEntity fielder, int runs)
+    onComplete,
+  ) async {
+    MatchPlayerEntity? selectedBatsman;
+    MatchPlayerEntity? selectedFielder;
+    int? selectedRuns;
+
+    await showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return FractionallySizedBox(
+              heightFactor: 0.9,
+              child: Padding(
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom,
+                  left: 16,
+                  right: 16,
+                  top: 16,
+                ),
+                child: Scaffold(
+                  backgroundColor: ColorsConstants.defaultWhite,
+                  floatingActionButtonLocation:
+                      FloatingActionButtonLocation.centerDocked,
+                  floatingActionButton: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: PrimaryButton(
+                        disabled: false,
+                        onPress: () {
+                          onComplete(
+                            selectedBatsman!,
+                            selectedFielder!,
+                            selectedRuns ?? 0,
+                          );
+                          GoRouter.of(context).pop();
+                        },
+                        child: Text(
+                          "Confirm Selection",
+                          style: TextStyles.poppinsSemiBold.copyWith(
+                            fontSize: 16,
+                            color: ColorsConstants.defaultWhite,
+                            letterSpacing: -0.8,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  body: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Run-Out Details",
+                        style: TextStyles.poppinsSemiBold.copyWith(
+                          fontSize: 16,
+                          letterSpacing: -0.6,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      // Batsman Selection
+                      Text(
+                        "Select Batsman",
+                        style: TextStyles.poppinsSemiBold.copyWith(
+                          fontSize: 12,
+                          letterSpacing: -0.5,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: batsmen.map((batsman) {
+                          final isSelected = selectedBatsman?.id == batsman!.id;
+                          return GestureDetector(
+                            onTap: () =>
+                                setState(() => selectedBatsman = batsman),
+                            child: Container(
+                              padding: EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: isSelected
+                                    ? ColorsConstants.accentOrange.withValues(
+                                        alpha: 0.2,
+                                      )
+                                    : ColorsConstants.defaultWhite,
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: isSelected
+                                      ? ColorsConstants.accentOrange
+                                      : ColorsConstants.defaultBlack.withValues(
+                                          alpha: 0.3,
+                                        ),
+                                ),
+                              ),
+                              width: 100,
+                              height: 150,
+                              child: Column(
+                                children: [
+                                  CircleAvatar(
+                                    backgroundColor: ColorsConstants
+                                        .accentOrange
+                                        .withValues(alpha: 0.2),
+                                    radius: 30,
+                                    child: Icon(
+                                      Icons.person,
+                                      size: 24,
+                                      color: ColorsConstants.defaultBlack,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    batsman.name,
+                                    style: TextStyles.poppinsMedium.copyWith(
+                                      fontSize: 12,
+                                      letterSpacing: -0.5,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  Text(
+                                    batsman.playerId,
+                                    style: TextStyles.poppinsMedium.copyWith(
+                                      fontSize: 12,
+                                      letterSpacing: -0.2,
+                                      color: ColorsConstants.defaultBlack
+                                          .withValues(alpha: 0.2),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                      const SizedBox(height: 24),
+                      // Fielder Selection
+                      Text(
+                        "Select Fielder",
+                        style: TextStyles.poppinsSemiBold.copyWith(
+                          fontSize: 12,
+                          letterSpacing: -0.5,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Center(
+                        child: GestureDetector(
+                          onTap: () async {
+                            showSelectBatsmenBottomSheet(
+                              context,
+                              players: bowlingTeam,
+                              maxSelection: 1,
+                              onConfirm: (player) {
+                                setState(() {
+                                  if (player.isNotEmpty) {
+                                    selectedFielder = player.last;
+                                  }
+                                });
+                              },
+                            );
+                          },
+                          child: Column(
+                            children: [
+                              CircleAvatar(
+                                radius: 30,
+                                backgroundColor: selectedFielder == null
+                                    ? Colors.grey.shade300
+                                    : ColorsConstants.accentOrange.withValues(
+                                        alpha: 0.2,
+                                      ),
+                                child: selectedFielder == null
+                                    ? Icon(
+                                        Icons.add,
+                                        size: 30,
+                                        color: Colors.white,
+                                      )
+                                    : Icon(
+                                        Icons.person,
+                                        size: 30,
+                                        color: ColorsConstants.defaultBlack,
+                                      ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                selectedFielder?.name ?? "Fielder",
+                                style: TextStyle(fontSize: 14),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      // Completed Runs Selection
+                      Text(
+                        "Completed Runs",
+                        style: TextStyles.poppinsSemiBold.copyWith(
+                          fontSize: 12,
+                          letterSpacing: -0.5,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Wrap(
+                        spacing: 12,
+                        children: List.generate(6, (index) {
+                          final run = index + 1;
+                          final isSelected = selectedRuns == run;
+                          return ChoiceChip(
+                            selectedColor: ColorsConstants.accentOrange
+                                .withValues(alpha: 0.2),
+                            label: Text(run.toString()),
+                            selected: isSelected,
+                            onSelected: (_) =>
+                                setState(() => selectedRuns = run),
+                          );
+                        }),
+                      ),
+                      const Spacer(),
                     ],
                   ),
                 ),

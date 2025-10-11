@@ -15,9 +15,11 @@ import 'package:cricklo/features/login/presentation/blocs/cubits/SetPinCubit/set
 import 'package:cricklo/features/login/presentation/blocs/cubits/OnboardingPageCubit/onboarding_page_cubit.dart';
 import 'package:cricklo/features/mainapp/data/datasource/main_app_remote_datasource.dart';
 import 'package:cricklo/features/mainapp/data/repo/main_app_repo_impl.dart';
+import 'package:cricklo/features/mainapp/data/repo/socket_auth_repo_impl.dart';
 import 'package:cricklo/features/mainapp/data/usecases/get_current_user_usecase.dart';
 import 'package:cricklo/features/mainapp/data/usecases/logout_usecase.dart';
 import 'package:cricklo/features/mainapp/domain/repo/main_app_repo.dart';
+import 'package:cricklo/features/mainapp/domain/repo/socket_auth_repo.dart';
 import 'package:cricklo/features/mainapp/presentation/blocs/cubits/MainAppCubit/main_app_cubit.dart';
 import 'package:cricklo/features/teams/data/datasource/team_datasource_remote.dart';
 import 'package:cricklo/features/teams/data/repo/team_repo_impl.dart';
@@ -29,6 +31,8 @@ import 'package:cricklo/features/teams/presentation/blocs/cubits/AddPlayersCubit
 import 'package:cricklo/features/teams/presentation/blocs/cubits/CreateTeamCubit/create_team_cubit.dart';
 import 'package:cricklo/features/teams/presentation/blocs/cubits/SearchPlayersCubit/search_players_cubit.dart';
 import 'package:cricklo/services/api_service.dart';
+import 'package:cricklo/services/auth_helper.dart';
+import 'package:cricklo/services/socket_service.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:get_it/get_it.dart';
@@ -39,13 +43,11 @@ final sl = GetIt.instance;
 Future<void> initializeDependencies() async {
   final appDocDir = await getApplicationDocumentsDirectory();
   final cookiePath = '${appDocDir.path}/.cookies';
-
-  // Create a single cookie jar instance
   final cookieJar = PersistCookieJar(storage: FileStorage(cookiePath));
 
-  // Register cookieJar in DI so we can query JWT later if needed
   sl.registerLazySingleton<PersistCookieJar>(() => cookieJar);
 
+  // 🔹 Dio setup
   sl.registerLazySingleton<Dio>(() {
     final dio = Dio(
       BaseOptions(
@@ -55,10 +57,7 @@ Future<void> initializeDependencies() async {
       ),
     );
 
-    // Attach cookie manager (will persist cookies automatically)
     dio.interceptors.add(CookieManager(cookieJar));
-
-    // Debug logging
     dio.interceptors.add(
       LogInterceptor(
         request: true,
@@ -71,6 +70,28 @@ Future<void> initializeDependencies() async {
     return dio;
   });
 
+  // 🔹 Auth dependencies
+  final authHelper = AuthCookieHelper(
+    cookieJar,
+    'https://cricklo.onrender.com',
+  );
+  sl.registerLazySingleton<AuthCookieHelper>(() => authHelper);
+  sl.registerLazySingleton<IAuthRepository>(
+    () => IAuthRepositoryImpl(authHelper),
+  );
+
+  // 🔹 Socket service
+  sl.registerLazySingleton<SocketService>(() => SocketService());
+
+  // Attempt connection only if token exists
+  final token = await sl<IAuthRepository>().getAuthToken();
+  if (token != null) {
+    await sl<SocketService>().connect();
+  } else {
+    print("⚠️ No token found — socket connection skipped");
+  }
+
+  // 🔹 Other services
   sl.registerLazySingleton<ApiService>(() => ApiService(sl<Dio>()));
 
   _authDependencies();

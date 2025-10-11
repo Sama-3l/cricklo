@@ -1,6 +1,7 @@
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/matches/domain/entities/match_entity.dart';
 import 'package:cricklo/features/scorer/presentation/blocs/cubits/ScorerMatchCenter/scorer_match_center_cubit.dart';
+import 'package:cricklo/features/scorer/presentation/screens/scorecard_tab.dart';
 import 'package:cricklo/features/scorer/presentation/screens/scorer_summary_tab.dart';
 import 'package:cricklo/features/scorer/presentation/screens/wagon_wheel_screen.dart';
 import 'package:flutter/cupertino.dart';
@@ -26,7 +27,7 @@ class ScorerMatchCenter extends StatelessWidget {
       case 0:
         return const ScorerSummaryTab();
       case 1:
-        return const ScorecardTab();
+        return const ScorecardScreen();
       case 2:
         return const WagonWheelScreen();
       case 3:
@@ -133,18 +134,6 @@ class ScorerMatchCenter extends StatelessWidget {
 
     return isLoaded ? child : const Center(child: CircularProgressIndicator());
   }
-}
-
-class SummaryTab extends StatelessWidget {
-  const SummaryTab({super.key});
-  @override
-  Widget build(BuildContext context) => const Center(child: Text("Summary"));
-}
-
-class ScorecardTab extends StatelessWidget {
-  const ScorecardTab({super.key});
-  @override
-  Widget build(BuildContext context) => const Center(child: Text("Scorecard"));
 }
 
 class WagonWheelTab extends StatelessWidget {

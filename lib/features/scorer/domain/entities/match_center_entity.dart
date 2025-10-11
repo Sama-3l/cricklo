@@ -19,6 +19,7 @@ class MatchCenterEntity {
   final String? winner;
   final DateTime? endDateTime;
   final List<InningsEntity> innings;
+  bool abandoned;
 
   MatchCenterEntity({
     required this.matchID,
@@ -33,26 +34,31 @@ class MatchCenterEntity {
     this.tossChoice,
     this.winner,
     this.endDateTime,
+    this.abandoned = false,
     required this.innings,
   });
 
-  MatchTeamEntity? get battingTeam => tossWinner == null
-      ? null
-      : tossWinner == teamA.id
-      ? tossChoice == TossChoice.batting
-            ? teamA
-            : teamB
-      : tossChoice == TossChoice.batting
-      ? teamB
-      : teamA;
-
-  MatchTeamEntity? get bowlingTeam => tossWinner == null
-      ? null
-      : tossWinner == teamA.id
-      ? tossChoice == TossChoice.batting
+  MatchTeamEntity? get battingTeam => innings.length <= 1
+      ? tossWinner == null
+            ? null
+            : tossWinner == teamA.id
+            ? tossChoice == TossChoice.batting
+                  ? teamA
+                  : teamB
+            : tossChoice == TossChoice.batting
             ? teamB
             : teamA
-      : tossChoice == TossChoice.batting
-      ? teamA
-      : teamB;
+      : innings.last.battingTeam;
+
+  MatchTeamEntity? get bowlingTeam => innings.length <= 1
+      ? tossWinner == null
+            ? null
+            : tossWinner == teamA.id
+            ? tossChoice == TossChoice.batting
+                  ? teamB
+                  : teamA
+            : tossChoice == TossChoice.batting
+            ? teamA
+            : teamB
+      : innings[innings.length - 2].battingTeam;
 }

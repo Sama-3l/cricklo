@@ -16,6 +16,11 @@ class BallDataItem extends StatelessWidget {
       return ColorsConstants.warningRed;
     }
 
+    if (ball.extraType != null && ball.extraType == ExtraType.moreRuns ||
+        ball.extraType == ExtraType.bonus) {
+      return Colors.grey.shade400;
+    }
+
     if (ball.runs >= 4) return ColorsConstants.urlBlue;
     return Colors.grey.shade400;
   }
@@ -23,15 +28,18 @@ class BallDataItem extends StatelessWidget {
   String _getDisplayText() {
     if (ball.wicketType != null) {
       final w = ball.wicketType!;
-      if (w == WicketType.retired) return "R";
-      if (ball.extraType != null && ball.extraType != ExtraType.none) {
-        return "W+${_extraAbbr(ball.extraType!)}${ball.runs > 0 ? "+${ball.runs}" : ""}";
+      if (w == WicketType.retired) return "RH";
+      if (w == WicketType.runOut) {
+        return "W${ball.runs > 0 ? "+${ball.runs}" : ""}";
       }
       return "W";
     }
 
-    if (ball.extraType != null && ball.extraType != ExtraType.none) {
+    if (ball.extraType != null) {
       final extra = _extraAbbr(ball.extraType!);
+      if (ball.extraType == ExtraType.moreRuns) {
+        return "${ball.runs}";
+      }
       return ball.runs > 0 ? "$extra+${ball.runs}" : extra;
     }
 
@@ -74,15 +82,26 @@ class BallDataItem extends StatelessWidget {
         fit: BoxFit.scaleDown,
         child: Padding(
           padding: const EdgeInsets.all(2.0),
-          child: Text(
-            text,
-            textAlign: TextAlign.center,
-            style: TextStyles.poppinsBold.copyWith(
-              fontSize: fontSize,
-              letterSpacing: -0.4,
-              color: ColorsConstants.defaultWhite,
-            ),
-          ),
+          child: ball.runs == 0 && ball.wicketType == null
+              ? Center(
+                  child: Container(
+                    height: 8,
+                    width: 8,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: ColorsConstants.defaultWhite,
+                    ),
+                  ),
+                )
+              : Text(
+                  text,
+                  textAlign: TextAlign.center,
+                  style: TextStyles.poppinsBold.copyWith(
+                    fontSize: fontSize,
+                    letterSpacing: -0.4,
+                    color: ColorsConstants.defaultWhite,
+                  ),
+                ),
         ),
       ),
     );

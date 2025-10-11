@@ -1,11 +1,15 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:cricklo/core/utils/constants/enums.dart';
+import 'package:cricklo/features/scorer/domain/entities/match_player_entity.dart';
 
 class BallEntity {
   final int runs;
   final bool isExtra;
   final ExtraType? extraType;
   final WicketType? wicketType;
+  final MatchPlayerEntity? batsman;
+  final MatchPlayerEntity? bowler;
+  final MatchPlayerEntity? fielder;
   final int? sector;
 
   BallEntity({
@@ -14,6 +18,9 @@ class BallEntity {
     this.extraType,
     this.wicketType,
     this.sector,
+    this.batsman,
+    this.bowler,
+    this.fielder,
   });
 
   int get totalRuns =>
@@ -39,8 +46,10 @@ class BallEntity {
       case ExtraType.legBye:
         // all runs count as extras
         return runs;
-      case ExtraType.none:
-        return 0;
+      case ExtraType.penalty:
+      case ExtraType.bonus:
+      case ExtraType.moreRuns:
+        return runs;
     }
   }
 }

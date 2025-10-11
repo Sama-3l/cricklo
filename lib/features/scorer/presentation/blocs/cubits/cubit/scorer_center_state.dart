@@ -1,44 +1,21 @@
 part of 'scorer_center_cubit.dart';
 
 class ScoreCenterState {
-  final String? onStrikeBatsman;
-  final String? offStrikeBatsman;
-  final String? currentBowler;
-  final int totalRuns;
-  final int overs;
-  final int balls;
-  final int wickets;
+  final ExtraType? extraType;
+  final bool wicket;
+  final OptionType? optionType;
 
-  ScoreCenterState({
-    this.onStrikeBatsman,
-    this.offStrikeBatsman,
-    this.currentBowler,
-    required this.totalRuns,
-    required this.overs,
-    required this.balls,
-    required this.wickets,
-  });
-
-  factory ScoreCenterState.initial() =>
-      ScoreCenterState(totalRuns: 0, overs: 0, balls: 0, wickets: 0);
+  ScoreCenterState({this.extraType, this.wicket = false, this.optionType});
 
   ScoreCenterState copyWith({
-    String? onStrikeBatsman,
-    String? offStrikeBatsman,
-    String? currentBowler,
-    int? totalRuns,
-    int? overs,
-    int? balls,
-    int? wickets,
+    ExtraType? extraType,
+    bool? wicket,
+    OptionType? optionType,
   }) {
     return ScoreCenterState(
-      onStrikeBatsman: onStrikeBatsman ?? this.onStrikeBatsman,
-      offStrikeBatsman: offStrikeBatsman ?? this.offStrikeBatsman,
-      currentBowler: currentBowler ?? this.currentBowler,
-      totalRuns: totalRuns ?? this.totalRuns,
-      overs: overs ?? this.overs,
-      balls: balls ?? this.balls,
-      wickets: wickets ?? this.wickets,
+      extraType: extraType,
+      wicket: wicket ?? this.wicket,
+      optionType: optionType,
     );
   }
 }
