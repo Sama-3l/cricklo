@@ -7,6 +7,7 @@ class ApiEndpointConstants {
 
   static const onboarding = '/profile/onboarding';
   static const getCurrentUser = '/profile/me';
+  static const getMyTeams = "/profile/my-teams";
 
   static const createTeam = '/team/create';
   static const searchPlayers = "/team/players/search";

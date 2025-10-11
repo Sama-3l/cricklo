@@ -1,3 +1,4 @@
+import 'package:cricklo/features/account/domain/models/remote/get_teams_response_model.dart';
 import 'package:cricklo/features/login/domain/models/remote/login_response_model.dart';
 import 'package:cricklo/features/login/domain/models/remote/set_pin_response_model.dart';
 import 'package:cricklo/features/login/domain/models/remote/user_model.dart';
@@ -53,4 +54,7 @@ abstract class ApiService {
     @Path("teamId") String teamId,
     @Body() Map<String, dynamic> body,
   );
+
+  @GET(ApiEndpointConstants.getMyTeams)
+  Future<GetTeamsResponseModel> getMyTeams();
 }

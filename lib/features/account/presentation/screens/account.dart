@@ -1,4 +1,3 @@
-import 'package:cricklo/core/utils/constants/dummy_data.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/account/presentation/blocs/cubits/AccountPageCubit/account_page_cubit.dart';
 import 'package:cricklo/features/account/presentation/screens/player_overview.dart';
@@ -6,6 +5,7 @@ import 'package:cricklo/features/account/presentation/screens/statistics.dart';
 import 'package:cricklo/features/account/presentation/screens/teams_grid.dart';
 import 'package:cricklo/features/account/presentation/widgets/profile_tab_bar.dart';
 import 'package:cricklo/features/login/domain/entities/user_entitiy.dart';
+import 'package:cricklo/injection_container.dart';
 import 'package:cricklo/routes/app_route_constants.dart';
 
 import 'package:flutter/material.dart';
@@ -21,7 +21,7 @@ class AccountPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => AccountCubit()..init(userEntity),
+      create: (_) => sl<AccountCubit>()..init(userEntity),
       child: BlocBuilder<AccountCubit, AccountPageState>(
         builder: (context, state) {
           final cubit = context.read<AccountCubit>();
@@ -68,7 +68,7 @@ class AccountPage extends StatelessWidget {
                       StatisticsPage(),
 
                       TeamsGrid(
-                        teams: [dummyTeam, dummyTeam, dummyTeam],
+                        teams: state.teams,
                         onTap: (team) => GoRouter.of(
                           context,
                         ).pushNamed(Routes.teamPage, extra: team),

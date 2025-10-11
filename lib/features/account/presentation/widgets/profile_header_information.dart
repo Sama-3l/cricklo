@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cricklo/core/utils/constants/methods.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/account/presentation/widgets/profile_social_stats.dart';
@@ -24,12 +25,26 @@ class ProfileHeaderInformation extends StatelessWidget {
               backgroundColor: ColorsConstants.accentOrange.withValues(
                 alpha: 0.2,
               ),
-              child: Icon(
-                CupertinoIcons.person_2_fill,
-                size: 16,
-                color: ColorsConstants.defaultBlack,
-              ),
+              backgroundImage: user != null
+                  ? null
+                  : team!.teamLogo.isNotEmpty
+                  ? CachedNetworkImageProvider(team!.teamLogo)
+                  : null,
+              child: user != null
+                  ? Icon(
+                      CupertinoIcons.person_fill,
+                      size: 16,
+                      color: ColorsConstants.defaultBlack,
+                    )
+                  : team!.teamLogo.isEmpty
+                  ? Icon(
+                      CupertinoIcons.person_2_fill,
+                      size: 16,
+                      color: ColorsConstants.defaultBlack,
+                    )
+                  : null,
             ),
+
             const SizedBox(width: 16),
             Expanded(
               child: Column(

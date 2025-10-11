@@ -31,6 +31,10 @@ abstract class ColorsConstants {
   static Color get surfaceOrange => const Color(0xFFFFDCD0);
   static Color get onSurfaceOrange => const Color(0xFFF4E6E3);
   static Color get correctGreen => const Color(0xff22F662);
+
+  static Color get wagonWheelField => const Color(0xff419B44);
+  static Color get wagonWheelPitch => const Color(0xffFFC21F);
+  static Color get wagonWheelStatBackground => const Color(0xff2E3C43);
 }
 
 class TextStyles {

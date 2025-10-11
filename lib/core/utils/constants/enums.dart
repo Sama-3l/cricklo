@@ -52,3 +52,19 @@ enum MatchStage {
   secondInnings,
   completed,
 }
+
+enum ExtraType { none, wide, noBall, bye, legBye }
+
+enum WicketType {
+  bowled,
+  caught,
+  stumped,
+  lbw,
+  runOut,
+  mankad,
+  retired,
+  overTheFence,
+  timedOut,
+  doubleHit,
+  hitWicket,
+}

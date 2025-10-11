@@ -1,4 +1,3 @@
-import 'package:cricklo/features/account/presentation/blocs/cubits/AccountPageCubit/account_page_cubit.dart';
 import 'package:cricklo/features/login/presentation/blocs/cubits/OtpPageCubit/otp_page_cubit.dart';
 import 'package:cricklo/features/login/presentation/blocs/cubits/SetPinCubit/set_pin_cubit.dart';
 import 'package:cricklo/features/login/presentation/blocs/cubits/OnboardingPageCubit/onboarding_page_cubit.dart';
@@ -48,7 +47,7 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (context) => sl<OtpPageCubit>()),
         BlocProvider(create: (context) => sl<SetPinCubit>()),
-        BlocProvider(create: (_) => AccountCubit()),
+        // BlocProvider(create: (_) => sl<AccountCubit>()),
         BlocProvider(create: (_) => sl<OnboardingPageCubit>()),
         BlocProvider(create: (context) => NotificationBloc(fakeStream)),
       ],

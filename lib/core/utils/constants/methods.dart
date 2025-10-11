@@ -5,6 +5,7 @@ import 'package:cricklo/core/utils/constants/enums.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/login/domain/entities/user_entitiy.dart';
 import 'package:cricklo/features/matches/domain/entities/match_entity.dart';
+import 'package:cricklo/features/scorer/domain/entities/overs_entity.dart';
 import 'package:cricklo/features/teams/domain/entities/player_entity.dart';
 import 'package:flutter/material.dart';
 
@@ -222,5 +223,85 @@ class Methods {
   static Future<String> imageToBase64(File imageFile) async {
     final bytes = await imageFile.readAsBytes();
     return base64Encode(bytes);
+  }
+
+  static String battingTeamAbbr(String name) {
+    final n = name.split(' ');
+    String d = "";
+    for (var word in n) {
+      d += word[0];
+    }
+    return d;
+  }
+
+  static String numberSuffix(int number) {
+    if (number >= 11 && number <= 13) return 'th';
+    switch (number % 10) {
+      case 1:
+        return 'st';
+      case 2:
+        return 'nd';
+      case 3:
+        return 'rd';
+      default:
+        return 'th';
+    }
+  }
+
+  static List<dynamic> getLastBallsWithBreaks(
+    List<OversEntity> overs, {
+    int count = 6,
+  }) {
+    final List<dynamic> result = [];
+    final List<Map<String, dynamic>> flattened = [];
+
+    // Flatten overs into list of { ball, overNumber }
+    for (var over in overs) {
+      for (var ball in over.balls) {
+        flattened.add({"ball": ball, "overNumber": over.overNumber});
+      }
+    }
+    if (flattened.isEmpty) return [];
+
+    // Take the last `count` balls safely
+    final int startIndex = flattened.length > count
+        ? flattened.length - count
+        : 0;
+    final recent = flattened.sublist(startIndex);
+
+    // Add "-" when over changes between consecutive balls
+    for (int i = 0; i < recent.length; i++) {
+      if (i > 0 && recent[i]["overNumber"] != recent[i - 1]["overNumber"]) {
+        result.add("-");
+      }
+      result.add(recent[i]["ball"]);
+    }
+
+    return result;
+  }
+
+  static String incrementOver(String currentOver) {
+    // Split the overs string into overs and balls
+    final parts = currentOver.split('.');
+    int overs = int.parse(parts[0]);
+    int balls = parts.length > 1 ? int.parse(parts[1]) : 0;
+
+    // Add one ball
+    balls += 1;
+
+    // If 6 balls are completed, increment overs and reset balls
+    if (balls >= 6) {
+      overs += 1;
+      balls = 0;
+    }
+
+    return '$overs.$balls';
+  }
+
+  static double oversToDecimal(String oversString) {
+    final parts = oversString.split('.');
+    final overs = int.parse(parts[0]);
+    final balls = parts.length > 1 ? int.parse(parts[1]) : 0;
+    return overs + (balls / 6.0);
   }
 }

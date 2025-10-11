@@ -118,7 +118,7 @@ final PlayerEntity player8 = PlayerEntity(
 
 final TeamEntity dummyTeam = TeamEntity(
   id: "t001",
-  name: "Hello World shall watch my wraith upon you",
+  name: "Hello World",
   teamLogo: "assets/images/team_1.png",
   teamBanner: "",
   players: [player1, player2, player3, player4],

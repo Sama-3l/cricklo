@@ -1,4 +1,6 @@
 import 'package:cookie_jar/cookie_jar.dart';
+import 'package:cricklo/features/account/data/usecases/get_teams_usecase.dart';
+import 'package:cricklo/features/account/presentation/blocs/cubits/AccountPageCubit/account_page_cubit.dart';
 import 'package:cricklo/features/login/data/datasource/login_remote_datasource.dart';
 import 'package:cricklo/features/login/data/repo/auth_repo_impl.dart';
 import 'package:cricklo/features/login/data/usecases/login_usecase.dart';
@@ -155,6 +157,9 @@ void _teamDependencies() {
   sl.registerLazySingleton<InvitePlayerUsecase>(
     () => InvitePlayerUsecase(sl<TeamRepo>()),
   );
+  sl.registerLazySingleton<GetTeamsUsecase>(
+    () => GetTeamsUsecase(sl<TeamRepo>()),
+  );
   //cubits
   sl.registerFactory<CreateTeamCubit>(
     () => CreateTeamCubit(sl<CreateTeamUsecase>()),
@@ -165,4 +170,5 @@ void _teamDependencies() {
   sl.registerFactory<AddPlayersCubit>(
     () => AddPlayersCubit(sl<InvitePlayerUsecase>()),
   );
+  sl.registerFactory<AccountCubit>(() => AccountCubit(sl<GetTeamsUsecase>()));
 }

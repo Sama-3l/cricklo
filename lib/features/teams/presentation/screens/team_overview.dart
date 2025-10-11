@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cricklo/core/utils/common/primary_button.dart';
 import 'package:cricklo/core/utils/constants/methods.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
@@ -35,19 +36,16 @@ class _TeamOverviewState extends State<TeamOverview> {
                 child: Container(
                   height: 150,
                   width: double.infinity,
-                  color: ColorsConstants.accentOrange.withValues(alpha: 0.2),
-                  child: Center(
-                    child: Text(
-                      "Team Banner Here",
-                      style: TextStyles.poppinsSemiBold.copyWith(
-                        fontSize: 16,
-                        letterSpacing: -0.8,
-                        color: ColorsConstants.defaultBlack,
-                      ),
+                  decoration: BoxDecoration(
+                    color: ColorsConstants.accentOrange.withValues(alpha: 0.2),
+                    image: DecorationImage(
+                      image: CachedNetworkImageProvider(widget.team.teamBanner),
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),
               ),
+
               Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 16.0,

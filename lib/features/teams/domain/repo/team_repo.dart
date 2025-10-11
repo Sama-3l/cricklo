@@ -1,4 +1,5 @@
 import 'package:cricklo/core/errors/failure.dart';
+import 'package:cricklo/features/account/domain/entities/get_teams_response_entity.dart';
 import 'package:cricklo/features/teams/data/entities/search_player_usecase_entity.dart';
 import 'package:cricklo/features/teams/domain/entities/create_team_response_entity.dart';
 import 'package:cricklo/features/teams/domain/entities/invite_player_response_entity.dart';
@@ -16,4 +17,5 @@ abstract class TeamRepo {
     String teamId,
     List<SearchUserModel> body,
   );
+  Future<Either<Failure, GetTeamsResponseEntity>> getTeams();
 }

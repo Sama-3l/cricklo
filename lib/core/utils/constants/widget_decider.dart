@@ -1,13 +1,19 @@
+import 'dart:math' as math;
+
 import 'package:cricklo/core/utils/common/primary_button.dart';
 import 'package:cricklo/core/utils/constants/enums.dart';
 import 'package:cricklo/core/utils/constants/methods.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/matches/domain/entities/match_entity.dart';
 import 'package:cricklo/features/matches/domain/entities/overall_score_entity.dart';
+import 'package:cricklo/features/scorer/domain/entities/match_player_entity.dart';
+import 'package:cricklo/features/scorer/presentation/blocs/cubits/ScorerMatchCenter/scorer_match_center_cubit.dart';
+import 'package:cricklo/features/scorer/presentation/widgets/wagon_wheel_painter.dart';
 import 'package:cricklo/features/teams/domain/entities/player_entity.dart';
 import 'package:cricklo/features/teams/domain/entities/team_entity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class WidgetDecider {
   static Widget optionBuilder({
@@ -681,28 +687,31 @@ class WidgetDecider {
   }
 
   static Widget buildBattingTable({
-    required List<Map<String, dynamic>> batsmen,
-    required String strikerName,
+    required List<MatchPlayerEntity?> players,
+    required MatchPlayerEntity? onStrike,
+    required ScorerMatchCenterCubit cubit,
   }) {
-    if (batsmen.isEmpty) {
-      batsmen = [
-        {
-          'name': '-',
-          'runs': "-",
-          'balls': "-",
-          'fours': "-",
-          'sixes': "-",
-          'strikeRate': "-",
-        },
-        {
-          'name': '-',
-          'runs': "-",
-          'balls': "-",
-          'fours': "-",
-          'sixes': "-",
-          'strikeRate': "-",
-        },
-      ];
+    List<Map<String, dynamic>> batsmen = [];
+
+    for (var i in players) {
+      batsmen.add({
+        'name': i!.name,
+        'runs': i.stats.runs,
+        'balls': i.stats.balls,
+        'fours': i.stats.n4s,
+        'sixes': i.stats.n6s,
+        'strikeRate': i.stats.sr.toStringAsFixed(2),
+      });
+    }
+    for (int i = batsmen.length; i < 2; i++) {
+      batsmen.add({
+        'name': '-',
+        'runs': "-",
+        'balls': "-",
+        'fours': "-",
+        'sixes': "-",
+        'strikeRate': "-",
+      });
     }
     return Table(
       columnWidths: const {
@@ -736,33 +745,51 @@ class WidgetDecider {
         ),
 
         // 🏏 Player Rows
-        for (final player in batsmen)
+        for (int i = 0; i < batsmen.length; i++)
           TableRow(
             children: [
-              _batsmanNameCell(player['name'], player['name'] == strikerName),
-              _dataCell("${player['runs']}"),
-              _dataCell("${player['balls']}"),
-              _dataCell("${player['fours']}"),
-              _dataCell("${player['sixes']}"),
-              _dataCell("${player['strikeRate']}"),
+              _batsmanNameCell(
+                batsmen[i]['name'],
+                onStrike == null ? false : onStrike.name == batsmen[i]['name'],
+                () {
+                  try {
+                    cubit.setOnStrike(players[i]!);
+                  } catch (e) {
+                    rethrow;
+                  }
+                },
+              ),
+              _dataCell("${batsmen[i]['runs']}"),
+              _dataCell("${batsmen[i]['balls']}"),
+              _dataCell("${batsmen[i]['fours']}"),
+              _dataCell("${batsmen[i]['sixes']}"),
+              _dataCell("${batsmen[i]['strikeRate']}"),
             ],
           ),
       ],
     );
   }
 
-  static Widget buildBowlingTable(List<Map<String, dynamic>> bowlers) {
-    if (bowlers.isEmpty) {
-      bowlers = [
-        {
-          'name': '-',
-          'overs': "-",
-          'runs': "-",
-          'maidens': "-",
-          'wickets': "-",
-          'economy': "-",
-        },
-      ];
+  static Widget buildBowlingTable(MatchPlayerEntity? bowlerData) {
+    Map<String, dynamic> bowler;
+    if (bowlerData == null) {
+      bowler = {
+        'name': '-',
+        'overs': "-",
+        'runs': "-",
+        'maidens': "-",
+        'wickets': "-",
+        'economy': "-",
+      };
+    } else {
+      bowler = {
+        'name': bowlerData.name,
+        'overs': bowlerData.stats.overs,
+        'runs': bowlerData.stats.runsGiven,
+        'maidens': bowlerData.stats.maidens,
+        'wickets': bowlerData.stats.wickets,
+        'economy': bowlerData.stats.eco,
+      };
     }
     return Table(
       columnWidths: const {
@@ -793,17 +820,16 @@ class WidgetDecider {
             _headerCell("Eco"),
           ],
         ),
-        for (final bowler in bowlers)
-          TableRow(
-            children: [
-              _dataCell(bowler['name']),
-              _dataCell("${bowler['overs']}"),
-              _dataCell("${bowler['runs']}"),
-              _dataCell("${bowler['maidens']}"),
-              _dataCell("${bowler['wickets']}"),
-              _dataCell("${bowler['economy']}"),
-            ],
-          ),
+        TableRow(
+          children: [
+            _dataCell(bowler['name']),
+            _dataCell("${bowler['overs']}"),
+            _dataCell("${bowler['runs']}"),
+            _dataCell("${bowler['maidens']}"),
+            _dataCell("${bowler['wickets']}"),
+            _dataCell("${bowler['economy']}"),
+          ],
+        ),
       ],
     );
   }
@@ -822,7 +848,11 @@ class WidgetDecider {
     );
   }
 
-  static Widget _batsmanNameCell(String name, bool isStriker) {
+  static Widget _batsmanNameCell(
+    String name,
+    bool isStriker,
+    Function() onTap,
+  ) {
     if (isStriker) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
@@ -833,7 +863,7 @@ class WidgetDecider {
           ),
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
           child: Text(
-            name,
+            "$name*",
             style: TextStyles.poppinsSemiBold.copyWith(
               fontSize: 12,
               color: ColorsConstants.defaultWhite,
@@ -844,7 +874,7 @@ class WidgetDecider {
       );
     }
 
-    return _dataCell(name);
+    return GestureDetector(onTap: () => onTap(), child: _dataCell(name));
   }
 
   static Widget _dataCell(String text) {
@@ -858,6 +888,331 @@ class WidgetDecider {
           letterSpacing: -0.3,
         ),
       ),
+    );
+  }
+
+  static Future<int?> showWagonWheelBottomSheet(
+    BuildContext context,
+    int runs,
+  ) async {
+    final sector = await showModalBottomSheet(
+      context: context,
+      backgroundColor: ColorsConstants.defaultWhite,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) {
+        bool showPercentages = false; // local state inside bottom sheet
+
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            return SizedBox(
+              height: 500,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text(
+                      "Select Shot Direction for $runs run${runs > 1 ? 's' : ''}",
+                      style: TextStyles.poppinsSemiBold.copyWith(
+                        fontSize: 16,
+                        letterSpacing: -0.8,
+                        color: ColorsConstants.defaultBlack,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTapUp: (details) {
+                        final box = context.findRenderObject() as RenderBox?;
+                        if (box == null) return;
+                        final localPos = box.globalToLocal(
+                          details.globalPosition,
+                        );
+
+                        final center = Offset(
+                          box.size.width / 2,
+                          box.size.height / 2,
+                        );
+                        final dx = localPos.dx - center.dx;
+                        final dy = localPos.dy - center.dy;
+
+                        final angle =
+                            (math.atan2(dy, dx) + 2 * math.pi) % (2 * math.pi);
+                        const sectors = 8;
+                        final sector = (angle / (2 * math.pi) * sectors)
+                            .floor();
+                        GoRouter.of(context).pop(sector);
+                      },
+                      child: SizedBox.expand(
+                        child: CustomPaint(
+                          painter: WagonWheelPainter(
+                            shots: [],
+                            showPercentages: showPercentages,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+    return sector;
+  }
+
+  static Widget cell(String title, {Function()? onTap}) {
+    return InkWell(
+      onTap: onTap,
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Text(
+            title,
+            style: TextStyles.poppinsMedium.copyWith(
+              fontSize: 16,
+              letterSpacing: -0.8,
+              color: ColorsConstants.defaultWhite,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  static void showSelectBatsmenBottomSheet(
+    BuildContext context, {
+    required List<MatchPlayerEntity> players,
+    required int maxSelection, // 1 or 2
+    bool bowler = false,
+    required Function(List<MatchPlayerEntity>) onConfirm,
+  }) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: ColorsConstants.defaultWhite,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        List<MatchPlayerEntity> selectedPlayers = [];
+
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            final grouped = {
+              "Batting": players
+                  .where((p) => p.playerType == PlayerType.batter)
+                  .toList(),
+              "All Rounder": players
+                  .where((p) => p.playerType == PlayerType.allRounder)
+                  .toList(),
+              "Bowling": players
+                  .where((p) => p.playerType == PlayerType.bowler)
+                  .toList(),
+            };
+
+            return FractionallySizedBox(
+              heightFactor: 0.9,
+              child: Padding(
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom,
+                ),
+                child: Scaffold(
+                  backgroundColor: ColorsConstants.defaultWhite,
+                  floatingActionButtonLocation:
+                      FloatingActionButtonLocation.centerDocked,
+                  floatingActionButton: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: PrimaryButton(
+                        disabled: false,
+                        onPress: selectedPlayers.length == maxSelection
+                            ? () {
+                                onConfirm(selectedPlayers);
+                                Navigator.pop(context);
+                              }
+                            : () {},
+                        child: Text(
+                          "Confirm Selection",
+                          style: TextStyles.poppinsSemiBold.copyWith(
+                            fontSize: 16,
+                            color: ColorsConstants.defaultWhite,
+                            letterSpacing: -0.8,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  body: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        child: Text(
+                          bowler
+                              ? "Select bowler"
+                              : "Select ${maxSelection == 1 ? 'Batsman' : 'Batsmen'}",
+                          style: TextStyles.poppinsSemiBold.copyWith(
+                            fontSize: 16,
+                            letterSpacing: -0.6,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: ListView(
+                          children: grouped.entries.map((entry) {
+                            final role = entry.key;
+                            final rolePlayers = entry.value;
+
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 8,
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  if (rolePlayers.isNotEmpty) ...[
+                                    Text(
+                                      role,
+                                      style: TextStyles.poppinsSemiBold
+                                          .copyWith(
+                                            fontSize: 16,
+                                            letterSpacing: -0.8,
+                                            color: ColorsConstants.accentOrange,
+                                          ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                  ],
+
+                                  ...rolePlayers.map((player) {
+                                    final isSelected = selectedPlayers.contains(
+                                      player,
+                                    );
+
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 6,
+                                      ),
+                                      child: InkWell(
+                                        borderRadius: BorderRadius.circular(12),
+                                        onTap: () {
+                                          setModalState(() {
+                                            if (isSelected) {
+                                              selectedPlayers.remove(player);
+                                            } else if (selectedPlayers.length <
+                                                maxSelection) {
+                                              selectedPlayers.add(player);
+                                            } else {
+                                              selectedPlayers.removeAt(0);
+                                              selectedPlayers.add(player);
+                                            }
+                                          });
+                                        },
+                                        child: Container(
+                                          padding: const EdgeInsets.all(12),
+                                          decoration: BoxDecoration(
+                                            color: isSelected
+                                                ? ColorsConstants.accentOrange
+                                                      .withValues(alpha: 0.2)
+                                                : ColorsConstants.defaultWhite,
+                                            borderRadius: BorderRadius.circular(
+                                              12,
+                                            ),
+                                            border: Border.all(
+                                              color: isSelected
+                                                  ? ColorsConstants.accentOrange
+                                                  : ColorsConstants.defaultBlack
+                                                        .withValues(alpha: 0.3),
+                                            ),
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              CircleAvatar(
+                                                radius: 20,
+                                                backgroundColor: ColorsConstants
+                                                    .accentOrange
+                                                    .withValues(alpha: 0.2),
+                                                child: Icon(
+                                                  Icons.person,
+                                                  color: ColorsConstants
+                                                      .defaultBlack,
+                                                ),
+                                              ),
+                                              const SizedBox(width: 12),
+                                              Expanded(
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      player.name,
+                                                      style: TextStyles
+                                                          .poppinsMedium
+                                                          .copyWith(
+                                                            fontSize: 12,
+                                                            letterSpacing: -0.5,
+                                                          ),
+                                                    ),
+                                                    Text(
+                                                      player.playerId,
+                                                      style: TextStyles
+                                                          .poppinsMedium
+                                                          .copyWith(
+                                                            fontSize: 10,
+                                                            letterSpacing: -0.2,
+                                                            color:
+                                                                ColorsConstants
+                                                                    .defaultBlack
+                                                                    .withValues(
+                                                                      alpha:
+                                                                          0.5,
+                                                                    ),
+                                                          ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Text(
+                                                bowler
+                                                    ? "${player.stats.wickets}-${player.stats.runsGiven} (${player.stats.overs})"
+                                                    : player.stats.out
+                                                    ? "${player.stats.runs} (${player.stats.balls})"
+                                                    : "",
+                                                style: TextStyles.poppinsRegular
+                                                    .copyWith(
+                                                      fontSize: 12,
+
+                                                      letterSpacing: -0.5,
+                                                      color: ColorsConstants
+                                                          .defaultBlack,
+                                                    ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  }),
+                                ],
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
     );
   }
 }

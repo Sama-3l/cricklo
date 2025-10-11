@@ -63,7 +63,12 @@ class TeamModel {
       teamLogo: map['logo'] as String,
       teamBanner: map['banner'] as String,
       players: [],
-      location: LocationModel.fromJson(map['location'] as Map<String, dynamic>),
+      location: map.containsKey('location')
+          ? LocationModel.fromJson(map['location'] as Map<String, dynamic>)
+          : LocationModel.fromJson({
+              'city': map['city'],
+              'state': map['state'],
+            }),
     );
   }
 

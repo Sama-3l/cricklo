@@ -1,3 +1,4 @@
+import 'package:cricklo/features/account/domain/models/remote/get_teams_response_model.dart';
 import 'package:cricklo/features/teams/domain/models/remote/create_team_response_model.dart';
 import 'package:cricklo/features/teams/domain/models/remote/invite_player_response_model.dart';
 import 'package:cricklo/features/teams/domain/models/remote/search_players_response_model.dart';
@@ -12,6 +13,7 @@ abstract class TeamDatasourceRemote {
     String teamId,
     List<SearchUserModel> players,
   );
+  Future<GetTeamsResponseModel> getTeams();
 }
 
 class TeamDatasourceRemoteImpl extends TeamDatasourceRemote {
@@ -54,5 +56,10 @@ class TeamDatasourceRemoteImpl extends TeamDatasourceRemote {
     } catch (e) {
       throw Exception('Failed to search players: $e');
     }
+  }
+
+  @override
+  Future<GetTeamsResponseModel> getTeams() {
+    return _apiService.getMyTeams();
   }
 }

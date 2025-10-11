@@ -2,6 +2,7 @@ import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/matches/domain/entities/match_entity.dart';
 import 'package:cricklo/features/scorer/presentation/blocs/cubits/ScorerMatchCenter/scorer_match_center_cubit.dart';
 import 'package:cricklo/features/scorer/presentation/screens/scorer_summary_tab.dart';
+import 'package:cricklo/features/scorer/presentation/screens/wagon_wheel_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,7 +28,7 @@ class ScorerMatchCenter extends StatelessWidget {
       case 1:
         return const ScorecardTab();
       case 2:
-        return const WagonWheelTab();
+        return const WagonWheelScreen();
       case 3:
         return const CommentaryTab();
       case 4:
@@ -40,11 +41,10 @@ class ScorerMatchCenter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => ScorerMatchCenterCubit(),
+      create: (_) => ScorerMatchCenterCubit()..init(match),
       child: Builder(
         builder: (context) {
           final cubit = context.read<ScorerMatchCenterCubit>();
-
           return DefaultTabController(
             length: _tabs.length,
             child: BlocBuilder<ScorerMatchCenterCubit, ScorerMatchCenterState>(
@@ -75,12 +75,11 @@ class ScorerMatchCenter extends StatelessWidget {
                         alignment: Alignment.centerLeft,
                         child: TabBar(
                           isScrollable: true,
-                          tabAlignment: TabAlignment
-                              .start, // 👈 ensures tabs start at left
-                          padding: EdgeInsets.zero, // 👈 removes outer padding
+                          tabAlignment: TabAlignment.start,
+                          padding: EdgeInsets.zero,
                           labelPadding: const EdgeInsets.symmetric(
                             horizontal: 16,
-                          ), // 👈 custom spacing between tabs
+                          ),
                           indicatorColor: ColorsConstants.accentOrange,
                           labelColor: ColorsConstants.defaultWhite,
                           unselectedLabelColor: ColorsConstants.defaultWhite

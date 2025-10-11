@@ -141,7 +141,7 @@ class AppRouter {
         name: Routes.scorerMatchCenter,
         path: Routes.scorerMatchCenter,
         pageBuilder: (context, state) {
-          final match = state.extra as MatchEntity? ?? dummyMatchScheduled;
+          final match = state.extra as MatchEntity? ?? dummyMatchTossDone;
           return MaterialPage(child: ScorerMatchCenter(match: match));
         },
       ),
