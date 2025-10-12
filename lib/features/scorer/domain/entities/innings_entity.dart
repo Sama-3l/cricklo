@@ -3,11 +3,11 @@ import 'package:cricklo/features/scorer/domain/entities/match_team_entity.dart';
 import 'package:cricklo/features/scorer/domain/entities/overs_entity.dart';
 
 class InningsEntity {
+  int number;
   final MatchTeamEntity battingTeam;
   int runs;
   int wickets;
   String overs;
-  int number;
   double crr;
   int extras;
   final List<OversEntity> oversData;

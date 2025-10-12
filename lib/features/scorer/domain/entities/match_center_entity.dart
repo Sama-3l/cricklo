@@ -10,16 +10,16 @@ class MatchCenterEntity {
   final DateTime dateAndTime;
   final int overs;
   final MatchType matchType;
-  final MatchTeamEntity teamA;
-  final MatchTeamEntity teamB;
   final LocationEntity location;
-  final MatchScorerEntity scorer;
   final String? tossWinner; // TeamID
   final TossChoice? tossChoice;
   String? winner;
-  final DateTime? endDateTime;
-  final List<InningsEntity> innings;
   bool abandoned;
+  final DateTime? endDateTime;
+  final MatchTeamEntity teamA;
+  final MatchTeamEntity teamB;
+  final MatchScorerEntity scorer;
+  final List<InningsEntity> innings;
 
   MatchCenterEntity({
     required this.matchID,
