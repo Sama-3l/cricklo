@@ -1,5 +1,6 @@
 import 'package:cricklo/core/utils/common/primary_button.dart';
 import 'package:cricklo/core/utils/common/textfield.dart';
+import 'package:cricklo/core/utils/constants/enums.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/matches/domain/entities/match_entity.dart';
 import 'package:cricklo/features/scorer/presentation/widgets/scorer_dialogs.dart';
@@ -100,6 +101,11 @@ class _ScorerMatchInitialScreenState extends State<ScorerMatchInitialScreen> {
               final choice = result["choice"];
 
               print("Winner: $winner | Choice: $choice");
+
+              widget.matchEntity.tossWinner = winner;
+              widget.matchEntity.tossChoice = choice!.split(" ")[0] == "Bat"
+                  ? TossChoice.batting
+                  : TossChoice.bowling;
 
               GoRouter.of(
                 context,
@@ -321,7 +327,7 @@ class _ScorerMatchInitialScreenState extends State<ScorerMatchInitialScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              widget.matchEntity.scorer.name,
+                              widget.matchEntity.scorer["playerName"],
                               style: TextStyles.poppinsMedium.copyWith(
                                 fontSize: 16,
                                 letterSpacing: -0.8,
@@ -329,7 +335,7 @@ class _ScorerMatchInitialScreenState extends State<ScorerMatchInitialScreen> {
                               ),
                             ),
                             Text(
-                              widget.matchEntity.scorer.playerId,
+                              widget.matchEntity.scorer["playerId"],
                               style: TextStyles.poppinsMedium.copyWith(
                                 fontSize: 12,
                                 letterSpacing: -0.4,

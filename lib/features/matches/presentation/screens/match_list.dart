@@ -15,33 +15,23 @@ class _MatchListState extends State<MatchList> {
   final PageController _pageController = PageController(viewportFraction: 1);
   int _currentPage = 0;
 
-  // final matches = [
-  //   dummyMatchScheduled,
-  //   dummyMatchLive,
-  //   dummyMatchTossDone,
-  //   dummyMatchInningsTwo,
-  //   dummyMatchDone,
-  // ];
-
   @override
   Widget build(BuildContext context) {
     final state = context.read<MainAppCubit>().state;
+    final matches = state.matches.reversed.toList();
     return Column(
       children: [
         SizedBox(
           height: 181,
           child: PageView.builder(
             controller: _pageController,
-            itemCount: state.matches.length,
+            itemCount: matches.length,
             physics: const BouncingScrollPhysics(),
             onPageChanged: (index) => setState(() => _currentPage = index),
             itemBuilder: (context, index) {
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: MatchTile(
-                  live: index == 0,
-                  matchEntity: state.matches[index],
-                ),
+                child: MatchTile(live: index == 0, matchEntity: matches[index]),
               );
             },
           ),

@@ -113,6 +113,7 @@ class _CreateTeamScreenState extends State<CreateTeamScreen> {
                       state.banner!,
                     );
                     final team = TeamEntity(
+                      inviteStatus: null,
                       uuid: "",
                       id: "",
                       name: nameController.text.trim(),

@@ -22,6 +22,7 @@ class SearchUserEntity {
   PlayerEntity toPlayerEntity() {
     return PlayerEntity(
       id: id,
+      profilePic: null,
       playerId: playerId,
       name: name,
       captain: false,

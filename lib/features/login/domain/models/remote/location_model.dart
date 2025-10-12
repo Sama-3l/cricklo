@@ -20,12 +20,11 @@ class LocationModel {
   });
 
   factory LocationModel.fromJson(Map<String, dynamic> json) {
-    final address = json['address'] ?? {};
     return LocationModel(
-      location: address['location'] ?? '',
-      area: address['area'] ?? '',
-      city: address['city'] ?? '',
-      state: address['state'] ?? '',
+      location: json['location'] ?? '',
+      area: json['area'] ?? '',
+      city: json['city'] ?? '',
+      state: json['state'] ?? '',
       lat: double.tryParse(json['lat'].toString()) ?? 0,
       lng: double.tryParse(json['lon'].toString()) ?? 0,
     );

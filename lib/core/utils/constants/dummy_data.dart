@@ -24,6 +24,7 @@ final dummyCurrUser = UserEntity(
 );
 
 final PlayerEntity currUser = PlayerEntity(
+  profilePic: null,
   teamRole: TeamRole.captain,
   id: 'siddhartha-0Z8jd97V1',
   playerId: 'siddhartha-0Z8jd97V1',
@@ -35,6 +36,7 @@ final PlayerEntity currUser = PlayerEntity(
 );
 
 final PlayerEntity player1 = PlayerEntity(
+  profilePic: null,
   teamRole: TeamRole.captain,
   id: '3',
   playerId: 'P003',
@@ -45,6 +47,7 @@ final PlayerEntity player1 = PlayerEntity(
   bowlerType: null,
 );
 final PlayerEntity player2 = PlayerEntity(
+  profilePic: null,
   teamRole: TeamRole.member,
   id: '4',
   playerId: 'P004',
@@ -55,6 +58,7 @@ final PlayerEntity player2 = PlayerEntity(
   bowlerType: null,
 );
 final PlayerEntity player3 = PlayerEntity(
+  profilePic: null,
   teamRole: TeamRole.invited,
   id: '5',
   playerId: 'P005',
@@ -65,6 +69,7 @@ final PlayerEntity player3 = PlayerEntity(
   bowlerType: null,
 );
 final PlayerEntity player4 = PlayerEntity(
+  profilePic: null,
   teamRole: TeamRole.invited,
   id: '6',
   playerId: 'P006',
@@ -76,6 +81,7 @@ final PlayerEntity player4 = PlayerEntity(
 );
 
 final PlayerEntity player5 = PlayerEntity(
+  profilePic: null,
   id: '1',
   teamRole: TeamRole.invited,
   playerId: 'P001',
@@ -86,6 +92,7 @@ final PlayerEntity player5 = PlayerEntity(
   bowlerType: null,
 );
 final PlayerEntity player6 = PlayerEntity(
+  profilePic: null,
   teamRole: TeamRole.invited,
   id: '2',
   playerId: 'P002',
@@ -96,6 +103,7 @@ final PlayerEntity player6 = PlayerEntity(
   bowlerType: null,
 );
 final PlayerEntity player7 = PlayerEntity(
+  profilePic: null,
   teamRole: TeamRole.invited,
   id: '7',
   playerId: 'P007',
@@ -106,6 +114,7 @@ final PlayerEntity player7 = PlayerEntity(
   bowlerType: BowlerType.leftArmSpin,
 );
 final PlayerEntity player8 = PlayerEntity(
+  profilePic: null,
   teamRole: TeamRole.invited,
   id: '8',
   playerId: 'P008',
@@ -130,10 +139,12 @@ final TeamEntity dummyTeam = TeamEntity(
     lat: 0,
     lng: 0,
   ),
+  inviteStatus: null,
 );
 
 final TeamEntity dummyTeam2 = TeamEntity(
   uuid: "t002",
+  inviteStatus: null,
   id: "t002",
   name: "Bye World",
   teamLogo: "assets/images/team_2.png",
@@ -150,6 +161,7 @@ final TeamEntity dummyTeam2 = TeamEntity(
 
 final List<PlayerEntity> dummyPlayers = [
   PlayerEntity(
+    profilePic: null,
     teamRole: TeamRole.invited,
     id: '9',
     playerId: 'P009',
@@ -160,6 +172,7 @@ final List<PlayerEntity> dummyPlayers = [
     bowlerType: null,
   ),
   PlayerEntity(
+    profilePic: null,
     teamRole: TeamRole.invited,
     id: '10',
     playerId: 'P010',
@@ -170,6 +183,7 @@ final List<PlayerEntity> dummyPlayers = [
     bowlerType: null,
   ),
   PlayerEntity(
+    profilePic: null,
     teamRole: TeamRole.invited,
     id: '11',
     playerId: 'P011',
@@ -180,6 +194,7 @@ final List<PlayerEntity> dummyPlayers = [
     bowlerType: BowlerType.rightArmPace,
   ),
   PlayerEntity(
+    profilePic: null,
     teamRole: TeamRole.invited,
     id: '12',
     playerId: 'P012',
@@ -190,6 +205,7 @@ final List<PlayerEntity> dummyPlayers = [
     bowlerType: BowlerType.rightArmPace,
   ),
   PlayerEntity(
+    profilePic: null,
     teamRole: TeamRole.invited,
     id: '13',
     playerId: 'P013',
@@ -200,6 +216,7 @@ final List<PlayerEntity> dummyPlayers = [
     bowlerType: BowlerType.rightArmPace,
   ),
   PlayerEntity(
+    profilePic: null,
     teamRole: TeamRole.invited,
     id: '14',
     playerId: 'P014',
@@ -210,6 +227,7 @@ final List<PlayerEntity> dummyPlayers = [
     bowlerType: BowlerType.rightArmSpin,
   ),
   PlayerEntity(
+    profilePic: null,
     teamRole: TeamRole.invited,
     id: '15',
     playerId: 'P015',
@@ -220,6 +238,7 @@ final List<PlayerEntity> dummyPlayers = [
     bowlerType: BowlerType.leftArmSpin,
   ),
   PlayerEntity(
+    profilePic: null,
     teamRole: TeamRole.invited,
     id: '16',
     playerId: 'P016',
@@ -230,6 +249,7 @@ final List<PlayerEntity> dummyPlayers = [
     bowlerType: BowlerType.rightArmSpin,
   ),
   PlayerEntity(
+    profilePic: null,
     teamRole: TeamRole.invited,
     id: '17',
     playerId: 'P017',
@@ -240,6 +260,7 @@ final List<PlayerEntity> dummyPlayers = [
     bowlerType: BowlerType.rightArmPace,
   ),
   PlayerEntity(
+    profilePic: null,
     teamRole: TeamRole.invited,
     id: '18',
     playerId: 'P018',
@@ -250,6 +271,7 @@ final List<PlayerEntity> dummyPlayers = [
     bowlerType: null,
   ),
   PlayerEntity(
+    profilePic: null,
     teamRole: TeamRole.invited,
     id: '19',
     playerId: 'P019',
@@ -260,6 +282,7 @@ final List<PlayerEntity> dummyPlayers = [
     bowlerType: null,
   ),
   PlayerEntity(
+    profilePic: null,
     teamRole: TeamRole.invited,
     id: '20',
     playerId: 'P020',
@@ -286,7 +309,7 @@ final MatchEntity dummyMatchScheduled = MatchEntity(
     lat: 0,
     lng: 0,
   ),
-  scorer: currUser,
+  scorer: {"playerId": currUser.playerId, "playerName": currUser.name},
 );
 
 final MatchEntity dummyMatchLive = MatchEntity(
@@ -304,7 +327,7 @@ final MatchEntity dummyMatchLive = MatchEntity(
     lat: 0,
     lng: 0,
   ),
-  scorer: currUser,
+  scorer: {"playerId": currUser.playerId, "playerName": currUser.name},
 );
 
 final MatchEntity dummyMatchTossDone = MatchEntity(
@@ -330,7 +353,7 @@ final MatchEntity dummyMatchTossDone = MatchEntity(
     lat: 0,
     lng: 0,
   ),
-  scorer: currUser,
+  scorer: {"playerId": currUser.playerId, "playerName": currUser.name},
 );
 
 final MatchEntity dummyMatchInningsTwo = MatchEntity(
@@ -362,7 +385,7 @@ final MatchEntity dummyMatchInningsTwo = MatchEntity(
     lat: 0,
     lng: 0,
   ),
-  scorer: currUser,
+  scorer: {"playerId": currUser.playerId, "playerName": currUser.name},
 );
 
 final MatchEntity dummyMatchDone = MatchEntity(
@@ -395,5 +418,5 @@ final MatchEntity dummyMatchDone = MatchEntity(
     lng: 0,
   ),
   winner: "t001",
-  scorer: currUser,
+  scorer: {"playerId": currUser.playerId, "playerName": currUser.name},
 );

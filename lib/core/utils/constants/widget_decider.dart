@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cricklo/core/utils/common/primary_button.dart';
 import 'package:cricklo/core/utils/constants/enums.dart';
 import 'package:cricklo/core/utils/constants/methods.dart';
@@ -666,7 +667,10 @@ class WidgetDecider {
 
     return Row(
       children: [
-        CircleAvatar(radius: 16, backgroundImage: AssetImage(team.teamLogo)),
+        CircleAvatar(
+          radius: 16,
+          backgroundImage: CachedNetworkImageProvider(team.teamLogo),
+        ),
         const SizedBox(width: 8),
         Expanded(
           child: Text(

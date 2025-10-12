@@ -1,8 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:cricklo/core/usecase/usecase.dart';
 import 'package:cricklo/core/utils/constants/global_variables.dart';
+import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/login/domain/entities/user_entitiy.dart';
 import 'package:cricklo/features/mainapp/data/usecases/get_current_user_usecase.dart';
+import 'package:cricklo/features/mainapp/data/usecases/get_user_matches_usecase.dart';
 import 'package:cricklo/features/mainapp/data/usecases/logout_usecase.dart';
 import 'package:cricklo/features/matches/domain/entities/match_entity.dart';
 import 'package:cricklo/injection_container.dart';
@@ -16,10 +18,14 @@ part 'main_app_state.dart';
 
 class MainAppCubit extends Cubit<MainAppState> {
   final GetCurrentUserUsecase _currentUserUsecase;
+  final GetUserMatchesUsecase _getUserMatchesUsecase;
   final LogoutUsecase _logoutUsecase;
 
-  MainAppCubit(this._currentUserUsecase, this._logoutUsecase)
-    : super(UpdateIndex(currentIndex: 0, showOptions: false, matches: []));
+  MainAppCubit(
+    this._currentUserUsecase,
+    this._logoutUsecase,
+    this._getUserMatchesUsecase,
+  ) : super(UpdateIndex(currentIndex: 0, showOptions: false, matches: []));
 
   logout(BuildContext context) async {
     emit(
@@ -77,6 +83,44 @@ class MainAppCubit extends Cubit<MainAppState> {
     );
   }
 
+  getUserMatches() async {
+    final response = await _getUserMatchesUsecase(NoParams());
+    response.fold(
+      (_) {
+        ScaffoldMessenger.of(
+          GlobalVariables.navigatorKey!.currentContext!,
+        ).showSnackBar(
+          SnackBar(
+            // behavior: SnackBarBehavior.floating,
+            backgroundColor: ColorsConstants.defaultBlack,
+            padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+            content: Text(
+              "Couldn't load matches",
+              style: TextStyles.poppinsSemiBold.copyWith(
+                fontSize: 16,
+                letterSpacing: -0.8,
+                color: ColorsConstants.defaultWhite,
+              ),
+            ),
+          ),
+        );
+      },
+      (response) {
+        if (response.success) {
+          emit(
+            UpdateIndex(
+              matches: response.matches,
+              currentIndex: state.currentIndex,
+              showOptions: state.showOptions,
+              user: state.user,
+              loading: false,
+            ),
+          );
+        }
+      },
+    );
+  }
+
   addMatch(MatchEntity match) {
     state.matches.add(match);
     emit(
@@ -124,6 +168,7 @@ class MainAppCubit extends Cubit<MainAppState> {
           ),
         );
         final response = await _currentUserUsecase(NoParams());
+        getUserMatches();
         response.fold(
           (_) {
             GlobalVariables.setUser(user);

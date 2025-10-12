@@ -30,6 +30,8 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
       );
 
   init(MatchEntity matchEntity) {
+    print(matchEntity.tossWinner);
+    print(matchEntity.tossChoice);
     final matchCenterEntity = MatchCenterEntity(
       matchID: matchEntity.matchID,
       dateAndTime: matchEntity.dateAndTime,
@@ -47,7 +49,7 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
         players: matchEntity.teamA.players
             .map(
               (e) => MatchPlayerEntity(
-                id: e.id,
+                id: e.id ?? e.playerId,
                 playerId: e.playerId,
                 name: e.name,
                 captain: e.captain,
@@ -87,7 +89,7 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
         players: matchEntity.teamB.players
             .map(
               (e) => MatchPlayerEntity(
-                id: e.id,
+                id: e.id ?? e.playerId,
                 playerId: e.playerId,
                 name: e.name,
                 captain: e.captain,
@@ -119,8 +121,8 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
       ),
       location: matchEntity.location,
       scorer: MatchScorerEntity(
-        playerId: matchEntity.scorer.id,
-        name: matchEntity.scorer.name,
+        playerId: matchEntity.scorer["playerId"],
+        name: matchEntity.scorer["playerName"],
         profilePic: "",
       ),
       innings: [],
@@ -575,7 +577,6 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
       bowler: bowlerInvolved,
       fielder: bowlingTeamPlayerInvolved?.copyWith(),
     );
-    final battingTeam = state.matchCenterEntity!.battingTeam!;
     final bowler = state.matchCenterEntity!.bowlingTeam!.bowler;
     if (state.matchCenterEntity!.innings.last.oversData.isEmpty) {
       state.matchCenterEntity!.innings.last.oversData.add(
@@ -945,7 +946,6 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
     final lastOver = innings.oversData.last;
     final over = state.matchCenterEntity!.innings.last.oversData.last;
     MatchPlayerEntity? batsmanInvolved;
-    MatchPlayerEntity? secondBatsmanInvolved;
     MatchPlayerEntity? bowlerInvolved;
     MatchPlayerEntity? fiedlerInvolved;
 
@@ -957,11 +957,6 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
     if (undoBall.bowler != null) {
       bowlerInvolved = state.matchCenterEntity!.bowlingTeam!.players
           .where((e) => e.playerId == undoBall.bowler!.playerId)
-          .first;
-    }
-    if (undoBall.secondBatsman != null) {
-      secondBatsmanInvolved = state.matchCenterEntity!.battingTeam!.players
-          .where((e) => e.playerId == undoBall.secondBatsman!.playerId)
           .first;
     }
     if (undoBall.fielder != null) {

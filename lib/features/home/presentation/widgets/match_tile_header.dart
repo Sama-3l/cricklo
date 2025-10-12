@@ -15,7 +15,7 @@ class MatchTileHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GlobalVariables.user != null &&
-            matchEntity.scorer.playerId == GlobalVariables.user!.profileId
+            matchEntity.scorer["playerId"] == GlobalVariables.user!.profileId
         ? Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

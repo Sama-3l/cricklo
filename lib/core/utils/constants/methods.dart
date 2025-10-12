@@ -345,7 +345,6 @@ class Methods {
     MatchPlayerEntity player,
     MatchCenterEntity match,
   ) {
-    final innings = match.innings.last;
     final isCurrBatsman = match.battingTeam!.currBatsmen.any(
       (b) => b?.playerId == player.playerId,
     );
@@ -389,5 +388,23 @@ class Methods {
 
   static DateTime combineDateAndTime(DateTime date, TimeOfDay time) {
     return DateTime(date.year, date.month, date.day, time.hour, time.minute);
+  }
+
+  static String abbreviateTeamName(String name) {
+    // Check if name contains text in brackets → use that directly
+    final bracketMatch = RegExp(r'\(([^)]+)\)').firstMatch(name);
+    if (bracketMatch != null) {
+      return bracketMatch.group(1)!.toUpperCase();
+    }
+
+    // Otherwise, take first letter of each word and uppercase it
+    final words = name
+        .split(' ')
+        .where((word) => word.isNotEmpty) // remove extra spaces
+        .toList();
+
+    final abbreviation = words.map((word) => word[0].toUpperCase()).join();
+
+    return abbreviation;
   }
 }

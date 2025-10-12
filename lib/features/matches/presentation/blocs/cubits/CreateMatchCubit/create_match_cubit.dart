@@ -35,10 +35,10 @@ class CreateMatchCubit extends Cubit<CreateMatchState> {
         time: time,
         overs: overs,
         matchType: format,
-        teamA: teamA.uuid,
-        teamB: teamB.uuid,
+        teamA: teamA.uuid!,
+        teamB: teamB.uuid!,
         location: location,
-        scorer: scorer.id,
+        scorer: scorer.id!,
       ),
     );
     response.fold((_) {}, (response) {
@@ -51,7 +51,7 @@ class CreateMatchCubit extends Cubit<CreateMatchState> {
           teamA: teamA,
           teamB: teamB,
           location: location,
-          scorer: scorer,
+          scorer: {"playerId": scorer.playerId, "playerName": scorer.name},
         );
         onComplete(matchEntity);
         GoRouter.of(context).pop();

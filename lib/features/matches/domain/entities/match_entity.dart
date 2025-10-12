@@ -2,7 +2,6 @@
 import 'package:cricklo/core/utils/constants/enums.dart';
 import 'package:cricklo/features/login/domain/entities/location_entity.dart';
 import 'package:cricklo/features/matches/domain/entities/overall_score_entity.dart';
-import 'package:cricklo/features/teams/domain/entities/player_entity.dart';
 import 'package:cricklo/features/teams/domain/entities/team_entity.dart';
 
 class MatchEntity {
@@ -14,9 +13,9 @@ class MatchEntity {
   bool abandoned;
   final TeamEntity teamB;
   final LocationEntity location;
-  final PlayerEntity scorer;
-  final String? tossWinner; // TeamID
-  final TossChoice? tossChoice;
+  final Map<String, dynamic> scorer;
+  String? tossWinner; // TeamID
+  TossChoice? tossChoice;
   String? winner;
   final OverallScoreEntity? teamAScore;
   final OverallScoreEntity? teamBScore;
@@ -51,7 +50,7 @@ class MatchEntity {
     TeamEntity? teamB,
     bool? abandoned,
     LocationEntity? location,
-    PlayerEntity? scorer,
+    Map<String, dynamic>? scorer,
   }) {
     return MatchEntity(
       matchID: matchID ?? this.matchID,

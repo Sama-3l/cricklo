@@ -121,6 +121,7 @@ class _CreateMatchState extends State<CreateMatch> {
                   teamA!,
                   teamB!,
                   PlayerEntity(
+                    profilePic: '',
                     id: scorer!.id,
                     playerId: scorer!.playerId,
                     name: scorer!.name,

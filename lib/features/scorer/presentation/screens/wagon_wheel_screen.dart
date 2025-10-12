@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'package:cricklo/core/utils/constants/methods.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/scorer/domain/entities/innings_entity.dart';
 import 'package:cricklo/features/scorer/domain/entities/shot_entity.dart';
@@ -225,7 +226,7 @@ class _WagonWheelScreenState extends State<WagonWheelScreen> {
           borderRadius: BorderRadius.circular(12),
         ),
         child: Text(
-          title,
+          Methods.abbreviateTeamName(title),
           style: TextStyles.poppinsSemiBold.copyWith(
             fontSize: 12,
             letterSpacing: -0.5,

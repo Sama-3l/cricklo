@@ -2,8 +2,9 @@
 import 'package:cricklo/core/utils/constants/enums.dart';
 
 class PlayerEntity {
-  final String id;
+  final String? id;
   final String playerId;
+  final String? profilePic;
   final String name;
   final bool captain;
   final TeamRole teamRole;
@@ -15,6 +16,7 @@ class PlayerEntity {
     required this.id,
     required this.playerId,
     required this.name,
+    required this.profilePic,
     required this.captain,
     required this.teamRole,
     required this.playerType,
@@ -28,6 +30,7 @@ class PlayerEntity {
     String? name,
     bool? captain,
     TeamRole? teamRole,
+    String? profilePic,
     PlayerType? playerType,
     BatterType? batterType,
     BowlerType? bowlerType,
@@ -37,6 +40,7 @@ class PlayerEntity {
       playerId: playerId ?? this.playerId,
       name: name ?? this.name,
       captain: captain ?? this.captain,
+      profilePic: profilePic ?? this.profilePic,
       teamRole: teamRole ?? this.teamRole,
       playerType: playerType ?? this.playerType,
       batterType: batterType ?? this.batterType,

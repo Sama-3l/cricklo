@@ -1,14 +1,15 @@
 import 'package:cricklo/features/login/domain/models/remote/location_model.dart';
-import 'package:cricklo/features/teams/domain/entities/player_entity.dart';
 import 'package:cricklo/features/teams/domain/entities/team_entity.dart';
+import 'package:cricklo/features/teams/domain/models/remote/player_model.dart';
 
 class TeamModel {
-  final String uuid;
+  final String? uuid;
   final String id;
   final String name;
+  final String? inviteStatus;
   final String teamLogo;
   final String teamBanner;
-  final List<PlayerEntity> players;
+  final List<PlayerModel> players;
   final LocationModel location;
 
   TeamModel({
@@ -16,6 +17,7 @@ class TeamModel {
     required this.id,
     required this.name,
     required this.teamLogo,
+    required this.inviteStatus,
     required this.teamBanner,
     this.players = const [],
     required this.location,
@@ -27,10 +29,12 @@ class TeamModel {
     String? name,
     String? teamLogo,
     String? teamBanner,
-    List<PlayerEntity>? players,
+    String? inviteStatus,
+    List<PlayerModel>? players,
     LocationModel? location,
   }) {
     return TeamModel(
+      inviteStatus: inviteStatus ?? this.inviteStatus,
       uuid: uuid ?? this.uuid,
       id: id ?? this.id,
       name: name ?? this.name,
@@ -52,6 +56,7 @@ class TeamModel {
 
   factory TeamModel.fromEntity(TeamEntity team) {
     return TeamModel(
+      inviteStatus: team.inviteStatus,
       uuid: team.uuid,
       id: team.id,
       name: team.name,
@@ -63,12 +68,17 @@ class TeamModel {
 
   factory TeamModel.fromJson(Map<String, dynamic> map) {
     return TeamModel(
-      uuid: map['id'] as String,
+      inviteStatus: map['inviteStatus'] as String?,
+      uuid: map['id'] as String?,
       id: map['teamId'] as String,
-      name: map['name'] as String,
-      teamLogo: map['logo'] as String,
-      teamBanner: map['banner'] as String,
-      players: [],
+      name: map['name'] ?? map['teamName'] as String,
+      teamLogo: map['logo'] ?? map['teamLogo'] as String,
+      teamBanner: map['banner'] ?? map['teamBanner'] as String,
+      players: map['teamPlayers'] != null
+          ? (map['teamPlayers'] as List<dynamic>)
+                .map<PlayerModel>((e) => PlayerModel.fromJson(e))
+                .toList()
+          : [],
       location: map.containsKey('location')
           ? LocationModel.fromJson(map['location'] as Map<String, dynamic>)
           : LocationModel.fromJson({
@@ -80,12 +90,13 @@ class TeamModel {
 
   TeamEntity toEntity() {
     return TeamEntity(
+      inviteStatus: inviteStatus,
       uuid: uuid,
       id: id,
       name: name,
       teamLogo: teamLogo,
       teamBanner: teamBanner,
-      players: players,
+      players: players.map((e) => e.toEntity()).toList(),
       location: location.toEntity(),
     );
   }

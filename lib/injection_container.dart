@@ -18,6 +18,7 @@ import 'package:cricklo/features/mainapp/data/datasource/main_app_remote_datasou
 import 'package:cricklo/features/mainapp/data/repo/main_app_repo_impl.dart';
 import 'package:cricklo/features/mainapp/data/repo/socket_auth_repo_impl.dart';
 import 'package:cricklo/features/mainapp/data/usecases/get_current_user_usecase.dart';
+import 'package:cricklo/features/mainapp/data/usecases/get_user_matches_usecase.dart';
 import 'package:cricklo/features/mainapp/data/usecases/logout_usecase.dart';
 import 'package:cricklo/features/mainapp/domain/repo/main_app_repo.dart';
 import 'package:cricklo/features/mainapp/domain/repo/socket_auth_repo.dart';
@@ -173,7 +174,11 @@ void _mainAppDependencies() {
   );
   //cubits
   sl.registerFactory<MainAppCubit>(
-    () => MainAppCubit(sl<GetCurrentUserUsecase>(), sl<LogoutUsecase>()),
+    () => MainAppCubit(
+      sl<GetCurrentUserUsecase>(),
+      sl<LogoutUsecase>(),
+      sl<GetUserMatchesUsecase>(),
+    ),
   );
 }
 
@@ -252,6 +257,9 @@ void _matchDependencies() {
   //use-cases
   sl.registerLazySingleton<CreateMatchUsecase>(
     () => CreateMatchUsecase(sl<MatchRepo>()),
+  );
+  sl.registerLazySingleton<GetUserMatchesUsecase>(
+    () => GetUserMatchesUsecase(sl<MatchRepo>()),
   );
   //cubits
   sl.registerFactory<CreateMatchCubit>(

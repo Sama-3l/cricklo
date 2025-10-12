@@ -13,8 +13,8 @@ class MatchPlayerStatsEntity {
   int wickets;
   double eco;
   bool out;
-  String? bowler;
-  String? fielder;
+  String? bowler; // For WHEN OUT IS TRUE (FOR THE SCORECARD)
+  String? fielder; // For WHEN OUT IS TRUE (FOR THE SCORECARD)
   WicketType? wicketType;
   int caught;
   int stumping;

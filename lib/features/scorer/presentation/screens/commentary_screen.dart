@@ -1,5 +1,4 @@
 import 'package:cricklo/core/utils/constants/theme.dart';
-import 'package:cricklo/features/scorer/domain/entities/innings_entity.dart';
 import 'package:cricklo/features/scorer/domain/entities/match_center_entity.dart';
 import 'package:cricklo/features/scorer/presentation/widgets/commentary_over_card.dart';
 import 'package:flutter/material.dart';
@@ -7,8 +6,7 @@ import 'package:flutter/material.dart';
 class CommentaryScreen extends StatefulWidget {
   final MatchCenterEntity matchCenterEntity;
 
-  const CommentaryScreen({Key? key, required this.matchCenterEntity})
-    : super(key: key);
+  const CommentaryScreen({super.key, required this.matchCenterEntity});
 
   @override
   State<CommentaryScreen> createState() => _CommentaryScreenState();
@@ -50,11 +48,11 @@ class _CommentaryScreenState extends State<CommentaryScreen> {
   }
 
   Widget _buildInningsToggle(MatchCenterEntity match) {
-    final innings = match.innings;
-    final isTestMatch = match.matchType.matchType.toLowerCase() == "test";
+    // final innings = match.innings;
+    // final isTestMatch = match.matchType.matchType.toLowerCase() == "test";
 
-    // For non-Test matches → always show 2 innings
-    final totalInnings = isTestMatch ? innings.length : 2;
+    // // For non-Test matches → always show 2 innings
+    // final totalInnings = isTestMatch ? innings.length : 2;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0).copyWith(top: 24),

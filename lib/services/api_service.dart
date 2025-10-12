@@ -3,6 +3,7 @@ import 'package:cricklo/features/login/domain/models/remote/login_response_model
 import 'package:cricklo/features/login/domain/models/remote/set_pin_response_model.dart';
 import 'package:cricklo/features/login/domain/models/remote/user_model.dart';
 import 'package:cricklo/features/matches/domain/models/remote/create_match_response_model.dart';
+import 'package:cricklo/features/matches/domain/models/remote/get_user_matches_response_model.dart';
 import 'package:cricklo/features/notifications/domain/models/remote/logout_model_remote.dart';
 import 'package:cricklo/features/teams/domain/models/remote/create_team_response_model.dart';
 import 'package:cricklo/features/teams/domain/models/remote/invite_player_response_model.dart';
@@ -67,4 +68,7 @@ abstract class ApiService {
   Future<CreateMatchResponseModel> createMatch(
     @Body() Map<String, dynamic> body,
   );
+
+  @GET(ApiEndpointConstants.getUserMatches)
+  Future<GetUserMatchesResponseModel> getUserMatches();
 }

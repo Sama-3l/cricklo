@@ -55,7 +55,7 @@ class _ScorecardScreenState extends State<ScorecardScreen> {
                         alignment: Alignment.center,
                         padding: const EdgeInsets.symmetric(vertical: 12),
                         child: Text(
-                          battingTeam.name,
+                          Methods.abbreviateTeamName(battingTeam.name),
                           style: TextStyles.poppinsSemiBold.copyWith(
                             fontSize: 16,
                             color: selectedTeamIndex == 0
@@ -84,7 +84,7 @@ class _ScorecardScreenState extends State<ScorecardScreen> {
                         alignment: Alignment.center,
                         padding: const EdgeInsets.symmetric(vertical: 12),
                         child: Text(
-                          bowlingTeam.name,
+                          Methods.abbreviateTeamName(bowlingTeam.name),
                           style: TextStyles.poppinsSemiBold.copyWith(
                             fontSize: 16,
                             color: selectedTeamIndex == 1
