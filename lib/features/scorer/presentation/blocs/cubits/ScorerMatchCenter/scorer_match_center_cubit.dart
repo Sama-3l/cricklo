@@ -286,7 +286,7 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
         : (bowler.stats.runsGiven / oversDecimal);
   }
 
-  addInningsRuns(BallEntity ball) {
+  bool addInningsRuns(BallEntity ball) {
     state.matchCenterEntity!.innings.last.runs += ball.totalRuns;
     if (!ball.isExtra ||
         (ball.extraType != null && ball.extraType == ExtraType.moreRuns)) {
@@ -312,6 +312,16 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
     if (ball.wicketType != null) {
       state.matchCenterEntity!.innings.last.wickets++;
     }
+    if (state.matchCenterEntity!.innings.last.overs.length >
+            state.matchCenterEntity!.overs ||
+        state.matchCenterEntity!.innings.last.wickets ==
+            state.matchCenterEntity!.innings.last.battingTeam.players.length -
+                1) {
+      print("endInnings");
+      endInnings();
+      return true;
+    }
+    return false;
   }
 
   void removeInningsRuns(BallEntity ball) {
@@ -351,10 +361,14 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
     emit(state.copyWith());
   }
 
-  void undoStatsForBatsman(int runs, BallEntity ball, bool ballCounted) {
-    final extraType = ball.extraType;
+  void undoStatsForBatsman(
+    int runs,
+    ExtraType? extraType,
+    MatchPlayerEntity batsman,
+    bool ballCounted,
+  ) {
     final battingTeam = state.matchCenterEntity!.battingTeam!;
-    final onStrike = ball.batsman!;
+    final onStrike = batsman;
     final currBatsmen = battingTeam.currBatsmen;
 
     // 1️⃣ If strike switched due to odd runs, switch back
@@ -403,11 +417,9 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
     bool wicket,
     bool maiden,
     ExtraType? extraType,
-    BallEntity ball,
+    // BallEntity ball,
+    MatchPlayerEntity bowler,
   ) {
-    final bowler = ball.bowler;
-    if (bowler == null) return;
-
     // Reverse over count
     if (extraType != null) {
       if (extraType == ExtraType.legBye || extraType == ExtraType.bye) {
@@ -445,10 +457,13 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
   }
 
   undoWicketTakenBatsman(
-    MatchPlayerEntity batsmen,
+    MatchPlayerEntity overBatsman,
+    MatchPlayerEntity batsman,
     bool lastDelivery, {
     WicketType? wicketType,
+    MatchPlayerEntity? overBowler,
     MatchPlayerEntity? bowler,
+    MatchPlayerEntity? overFielder,
     MatchPlayerEntity? fielderInvolved,
   }) {
     final currBatsmen = state.matchCenterEntity!.battingTeam!.currBatsmen;
@@ -470,15 +485,15 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
     // print(currBatsmen[1]!.name);
     // Re-add batsman to the slot where he was removed
     if (currBatsmen[0]!.playerId == repeatedPlayer!.playerId) {
-      currBatsmen[1] = batsmen;
+      currBatsmen[1] = batsman;
     } else {
-      currBatsmen[0] = batsmen;
+      currBatsmen[0] = batsman;
     }
     state.matchCenterEntity!.battingTeam!.partnerships.removeLast();
     // print(currBatsmen[0]!.name);
     // Reverse lastDelivery strike change and bowler edit
     if (lastDelivery) {
-      if (batsmen.playerId ==
+      if (batsman.playerId ==
           state.matchCenterEntity!.battingTeam!.currBatsmen[0]!.playerId) {
         setOnStrike(state.matchCenterEntity!.battingTeam!.currBatsmen[1]!);
       } else {
@@ -490,7 +505,7 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
 
     // Revert batsman’s out status and wicket info
     for (var player in state.matchCenterEntity!.battingTeam!.players) {
-      if (player.playerId == batsmen.playerId) {
+      if (player.playerId == batsman.playerId) {
         player.stats.out = false;
         player.stats.wicketType = null;
         player.stats.bowler = null;
@@ -544,6 +559,7 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
     ExtraType? extraType,
     WicketType? wicketType,
     int? sector,
+    MatchPlayerEntity? secondBatsman,
     MatchPlayerEntity? batsmanInvolved,
     MatchPlayerEntity? bowlerInvolved,
     MatchPlayerEntity? bowlingTeamPlayerInvolved,
@@ -554,9 +570,10 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
       extraType: extraType,
       wicketType: wicketType,
       sector: sector,
+      secondBatsman: secondBatsman,
       batsman: batsmanInvolved,
       bowler: bowlerInvolved,
-      fielder: bowlingTeamPlayerInvolved,
+      fielder: bowlingTeamPlayerInvolved?.copyWith(),
     );
     final battingTeam = state.matchCenterEntity!.battingTeam!;
     final bowler = state.matchCenterEntity!.bowlingTeam!.bowler;
@@ -588,6 +605,7 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
         state.matchCenterEntity!.innings.last.oversData.last.balls.add(newBall);
       }
     }
+
     if (!newBall.isExtra) {
       if (newBall.wicketType != null &&
           newBall.wicketType == WicketType.retired) {
@@ -715,8 +733,13 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
         );
       }
     }
-    addInningsRuns(newBall);
-    if (state.matchCenterEntity!.innings.last.oversData.last.legalDeliveries ==
+    newBall.batsman = newBall.batsman?.copyWith();
+    newBall.secondBatsman = newBall.secondBatsman?.copyWith();
+    newBall.bowler = newBall.bowler?.copyWith();
+    final inningsEnded = addInningsRuns(newBall);
+
+    if (!inningsEnded &&
+        state.matchCenterEntity!.innings.last.oversData.last.legalDeliveries ==
             6 &&
         wicketType == null) {
       setOnStrike(
@@ -730,6 +753,7 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
       );
       editBowler(null);
     }
+    setWinner();
 
     emit(state.copyWith());
   }
@@ -829,7 +853,43 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
       },
     );
 
-    timer?.cancel(); // cleanup in case dialog closed early
+    timer?.cancel();
+  }
+
+  void setWinner() {
+    final matchCenter = state.matchCenterEntity!;
+    final match = state.matchEntity!;
+
+    // No winner logic for Test matches
+    if (match.matchType == MatchType.test) return;
+
+    // Ensure both innings exist
+    if (matchCenter.innings.length < 2) return;
+
+    final firstInnings = matchCenter.innings[0];
+    final secondInnings = matchCenter.innings[1];
+
+    // Total players in the batting side
+    final totalPlayers = secondInnings.battingTeam.players.length;
+
+    // Check winning conditions
+    if (secondInnings.runs > firstInnings.runs) {
+      // Chasing team won
+      matchCenter.winner = secondInnings.battingTeam.id;
+    } else if (secondInnings.wickets == totalPlayers - 1 ||
+        secondInnings.overs == matchCenter.overs.toString()) {
+      // Chasing team all out or overs finished
+      if (firstInnings.runs > secondInnings.runs) {
+        matchCenter.winner = firstInnings.battingTeam.id;
+      } else if (firstInnings.runs == secondInnings.runs) {
+        matchCenter.winner = null;
+      }
+    } else {
+      // Match still in progress
+      matchCenter.winner = null;
+    }
+
+    emit(state.copyWith(matchCenterEntity: matchCenter));
   }
 
   undoLastBall() {
@@ -843,14 +903,39 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
 
     final lastOver = innings.oversData.last;
     final over = state.matchCenterEntity!.innings.last.oversData.last;
+    MatchPlayerEntity? batsmanInvolved;
+    MatchPlayerEntity? secondBatsmanInvolved;
+    MatchPlayerEntity? bowlerInvolved;
+    MatchPlayerEntity? fiedlerInvolved;
+    if (undoBall.batsman != null) {
+      batsmanInvolved = state.matchCenterEntity!.battingTeam!.players
+          .where((e) => e.playerId == undoBall.batsman!.playerId)
+          .first;
+    }
+    if (undoBall.bowler != null) {
+      bowlerInvolved = state.matchCenterEntity!.bowlingTeam!.players
+          .where((e) => e.playerId == undoBall.bowler!.playerId)
+          .first;
+    }
+    if (undoBall.secondBatsman != null) {
+      secondBatsmanInvolved = state.matchCenterEntity!.battingTeam!.players
+          .where((e) => e.playerId == undoBall.secondBatsman!.playerId)
+          .first;
+    }
+    if (undoBall.fielder != null) {
+      fiedlerInvolved = state.matchCenterEntity!.bowlingTeam!.players
+          .where((e) => e.playerId == undoBall.fielder!.playerId)
+          .first;
+    }
     if (undoBall.wicketType != null) {
       if (undoBall.wicketType == WicketType.runOut) {
         undoWicketTakenBatsman(
           undoBall.batsman!,
+          batsmanInvolved!,
           over.legalDeliveries == 0 ? true : false,
           wicketType: undoBall.wicketType,
-          bowler: undoBall.bowler,
-          fielderInvolved: undoBall.fielder,
+          bowler: bowlerInvolved,
+          fielderInvolved: fiedlerInvolved,
         );
         final fielder = state.matchCenterEntity!.bowlingTeam!.players
             .where((e) => e.playerId == undoBall.fielder!.playerId)
@@ -859,10 +944,11 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
       } else if (undoBall.wicketType == WicketType.caught) {
         undoWicketTakenBatsman(
           undoBall.batsman!,
+          batsmanInvolved!,
           over.legalDeliveries == 0 ? true : false,
           wicketType: undoBall.wicketType,
-          bowler: undoBall.bowler,
-          fielderInvolved: undoBall.fielder,
+          bowler: bowlerInvolved,
+          fielderInvolved: fiedlerInvolved,
         );
         final fielder = state.matchCenterEntity!.bowlingTeam!.players
             .where((e) => e.playerId == undoBall.fielder!.playerId)
@@ -871,10 +957,11 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
       } else if (undoBall.wicketType == WicketType.stumped) {
         undoWicketTakenBatsman(
           undoBall.batsman!,
+          batsmanInvolved!,
           over.legalDeliveries == 0 ? true : false,
           wicketType: undoBall.wicketType,
-          bowler: undoBall.bowler,
-          fielderInvolved: undoBall.fielder,
+          bowler: bowlerInvolved,
+          fielderInvolved: fiedlerInvolved,
         );
         final fielder = state.matchCenterEntity!.bowlingTeam!.players
             .where((e) => e.playerId == undoBall.fielder!.playerId)
@@ -883,9 +970,10 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
       } else {
         undoWicketTakenBatsman(
           undoBall.batsman!,
+          batsmanInvolved!,
           over.legalDeliveries == 0 ? true : false,
           wicketType: undoBall.wicketType,
-          bowler: undoBall.bowler,
+          bowler: bowlerInvolved,
         );
       }
     }
@@ -893,18 +981,33 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
     if (!undoBall.isExtra) {
       if (undoBall.wicketType != null &&
           undoBall.wicketType == WicketType.retired) {
-        undoStatsForBatsman(0, undoBall, false);
+        undoStatsForBatsman(0, undoBall.extraType!, batsmanInvolved!, false);
       } else {
-        undoStatsForBatsman(undoBall.runs, undoBall, true);
+        undoStatsForBatsman(
+          undoBall.runs,
+          undoBall.extraType,
+          batsmanInvolved!,
+          true,
+        );
       }
     } else if (undoBall.extraType == ExtraType.noBall) {
-      undoStatsForBatsman(undoBall.runs, undoBall, false);
+      undoStatsForBatsman(
+        undoBall.runs,
+        undoBall.extraType,
+        batsmanInvolved!,
+        false,
+      );
     } else if (undoBall.extraType != ExtraType.bonus &&
         undoBall.extraType != ExtraType.penalty) {
       if (undoBall.extraType == ExtraType.moreRuns) {
-        undoStatsForBatsman(undoBall.runs, undoBall, true);
+        undoStatsForBatsman(
+          undoBall.runs,
+          undoBall.extraType,
+          batsmanInvolved!,
+          true,
+        );
       } else {
-        undoStatsForBatsman(0, undoBall, true);
+        undoStatsForBatsman(0, undoBall.extraType, batsmanInvolved!, true);
       }
     }
 
@@ -930,7 +1033,7 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
                 undoBall.wicketType == WicketType.lbw),
         maiden,
         undoBall.extraType,
-        undoBall,
+        bowlerInvolved!,
       );
     } else {
       undoBowlerRuns(
@@ -943,7 +1046,7 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
                 undoBall.wicketType == WicketType.lbw),
         maiden,
         undoBall.extraType,
-        undoBall,
+        bowlerInvolved!,
       );
     }
 
@@ -963,6 +1066,7 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
     }
 
     removeInningsRuns(undoBall);
+    setWinner();
     emit(state.copyWith());
   }
 

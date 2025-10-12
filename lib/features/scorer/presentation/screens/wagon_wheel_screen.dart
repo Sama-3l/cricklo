@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/scorer/domain/entities/innings_entity.dart';
-import 'package:cricklo/features/scorer/domain/entities/match_entities.dart';
+import 'package:cricklo/features/scorer/domain/entities/shot_entity.dart';
 import 'package:cricklo/features/scorer/presentation/blocs/cubits/ScorerMatchCenter/scorer_match_center_cubit.dart';
 import 'package:cricklo/features/scorer/presentation/widgets/wagon_wheel_painter.dart';
 import 'package:flutter/material.dart';
@@ -145,7 +145,6 @@ class _WagonWheelScreenState extends State<WagonWheelScreen> {
                 final distance = math.sqrt(dx * dx + dy * dy);
 
                 final radius = box.size.width * 0.45;
-                final innerRadius = radius * 0.6;
                 if (distance >= radius) {
                   setState(() => showPercentages = !showPercentages);
 

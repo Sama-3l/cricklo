@@ -16,7 +16,7 @@ class MatchCenterEntity {
   final MatchScorerEntity scorer;
   final String? tossWinner; // TeamID
   final TossChoice? tossChoice;
-  final String? winner;
+  String? winner;
   final DateTime? endDateTime;
   final List<InningsEntity> innings;
   bool abandoned;

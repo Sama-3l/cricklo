@@ -1,7 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:cricklo/features/scorer/domain/entities/match_team_entity.dart';
 import 'package:cricklo/features/scorer/domain/entities/overs_entity.dart';
-import 'package:cricklo/features/scorer/domain/entities/partnership_entity.dart';
 
 class InningsEntity {
   final MatchTeamEntity battingTeam;
@@ -22,6 +21,5 @@ class InningsEntity {
     required this.crr,
     required this.extras,
     required this.oversData,
-    // required this.partnerships,
   });
 }

@@ -29,149 +29,200 @@ class _ScorecardScreenState extends State<ScorecardScreen> {
         : state.matchCenterEntity!.teamA;
     return Scaffold(
       backgroundColor: ColorsConstants.defaultWhite,
-      appBar: AppBar(
-        bottom: battingTeam.battingOrder.isNotEmpty
-            ? PreferredSize(
-                preferredSize: const Size.fromHeight(50),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () => setState(() => selectedTeamIndex = 0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: selectedTeamIndex == 0
-                                  ? ColorsConstants.accentOrange
-                                  : ColorsConstants.accentOrange.withValues(
-                                      alpha: 0.1,
-                                    ),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            alignment: Alignment.center,
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                            child: Text(
-                              battingTeam.name,
-                              style: TextStyles.poppinsSemiBold.copyWith(
-                                fontSize: 16,
-                                color: selectedTeamIndex == 0
-                                    ? ColorsConstants.defaultWhite
-                                    : ColorsConstants.defaultBlack.withValues(
-                                        alpha: 0.5,
-                                      ),
-                              ),
-                            ),
+      body: Padding(
+        padding: const EdgeInsets.only(top: 24.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+              ).copyWith(bottom: 16),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () => setState(() => selectedTeamIndex = 0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: selectedTeamIndex == 0
+                              ? ColorsConstants.accentOrange
+                              : ColorsConstants.accentOrange.withValues(
+                                  alpha: 0.1,
+                                ),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        child: Text(
+                          battingTeam.name,
+                          style: TextStyles.poppinsSemiBold.copyWith(
+                            fontSize: 16,
+                            color: selectedTeamIndex == 0
+                                ? ColorsConstants.defaultWhite
+                                : ColorsConstants.defaultBlack.withValues(
+                                    alpha: 0.5,
+                                  ),
                           ),
                         ),
                       ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () => setState(() => selectedTeamIndex = 1),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: selectedTeamIndex == 1
-                                  ? ColorsConstants.accentOrange
-                                  : ColorsConstants.accentOrange.withValues(
-                                      alpha: 0.1,
-                                    ),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            alignment: Alignment.center,
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                            child: Text(
-                              bowlingTeam.name,
-                              style: TextStyles.poppinsSemiBold.copyWith(
-                                fontSize: 16,
-                                color: selectedTeamIndex == 1
-                                    ? ColorsConstants.defaultWhite
-                                    : ColorsConstants.defaultBlack.withValues(
-                                        alpha: 0.5,
-                                      ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-              )
-            : null,
-      ),
-      body:
-          selectedTeamIndex == 0 && state.matchCenterEntity!.innings.isEmpty ||
-              battingTeam.battingOrder.isEmpty
-          ? Center(
-              child: Text(
-                "No Data To Show",
-                style: TextStyles.poppinsSemiBold.copyWith(
-                  fontSize: 16,
-                  letterSpacing: -0.8,
-                  color: ColorsConstants.accentOrange,
-                ),
-              ),
-            )
-          : selectedTeamIndex == 0 &&
-                state.matchCenterEntity!.innings.isNotEmpty
-          ? Padding(
-              padding: const EdgeInsets.only(top: 24.0),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildBattingStats(
-                      selectedTeamIndex == 0 ? battingTeam : bowlingTeam,
-                      state.matchCenterEntity!,
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () => setState(() => selectedTeamIndex = 1),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: selectedTeamIndex == 1
+                              ? ColorsConstants.accentOrange
+                              : ColorsConstants.accentOrange.withValues(
+                                  alpha: 0.1,
+                                ),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        child: Text(
+                          bowlingTeam.name,
+                          style: TextStyles.poppinsSemiBold.copyWith(
+                            fontSize: 16,
+                            color: selectedTeamIndex == 1
+                                ? ColorsConstants.defaultWhite
+                                : ColorsConstants.defaultBlack.withValues(
+                                    alpha: 0.5,
+                                  ),
+                          ),
+                        ),
+                      ),
                     ),
-                    const SizedBox(height: 20),
-                    _buildBowlingStats(
-                      selectedTeamIndex == 0 ? bowlingTeam : battingTeam,
-                    ),
-                    const SizedBox(height: 20),
-                    _buildPartnerships(
-                      selectedTeamIndex == 0 ? battingTeam : bowlingTeam,
-                    ),
-                  ],
-                ),
-              ),
-            )
-          : selectedTeamIndex == 1 &&
-                    state.matchCenterEntity!.innings.isEmpty ||
-                state.matchCenterEntity!.innings.length == 1
-          ? Center(
-              child: Text(
-                "No Data To Show",
-                style: TextStyles.poppinsSemiBold.copyWith(
-                  fontSize: 16,
-                  letterSpacing: -0.8,
-                  color: ColorsConstants.accentOrange,
-                ),
-              ),
-            )
-          : Padding(
-              padding: const EdgeInsets.only(top: 24.0),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildBattingStats(
-                      selectedTeamIndex == 0 ? battingTeam : bowlingTeam,
-                      state.matchCenterEntity!,
-                    ),
-                    const SizedBox(height: 20),
-                    _buildBowlingStats(
-                      selectedTeamIndex == 0 ? bowlingTeam : battingTeam,
-                    ),
-                    const SizedBox(height: 20),
-                    _buildPartnerships(
-                      selectedTeamIndex == 0 ? battingTeam : bowlingTeam,
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
+            selectedTeamIndex == 0 &&
+                        state.matchCenterEntity!.innings.isEmpty ||
+                    battingTeam.battingOrder.isEmpty
+                ? Expanded(
+                    child: Column(
+                      children: [
+                        Spacer(),
+                        Center(
+                          child: Text(
+                            "No Data To Show",
+                            style: TextStyles.poppinsSemiBold.copyWith(
+                              fontSize: 16,
+                              letterSpacing: -0.8,
+                              color: ColorsConstants.accentOrange,
+                            ),
+                          ),
+                        ),
+                        Spacer(),
+                      ],
+                    ),
+                  )
+                : selectedTeamIndex == 0 &&
+                      state.matchCenterEntity!.innings.isNotEmpty
+                ? Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          _buildBattingStats(
+                            selectedTeamIndex == 0 ? battingTeam : bowlingTeam,
+                            state.matchCenterEntity!,
+                          ),
+                          const SizedBox(height: 20),
+                          _buildBowlingStats(
+                            selectedTeamIndex == 0 ? bowlingTeam : battingTeam,
+                          ),
+                          const SizedBox(height: 20),
+                          _buildPartnerships(
+                            selectedTeamIndex == 0 ? battingTeam : bowlingTeam,
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                : selectedTeamIndex == 1 &&
+                          state.matchCenterEntity!.innings.isEmpty ||
+                      state.matchCenterEntity!.innings.length == 1
+                ? Expanded(
+                    child: Column(
+                      children: [
+                        Spacer(),
+                        Center(
+                          child: Text(
+                            "No Data To Show",
+                            style: TextStyles.poppinsSemiBold.copyWith(
+                              fontSize: 16,
+                              letterSpacing: -0.8,
+                              color: ColorsConstants.accentOrange,
+                            ),
+                          ),
+                        ),
+                        Spacer(),
+                      ],
+                    ),
+                  )
+                : Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildBattingStats(
+                            selectedTeamIndex == 0 ? battingTeam : bowlingTeam,
+                            state.matchCenterEntity!,
+                          ),
+                          const SizedBox(height: 20),
+                          _buildBowlingStats(
+                            selectedTeamIndex == 0 ? bowlingTeam : battingTeam,
+                          ),
+                          const SizedBox(height: 20),
+                          _buildPartnerships(
+                            selectedTeamIndex == 0 ? battingTeam : bowlingTeam,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+          ],
+        ),
+      ),
+      // : selectedTeamIndex == 1 &&
+      //           state.matchCenterEntity!.innings.isEmpty ||
+      //       state.matchCenterEntity!.innings.length == 1
+      // ? Center(
+      //     child: Text(
+      //       "No Data To Show",
+      //       style: TextStyles.poppinsSemiBold.copyWith(
+      //         fontSize: 16,
+      //         letterSpacing: -0.8,
+      //         color: ColorsConstants.accentOrange,
+      //       ),
+      //     ),
+      //   )
+      // : Padding(
+      //     padding: const EdgeInsets.only(top: 24.0),
+      //     child: SingleChildScrollView(
+      //       child: Column(
+      //         crossAxisAlignment: CrossAxisAlignment.start,
+      //         children: [
+      //           _buildBattingStats(
+      //             selectedTeamIndex == 0 ? battingTeam : bowlingTeam,
+      //             state.matchCenterEntity!,
+      //           ),
+      //           const SizedBox(height: 20),
+      //           _buildBowlingStats(
+      //             selectedTeamIndex == 0 ? bowlingTeam : battingTeam,
+      //           ),
+      //           const SizedBox(height: 20),
+      //           _buildPartnerships(
+      //             selectedTeamIndex == 0 ? battingTeam : bowlingTeam,
+      //           ),
+      //         ],
+      //       ),
+      //     ),
+      //   ),
     );
   }
 

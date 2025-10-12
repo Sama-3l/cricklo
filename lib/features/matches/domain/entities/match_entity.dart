@@ -18,7 +18,7 @@ class MatchEntity {
   final PlayerEntity scorer;
   final String? tossWinner; // TeamID
   final TossChoice? tossChoice;
-  final String? winner;
+  String? winner;
   final OverallScoreEntity? teamAScore;
   final OverallScoreEntity? teamBScore;
   final DateTime? endDateTime;

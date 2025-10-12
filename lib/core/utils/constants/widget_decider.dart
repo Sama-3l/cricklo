@@ -6,9 +6,11 @@ import 'package:cricklo/core/utils/constants/methods.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/matches/domain/entities/match_entity.dart';
 import 'package:cricklo/features/matches/domain/entities/overall_score_entity.dart';
+import 'package:cricklo/features/scorer/domain/entities/ball_entity.dart';
 import 'package:cricklo/features/scorer/domain/entities/match_player_entity.dart';
 import 'package:cricklo/features/scorer/domain/entities/overs_entity.dart';
 import 'package:cricklo/features/scorer/presentation/blocs/cubits/ScorerMatchCenter/scorer_match_center_cubit.dart';
+import 'package:cricklo/features/scorer/presentation/widgets/commentary_ball_row.dart';
 import 'package:cricklo/features/scorer/presentation/widgets/wagon_wheel_painter.dart';
 import 'package:cricklo/features/teams/domain/entities/player_entity.dart';
 import 'package:cricklo/features/teams/domain/entities/team_entity.dart';
@@ -1515,5 +1517,38 @@ class WidgetDecider {
         );
       },
     );
+  }
+
+  static List<Widget> renderCommentaryBallWidget(
+    List<BallEntity> balls,
+    OversEntity over,
+  ) {
+    int legalCount = 0;
+
+    // First, compute all balls with correct numbering
+    final numberedBalls = balls.asMap().entries.map((entry) {
+      final ball = entry.value;
+
+      final legalDelivery =
+          !ball.isExtra ||
+          ball.extraType == ExtraType.bye ||
+          ball.extraType == ExtraType.legBye;
+
+      if (legalDelivery) legalCount++;
+
+      final ballNumber = "${over.overNumber - 1}.$legalCount";
+
+      return CommentaryBallRow(ballNumber: ballNumber, ball: ball);
+    }).toList();
+
+    // Then reverse them so latest ball is shown first
+    return numberedBalls.reversed
+        .map(
+          (e) => Padding(
+            padding: const EdgeInsets.symmetric(vertical: 6.0),
+            child: e,
+          ),
+        )
+        .toList();
   }
 }

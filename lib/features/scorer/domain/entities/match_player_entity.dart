@@ -45,7 +45,7 @@ class MatchPlayerEntity {
       playerType: playerType ?? this.playerType,
       batterType: batterType ?? this.batterType,
       bowlerType: bowlerType ?? this.bowlerType,
-      stats: stats ?? this.stats,
+      stats: stats != null ? stats.copyWith() : this.stats.copyWith(),
     );
   }
 }

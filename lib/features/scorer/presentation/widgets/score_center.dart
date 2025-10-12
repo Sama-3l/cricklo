@@ -30,6 +30,68 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
           final currBatsmen = state.matchCenterEntity!.battingTeam!.currBatsmen;
 
           final strike = state.matchCenterEntity!.battingTeam!.onStrike;
+          if (state.matchCenterEntity!.winner != null) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 16.0, left: 16),
+                  child: Row(
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          currentCubit.newWicket(false);
+                        },
+                        child: Icon(
+                          Icons.close,
+                          size: 24,
+                          color: ColorsConstants.defaultWhite,
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Text(
+                        "Match Completed",
+                        style: TextStyles.poppinsSemiBold.copyWith(
+                          color: ColorsConstants.defaultWhite,
+                          fontSize: 20,
+                          letterSpacing: -1.0,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Spacer(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Center(
+                    child: Wrap(
+                      spacing: 16, // horizontal spacing between children
+                      runSpacing: 16, // vertical spacing between lines
+                      alignment: WrapAlignment.center,
+                      children: [
+                        SecondaryButton(
+                          title: "End Match",
+                          onTap: () {
+                            // cubit.showAbandonMatchDialog(context, () {});
+                          },
+                          color: ColorsConstants.defaultWhite,
+                        ),
+                        SecondaryButton(
+                          title: "Undo",
+                          onTap: () {
+                            cubit.undoLastBall();
+                          },
+                          color: ColorsConstants.defaultWhite,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                Spacer(),
+              ],
+            );
+          }
           if (state.matchCenterEntity!.battingTeam!.currBatsmen[0] == null ||
               state.matchCenterEntity!.battingTeam!.currBatsmen[1] == null) {
             return Column(
@@ -259,6 +321,17 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
                                       .matchCenterEntity!
                                       .battingTeam!
                                       .onStrike,
+                                  secondBatsman: currBatsmen
+                                      .where(
+                                        (e) =>
+                                            e!.playerId !=
+                                            state
+                                                .matchCenterEntity!
+                                                .battingTeam!
+                                                .onStrike!
+                                                .playerId,
+                                      )
+                                      .first,
                                 );
                                 currentCubit.setExtraType(null);
                               } else {
@@ -363,6 +436,17 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
                                               .matchCenterEntity!
                                               .battingTeam!
                                               .onStrike,
+                                          secondBatsman: currBatsmen
+                                              .where(
+                                                (e) =>
+                                                    e!.playerId !=
+                                                    state
+                                                        .matchCenterEntity!
+                                                        .battingTeam!
+                                                        .onStrike!
+                                                        .playerId,
+                                              )
+                                              .first,
                                         );
                                         currentCubit.newWicket(false);
                                       }
@@ -392,6 +476,17 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
                                               .matchCenterEntity!
                                               .battingTeam!
                                               .onStrike,
+                                          secondBatsman: currBatsmen
+                                              .where(
+                                                (e) =>
+                                                    e!.playerId !=
+                                                    state
+                                                        .matchCenterEntity!
+                                                        .battingTeam!
+                                                        .onStrike!
+                                                        .playerId,
+                                              )
+                                              .first,
                                         );
                                         currentCubit.newWicket(false);
                                       }
@@ -419,6 +514,13 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
                                             .matchCenterEntity!
                                             .bowlingTeam!
                                             .bowler,
+                                        secondBatsman: currBatsmen
+                                            .where(
+                                              (e) =>
+                                                  e!.playerId !=
+                                                  batsman.playerId,
+                                            )
+                                            .first,
                                       );
                                       currentCubit.newWicket(false);
                                     },
@@ -436,6 +538,17 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
                                         .matchCenterEntity!
                                         .battingTeam!
                                         .onStrike,
+                                    secondBatsman: currBatsmen
+                                        .where(
+                                          (e) =>
+                                              e!.playerId !=
+                                              state
+                                                  .matchCenterEntity!
+                                                  .battingTeam!
+                                                  .onStrike!
+                                                  .playerId,
+                                        )
+                                        .first,
                                   );
                                   currentCubit.newWicket(false);
                                 }
@@ -551,6 +664,17 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
                                       .matchCenterEntity!
                                       .battingTeam!
                                       .onStrike,
+                                  secondBatsman: currBatsmen
+                                      .where(
+                                        (e) =>
+                                            e!.playerId !=
+                                            state
+                                                .matchCenterEntity!
+                                                .battingTeam!
+                                                .onStrike!
+                                                .playerId,
+                                      )
+                                      .first,
                                 );
                                 currentCubit.optionType(null);
                               } else {
@@ -725,6 +849,17 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
                                         .matchCenterEntity!
                                         .battingTeam!
                                         .onStrike,
+                                    secondBatsman: currBatsmen
+                                        .where(
+                                          (e) =>
+                                              e!.playerId !=
+                                              state
+                                                  .matchCenterEntity!
+                                                  .battingTeam!
+                                                  .onStrike!
+                                                  .playerId,
+                                        )
+                                        .first,
                                   );
                                   currentCubit.optionType(null);
                                 } else {
@@ -823,6 +958,17 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
                                           .matchCenterEntity!
                                           .battingTeam!
                                           .onStrike,
+                                      secondBatsman: currBatsmen
+                                          .where(
+                                            (e) =>
+                                                e!.playerId !=
+                                                state
+                                                    .matchCenterEntity!
+                                                    .battingTeam!
+                                                    .onStrike!
+                                                    .playerId,
+                                          )
+                                          .first,
                                     );
                                   } else {
                                     ScaffoldMessenger.of(context).showSnackBar(
@@ -886,27 +1032,7 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
                                         break;
                                     }
                                     currentCubit.setExtraType(extraType);
-                                  } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        behavior: SnackBarBehavior.floating,
-                                        backgroundColor:
-                                            ColorsConstants.defaultBlack,
-                                        content: Center(
-                                          child: Text(
-                                            "Please select striker",
-                                            style: TextStyles.poppinsSemiBold
-                                                .copyWith(
-                                                  fontSize: 12,
-                                                  letterSpacing: -0.5,
-                                                  color: ColorsConstants
-                                                      .defaultWhite,
-                                                ),
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  }
+                                  } else {}
                                 },
                                 child: WidgetDecider.cell(label),
                               ),
@@ -920,6 +1046,17 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
                                 state.matchCenterEntity!.bowlingTeam!.bowler,
                             batsmanInvolved:
                                 state.matchCenterEntity!.battingTeam!.onStrike,
+                            secondBatsman: currBatsmen
+                                .where(
+                                  (e) =>
+                                      e!.playerId !=
+                                      state
+                                          .matchCenterEntity!
+                                          .battingTeam!
+                                          .onStrike!
+                                          .playerId,
+                                )
+                                .first,
                           ),
                           child: SizedBox(
                             height: rowHeight,
@@ -977,7 +1114,49 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
                           ),
                         ),
                         InkWell(
-                          onTap: () => cubit.undoLastBall(),
+                          onTap: () {
+                            if (state
+                                    .matchCenterEntity!
+                                    .innings
+                                    .last
+                                    .oversData
+                                    .isEmpty ||
+                                (state
+                                            .matchCenterEntity!
+                                            .innings
+                                            .last
+                                            .oversData
+                                            .length ==
+                                        1 &&
+                                    state
+                                        .matchCenterEntity!
+                                        .innings
+                                        .last
+                                        .oversData
+                                        .last
+                                        .balls
+                                        .isEmpty)) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  behavior: SnackBarBehavior.floating,
+                                  backgroundColor: ColorsConstants.defaultBlack,
+                                  content: Center(
+                                    child: Text(
+                                      "Can't Undo Now",
+                                      style: TextStyles.poppinsSemiBold
+                                          .copyWith(
+                                            fontSize: 12,
+                                            letterSpacing: -0.5,
+                                            color: ColorsConstants.defaultWhite,
+                                          ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            } else {
+                              cubit.undoLastBall();
+                            }
+                          },
                           child: SizedBox(
                             height: rowHeight,
                             child: Center(child: WidgetDecider.cell("Undo")),

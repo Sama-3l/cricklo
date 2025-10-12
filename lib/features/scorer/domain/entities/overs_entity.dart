@@ -21,13 +21,15 @@ class OversEntity {
     required this.balls,
   });
 
-  int get legalDeliveries => balls
-      .where(
-        (e) =>
-            !e.isExtra ||
-            (e.extraType != null && e.extraType == ExtraType.moreRuns),
-      )
-      .length;
+  int get legalDeliveries => balls.where((e) {
+    if (!e.isExtra) return true;
+
+    if (e.extraType == ExtraType.bye || e.extraType == ExtraType.legBye) {
+      return true;
+    }
+
+    return false;
+  }).length;
 
   int get overRuns => balls.fold(0, (sum, ball) => sum + ball.totalRuns);
 

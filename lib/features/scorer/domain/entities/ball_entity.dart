@@ -7,14 +7,16 @@ class BallEntity {
   final bool isExtra;
   final ExtraType? extraType;
   final WicketType? wicketType;
-  final MatchPlayerEntity? batsman;
-  final MatchPlayerEntity? bowler;
-  final MatchPlayerEntity? fielder;
+  MatchPlayerEntity? secondBatsman;
+  MatchPlayerEntity? batsman;
+  MatchPlayerEntity? bowler;
+  MatchPlayerEntity? fielder;
   final int? sector;
 
   BallEntity({
     required this.runs,
     required this.isExtra,
+    this.secondBatsman,
     this.extraType,
     this.wicketType,
     this.sector,
