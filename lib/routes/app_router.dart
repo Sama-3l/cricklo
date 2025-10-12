@@ -1,4 +1,5 @@
 import 'package:cricklo/core/utils/constants/dummy_data.dart';
+import 'package:cricklo/core/utils/constants/global_variables.dart';
 import 'package:cricklo/features/login/domain/entities/user_entitiy.dart';
 import 'package:cricklo/features/login/presentation/screens/login_page.dart';
 import 'package:cricklo/features/login/presentation/screens/otp_page.dart';
@@ -21,7 +22,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class AppRouter {
-  GoRouter router = GoRouter(
+  late final GoRouter router = GoRouter(
+    navigatorKey: GlobalVariables.navigatorKey,
     routes: [
       GoRoute(
         name: Routes.mainAppScreen,

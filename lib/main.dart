@@ -39,7 +39,7 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   MyApp({super.key});
 
-  final fakeStream = Stream.periodic(const Duration(seconds: 5));
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => sl<SetPinCubit>()),
         // BlocProvider(create: (_) => sl<AccountCubit>()),
         BlocProvider(create: (_) => sl<OnboardingPageCubit>()),
-        BlocProvider(create: (context) => NotificationBloc(fakeStream)),
+        BlocProvider(create: (context) => sl<NotificationBloc>()),
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,

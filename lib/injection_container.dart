@@ -1,4 +1,5 @@
 import 'package:cookie_jar/cookie_jar.dart';
+import 'package:cricklo/core/utils/constants/global_variables.dart';
 import 'package:cricklo/features/account/data/usecases/get_teams_usecase.dart';
 import 'package:cricklo/features/account/presentation/blocs/cubits/AccountPageCubit/account_page_cubit.dart';
 import 'package:cricklo/features/login/data/datasource/login_remote_datasource.dart';
@@ -21,6 +22,11 @@ import 'package:cricklo/features/mainapp/data/usecases/logout_usecase.dart';
 import 'package:cricklo/features/mainapp/domain/repo/main_app_repo.dart';
 import 'package:cricklo/features/mainapp/domain/repo/socket_auth_repo.dart';
 import 'package:cricklo/features/mainapp/presentation/blocs/cubits/MainAppCubit/main_app_cubit.dart';
+import 'package:cricklo/features/notifications/data/datasource/notification_datasource.dart';
+import 'package:cricklo/features/notifications/data/repo/notification_repo_impl.dart';
+import 'package:cricklo/features/notifications/data/usecases/get_notification_usecase.dart';
+import 'package:cricklo/features/notifications/domain/repo/notification_repo.dart';
+import 'package:cricklo/features/notifications/presentation/blocs/blocs/NotificationBloc/notification_bloc.dart';
 import 'package:cricklo/features/teams/data/datasource/team_datasource_remote.dart';
 import 'package:cricklo/features/teams/data/repo/team_repo_impl.dart';
 import 'package:cricklo/features/teams/data/usecases/create_team_usecase.dart';
@@ -35,12 +41,15 @@ import 'package:cricklo/services/auth_helper.dart';
 import 'package:cricklo/services/socket_service.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
+import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:path_provider/path_provider.dart';
 
 final sl = GetIt.instance;
 
 Future<void> initializeDependencies() async {
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  GlobalVariables.setNavigatorKey(navigatorKey);
   final appDocDir = await getApplicationDocumentsDirectory();
   final cookiePath = '${appDocDir.path}/.cookies';
   final cookieJar = PersistCookieJar(storage: FileStorage(cookiePath));
@@ -97,6 +106,7 @@ Future<void> initializeDependencies() async {
   _authDependencies();
   _mainAppDependencies();
   _teamDependencies();
+  _notificationDependencies();
 }
 
 void _authDependencies() {
@@ -192,4 +202,27 @@ void _teamDependencies() {
     () => AddPlayersCubit(sl<InvitePlayerUsecase>()),
   );
   sl.registerFactory<AccountCubit>(() => AccountCubit(sl<GetTeamsUsecase>()));
+}
+
+void _notificationDependencies() {
+  sl.registerLazySingleton<NotificationRemoteDataSource>(
+    () => NotificationRemoteDataSourceImpl(socketService: sl<SocketService>()),
+  );
+  // repo
+  sl.registerLazySingleton<NotificationRepository>(
+    () => NotificationRepositoryImpl(
+      remoteDataSource: sl<NotificationRemoteDataSource>(),
+    ),
+  );
+  //use-cases
+  sl.registerLazySingleton<GetNotificationsUseCase>(
+    () => GetNotificationsUseCase(sl<NotificationRepository>()),
+  );
+  //cubits
+  sl.registerFactory<NotificationBloc>(
+    () => NotificationBloc(
+      sl<GetNotificationsUseCase>(),
+      GlobalVariables.navigatorKey!,
+    ),
+  );
 }
