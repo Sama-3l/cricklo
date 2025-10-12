@@ -2,10 +2,12 @@ import 'package:cricklo/features/account/domain/models/remote/get_teams_response
 import 'package:cricklo/features/login/domain/models/remote/login_response_model.dart';
 import 'package:cricklo/features/login/domain/models/remote/set_pin_response_model.dart';
 import 'package:cricklo/features/login/domain/models/remote/user_model.dart';
+import 'package:cricklo/features/matches/domain/models/remote/create_match_response_model.dart';
 import 'package:cricklo/features/notifications/domain/models/remote/logout_model_remote.dart';
 import 'package:cricklo/features/teams/domain/models/remote/create_team_response_model.dart';
 import 'package:cricklo/features/teams/domain/models/remote/invite_player_response_model.dart';
 import 'package:cricklo/features/teams/domain/models/remote/search_players_response_model.dart';
+import 'package:cricklo/features/teams/domain/models/remote/search_team_response_model.dart';
 import 'package:cricklo/services/api_endpoint_constants.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/error_logger.dart';
@@ -57,4 +59,12 @@ abstract class ApiService {
 
   @GET(ApiEndpointConstants.getMyTeams)
   Future<GetTeamsResponseModel> getMyTeams();
+
+  @GET(ApiEndpointConstants.searchteams)
+  Future<SearchTeamResponseModel> searchTeams(@Query("query") String query);
+
+  @POST(ApiEndpointConstants.createMatch)
+  Future<CreateMatchResponseModel> createMatch(
+    @Body() Map<String, dynamic> body,
+  );
 }

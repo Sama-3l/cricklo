@@ -6,8 +6,10 @@ import 'package:cricklo/features/home/presentation/widgets/home_profile_header.d
 import 'package:cricklo/features/home/presentation/widgets/match_tile.dart';
 import 'package:cricklo/features/home/presentation/widgets/section_header.dart';
 import 'package:cricklo/features/login/domain/entities/user_entitiy.dart';
+import 'package:cricklo/features/mainapp/presentation/blocs/cubits/MainAppCubit/main_app_cubit.dart';
 import 'package:cricklo/routes/app_route_constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class HomePage extends StatefulWidget {
@@ -247,9 +249,11 @@ class _HomePageState extends State<HomePage>
                     "Create Match",
                     () async {
                       toggleShowOptions();
-                      final done = await GoRouter.of(
-                        context,
-                      ).pushNamed(Routes.createMatch);
+                      final done = await GoRouter.of(context).pushNamed(
+                        Routes.createMatch,
+                        extra: (match) =>
+                            context.read<MainAppCubit>().addMatch(match),
+                      );
                       if (done != null) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(

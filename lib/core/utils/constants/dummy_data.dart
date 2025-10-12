@@ -117,6 +117,7 @@ final PlayerEntity player8 = PlayerEntity(
 );
 
 final TeamEntity dummyTeam = TeamEntity(
+  uuid: "t002",
   id: "t001",
   name: "Hello World",
   teamLogo: "assets/images/team_1.png",
@@ -132,6 +133,7 @@ final TeamEntity dummyTeam = TeamEntity(
 );
 
 final TeamEntity dummyTeam2 = TeamEntity(
+  uuid: "t002",
   id: "t002",
   name: "Bye World",
   teamLogo: "assets/images/team_2.png",
@@ -270,7 +272,6 @@ final List<PlayerEntity> dummyPlayers = [
 ];
 
 final MatchEntity dummyMatchScheduled = MatchEntity(
-  id: "match-0001",
   matchID: "match-0001",
   dateAndTime: DateTime.now().add(Duration(days: 1)),
   overs: 20,
@@ -289,7 +290,6 @@ final MatchEntity dummyMatchScheduled = MatchEntity(
 );
 
 final MatchEntity dummyMatchLive = MatchEntity(
-  id: "match-0001",
   matchID: "match-0001",
   dateAndTime: DateTime.now(),
   overs: 20,
@@ -308,7 +308,6 @@ final MatchEntity dummyMatchLive = MatchEntity(
 );
 
 final MatchEntity dummyMatchTossDone = MatchEntity(
-  id: "match-0001",
   matchID: "match-0001",
   dateAndTime: DateTime.now(),
   overs: 20,
@@ -335,7 +334,6 @@ final MatchEntity dummyMatchTossDone = MatchEntity(
 );
 
 final MatchEntity dummyMatchInningsTwo = MatchEntity(
-  id: "match-0001",
   matchID: "match-0001",
   dateAndTime: DateTime.now(),
   overs: 20,
@@ -368,7 +366,6 @@ final MatchEntity dummyMatchInningsTwo = MatchEntity(
 );
 
 final MatchEntity dummyMatchDone = MatchEntity(
-  id: "match-0001",
   matchID: "match-0001",
   dateAndTime: DateTime.now(),
   overs: 20,

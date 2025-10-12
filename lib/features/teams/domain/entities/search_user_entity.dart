@@ -3,6 +3,7 @@ import 'package:cricklo/core/utils/constants/enums.dart';
 import 'package:cricklo/features/teams/domain/entities/player_entity.dart';
 
 class SearchUserEntity {
+  final String id;
   final String playerId;
   final String name;
   final PlayerType playerType;
@@ -10,6 +11,7 @@ class SearchUserEntity {
   final BowlerType? bowlerType;
 
   SearchUserEntity({
+    required this.id,
     required this.playerId,
     required this.name,
     required this.playerType,
@@ -19,7 +21,7 @@ class SearchUserEntity {
 
   PlayerEntity toPlayerEntity() {
     return PlayerEntity(
-      id: playerId,
+      id: id,
       playerId: playerId,
       name: name,
       captain: false,

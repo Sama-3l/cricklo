@@ -22,6 +22,13 @@ import 'package:cricklo/features/mainapp/data/usecases/logout_usecase.dart';
 import 'package:cricklo/features/mainapp/domain/repo/main_app_repo.dart';
 import 'package:cricklo/features/mainapp/domain/repo/socket_auth_repo.dart';
 import 'package:cricklo/features/mainapp/presentation/blocs/cubits/MainAppCubit/main_app_cubit.dart';
+import 'package:cricklo/features/matches/data/datasource/match_datasource_remote.dart';
+import 'package:cricklo/features/matches/data/repo/match_repo_impl.dart';
+import 'package:cricklo/features/matches/data/usecases/create_match_usecase.dart';
+import 'package:cricklo/features/matches/data/usecases/search_teams_usecase.dart';
+import 'package:cricklo/features/matches/domain/repo/match_repo.dart';
+import 'package:cricklo/features/matches/presentation/blocs/cubits/CreateMatchCubit/create_match_cubit.dart';
+import 'package:cricklo/features/matches/presentation/blocs/cubits/SearchTeamCubit/search_team_cubit.dart';
 import 'package:cricklo/features/notifications/data/datasource/notification_datasource.dart';
 import 'package:cricklo/features/notifications/data/repo/notification_repo_impl.dart';
 import 'package:cricklo/features/notifications/data/usecases/get_notification_usecase.dart';
@@ -107,6 +114,7 @@ Future<void> initializeDependencies() async {
   _mainAppDependencies();
   _teamDependencies();
   _notificationDependencies();
+  _matchDependencies();
 }
 
 void _authDependencies() {
@@ -191,6 +199,9 @@ void _teamDependencies() {
   sl.registerLazySingleton<GetTeamsUsecase>(
     () => GetTeamsUsecase(sl<TeamRepo>()),
   );
+  sl.registerLazySingleton<SearchTeamsUseCase>(
+    () => SearchTeamsUseCase(sl<TeamRepo>()),
+  );
   //cubits
   sl.registerFactory<CreateTeamCubit>(
     () => CreateTeamCubit(sl<CreateTeamUsecase>()),
@@ -202,6 +213,9 @@ void _teamDependencies() {
     () => AddPlayersCubit(sl<InvitePlayerUsecase>()),
   );
   sl.registerFactory<AccountCubit>(() => AccountCubit(sl<GetTeamsUsecase>()));
+  sl.registerFactory<SearchTeamCubit>(
+    () => SearchTeamCubit(sl<SearchTeamsUseCase>()),
+  );
 }
 
 void _notificationDependencies() {
@@ -224,5 +238,23 @@ void _notificationDependencies() {
       sl<GetNotificationsUseCase>(),
       GlobalVariables.navigatorKey!,
     ),
+  );
+}
+
+void _matchDependencies() {
+  sl.registerLazySingleton<MatchDatasourceRemote>(
+    () => MatchDatasourceRemoteImpl(sl<ApiService>()),
+  );
+  // repo
+  sl.registerLazySingleton<MatchRepo>(
+    () => MatchRepoImpl(sl<MatchDatasourceRemote>()),
+  );
+  //use-cases
+  sl.registerLazySingleton<CreateMatchUsecase>(
+    () => CreateMatchUsecase(sl<MatchRepo>()),
+  );
+  //cubits
+  sl.registerFactory<CreateMatchCubit>(
+    () => CreateMatchCubit(sl<CreateMatchUsecase>()),
   );
 }

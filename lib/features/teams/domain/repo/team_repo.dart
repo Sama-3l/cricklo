@@ -4,6 +4,7 @@ import 'package:cricklo/features/teams/data/entities/search_player_usecase_entit
 import 'package:cricklo/features/teams/domain/entities/create_team_response_entity.dart';
 import 'package:cricklo/features/teams/domain/entities/invite_player_response_entity.dart';
 import 'package:cricklo/features/teams/domain/entities/search_players_response_entity.dart';
+import 'package:cricklo/features/teams/domain/entities/search_team_response_entity.dart';
 import 'package:cricklo/features/teams/domain/models/remote/search_user_model.dart';
 import 'package:cricklo/features/teams/domain/models/remote/team_model.dart';
 import 'package:dartz/dartz.dart';
@@ -18,4 +19,5 @@ abstract class TeamRepo {
     List<SearchUserModel> body,
   );
   Future<Either<Failure, GetTeamsResponseEntity>> getTeams();
+  Future<Either<Failure, SearchTeamResponseEntity>> searchTeams(String query);
 }

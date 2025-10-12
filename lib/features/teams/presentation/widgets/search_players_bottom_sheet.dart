@@ -12,9 +12,12 @@ import 'package:go_router/go_router.dart';
 class SearchPlayersBottomSheet extends StatefulWidget {
   final List<SearchUserEntity> initiallySelected; // Pass selected players here
 
+  final bool singleSelect;
+
   const SearchPlayersBottomSheet({
     super.key,
     this.initiallySelected = const [],
+    this.singleSelect = false,
   });
 
   @override
@@ -214,12 +217,23 @@ class _SearchPlayersBottomSheetState extends State<SearchPlayersBottomSheet> {
                                 ),
                                 onTap: () {
                                   setState(() {
-                                    if (selected) {
-                                      selectedPlayers.removeWhere(
-                                        (p) => p.playerId == player.playerId,
-                                      );
+                                    if (widget.singleSelect) {
+                                      if (selected) {
+                                        selectedPlayers.removeWhere(
+                                          (p) => p.playerId == player.playerId,
+                                        );
+                                      } else {
+                                        selectedPlayers.clear();
+                                        selectedPlayers.add(player);
+                                      }
                                     } else {
-                                      selectedPlayers.add(player);
+                                      if (selected) {
+                                        selectedPlayers.removeWhere(
+                                          (p) => p.playerId == player.playerId,
+                                        );
+                                      } else {
+                                        selectedPlayers.add(player);
+                                      }
                                     }
                                   });
                                 },

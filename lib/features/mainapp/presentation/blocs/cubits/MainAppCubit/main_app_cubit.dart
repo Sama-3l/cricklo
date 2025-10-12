@@ -4,6 +4,7 @@ import 'package:cricklo/core/utils/constants/global_variables.dart';
 import 'package:cricklo/features/login/domain/entities/user_entitiy.dart';
 import 'package:cricklo/features/mainapp/data/usecases/get_current_user_usecase.dart';
 import 'package:cricklo/features/mainapp/data/usecases/logout_usecase.dart';
+import 'package:cricklo/features/matches/domain/entities/match_entity.dart';
 import 'package:cricklo/injection_container.dart';
 import 'package:cricklo/routes/app_route_constants.dart';
 import 'package:dio/dio.dart';
@@ -18,7 +19,7 @@ class MainAppCubit extends Cubit<MainAppState> {
   final LogoutUsecase _logoutUsecase;
 
   MainAppCubit(this._currentUserUsecase, this._logoutUsecase)
-    : super(UpdateIndex(currentIndex: 0, showOptions: false));
+    : super(UpdateIndex(currentIndex: 0, showOptions: false, matches: []));
 
   logout(BuildContext context) async {
     emit(
@@ -27,6 +28,7 @@ class MainAppCubit extends Cubit<MainAppState> {
         showOptions: false,
         user: state.user,
         loading: true,
+        matches: state.matches,
       ),
     );
     final response = await _logoutUsecase(NoParams());
@@ -38,6 +40,7 @@ class MainAppCubit extends Cubit<MainAppState> {
             showOptions: false,
             user: state.user,
             loading: false,
+            matches: state.matches,
           ),
         );
       },
@@ -52,6 +55,7 @@ class MainAppCubit extends Cubit<MainAppState> {
           }
           emit(
             UpdateIndex(
+              matches: state.matches,
               currentIndex: 0,
               showOptions: false,
               user: null,
@@ -61,6 +65,7 @@ class MainAppCubit extends Cubit<MainAppState> {
         } else {
           emit(
             UpdateIndex(
+              matches: state.matches,
               currentIndex: 0,
               showOptions: false,
               user: state.user,
@@ -72,9 +77,23 @@ class MainAppCubit extends Cubit<MainAppState> {
     );
   }
 
+  addMatch(MatchEntity match) {
+    state.matches.add(match);
+    emit(
+      UpdateIndex(
+        loading: state.loading,
+        user: state.user,
+        currentIndex: state.currentIndex,
+        showOptions: state.showOptions,
+        matches: state.matches,
+      ),
+    );
+  }
+
   init(UserEntity? user) async {
     emit(
       UpdateIndex(
+        matches: state.matches,
         currentIndex: 0,
         showOptions: false,
         user: user,
@@ -97,6 +116,7 @@ class MainAppCubit extends Cubit<MainAppState> {
       if (cookies.isNotEmpty) {
         emit(
           UpdateIndex(
+            matches: state.matches,
             currentIndex: 0,
             showOptions: false,
             user: user,
@@ -109,6 +129,7 @@ class MainAppCubit extends Cubit<MainAppState> {
             GlobalVariables.setUser(user);
             emit(
               UpdateIndex(
+                matches: state.matches,
                 currentIndex: 0,
                 showOptions: false,
                 user: user,
@@ -121,6 +142,7 @@ class MainAppCubit extends Cubit<MainAppState> {
             print(GlobalVariables.user);
             emit(
               UpdateIndex(
+                matches: state.matches,
                 currentIndex: 0,
                 showOptions: false,
                 user: response,
@@ -142,7 +164,12 @@ class MainAppCubit extends Cubit<MainAppState> {
       GoRouter.of(context).goNamed(Routes.loginPage);
     } else {
       emit(
-        UpdateIndex(currentIndex: index, showOptions: false, user: state.user),
+        UpdateIndex(
+          matches: state.matches,
+          currentIndex: index,
+          showOptions: false,
+          user: state.user,
+        ),
       );
     }
   }
@@ -155,6 +182,7 @@ class MainAppCubit extends Cubit<MainAppState> {
     }
     emit(
       UpdateIndex(
+        matches: state.matches,
         currentIndex: state.currentIndex,
         showOptions: !state.showOptions,
         user: state.user,

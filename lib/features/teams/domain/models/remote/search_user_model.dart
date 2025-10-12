@@ -3,6 +3,7 @@ import 'package:cricklo/core/utils/constants/enums.dart';
 import 'package:cricklo/features/teams/domain/entities/search_user_entity.dart';
 
 class SearchUserModel {
+  final String id;
   final String playerId;
   final String name;
   final PlayerType playerType;
@@ -10,6 +11,7 @@ class SearchUserModel {
   final BowlerType? bowlerType;
 
   SearchUserModel({
+    required this.id,
     required this.playerId,
     required this.name,
     required this.playerType,
@@ -19,6 +21,7 @@ class SearchUserModel {
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
+      'id': id,
       'playerId': playerId,
       'name': name,
       'playerType': playerType.name,
@@ -86,6 +89,7 @@ class SearchUserModel {
     }
 
     return SearchUserModel(
+      id: data['id'] as String,
       playerId: data['playerId'] as String,
       name: data['name'] as String,
       playerType: playerType,
@@ -96,6 +100,7 @@ class SearchUserModel {
 
   factory SearchUserModel.fromEntity(SearchUserEntity entity) {
     return SearchUserModel(
+      id: entity.id,
       playerId: entity.playerId,
       name: entity.name,
       playerType: entity.playerType,
@@ -104,6 +109,7 @@ class SearchUserModel {
 
   SearchUserEntity toEntity() {
     return SearchUserEntity(
+      id: id,
       playerId: playerId,
       name: name,
       playerType: playerType,

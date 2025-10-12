@@ -5,16 +5,16 @@ class LocationEntity {
   final String area;
   final String city;
   final String state;
-  final double lat;
-  final double lng;
+  final double? lat;
+  final double? lng;
 
   LocationEntity({
     this.location,
     required this.area,
     required this.city,
     required this.state,
-    required this.lat,
-    required this.lng,
+    this.lat,
+    this.lng,
   });
 
   LocationEntity copyWith({

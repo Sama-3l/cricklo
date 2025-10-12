@@ -5,6 +5,7 @@ import 'package:cricklo/features/login/domain/entities/location_entity.dart';
 import 'package:cricklo/features/teams/domain/entities/player_entity.dart';
 
 class TeamEntity {
+  final String uuid;
   final String id;
   final String name;
   final File? logoFile;
@@ -15,6 +16,7 @@ class TeamEntity {
   final LocationEntity location;
 
   TeamEntity({
+    required this.uuid,
     required this.id,
     required this.name,
     this.logoFile,

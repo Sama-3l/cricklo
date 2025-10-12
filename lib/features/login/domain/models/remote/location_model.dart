@@ -3,13 +3,15 @@
 import 'package:cricklo/features/login/domain/entities/location_entity.dart';
 
 class LocationModel {
+  final String? location;
   final String area;
   final String city;
   final String state;
-  final double lat;
-  final double lng;
+  double? lat;
+  double? lng;
 
   LocationModel({
+    this.location,
     required this.area,
     required this.city,
     required this.state,
@@ -20,7 +22,8 @@ class LocationModel {
   factory LocationModel.fromJson(Map<String, dynamic> json) {
     final address = json['address'] ?? {};
     return LocationModel(
-      area: address['neighbourhood'] ?? '',
+      location: address['location'] ?? '',
+      area: address['area'] ?? '',
       city: address['city'] ?? '',
       state: address['state'] ?? '',
       lat: double.tryParse(json['lat'].toString()) ?? 0,
@@ -30,6 +33,7 @@ class LocationModel {
 
   factory LocationModel.fromEntity(LocationEntity location) {
     return LocationModel(
+      location: location.location,
       area: location.area,
       city: location.city,
       state: location.state,
@@ -39,11 +43,12 @@ class LocationModel {
   }
 
   Map<String, dynamic> toJson() {
-    return {"area": area, "city": city, "state": state};
+    return {"location": location, "area": area, "city": city, "state": state};
   }
 
   LocationEntity toEntity() {
     return LocationEntity(
+      location: location,
       area: area,
       city: city,
       state: state,

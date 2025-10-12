@@ -6,7 +6,6 @@ import 'package:cricklo/features/teams/domain/entities/player_entity.dart';
 import 'package:cricklo/features/teams/domain/entities/team_entity.dart';
 
 class MatchEntity {
-  final String id;
   final String matchID;
   final DateTime dateAndTime;
   final int overs;
@@ -24,7 +23,6 @@ class MatchEntity {
   final DateTime? endDateTime;
 
   MatchEntity({
-    required this.id,
     required this.matchID,
     required this.dateAndTime,
     required this.overs,
@@ -56,7 +54,6 @@ class MatchEntity {
     PlayerEntity? scorer,
   }) {
     return MatchEntity(
-      id: id ?? this.id,
       matchID: matchID ?? this.matchID,
       dateAndTime: dateAndTime ?? this.dateAndTime,
       endDateTime: endDateTime ?? this.endDateTime,

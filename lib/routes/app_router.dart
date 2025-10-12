@@ -119,7 +119,10 @@ class AppRouter {
         name: Routes.createMatch,
         path: Routes.createMatch,
         pageBuilder: (context, state) {
-          return MaterialPage(child: CreateMatch());
+          final function = state.extra as Function(MatchEntity match);
+          return MaterialPage(
+            child: CreateMatch(onComplete: (match) => function(match)),
+          );
         },
       ),
       GoRoute(

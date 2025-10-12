@@ -5,6 +5,7 @@ import 'package:cricklo/features/teams/data/entities/search_player_usecase_entit
 import 'package:cricklo/features/teams/domain/entities/create_team_response_entity.dart';
 import 'package:cricklo/features/teams/domain/entities/invite_player_response_entity.dart';
 import 'package:cricklo/features/teams/domain/entities/search_players_response_entity.dart';
+import 'package:cricklo/features/teams/domain/entities/search_team_response_entity.dart';
 import 'package:cricklo/features/teams/domain/models/remote/search_user_model.dart';
 import 'package:cricklo/features/teams/domain/models/remote/team_model.dart';
 import 'package:cricklo/features/teams/domain/repo/team_repo.dart';
@@ -98,6 +99,31 @@ class TeamRepoImpl extends TeamRepo {
 
       return Right(
         GetTeamsResponseEntity(
+          success: false,
+          message: message,
+          errorCode: code,
+        ),
+      );
+    } catch (e) {
+      return Left(LocalStorageFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, SearchTeamResponseEntity>> searchTeams(
+    String query,
+  ) async {
+    try {
+      final response = await _teamDatasourceRemote.searchTeams(query);
+      return Right(response.toEntity());
+    } on DioException catch (e) {
+      final data = e.response?.data;
+
+      final code = data?['error']?['code'];
+      final message = data?['error']?['message'];
+
+      return Right(
+        SearchTeamResponseEntity(
           success: false,
           message: message,
           errorCode: code,

@@ -34,8 +34,7 @@ enum MatchType {
   t20("T20"),
   t30("T30"),
   odi("ODI"),
-  test("Test"),
-  custom("Custom");
+  test("Test");
 
   final String matchType;
   const MatchType(this.matchType);

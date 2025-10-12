@@ -3,6 +3,7 @@ import 'package:cricklo/features/teams/domain/entities/player_entity.dart';
 import 'package:cricklo/features/teams/domain/entities/team_entity.dart';
 
 class TeamModel {
+  final String uuid;
   final String id;
   final String name;
   final String teamLogo;
@@ -11,6 +12,7 @@ class TeamModel {
   final LocationModel location;
 
   TeamModel({
+    required this.uuid,
     required this.id,
     required this.name,
     required this.teamLogo,
@@ -20,6 +22,7 @@ class TeamModel {
   });
 
   TeamModel copyWith({
+    String? uuid,
     String? id,
     String? name,
     String? teamLogo,
@@ -28,6 +31,7 @@ class TeamModel {
     LocationModel? location,
   }) {
     return TeamModel(
+      uuid: uuid ?? this.uuid,
       id: id ?? this.id,
       name: name ?? this.name,
       teamLogo: teamLogo ?? this.teamLogo,
@@ -48,6 +52,7 @@ class TeamModel {
 
   factory TeamModel.fromEntity(TeamEntity team) {
     return TeamModel(
+      uuid: team.uuid,
       id: team.id,
       name: team.name,
       teamLogo: team.teamLogo,
@@ -58,6 +63,7 @@ class TeamModel {
 
   factory TeamModel.fromJson(Map<String, dynamic> map) {
     return TeamModel(
+      uuid: map['id'] as String,
       id: map['teamId'] as String,
       name: map['name'] as String,
       teamLogo: map['logo'] as String,
@@ -74,6 +80,7 @@ class TeamModel {
 
   TeamEntity toEntity() {
     return TeamEntity(
+      uuid: uuid,
       id: id,
       name: name,
       teamLogo: teamLogo,

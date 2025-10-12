@@ -1,7 +1,8 @@
-import 'package:cricklo/core/utils/constants/dummy_data.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/home/presentation/widgets/match_tile.dart';
+import 'package:cricklo/features/mainapp/presentation/blocs/cubits/MainAppCubit/main_app_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MatchList extends StatefulWidget {
   const MatchList({super.key});
@@ -14,29 +15,33 @@ class _MatchListState extends State<MatchList> {
   final PageController _pageController = PageController(viewportFraction: 1);
   int _currentPage = 0;
 
-  final matches = [
-    dummyMatchScheduled,
-    dummyMatchLive,
-    dummyMatchTossDone,
-    dummyMatchInningsTwo,
-    dummyMatchDone,
-  ];
+  // final matches = [
+  //   dummyMatchScheduled,
+  //   dummyMatchLive,
+  //   dummyMatchTossDone,
+  //   dummyMatchInningsTwo,
+  //   dummyMatchDone,
+  // ];
 
   @override
   Widget build(BuildContext context) {
+    final state = context.read<MainAppCubit>().state;
     return Column(
       children: [
         SizedBox(
           height: 181,
           child: PageView.builder(
             controller: _pageController,
-            itemCount: matches.length,
+            itemCount: state.matches.length,
             physics: const BouncingScrollPhysics(),
             onPageChanged: (index) => setState(() => _currentPage = index),
             itemBuilder: (context, index) {
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: MatchTile(live: index == 0, matchEntity: matches[index]),
+                child: MatchTile(
+                  live: index == 0,
+                  matchEntity: state.matches[index],
+                ),
               );
             },
           ),
@@ -46,7 +51,7 @@ class _MatchListState extends State<MatchList> {
         // Dot indicators
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: List.generate(matches.length, (index) {
+          children: List.generate(state.matches.length, (index) {
             final isActive = index == _currentPage;
             return AnimatedContainer(
               duration: const Duration(milliseconds: 250),
