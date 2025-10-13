@@ -83,7 +83,7 @@ class MainAppCubit extends Cubit<MainAppState> {
     );
   }
 
-  getUserMatches() async {
+  Future<void> getUserMatches() async {
     final response = await _getUserMatchesUsecase(NoParams());
     response.fold(
       (_) {
@@ -168,10 +168,11 @@ class MainAppCubit extends Cubit<MainAppState> {
           ),
         );
         final response = await _currentUserUsecase(NoParams());
-        getUserMatches();
+
         response.fold(
-          (_) {
+          (_) async {
             GlobalVariables.setUser(user);
+            await Future.wait([getUserMatches()]);
             emit(
               UpdateIndex(
                 matches: state.matches,
@@ -182,9 +183,19 @@ class MainAppCubit extends Cubit<MainAppState> {
               ),
             );
           },
-          (response) {
+          (response) async {
             GlobalVariables.setUser(response);
             print(GlobalVariables.user);
+            emit(
+              UpdateIndex(
+                matches: state.matches,
+                currentIndex: 0,
+                showOptions: false,
+                user: response,
+                loading: false,
+              ),
+            );
+            await Future.wait([getUserMatches()]);
             emit(
               UpdateIndex(
                 matches: state.matches,

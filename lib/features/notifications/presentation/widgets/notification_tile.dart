@@ -1,17 +1,22 @@
 import 'package:cricklo/core/utils/common/primary_button.dart';
 import 'package:cricklo/core/utils/constants/enums.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
+import 'package:cricklo/features/notifications/domain/entities/team_notification_entity.dart';
+import 'package:cricklo/features/notifications/presentation/blocs/cubits/NotificationCubit/notification_cubit.dart';
 import 'package:cricklo/features/notifications/presentation/widgets/match_notification_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class NotificationTile extends StatelessWidget {
   const NotificationTile({
     super.key,
+    this.teamNotificationEntity,
     required this.title,
     required this.id,
     this.notificationType = NotificationType.team,
   });
 
+  final TeamNotificationEntity? teamNotificationEntity;
   final String title;
   final String id;
   final NotificationType notificationType;
@@ -23,6 +28,7 @@ class NotificationTile extends StatelessWidget {
     } else if (notificationType == NotificationType.match) {
       return MatchNotificationTile();
     }
+    final cubit = context.read<NotificationCubit>();
     return Container(
       margin: EdgeInsets.only(top: 12),
       child: Row(
@@ -58,7 +64,9 @@ class NotificationTile extends StatelessWidget {
           Spacer(),
           PrimaryButton(
             disabled: false,
-            onPress: () {},
+            onPress: () => notificationType == NotificationType.team
+                ? cubit.teamInviteAction(teamNotificationEntity!, "accept")
+                : {},
             padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             child: Text(
               "Accept",
@@ -71,7 +79,9 @@ class NotificationTile extends StatelessWidget {
           ),
           const SizedBox(width: 4),
           InkWell(
-            onTap: () {},
+            onTap: () => notificationType == NotificationType.team
+                ? cubit.teamInviteAction(teamNotificationEntity!, "deny")
+                : {},
             child: Padding(
               padding: const EdgeInsets.all(8),
               child: Icon(

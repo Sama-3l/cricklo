@@ -17,6 +17,7 @@ import 'package:cricklo/features/login/presentation/blocs/cubits/OnboardingPageC
 import 'package:cricklo/features/mainapp/data/datasource/main_app_remote_datasource.dart';
 import 'package:cricklo/features/mainapp/data/repo/main_app_repo_impl.dart';
 import 'package:cricklo/features/mainapp/data/repo/socket_auth_repo_impl.dart';
+import 'package:cricklo/features/mainapp/data/usecases/fetch_notifications_usecase.dart';
 import 'package:cricklo/features/mainapp/data/usecases/get_current_user_usecase.dart';
 import 'package:cricklo/features/mainapp/data/usecases/get_user_matches_usecase.dart';
 import 'package:cricklo/features/mainapp/data/usecases/logout_usecase.dart';
@@ -33,8 +34,10 @@ import 'package:cricklo/features/matches/presentation/blocs/cubits/SearchTeamCub
 import 'package:cricklo/features/notifications/data/datasource/notification_datasource.dart';
 import 'package:cricklo/features/notifications/data/repo/notification_repo_impl.dart';
 import 'package:cricklo/features/notifications/data/usecases/get_notification_usecase.dart';
+import 'package:cricklo/features/notifications/data/usecases/team_response_invite_usecase.dart';
 import 'package:cricklo/features/notifications/domain/repo/notification_repo.dart';
 import 'package:cricklo/features/notifications/presentation/blocs/blocs/NotificationBloc/notification_bloc.dart';
+import 'package:cricklo/features/notifications/presentation/blocs/cubits/NotificationCubit/notification_cubit.dart';
 import 'package:cricklo/features/teams/data/datasource/team_datasource_remote.dart';
 import 'package:cricklo/features/teams/data/repo/team_repo_impl.dart';
 import 'package:cricklo/features/teams/data/usecases/create_team_usecase.dart';
@@ -225,7 +228,10 @@ void _teamDependencies() {
 
 void _notificationDependencies() {
   sl.registerLazySingleton<NotificationRemoteDataSource>(
-    () => NotificationRemoteDataSourceImpl(socketService: sl<SocketService>()),
+    () => NotificationRemoteDataSourceImpl(
+      sl<ApiService>(),
+      socketService: sl<SocketService>(),
+    ),
   );
   // repo
   sl.registerLazySingleton<NotificationRepository>(
@@ -237,11 +243,23 @@ void _notificationDependencies() {
   sl.registerLazySingleton<GetNotificationsUseCase>(
     () => GetNotificationsUseCase(sl<NotificationRepository>()),
   );
+  sl.registerLazySingleton<FetchNotificationsUsecase>(
+    () => FetchNotificationsUsecase(sl<NotificationRepository>()),
+  );
+  sl.registerLazySingleton<TeamResponseInviteUsecase>(
+    () => TeamResponseInviteUsecase(sl<NotificationRepository>()),
+  );
   //cubits
   sl.registerFactory<NotificationBloc>(
     () => NotificationBloc(
       sl<GetNotificationsUseCase>(),
       GlobalVariables.navigatorKey!,
+    ),
+  );
+  sl.registerFactory<NotificationCubit>(
+    () => NotificationCubit(
+      sl<FetchNotificationsUsecase>(),
+      sl<TeamResponseInviteUsecase>(),
     ),
   );
 }

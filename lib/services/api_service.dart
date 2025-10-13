@@ -4,7 +4,9 @@ import 'package:cricklo/features/login/domain/models/remote/set_pin_response_mod
 import 'package:cricklo/features/login/domain/models/remote/user_model.dart';
 import 'package:cricklo/features/matches/domain/models/remote/create_match_response_model.dart';
 import 'package:cricklo/features/matches/domain/models/remote/get_user_matches_response_model.dart';
+import 'package:cricklo/features/notifications/domain/models/remote/get_notifications_response_model.dart';
 import 'package:cricklo/features/notifications/domain/models/remote/logout_model_remote.dart';
+import 'package:cricklo/features/notifications/domain/models/remote/team_invite_response_response_model.dart';
 import 'package:cricklo/features/teams/domain/models/remote/create_team_response_model.dart';
 import 'package:cricklo/features/teams/domain/models/remote/invite_player_response_model.dart';
 import 'package:cricklo/features/teams/domain/models/remote/search_players_response_model.dart';
@@ -71,4 +73,17 @@ abstract class ApiService {
 
   @GET(ApiEndpointConstants.getUserMatches)
   Future<GetUserMatchesResponseModel> getUserMatches();
+
+  @GET(ApiEndpointConstants.getNotifications)
+  Future<GetNotificationsResponseModel> getNotifications();
+
+  @POST(ApiEndpointConstants.teamInviteResponse)
+  Future<TeamInviteResponseResponseModel> teamInviteResponse(
+    @Path("teamId") String teamId,
+    @Path("inviteId") String inviteId,
+    @Body() Map<String, dynamic> body,
+  );
+
+  // @GET(ApiEndpointConstants.getTeamDetails)
+  // Future<GetNotificationsResponseModel> getTeamDetails();
 }

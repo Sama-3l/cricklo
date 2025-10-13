@@ -1,0 +1,354 @@
+{
+  "matchID": "match_001",
+  "dateAndTime": "2025-10-12T16:00:00Z",
+  "overs": 20,
+  "matchType": "T20",
+  "location": {
+    "venue": "Wankhede Stadium",
+    "area": "Churchgate",
+    "city": "Mumbai",
+    "state": "Maharashtra"
+  },
+  "tossWinner": "team_001",
+  "tossChoice": "batting",
+  "winner": null,
+  "endDateTime": null,
+  "abandoned": false,
+  "teamA": {
+    "id" : "team_001",
+    "name" : "Chennai Super Kings",
+    "teamLogo" : "https://logo.com",
+    "teamBanner" : "https://banner.com",
+    "onStrike" : {
+      "playerId" : "p_004"
+    },
+    "currBatsmen" : [
+      "p_002", "p_004"
+    ],
+    "bowler": null,
+    "players": [
+      {
+        "id": "p_001",
+        "playerId": "p_001",
+        "name": "Player1",
+        "teamRole": "Captain",
+        "playerType": "Batsman",
+        "batterType": null,
+        "bowlerType": "LEFT_HAND",
+        "stats": {
+          "runs": 0,
+          "balls": 0,
+          "n4s": 0,
+          "n6s": 0,
+          "sr": 0,
+          "overs": 0,
+          "runsGiven": 0,
+          "maidens": 0,
+          "wickets": 0,
+          "eco": 0,
+          "out": true,
+          "bowler": "Player2",
+          "fielder": "Player3",
+          "wicketType": 0,
+          "caught": 0,
+          "stumping": 0,
+          "runout": 0
+        }
+      },
+      {
+        "id": "p_002",
+        "playerId": "p_002",
+        "name": "Player1",
+        "teamRole": "Captain",
+        "playerType": "Batsman",
+        "batterType": null,
+        "bowlerType": "LEFT_HAND",
+        "stats": {
+          "runs": 0,
+          "balls": 0,
+          "n4s": 0,
+          "n6s": 0,
+          "sr": 0,
+          "overs": 0,
+          "runsGiven": 0,
+          "maidens": 0,
+          "wickets": 0,
+          "eco": 0,
+          "out": true,
+          "bowler": "Player2",
+          "fielder": "Player3",
+          "wicketType": "Caught",
+          "caught": 0,
+          "stumping": 0,
+          "runout": 0
+        }
+      },
+      {
+        "id": "p_003",
+        "playerId": "p_003",
+        "name": "Player1",
+        "teamRole": "Captain",
+        "playerType": "Batsman",
+        "batterType": null,
+        "bowlerType": "LEFT_HAND",
+        "stats": {
+          "runs": 0,
+          "balls": 0,
+          "n4s": 0,
+          "n6s": 0,
+          "sr": 0,
+          "overs": 0,
+          "runsGiven": 0,
+          "maidens": 0,
+          "wickets": 0,
+          "eco": 0,
+          "out": true,
+          "bowler": "Player2",
+          "fielder": "Player3",
+          "wicketType": 0,
+          "caught": 0,
+          "stumping": 0,
+          "runout": 0
+        }
+      },
+      {
+        "id": "p_004",
+        "playerId": "p_004",
+        "name": "Player1",
+        "teamRole": "Captain",
+        "playerType": "Batsman",
+        "batterType": null,
+        "bowlerType": "LEFT_HAND",
+        "stats": {
+          "runs": 0,
+          "balls": 0,
+          "n4s": 0,
+          "n6s": 0,
+          "sr": 0,
+          "overs": 0,
+          "runsGiven": 0,
+          "maidens": 0,
+          "wickets": 0,
+          "eco": 0,
+          "out": true,
+          "bowler": "Player2",
+          "fielder": "Player3",
+          "wicketType": 0,
+          "caught": 0,
+          "stumping": 0,
+          "runout": 0
+        }
+      }
+    ],
+    "battingOrder": {
+      "1" : "p_001",
+      "2" : "p_002",
+      "3" : "p_003",
+      "4" : "p_004"
+    },
+    "partnerships": [
+      {
+        "player1" : "p_001",
+        "player2" : "p_002",
+        "runs" : 0,
+        "balls" : 0
+      },
+      {
+        "player1" : "p_003",
+        "player2" : "p_002",
+        "runs" : 0,
+        "balls" : 0
+      },
+      {
+        "player1" : "p_004",
+        "player2" : "p_002",
+        "runs" : 0,
+        "balls" : 0
+      }
+    ]
+  },
+  "teamB": {
+    "id" : "team_002",
+    "name" : "Royal Challengers",
+    "teamLogo" : "https://logo.com",
+    "teamBanner" : "https://banner.com",
+    "onStrike" : null,
+    "currBatsmen" : [],
+    "bowler": 
+      "p_007",
+    "players": [
+      {
+        "id": "p_001",
+        "playerId": "p_001",
+        "name": "Player1",
+        "teamRole": "Captain",
+        "playerType": "Batsman",
+        "batterType": null,
+        "bowlerType": "LEFT_HAND",
+        "stats": {
+          "runs": 0,
+          "balls": 0,
+          "n4s": 0,
+          "n6s": 0,
+          "sr": 0,
+          "overs": 0,
+          "runsGiven": 0,
+          "maidens": 0,
+          "wickets": 0,
+          "eco": 0,
+          "out": true,
+          "bowler": "Player2",
+          "fielder": "Player3",
+          "wicketType": 0,
+          "caught": 0,
+          "stumping": 0,
+          "runout": 0
+        }
+      },
+      {
+        "id": "p_002",
+        "playerId": "p_001",
+        "name": "Player1",
+        "teamRole": "Captain",
+        "playerType": "Batsman",
+        "batterType": null,
+        "bowlerType": "LEFT_HAND",
+        "stats": {
+          "runs": 0,
+          "balls": 0,
+          "n4s": 0,
+          "n6s": 0,
+          "sr": 0,
+          "overs": 0,
+          "runsGiven": 0,
+          "maidens": 0,
+          "wickets": 0,
+          "eco": 0,
+          "out": true,
+          "bowler": "Player2",
+          "fielder": "Player3",
+          "wicketType": 0,
+          "caught": 0,
+          "stumping": 0,
+          "runout": 0
+        }
+      },
+      {
+        "id": "p_003",
+        "playerId": "p_001",
+        "name": "Player1",
+        "teamRole": "Captain",
+        "playerType": "Batsman",
+        "batterType": null,
+        "bowlerType": "LEFT_HAND",
+        "stats": {
+          "runs": 0,
+          "balls": 0,
+          "n4s": 0,
+          "n6s": 0,
+          "sr": 0,
+          "overs": 0,
+          "runsGiven": 0,
+          "maidens": 0,
+          "wickets": 0,
+          "eco": 0,
+          "out": true,
+          "bowler": "Player2",
+          "fielder": "Player3",
+          "wicketType": 0,
+          "caught": 0,
+          "stumping": 0,
+          "runout": 0
+        }
+      },
+      {
+        "id": "p_004",
+        "playerId": "p_001",
+        "name": "Player1",
+        "teamRole": "Captain",
+        "playerType": "Batsman",
+        "batterType": null,
+        "bowlerType": "LEFT_HAND",
+        "stats": {
+          "runs": 0,
+          "balls": 0,
+          "n4s": 0,
+          "n6s": 0,
+          "sr": 0,
+          "overs": 0,
+          "runsGiven": 0,
+          "maidens": 0,
+          "wickets": 0,
+          "eco": 0,
+          "out": true,
+          "bowler": 0,
+          "fielder": 0,
+          "wicketType": 0,
+          "caught": 0,
+          "stumping": 0,
+          "runout": 0
+        }
+      }
+    ],
+    "battingOrder": {},
+    "partnerships": []
+  },
+  "scorer" : {
+    "playerId": "p_010",
+    "name": "Scorer1",
+    "profilePic": "https://profilePic.com"
+  },
+  "innings" : [
+    {
+      "number": 1,
+      "battingTeam" : "t_001",
+      "runs": 0,
+      "wickets": 0,
+      
+      "oversData": [
+        {
+          "runs": 0,
+          "wickets": 0,
+          "player1runs": 0,
+          "player1balls": 0,
+          "player1Id" : "P_002",
+          "player1Name" : "Player2",
+          "player2runs": 0,
+          "player2balls": 0,
+          "player2Id" : "P_004",
+          "player2Name" : "Player4",
+          "bowlerId" : "P_007",
+          "bowlerName" : "Player7",
+          "bowlerOvers" : "0.0",
+          "bowlerRuns": 0,
+          "bowlerMaidens": 0,
+          "bowlerWickets": 0,
+          "balls": [
+            {
+              "runs": 0, 
+              "isExtra": false,
+              "extraType": null,
+              "wicketType": "Caught",
+              "secondBatsman": 0,
+              "batsman": "P_002",
+              "bowler": "P_004",
+              "fielder": "P_008",
+              "sector": 0
+            },
+            {
+              "runs": 0, 
+              "isExtra": true,
+              "extraType": "Wide",
+              "wicketType": null,
+              "secondBatsman": 0,
+              "batsman": "P_002",
+              "bowler": "P_004",
+              "fielder": null,
+              "sector": 0
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

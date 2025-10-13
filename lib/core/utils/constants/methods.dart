@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:cricklo/core/utils/constants/enums.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
+import 'package:cricklo/features/login/domain/entities/location_entity.dart';
 import 'package:cricklo/features/login/domain/entities/user_entitiy.dart';
 import 'package:cricklo/features/matches/domain/entities/match_entity.dart';
 import 'package:cricklo/features/scorer/domain/entities/match_center_entity.dart';
@@ -406,5 +407,18 @@ class Methods {
     final abbreviation = words.map((word) => word[0].toUpperCase()).join();
 
     return abbreviation;
+  }
+
+  static LocationEntity getLocationEntity(String venueArea, String location) {
+    final split = venueArea.split(', ');
+    final state = split.last;
+    final city = split[split.length - 2];
+    final area = split.first;
+    return LocationEntity(
+      location: location,
+      area: area,
+      city: city,
+      state: state,
+    );
   }
 }

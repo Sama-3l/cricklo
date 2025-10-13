@@ -4,7 +4,6 @@ import 'package:cricklo/core/utils/common/textfield.dart';
 import 'package:cricklo/core/utils/constants/enums.dart';
 import 'package:cricklo/core/utils/constants/methods.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
-import 'package:cricklo/features/login/domain/entities/location_entity.dart';
 import 'package:cricklo/features/matches/domain/entities/match_entity.dart';
 import 'package:cricklo/features/matches/presentation/blocs/cubits/CreateMatchCubit/create_match_cubit.dart';
 import 'package:cricklo/features/matches/presentation/widgets/search_teams_bottom_sheet.dart';
@@ -44,7 +43,7 @@ class _CreateMatchState extends State<CreateMatch> {
         _selectedDate == null ||
         _selectedTime == null ||
         _selectedFormat == null ||
-        venueArea.text.split(' ').length != 3;
+        venueArea.text.split(', ').length < 3;
   }
 
   DateTime? _selectedDate;
@@ -131,12 +130,7 @@ class _CreateMatchState extends State<CreateMatch> {
                     batterType: scorer!.batterType,
                     bowlerType: scorer!.bowlerType,
                   ),
-                  LocationEntity(
-                    location: venueLocation.text,
-                    area: venueArea.text.replaceAll(',', '').split(' ')[0],
-                    city: venueArea.text.replaceAll(',', '').split(' ')[1],
-                    state: venueArea.text.replaceAll(',', '').split(' ')[2],
-                  ),
+                  Methods.getLocationEntity(venueArea.text, venueLocation.text),
                   _selectedDate!,
                   _selectedTime!,
                   _selectedFormat!,
@@ -319,7 +313,7 @@ class _CreateMatchState extends State<CreateMatch> {
                         title: "Venue Area",
                         focusNode: areaNode,
                         controller: venueArea,
-                        hintText: "Area, City, State",
+                        hintText: "Enter: Area, City, State",
                         showBuilder: false,
                         prefixIcon: Align(
                           alignment: Alignment.center,

@@ -1,3 +1,14 @@
+import 'package:cricklo/core/errors/failure.dart';
+import 'package:cricklo/features/notifications/domain/entities/get_notifications_response_entity.dart';
+import 'package:cricklo/features/notifications/domain/entities/team_invite_response_response_entity.dart';
+import 'package:dartz/dartz.dart';
+
 abstract class NotificationRepository {
   Stream<Map<String, dynamic>> notifications();
+  Future<Either<Failure, GetNotificationsResponseEntity>> getNotifications();
+  Future<Either<Failure, TeamInviteResponseResponseEntity>> respondToTeamInvite(
+    String teamId,
+    String inviteId,
+    String action,
+  );
 }
