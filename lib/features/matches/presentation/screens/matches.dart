@@ -18,106 +18,115 @@ class _MatchesPageState extends State<MatchesPage> {
     final state = context.read<MainAppCubit>().state;
     return Scaffold(
       backgroundColor: ColorsConstants.defaultWhite,
-      body: CustomScrollView(
-        physics: const BouncingScrollPhysics(),
-        slivers: [
-          SliverList(
-            delegate: SliverChildListDelegate([
-              const SizedBox(height: 24),
+      body: RefreshIndicator(
+        color: ColorsConstants.accentOrange,
+        onRefresh: () async {
+          // Trigger Cubit method when user pulls down
+          await context.read<MainAppCubit>().getUserMatches();
+        },
+        child: CustomScrollView(
+          physics: const BouncingScrollPhysics(
+            parent: AlwaysScrollableScrollPhysics(),
+          ),
+          slivers: [
+            SliverList(
+              delegate: SliverChildListDelegate([
+                const SizedBox(height: 24),
 
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: SectionHeader(title: "Your Matches"),
-              ),
-              const SizedBox(height: 12),
-              state.matches.isEmpty
-                  ? Container(
-                      height: 200,
-                      padding: const EdgeInsets.all(16),
-                      margin: const EdgeInsets.symmetric(horizontal: 16),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        color: ColorsConstants.defaultBlack.withValues(
-                          alpha: 0.07,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: SectionHeader(title: "Your Matches"),
+                ),
+                const SizedBox(height: 12),
+                state.matches.isEmpty
+                    ? Container(
+                        height: 200,
+                        padding: const EdgeInsets.all(16),
+                        margin: const EdgeInsets.symmetric(horizontal: 16),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          color: ColorsConstants.defaultBlack.withValues(
+                            alpha: 0.07,
+                          ),
                         ),
-                      ),
-                      child: Center(
-                        child: Text(
-                          "No Matches Yet",
-                          style: TextStyles.poppinsRegular.copyWith(
-                            fontSize: 16,
-                            letterSpacing: -0.8,
-                            color: ColorsConstants.defaultBlack.withValues(
-                              alpha: 0.5,
+                        child: Center(
+                          child: Text(
+                            "No Matches Yet",
+                            style: TextStyles.poppinsRegular.copyWith(
+                              fontSize: 16,
+                              letterSpacing: -0.8,
+                              color: ColorsConstants.defaultBlack.withValues(
+                                alpha: 0.5,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    )
-                  : MatchList(),
+                      )
+                    : MatchList(),
 
-              const SizedBox(height: 24),
+                const SizedBox(height: 24),
 
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: SectionHeader(title: "From Your Circle"),
-              ),
-              const SizedBox(height: 12),
-              Container(
-                height: 200,
-                padding: const EdgeInsets.all(16),
-                margin: const EdgeInsets.symmetric(horizontal: 16),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  color: ColorsConstants.defaultBlack.withValues(alpha: 0.07),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: SectionHeader(title: "From Your Circle"),
                 ),
-                child: Center(
-                  child: Text(
-                    "No Matches Yet",
-                    style: TextStyles.poppinsRegular.copyWith(
-                      fontSize: 16,
-                      letterSpacing: -0.8,
-                      color: ColorsConstants.defaultBlack.withValues(
-                        alpha: 0.5,
+                const SizedBox(height: 12),
+                Container(
+                  height: 200,
+                  padding: const EdgeInsets.all(16),
+                  margin: const EdgeInsets.symmetric(horizontal: 16),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    color: ColorsConstants.defaultBlack.withValues(alpha: 0.07),
+                  ),
+                  child: Center(
+                    child: Text(
+                      "No Matches Yet",
+                      style: TextStyles.poppinsRegular.copyWith(
+                        fontSize: 16,
+                        letterSpacing: -0.8,
+                        color: ColorsConstants.defaultBlack.withValues(
+                          alpha: 0.5,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
 
-              const SizedBox(height: 24),
+                const SizedBox(height: 24),
 
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: SectionHeader(title: "Explore"),
-              ),
-              const SizedBox(height: 12),
-              Container(
-                height: 200,
-                padding: const EdgeInsets.all(16),
-                margin: const EdgeInsets.symmetric(horizontal: 16),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  color: ColorsConstants.defaultBlack.withValues(alpha: 0.07),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: SectionHeader(title: "Explore"),
                 ),
-                child: Center(
-                  child: Text(
-                    "No Matches Yet",
-                    style: TextStyles.poppinsRegular.copyWith(
-                      fontSize: 16,
-                      letterSpacing: -0.8,
-                      color: ColorsConstants.defaultBlack.withValues(
-                        alpha: 0.5,
+                const SizedBox(height: 12),
+                Container(
+                  height: 200,
+                  padding: const EdgeInsets.all(16),
+                  margin: const EdgeInsets.symmetric(horizontal: 16),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    color: ColorsConstants.defaultBlack.withValues(alpha: 0.07),
+                  ),
+                  child: Center(
+                    child: Text(
+                      "No Matches Yet",
+                      style: TextStyles.poppinsRegular.copyWith(
+                        fontSize: 16,
+                        letterSpacing: -0.8,
+                        color: ColorsConstants.defaultBlack.withValues(
+                          alpha: 0.5,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
 
-              const SizedBox(height: 24),
-            ]),
-          ),
-        ],
+                const SizedBox(height: 24),
+              ]),
+            ),
+          ],
+        ),
       ),
     );
   }

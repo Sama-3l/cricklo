@@ -28,7 +28,7 @@ class ScorerInitialScreenTeamsHeader extends StatelessWidget {
               teamId: matchEntity.teamB.id,
               teamLogo: matchEntity.teamB.teamLogo,
               teamName: matchEntity.teamB.name,
-              inviteAccepted: matchEntity.teamA.inviteStatus == "ACCEPTED",
+              inviteAccepted: matchEntity.teamB.inviteStatus == "ACCEPTED",
             ),
           ),
         ],
