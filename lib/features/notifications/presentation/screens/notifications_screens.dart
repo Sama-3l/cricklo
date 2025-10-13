@@ -21,6 +21,12 @@ class _NotificationsScreensState extends State<NotificationsScreens> {
       create: (context) => sl<NotificationCubit>()..init(),
       child: BlocBuilder<NotificationCubit, NotificationState>(
         builder: (context, state) {
+          final scorerInvites = state.matchNotifications.where(
+            (e) => e.notificationType == NotificationType.scorer,
+          );
+          final nonScorerInvites = state.matchNotifications.where(
+            (e) => e.notificationType == NotificationType.match,
+          );
           return Scaffold(
             backgroundColor: ColorsConstants.defaultWhite,
             appBar: AppBar(
@@ -51,9 +57,15 @@ class _NotificationsScreensState extends State<NotificationsScreens> {
                     padding: const EdgeInsets.only(left: 16, right: 8),
                     child: ListView(
                       children: [
-                        const SizedBox(height: 24),
+                        // const SizedBox(height: 24),
                         if (state.teamNotifications.isNotEmpty) ...[
-                          SectionHeader(title: "Team Invites", showIcon: false),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 24.0),
+                            child: SectionHeader(
+                              title: "Team Invites",
+                              showIcon: false,
+                            ),
+                          ),
                           ...state.teamNotifications.map(
                             (e) => NotificationTile(
                               teamNotificationEntity: e,
@@ -63,60 +75,62 @@ class _NotificationsScreensState extends State<NotificationsScreens> {
                           ),
                           const SizedBox(height: 16),
                         ],
-                        Text(
-                          "Scorer Invites",
-                          style: TextStyles.poppinsSemiBold.copyWith(
-                            fontSize: 16,
-                            letterSpacing: -0.8,
-                            color: ColorsConstants.accentOrange,
+                        if (scorerInvites.isNotEmpty) ...[
+                          Padding(
+                            padding: const EdgeInsets.only(top: 24.0),
+                            child: Text(
+                              "Scorer Invites",
+                              style: TextStyles.poppinsSemiBold.copyWith(
+                                fontSize: 16,
+                                letterSpacing: -0.8,
+                                color: ColorsConstants.accentOrange,
+                              ),
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 6),
-                        NotificationTile(
-                          title: "Mumbai Masters",
-                          id: "mumbaimasters-001",
-                          notificationType: NotificationType.match,
-                        ),
-                        NotificationTile(
-                          title: "Mumbai Masters",
-                          id: "mumbaimasters-001",
-                          notificationType: NotificationType.match,
-                        ),
-                        NotificationTile(
-                          title: "Mumbai Masters",
-                          id: "mumbaimasters-001",
-                          notificationType: NotificationType.match,
-                        ),
-                        const SizedBox(height: 12),
-                        Text(
-                          "Game Invites",
-                          style: TextStyles.poppinsSemiBold.copyWith(
-                            fontSize: 16,
-                            letterSpacing: -0.8,
-                            color: ColorsConstants.accentOrange,
+                          const SizedBox(height: 6),
+                          ...scorerInvites.map(
+                            (e) => NotificationTile(
+                              title: "",
+                              id: "",
+                              matchNotificationEntity: e,
+                              notificationType: NotificationType.scorer,
+                            ),
                           ),
-                        ),
-                        NotificationTile(
-                          title: "Mumbai Masters",
-                          id: "mumbaimasters-001",
-                          notificationType: NotificationType.match,
-                        ),
-                        NotificationTile(
-                          title: "Mumbai Masters",
-                          id: "mumbaimasters-001",
-                          notificationType: NotificationType.match,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 24.0),
-                          child: SectionHeader(
-                            title: "Tournament Invites",
-                            showIcon: false,
+                        ],
+                        if (scorerInvites.isNotEmpty) ...[
+                          Padding(
+                            padding: const EdgeInsets.only(top: 24.0),
+                            child: Text(
+                              "Game Invites",
+                              style: TextStyles.poppinsSemiBold.copyWith(
+                                fontSize: 16,
+                                letterSpacing: -0.8,
+                                color: ColorsConstants.accentOrange,
+                              ),
+                            ),
                           ),
-                        ),
-                        NotificationTile(
-                          title: "Mumbai Masters",
-                          id: "mumbaimasters-001",
-                        ),
+                          const SizedBox(height: 6),
+                          ...nonScorerInvites.map(
+                            (e) => NotificationTile(
+                              title: "",
+                              id: "",
+                              matchNotificationEntity: e,
+                              notificationType: NotificationType.scorer,
+                            ),
+                          ),
+                        ],
+
+                        // Padding(
+                        //   padding: const EdgeInsets.only(top: 24.0),
+                        //   child: SectionHeader(
+                        //     title: "Tournament Invites",
+                        //     showIcon: false,
+                        //   ),
+                        // ),
+                        // NotificationTile(
+                        //   title: "Mumbai Masters",
+                        //   id: "mumbaimasters-001",
+                        // ),
                       ],
                     ),
                   ),

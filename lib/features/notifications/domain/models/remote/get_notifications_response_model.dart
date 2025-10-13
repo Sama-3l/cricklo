@@ -1,12 +1,15 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
+import 'package:cricklo/core/utils/constants/enums.dart';
 import 'package:cricklo/features/notifications/domain/entities/get_notifications_response_entity.dart';
+import 'package:cricklo/features/notifications/domain/models/remote/match_notification_model.dart';
 import 'package:cricklo/features/notifications/domain/models/remote/team_notification_model.dart';
 
 class GetNotificationsResponseModel {
   final bool success;
   final int count;
   final List<TeamNotificationModel> teamNotifications;
+  final List<MatchNotificationModel> matchNotifications;
   final String? message;
   final int? status;
   final String? errorCode;
@@ -16,6 +19,7 @@ class GetNotificationsResponseModel {
     required this.success,
     required this.count,
     required this.teamNotifications,
+    required this.matchNotifications,
     this.message,
     this.status,
     this.errorCode,
@@ -38,6 +42,7 @@ class GetNotificationsResponseModel {
     return GetNotificationsResponseEntity(
       success: success,
       count: count,
+      matchNotifications: matchNotifications.map((e) => e.toEntity()).toList(),
       teamNotifications: teamNotifications.map((e) => e.toEntity()).toList(),
       message: message,
       status: status,
@@ -48,15 +53,28 @@ class GetNotificationsResponseModel {
 
   factory GetNotificationsResponseModel.fromJson(Map<String, dynamic> map) {
     List<TeamNotificationModel> teamNotifications = [];
+    List<MatchNotificationModel> matchNotifications = [];
     for (var notify in map['data'] as List<dynamic>) {
       if (notify["type"] == "TEAM_INVITE") {
         teamNotifications.add(TeamNotificationModel.fromJson(notify));
+      }
+      if (notify["type"] == "MATCH_INVITE" ||
+          notify["type"] == "MATCH_SCORER_INVITE") {
+        matchNotifications.add(
+          MatchNotificationModel.fromJson(
+            notify["enriched"],
+            notify["type"] == "MATCH_INVITE"
+                ? NotificationType.match
+                : NotificationType.scorer,
+          ),
+        );
       }
     }
     return GetNotificationsResponseModel(
       success: map['success'] as bool,
       count: map['count'] as int? ?? 0,
       teamNotifications: teamNotifications,
+      matchNotifications: matchNotifications,
       message: map['message'] != null ? map['message'] as String : null,
       status: map['status'] != null ? map['status'] as int : null,
       errorCode: map['errorCode'] != null ? map['errorCode'] as String : null,

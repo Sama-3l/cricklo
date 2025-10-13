@@ -1,9 +1,17 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cricklo/core/utils/common/primary_button.dart';
+import 'package:cricklo/core/utils/constants/methods.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
+import 'package:cricklo/features/notifications/domain/entities/match_notification_entity.dart';
 import 'package:flutter/material.dart';
 
 class MatchNotificationTile extends StatelessWidget {
-  const MatchNotificationTile({super.key});
+  const MatchNotificationTile({
+    super.key,
+    required this.matchNotificationEntity,
+  });
+
+  final MatchNotificationEntity matchNotificationEntity;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +30,7 @@ class MatchNotificationTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Dummy Match",
+                  "${matchNotificationEntity.format.matchType} Match",
                   style: TextStyles.poppinsMedium.copyWith(
                     fontSize: 12,
                     color: ColorsConstants.defaultBlack.withValues(alpha: 0.5),
@@ -31,7 +39,10 @@ class MatchNotificationTile extends StatelessWidget {
                 ),
                 const Spacer(),
                 Text(
-                  "1st October, 2025",
+                  Methods.formatDateTime(
+                    matchNotificationEntity.dateTime,
+                    addLineBreak: false,
+                  ),
                   style: TextStyles.poppinsSemiBold.copyWith(
                     color: ColorsConstants.defaultBlack,
                     fontSize: 10,
@@ -46,53 +57,73 @@ class MatchNotificationTile extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 // Team 1
-                Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 20,
-                      backgroundImage: AssetImage("assets/images/team_1.png"),
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      "Mumbai Riders",
-                      style: TextStyles.poppinsSemiBold.copyWith(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 12,
-                        letterSpacing: -0.5,
+                Expanded(
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 20,
+                        backgroundImage: CachedNetworkImageProvider(
+                          matchNotificationEntity.teamA.logo,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                Text(
-                  "VS",
-                  style: TextStyles.poppinsSemiBold.copyWith(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                    letterSpacing: -0.8,
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          matchNotificationEntity.teamA.name,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyles.poppinsSemiBold.copyWith(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                            letterSpacing: -0.5,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 20,
-                      backgroundImage: AssetImage("assets/images/team_2.png"),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Text(
+                    "VS",
+                    style: TextStyles.poppinsSemiBold.copyWith(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      letterSpacing: -0.8,
                     ),
-                    const SizedBox(width: 8),
-                    Text(
-                      "Gujrat Langoors",
-                      style: TextStyles.poppinsSemiBold.copyWith(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 12,
-                        letterSpacing: -0.5,
+                  ),
+                ),
+                Expanded(
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          matchNotificationEntity.teamB.name,
+                          maxLines: 2,
+                          textAlign: TextAlign.end,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyles.poppinsSemiBold.copyWith(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                            letterSpacing: -0.5,
+                          ),
+                        ),
                       ),
-                    ),
-                  ],
+                      const SizedBox(width: 8),
+                      CircleAvatar(
+                        radius: 20,
+                        backgroundImage: CachedNetworkImageProvider(
+                          matchNotificationEntity.teamB.logo,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
             const SizedBox(height: 12),
             Text(
-              "Ambedkar Park, Ambedkar Park, Lucknow, Uttar Pradesh",
+              "${matchNotificationEntity.locationEntity.location}, ${matchNotificationEntity.locationEntity.area}, ${matchNotificationEntity.locationEntity.city}, ${matchNotificationEntity.locationEntity.state}",
               style: TextStyles.poppinsMedium.copyWith(
                 fontSize: 10,
                 letterSpacing: -0.2,

@@ -48,15 +48,11 @@ class TeamNotificationModel {
     return TeamNotificationModel(
       id: map['id'] as String,
       notificationType: NotificationType.team,
-      teamName:
-          RegExp(
-            r'"([^"]+)"',
-          ).firstMatch(map["message"] as String)?.group(1)! ??
-          "",
+      teamName: map["enriched"]["team"]["name"],
       message: map['message'] as String,
       inviteId: map['inviteId'] as String,
       senderProfileId: map['senderProfileId'] as String,
-      teamId: map['resourceId'] as String,
+      teamId: map["enriched"]["recordId"] as String,
     );
   }
 }

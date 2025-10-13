@@ -32,6 +32,7 @@ class NotificationRepositoryImpl implements NotificationRepository {
         GetNotificationsResponseEntity(
           count: 0,
           teamNotifications: [],
+          matchNotifications: [],
           success: false,
           message: message,
           errorCode: code,

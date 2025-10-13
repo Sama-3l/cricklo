@@ -1,6 +1,7 @@
 import 'package:cricklo/core/utils/common/primary_button.dart';
 import 'package:cricklo/core/utils/constants/enums.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
+import 'package:cricklo/features/notifications/domain/entities/match_notification_entity.dart';
 import 'package:cricklo/features/notifications/domain/entities/team_notification_entity.dart';
 import 'package:cricklo/features/notifications/presentation/blocs/cubits/NotificationCubit/notification_cubit.dart';
 import 'package:cricklo/features/notifications/presentation/widgets/match_notification_tile.dart';
@@ -11,22 +12,25 @@ class NotificationTile extends StatelessWidget {
   const NotificationTile({
     super.key,
     this.teamNotificationEntity,
+    this.matchNotificationEntity,
     required this.title,
     required this.id,
     this.notificationType = NotificationType.team,
   });
 
   final TeamNotificationEntity? teamNotificationEntity;
+  final MatchNotificationEntity? matchNotificationEntity;
   final String title;
   final String id;
   final NotificationType notificationType;
 
   @override
   Widget build(BuildContext context) {
-    if (notificationType == NotificationType.match) {
-      return MatchNotificationTile();
-    } else if (notificationType == NotificationType.match) {
-      return MatchNotificationTile();
+    if (notificationType == NotificationType.match ||
+        notificationType == NotificationType.scorer) {
+      return MatchNotificationTile(
+        matchNotificationEntity: matchNotificationEntity!,
+      );
     }
     final cubit = context.read<NotificationCubit>();
     return Container(

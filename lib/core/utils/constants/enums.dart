@@ -40,7 +40,7 @@ enum MatchType {
   const MatchType(this.matchType);
 }
 
-enum NotificationType { team, match, tournament }
+enum NotificationType { team, match, tournament, scorer }
 
 enum TossChoice { batting, bowling }
 
