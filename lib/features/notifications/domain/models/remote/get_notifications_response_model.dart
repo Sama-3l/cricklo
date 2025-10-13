@@ -66,6 +66,7 @@ class GetNotificationsResponseModel {
             notify["type"] == "MATCH_INVITE"
                 ? NotificationType.match
                 : NotificationType.scorer,
+            notify["inviteId"],
           ),
         );
       }

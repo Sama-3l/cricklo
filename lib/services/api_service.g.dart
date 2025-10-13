@@ -448,7 +448,7 @@ class _ApiService implements ApiService {
   }
 
   @override
-  Future<TeamInviteResponseResponseModel> teamInviteResponse(
+  Future<InviteResponseResponseModel> teamInviteResponse(
     String teamId,
     String inviteId,
     Map<String, dynamic> body,
@@ -458,7 +458,7 @@ class _ApiService implements ApiService {
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(body);
-    final _options = _setStreamType<TeamInviteResponseResponseModel>(
+    final _options = _setStreamType<InviteResponseResponseModel>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -469,9 +469,41 @@ class _ApiService implements ApiService {
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late TeamInviteResponseResponseModel _value;
+    late InviteResponseResponseModel _value;
     try {
-      _value = TeamInviteResponseResponseModel.fromJson(_result.data!);
+      _value = InviteResponseResponseModel.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<InviteResponseResponseModel> matchInviteResponse(
+    String matchId,
+    String inviteId,
+    Map<String, dynamic> body,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(body);
+    final _options = _setStreamType<InviteResponseResponseModel>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/match/${matchId}/invites/${inviteId}/respond',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late InviteResponseResponseModel _value;
+    try {
+      _value = InviteResponseResponseModel.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;

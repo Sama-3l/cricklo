@@ -1,7 +1,7 @@
 import 'package:cricklo/core/errors/failure.dart';
 import 'package:cricklo/features/notifications/data/datasource/notification_datasource.dart';
 import 'package:cricklo/features/notifications/domain/entities/get_notifications_response_entity.dart';
-import 'package:cricklo/features/notifications/domain/entities/team_invite_response_response_entity.dart';
+import 'package:cricklo/features/notifications/domain/entities/invite_response_response_entity.dart';
 import 'package:cricklo/features/notifications/domain/repo/notification_repo.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
@@ -44,7 +44,7 @@ class NotificationRepositoryImpl implements NotificationRepository {
   }
 
   @override
-  Future<Either<Failure, TeamInviteResponseResponseEntity>> respondToTeamInvite(
+  Future<Either<Failure, InviteResponseResponseEntity>> respondToTeamInvite(
     String teamId,
     String inviteId,
     String action,
@@ -63,7 +63,38 @@ class NotificationRepositoryImpl implements NotificationRepository {
       final message = data?['error']?['message'];
 
       return Right(
-        TeamInviteResponseResponseEntity(
+        InviteResponseResponseEntity(
+          success: false,
+          message: message,
+          errorCode: code,
+        ),
+      );
+    } catch (e) {
+      return Left(ServerFailure(message: "Unexpected error: ${e.toString()}"));
+    }
+  }
+
+  @override
+  Future<Either<Failure, InviteResponseResponseEntity>> respondToMatchInvite(
+    String matchId,
+    String inviteId,
+    String action,
+  ) async {
+    try {
+      final response = await remoteDataSource.respondToMatchInvite(
+        matchId,
+        inviteId,
+        action,
+      );
+      return Right(response.toEntity());
+    } on DioException catch (e) {
+      final data = e.response?.data;
+
+      final code = data?['error']?['code'];
+      final message = data?['error']?['message'];
+
+      return Right(
+        InviteResponseResponseEntity(
           success: false,
           message: message,
           errorCode: code,

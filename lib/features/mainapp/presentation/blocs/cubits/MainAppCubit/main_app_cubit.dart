@@ -83,6 +83,18 @@ class MainAppCubit extends Cubit<MainAppState> {
     );
   }
 
+  readNotifications() {
+    emit(
+      UpdateIndex(
+        currentIndex: state.currentIndex,
+        showOptions: state.showOptions,
+        matches: state.matches,
+        user: state.user?.copyWith(unreadNotifications: 0),
+        loading: false,
+      ),
+    );
+  }
+
   Future<void> getUserMatches() async {
     final response = await _getUserMatchesUsecase(NoParams());
     response.fold(
@@ -107,6 +119,12 @@ class MainAppCubit extends Cubit<MainAppState> {
       },
       (response) {
         if (response.success) {
+          response.matches.removeWhere(
+            (e) =>
+                e.teamA.inviteStatus == "DENIED" ||
+                e.teamB.inviteStatus == "DENIED" ||
+                e.scorer["inviteStatus"] == "DENIED",
+          );
           emit(
             UpdateIndex(
               matches: response.matches,

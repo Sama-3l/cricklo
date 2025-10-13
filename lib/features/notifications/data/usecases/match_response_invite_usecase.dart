@@ -5,17 +5,17 @@ import 'package:cricklo/features/notifications/domain/entities/invite_response_r
 import 'package:cricklo/features/notifications/domain/repo/notification_repo.dart';
 import 'package:dartz/dartz.dart';
 
-class TeamResponseInviteUsecase
+class MatchResponseInviteUsecase
     extends UseCase<InviteResponseResponseEntity, ResponseInviteUsecaseEntity> {
   final NotificationRepository _mainAppRepository;
 
-  TeamResponseInviteUsecase(this._mainAppRepository);
+  MatchResponseInviteUsecase(this._mainAppRepository);
 
   @override
   Future<Either<Failure, InviteResponseResponseEntity>> call(
     ResponseInviteUsecaseEntity entity,
   ) {
-    return _mainAppRepository.respondToTeamInvite(
+    return _mainAppRepository.respondToMatchInvite(
       entity.id,
       entity.inviteId,
       entity.action,

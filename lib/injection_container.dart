@@ -34,6 +34,7 @@ import 'package:cricklo/features/matches/presentation/blocs/cubits/SearchTeamCub
 import 'package:cricklo/features/notifications/data/datasource/notification_datasource.dart';
 import 'package:cricklo/features/notifications/data/repo/notification_repo_impl.dart';
 import 'package:cricklo/features/notifications/data/usecases/get_notification_usecase.dart';
+import 'package:cricklo/features/notifications/data/usecases/match_response_invite_usecase.dart';
 import 'package:cricklo/features/notifications/data/usecases/team_response_invite_usecase.dart';
 import 'package:cricklo/features/notifications/domain/repo/notification_repo.dart';
 import 'package:cricklo/features/notifications/presentation/blocs/blocs/NotificationBloc/notification_bloc.dart';
@@ -257,6 +258,9 @@ void _notificationDependencies() {
   sl.registerLazySingleton<TeamResponseInviteUsecase>(
     () => TeamResponseInviteUsecase(sl<NotificationRepository>()),
   );
+  sl.registerLazySingleton<MatchResponseInviteUsecase>(
+    () => MatchResponseInviteUsecase(sl<NotificationRepository>()),
+  );
   //cubits
   sl.registerFactory<NotificationBloc>(
     () => NotificationBloc(
@@ -268,6 +272,7 @@ void _notificationDependencies() {
     () => NotificationCubit(
       sl<FetchNotificationsUsecase>(),
       sl<TeamResponseInviteUsecase>(),
+      sl<MatchResponseInviteUsecase>(),
     ),
   );
 }

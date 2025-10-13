@@ -1,4 +1,4 @@
-class TeamInviteResponseResponseEntity {
+class InviteResponseResponseEntity {
   final bool success;
 
   final String? message;
@@ -6,7 +6,7 @@ class TeamInviteResponseResponseEntity {
   final String? errorCode;
   final String? errorMessage;
 
-  TeamInviteResponseResponseEntity({
+  InviteResponseResponseEntity({
     required this.success,
     this.message,
     this.status,

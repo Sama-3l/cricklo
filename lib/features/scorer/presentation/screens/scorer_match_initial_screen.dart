@@ -308,12 +308,25 @@ class _ScorerMatchInitialScreenState extends State<ScorerMatchInitialScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "Scorer",
-                        style: TextStyles.poppinsSemiBold.copyWith(
-                          fontSize: 12,
-                          letterSpacing: -0.5,
-                        ),
+                      Row(
+                        children: [
+                          Text(
+                            "Scorer",
+                            style: TextStyles.poppinsSemiBold.copyWith(
+                              fontSize: 12,
+                              letterSpacing: -0.5,
+                            ),
+                          ),
+                          const Spacer(),
+                          Text(
+                            "INVITE ${widget.matchEntity.scorer["inviteStatus"]}",
+                            style: TextStyles.poppinsSemiBold.copyWith(
+                              fontSize: 12,
+                              letterSpacing: -0.5,
+                              color: ColorsConstants.accentOrange,
+                            ),
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 8),
                       Container(

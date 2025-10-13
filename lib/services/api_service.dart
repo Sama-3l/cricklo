@@ -6,7 +6,7 @@ import 'package:cricklo/features/matches/domain/models/remote/create_match_respo
 import 'package:cricklo/features/matches/domain/models/remote/get_user_matches_response_model.dart';
 import 'package:cricklo/features/notifications/domain/models/remote/get_notifications_response_model.dart';
 import 'package:cricklo/features/notifications/domain/models/remote/logout_model_remote.dart';
-import 'package:cricklo/features/notifications/domain/models/remote/team_invite_response_response_model.dart';
+import 'package:cricklo/features/notifications/domain/models/remote/invite_response_response_model.dart';
 import 'package:cricklo/features/teams/domain/models/remote/create_team_response_model.dart';
 import 'package:cricklo/features/teams/domain/models/remote/get_team_details_response_model.dart';
 import 'package:cricklo/features/teams/domain/models/remote/invite_player_response_model.dart';
@@ -79,8 +79,15 @@ abstract class ApiService {
   Future<GetNotificationsResponseModel> getNotifications();
 
   @POST(ApiEndpointConstants.teamInviteResponse)
-  Future<TeamInviteResponseResponseModel> teamInviteResponse(
+  Future<InviteResponseResponseModel> teamInviteResponse(
     @Path("teamId") String teamId,
+    @Path("inviteId") String inviteId,
+    @Body() Map<String, dynamic> body,
+  );
+
+  @POST(ApiEndpointConstants.matchInviteResponse)
+  Future<InviteResponseResponseModel> matchInviteResponse(
+    @Path("matchId") String matchId,
     @Path("inviteId") String inviteId,
     @Body() Map<String, dynamic> body,
   );

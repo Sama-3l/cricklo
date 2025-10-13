@@ -82,6 +82,7 @@ class _ContentViewState extends State<ContentView> {
                   child: NotificationsButton(
                     unread: state.user?.unreadNotifications ?? 0,
                     onPressed: () {
+                      cubit.readNotifications();
                       context.read<NotificationBloc>().add(
                         NotificationReadAll(),
                       );

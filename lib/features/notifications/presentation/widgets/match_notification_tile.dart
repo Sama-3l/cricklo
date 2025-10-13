@@ -3,7 +3,9 @@ import 'package:cricklo/core/utils/common/primary_button.dart';
 import 'package:cricklo/core/utils/constants/methods.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/notifications/domain/entities/match_notification_entity.dart';
+import 'package:cricklo/features/notifications/presentation/blocs/cubits/NotificationCubit/notification_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MatchNotificationTile extends StatelessWidget {
   const MatchNotificationTile({
@@ -15,6 +17,7 @@ class MatchNotificationTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<NotificationCubit>();
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
@@ -136,7 +139,10 @@ class MatchNotificationTile extends StatelessWidget {
                 Expanded(
                   child: PrimaryButton(
                     disabled: false,
-                    onPress: () {},
+                    onPress: () => cubit.matchInviteAction(
+                      matchNotificationEntity,
+                      "accept",
+                    ),
                     noShadow: true,
                     child: Text(
                       "Accept",
@@ -152,7 +158,10 @@ class MatchNotificationTile extends StatelessWidget {
                 Expanded(
                   child: PrimaryButton(
                     disabled: false,
-                    onPress: () {},
+                    onPress: () => cubit.matchInviteAction(
+                      matchNotificationEntity,
+                      "deny",
+                    ),
                     color: ColorsConstants.accentOrange.withValues(alpha: 0.2),
                     noShadow: true,
                     child: Text(

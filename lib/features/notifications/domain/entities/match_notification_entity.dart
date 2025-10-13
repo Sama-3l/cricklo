@@ -4,6 +4,7 @@ import 'package:cricklo/features/login/domain/entities/location_entity.dart';
 import 'package:cricklo/features/notifications/domain/entities/match_notification_team_entity.dart';
 
 class MatchNotificationEntity {
+  final String inviteId;
   final String matchId;
   final NotificationType notificationType;
   final MatchNotificationTeamEntity teamA;
@@ -14,6 +15,7 @@ class MatchNotificationEntity {
   final int overs;
 
   MatchNotificationEntity({
+    required this.inviteId,
     required this.matchId,
     required this.notificationType,
     required this.teamA,

@@ -19,4 +19,6 @@ class ApiEndpointConstants {
 
   static const createMatch = '/match/create';
   static const getUserMatches = '/match/user';
+  static const matchInviteResponse =
+      '/match/{matchId}/invites/{inviteId}/respond';
 }

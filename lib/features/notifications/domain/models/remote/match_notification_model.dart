@@ -4,6 +4,7 @@ import 'package:cricklo/features/notifications/domain/entities/match_notificatio
 import 'package:cricklo/features/notifications/domain/models/remote/match_notification_team_model.dart';
 
 class MatchNotificationModel {
+  final String inviteId;
   final String matchId;
   final NotificationType notificationType;
   final MatchNotificationTeamModel teamA;
@@ -14,6 +15,7 @@ class MatchNotificationModel {
   final int overs;
 
   MatchNotificationModel({
+    required this.inviteId,
     required this.matchId,
     required this.notificationType,
     required this.teamA,
@@ -34,6 +36,7 @@ class MatchNotificationModel {
       'dateTime': dateTime.millisecondsSinceEpoch,
       'format': format.matchType,
       'overs': overs,
+      'inviteId': inviteId,
     };
   }
 
@@ -47,12 +50,14 @@ class MatchNotificationModel {
       dateTime: dateTime,
       format: format,
       overs: overs,
+      inviteId: inviteId,
     );
   }
 
   factory MatchNotificationModel.fromJson(
     Map<String, dynamic> map,
     NotificationType notifcationType,
+    String inviteId,
   ) {
     MatchType matchType = MatchType.t10;
     final format = map["format"] as String?;
@@ -88,6 +93,7 @@ class MatchNotificationModel {
       utcTime.second,
     );
     return MatchNotificationModel(
+      inviteId: inviteId,
       matchId: map['recordId'] as String,
       notificationType: notifcationType,
       teamA: MatchNotificationTeamModel.fromJson(

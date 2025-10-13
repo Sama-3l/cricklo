@@ -1,13 +1,13 @@
-import 'package:cricklo/features/notifications/domain/entities/team_invite_response_response_entity.dart';
+import 'package:cricklo/features/notifications/domain/entities/invite_response_response_entity.dart';
 
-class TeamInviteResponseResponseModel {
+class InviteResponseResponseModel {
   final bool success;
   final String? message;
   final int? status;
   final String? errorCode;
   final String? errorMessage;
 
-  TeamInviteResponseResponseModel({
+  InviteResponseResponseModel({
     required this.success,
     this.message,
     this.status,
@@ -25,8 +25,8 @@ class TeamInviteResponseResponseModel {
     };
   }
 
-  TeamInviteResponseResponseEntity toEntity() {
-    return TeamInviteResponseResponseEntity(
+  InviteResponseResponseEntity toEntity() {
+    return InviteResponseResponseEntity(
       success: success,
       message: message,
       status: status,
@@ -35,8 +35,8 @@ class TeamInviteResponseResponseModel {
     );
   }
 
-  factory TeamInviteResponseResponseModel.fromJson(Map<String, dynamic> map) {
-    return TeamInviteResponseResponseModel(
+  factory InviteResponseResponseModel.fromJson(Map<String, dynamic> map) {
+    return InviteResponseResponseModel(
       success: map['success'] as bool,
       message: map['message'] != null ? map['message'] as String : null,
       status: map['status'] != null ? map['status'] as int : null,

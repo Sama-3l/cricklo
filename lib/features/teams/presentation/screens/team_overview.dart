@@ -305,7 +305,13 @@ class _TeamOverviewState extends State<TeamOverview> {
             ),
             const SizedBox(height: 20),
           ],
-          if (widget.matches.isNotEmpty) ...[
+          if (widget.matches
+              .where(
+                (e) =>
+                    e.dateAndTime.isAfter(DateTime.now()) &&
+                    e.tossWinner == null,
+              )
+              .isNotEmpty) ...[
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: SectionHeader(title: "Scheduled Matches", showIcon: false),

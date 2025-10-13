@@ -4,6 +4,7 @@ import 'package:cricklo/core/utils/constants/global_variables.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/mainapp/data/usecases/fetch_notifications_usecase.dart';
 import 'package:cricklo/features/notifications/data/entities/team_response_invite_usecase_entity.dart';
+import 'package:cricklo/features/notifications/data/usecases/match_response_invite_usecase.dart';
 import 'package:cricklo/features/notifications/data/usecases/team_response_invite_usecase.dart';
 import 'package:cricklo/features/notifications/domain/entities/match_notification_entity.dart';
 import 'package:cricklo/features/notifications/domain/entities/team_notification_entity.dart';
@@ -15,8 +16,12 @@ part 'notification_state.dart';
 class NotificationCubit extends Cubit<NotificationState> {
   final FetchNotificationsUsecase _fetchNotifications;
   final TeamResponseInviteUsecase _teamResponseInviteUsecase;
-  NotificationCubit(this._fetchNotifications, this._teamResponseInviteUsecase)
-    : super(
+  final MatchResponseInviteUsecase _matchResponseInviteUsecase;
+  NotificationCubit(
+    this._fetchNotifications,
+    this._teamResponseInviteUsecase,
+    this._matchResponseInviteUsecase,
+  ) : super(
         NotificationUpdate(
           loading: false,
           teamNotifications: [],
@@ -82,19 +87,71 @@ class NotificationCubit extends Cubit<NotificationState> {
     TeamNotificationEntity team,
     String action,
   ) async {
-    final response = await _teamResponseInviteUsecase(
-      TeamResponseInviteUsecaseEntity(
-        teamId: team.teamId,
-        inviteId: team.inviteId,
-        action: action,
-      ),
-    );
     state.teamNotifications.remove(team);
     emit(
       NotificationUpdate(
         teamNotifications: state.teamNotifications,
         matchNotifications: state.matchNotifications,
         loading: false,
+      ),
+    );
+    final response = await _teamResponseInviteUsecase(
+      ResponseInviteUsecaseEntity(
+        id: team.teamId,
+        inviteId: team.inviteId,
+        action: action,
+      ),
+    );
+    response.fold(
+      (_) {
+        ScaffoldMessenger.of(
+          GlobalVariables.navigatorKey!.currentContext!,
+        ).showSnackBar(
+          SnackBar(
+            // behavior: SnackBarBehavior.floating,
+            backgroundColor: ColorsConstants.defaultBlack,
+            padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+            content: Text(
+              "Couldn't perform action",
+              style: TextStyles.poppinsSemiBold.copyWith(
+                fontSize: 16,
+                letterSpacing: -0.8,
+                color: ColorsConstants.defaultWhite,
+              ),
+            ),
+          ),
+        );
+        emit(
+          NotificationUpdate(
+            teamNotifications: [],
+            matchNotifications: [],
+            loading: false,
+          ),
+        );
+      },
+      (response) {
+        if (response.success) {}
+      },
+    );
+  }
+
+  Future<void> matchInviteAction(
+    MatchNotificationEntity match,
+    String action,
+  ) async {
+    state.matchNotifications.remove(match);
+    emit(
+      NotificationUpdate(
+        teamNotifications: state.teamNotifications,
+        matchNotifications: state.matchNotifications,
+        loading: false,
+      ),
+    );
+    final response = await _matchResponseInviteUsecase(
+      ResponseInviteUsecaseEntity(
+        id: match.matchId,
+        inviteId: match.inviteId,
+        action: action,
       ),
     );
     response.fold(
