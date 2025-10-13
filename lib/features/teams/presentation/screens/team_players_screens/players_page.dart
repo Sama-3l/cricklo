@@ -1,21 +1,20 @@
 import 'package:cricklo/core/utils/common/primary_button.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/account/presentation/widgets/stats_table_filter_tab_bar.dart';
-import 'package:cricklo/features/teams/domain/entities/team_entity.dart';
+import 'package:cricklo/features/teams/presentation/blocs/cubits/TeamPageCubit/team_page_cubit.dart';
 import 'package:cricklo/features/teams/presentation/screens/team_players_screens/active_squad.dart';
 import 'package:cricklo/features/teams/presentation/screens/team_players_screens/alphabetical_order_players.dart';
 import 'package:cricklo/features/teams/presentation/screens/team_players_screens/players_role_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PlayersPage extends StatefulWidget {
   const PlayersPage({
     super.key,
-    required this.team,
     required this.selectTab,
     required this.selectedTab,
   });
 
-  final TeamEntity team;
   final Function(int index) selectTab;
   final int selectedTab;
 
@@ -26,6 +25,7 @@ class PlayersPage extends StatefulWidget {
 class _PlayersPageState extends State<PlayersPage> {
   @override
   Widget build(BuildContext context) {
+    final state = context.read<TeamPageCubit>().state;
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Container(
@@ -65,10 +65,10 @@ class _PlayersPageState extends State<PlayersPage> {
             child: IndexedStack(
               index: widget.selectedTab,
               children: [
-                PlayersRolePage(teamEntity: widget.team),
-                AlphabeticalOrderPlayers(team: widget.team),
-                ActiveSquad(team: widget.team),
-                PlayersRolePage(teamEntity: widget.team, invites: true),
+                PlayersRolePage(teamEntity: state.team),
+                AlphabeticalOrderPlayers(team: state.team),
+                ActiveSquad(team: state.team),
+                PlayersRolePage(teamEntity: state.team, invites: true),
               ],
             ),
           ),

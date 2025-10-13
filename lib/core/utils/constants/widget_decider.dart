@@ -112,7 +112,6 @@ class WidgetDecider {
         .toList();
 
     final effectiveList = showInvited ? invited : nonInvited;
-
     final captain = !showInvited && nonInvited.any((p) => p.captain)
         ? nonInvited.firstWhere((p) => p.captain)
         : null;

@@ -2,12 +2,16 @@ part of 'team_page_cubit.dart';
 
 @immutable
 sealed class TeamPageState {
+  final bool loading;
+  final TeamEntity? team;
   final int selectedMainTab;
   final int selectedPlayersTab;
   final int selectedStatsTab;
   final int selectedStatsTabTableType;
 
   const TeamPageState({
+    this.loading = false,
+    required this.team,
     required this.selectedMainTab,
     required this.selectedPlayersTab,
     required this.selectedStatsTab,
@@ -21,5 +25,7 @@ final class TeamPageUpdate extends TeamPageState {
     required super.selectedPlayersTab,
     required super.selectedStatsTab,
     required super.selectedStatsTabTableType,
+    super.loading,
+    required super.team,
   });
 }

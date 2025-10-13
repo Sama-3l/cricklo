@@ -100,7 +100,7 @@ class _ContentViewState extends State<ContentView> {
                 HomePage(userEntity: state.user),
                 MatchesPage(),
                 const Center(child: Text('Tournaments')),
-                AccountPage(userEntity: state.user),
+                AccountPage(userEntity: state.user, userMatches: state.matches),
               ],
             ),
 

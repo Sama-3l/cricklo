@@ -41,12 +41,14 @@ import 'package:cricklo/features/notifications/presentation/blocs/cubits/Notific
 import 'package:cricklo/features/teams/data/datasource/team_datasource_remote.dart';
 import 'package:cricklo/features/teams/data/repo/team_repo_impl.dart';
 import 'package:cricklo/features/teams/data/usecases/create_team_usecase.dart';
+import 'package:cricklo/features/teams/data/usecases/get_team_details_usecase.dart';
 import 'package:cricklo/features/teams/data/usecases/invite_player_usecase.dart';
 import 'package:cricklo/features/teams/data/usecases/search_players_usecase.dart';
 import 'package:cricklo/features/teams/domain/repo/team_repo.dart';
 import 'package:cricklo/features/teams/presentation/blocs/cubits/AddPlayersCubit/add_players_cubit.dart';
 import 'package:cricklo/features/teams/presentation/blocs/cubits/CreateTeamCubit/create_team_cubit.dart';
 import 'package:cricklo/features/teams/presentation/blocs/cubits/SearchPlayersCubit/search_players_cubit.dart';
+import 'package:cricklo/features/teams/presentation/blocs/cubits/TeamPageCubit/team_page_cubit.dart';
 import 'package:cricklo/services/api_service.dart';
 import 'package:cricklo/services/auth_helper.dart';
 import 'package:cricklo/services/socket_service.dart';
@@ -210,6 +212,9 @@ void _teamDependencies() {
   sl.registerLazySingleton<SearchTeamsUseCase>(
     () => SearchTeamsUseCase(sl<TeamRepo>()),
   );
+  sl.registerLazySingleton<GetTeamDetailsUsecase>(
+    () => GetTeamDetailsUsecase(sl<TeamRepo>()),
+  );
   //cubits
   sl.registerFactory<CreateTeamCubit>(
     () => CreateTeamCubit(sl<CreateTeamUsecase>()),
@@ -223,6 +228,9 @@ void _teamDependencies() {
   sl.registerFactory<AccountCubit>(() => AccountCubit(sl<GetTeamsUsecase>()));
   sl.registerFactory<SearchTeamCubit>(
     () => SearchTeamCubit(sl<SearchTeamsUseCase>()),
+  );
+  sl.registerFactory<TeamPageCubit>(
+    () => TeamPageCubit(sl<GetTeamDetailsUsecase>()),
   );
 }
 

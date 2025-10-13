@@ -1,5 +1,6 @@
 import 'package:cricklo/features/account/domain/models/remote/get_teams_response_model.dart';
 import 'package:cricklo/features/teams/domain/models/remote/create_team_response_model.dart';
+import 'package:cricklo/features/teams/domain/models/remote/get_team_details_response_model.dart';
 import 'package:cricklo/features/teams/domain/models/remote/invite_player_response_model.dart';
 import 'package:cricklo/features/teams/domain/models/remote/search_players_response_model.dart';
 import 'package:cricklo/features/teams/domain/models/remote/search_team_response_model.dart';
@@ -16,6 +17,7 @@ abstract class TeamDatasourceRemote {
   );
   Future<GetTeamsResponseModel> getTeams();
   Future<SearchTeamResponseModel> searchTeams(String query);
+  Future<GetTeamDetailsResponseModel> getTeamDetails(String teamId);
 }
 
 class TeamDatasourceRemoteImpl extends TeamDatasourceRemote {
@@ -68,5 +70,10 @@ class TeamDatasourceRemoteImpl extends TeamDatasourceRemote {
   @override
   Future<SearchTeamResponseModel> searchTeams(String query) {
     return _apiService.searchTeams(query);
+  }
+
+  @override
+  Future<GetTeamDetailsResponseModel> getTeamDetails(String teamId) {
+    return _apiService.getTeamDetails(teamId);
   }
 }

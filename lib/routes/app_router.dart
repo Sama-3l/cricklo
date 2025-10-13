@@ -111,8 +111,12 @@ class AppRouter {
         name: Routes.teamPage,
         path: Routes.teamPage,
         pageBuilder: (context, state) {
-          final team = state.extra as TeamEntity? ?? dummyTeam;
-          return MaterialPage(child: TeamPage(team: team));
+          final extras = state.extra as List<dynamic>;
+          final team = extras[0] as TeamEntity? ?? dummyTeam;
+          final matches = extras[1] as List<MatchEntity>? ?? [];
+          return MaterialPage(
+            child: TeamPage(team: team, userMatches: matches),
+          );
         },
       ),
       GoRoute(

@@ -5,6 +5,7 @@ import 'package:cricklo/features/account/presentation/screens/statistics.dart';
 import 'package:cricklo/features/account/presentation/screens/teams_grid.dart';
 import 'package:cricklo/features/account/presentation/widgets/profile_tab_bar.dart';
 import 'package:cricklo/features/login/domain/entities/user_entitiy.dart';
+import 'package:cricklo/features/matches/domain/entities/match_entity.dart';
 import 'package:cricklo/injection_container.dart';
 import 'package:cricklo/routes/app_route_constants.dart';
 
@@ -14,9 +15,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class AccountPage extends StatelessWidget {
-  const AccountPage({super.key, required this.userEntity});
+  const AccountPage({
+    super.key,
+    required this.userEntity,
+    required this.userMatches,
+  });
 
   final UserEntity? userEntity;
+  final List<MatchEntity> userMatches;
 
   @override
   Widget build(BuildContext context) {
@@ -69,9 +75,10 @@ class AccountPage extends StatelessWidget {
 
                       TeamsGrid(
                         teams: state.teams,
-                        onTap: (team) => GoRouter.of(
-                          context,
-                        ).pushNamed(Routes.teamPage, extra: team),
+                        onTap: (team) => GoRouter.of(context).pushNamed(
+                          Routes.teamPage,
+                          extra: [team, userMatches],
+                        ),
                       ),
                       const Center(child: Text("Matches Page")),
                       const Center(child: Text("Tournaments Page")),

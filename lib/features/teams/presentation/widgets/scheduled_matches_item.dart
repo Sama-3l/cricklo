@@ -1,8 +1,14 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cricklo/core/utils/constants/methods.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
+import 'package:cricklo/features/matches/domain/entities/match_entity.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class ScheduledMatchesItem extends StatelessWidget {
-  const ScheduledMatchesItem({super.key});
+  const ScheduledMatchesItem({super.key, required this.match});
+
+  final MatchEntity match;
 
   @override
   Widget build(BuildContext context) {
@@ -24,10 +30,11 @@ class ScheduledMatchesItem extends StatelessWidget {
                 ),
                 height: 64,
                 width: 64,
-                child: Icon(
-                  CupertinoIcons.person_2_fill,
-                  color: ColorsConstants.defaultBlack,
-                  size: 24,
+                child: CircleAvatar(
+                  radius: 32,
+                  backgroundImage: CachedNetworkImageProvider(
+                    match.teamA.teamLogo,
+                  ),
                 ),
               ),
               Transform.translate(
@@ -41,10 +48,11 @@ class ScheduledMatchesItem extends StatelessWidget {
                     border: Border.all(color: ColorsConstants.defaultBlack),
                   ),
 
-                  child: Icon(
-                    CupertinoIcons.person_2_fill,
-                    color: ColorsConstants.defaultBlack,
-                    size: 24,
+                  child: CircleAvatar(
+                    radius: 32,
+                    backgroundImage: CachedNetworkImageProvider(
+                      match.teamB.teamLogo,
+                    ),
                   ),
                 ),
               ),
@@ -55,14 +63,14 @@ class ScheduledMatchesItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Aviral All Star",
+                match.teamA.name,
                 style: TextStyles.poppinsSemiBold.copyWith(
                   fontSize: 12,
                   letterSpacing: -0.5,
                 ),
               ),
               Text(
-                "Kerala Kings",
+                match.teamB.name,
                 style: TextStyles.poppinsSemiBold.copyWith(
                   fontSize: 12,
                   letterSpacing: -0.5,
@@ -70,7 +78,7 @@ class ScheduledMatchesItem extends StatelessWidget {
               ),
               // const Spacer(),
               Text(
-                "10th Aug 2025 at 8:00AM",
+                Methods.formatDateTime(match.dateAndTime, addLineBreak: false),
                 style: TextStyles.poppinsRegular.copyWith(
                   fontSize: 12,
                   letterSpacing: -0.5,

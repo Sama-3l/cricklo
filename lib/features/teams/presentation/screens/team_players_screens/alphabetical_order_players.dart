@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 class AlphabeticalOrderPlayers extends StatelessWidget {
   const AlphabeticalOrderPlayers({super.key, required this.team});
 
-  final TeamEntity team;
+  final TeamEntity? team;
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,9 @@ class AlphabeticalOrderPlayers extends StatelessWidget {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: WidgetDecider.buildAlphabeticalList(team.players),
+          child: WidgetDecider.buildAlphabeticalList(
+            team == null ? [] : team!.players,
+          ),
         ),
       ),
     );

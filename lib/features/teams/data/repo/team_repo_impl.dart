@@ -3,6 +3,7 @@ import 'package:cricklo/features/account/domain/entities/get_teams_response_enti
 import 'package:cricklo/features/teams/data/datasource/team_datasource_remote.dart';
 import 'package:cricklo/features/teams/data/entities/search_player_usecase_entity.dart';
 import 'package:cricklo/features/teams/domain/entities/create_team_response_entity.dart';
+import 'package:cricklo/features/teams/domain/entities/get_team_details_response_entity.dart';
 import 'package:cricklo/features/teams/domain/entities/invite_player_response_entity.dart';
 import 'package:cricklo/features/teams/domain/entities/search_players_response_entity.dart';
 import 'package:cricklo/features/teams/domain/entities/search_team_response_entity.dart';
@@ -124,6 +125,31 @@ class TeamRepoImpl extends TeamRepo {
 
       return Right(
         SearchTeamResponseEntity(
+          success: false,
+          message: message,
+          errorCode: code,
+        ),
+      );
+    } catch (e) {
+      return Left(LocalStorageFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, GetTeamDetailsResponseEntity>> getTeamDetails(
+    String query,
+  ) async {
+    try {
+      final response = await _teamDatasourceRemote.getTeamDetails(query);
+      return Right(response.toEntity());
+    } on DioException catch (e) {
+      final data = e.response?.data;
+
+      final code = data?['error']?['code'];
+      final message = data?['error']?['message'];
+
+      return Right(
+        GetTeamDetailsResponseEntity(
           success: false,
           message: message,
           errorCode: code,

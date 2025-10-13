@@ -78,6 +78,10 @@ class TeamModel {
           ? (map['teamPlayers'] as List<dynamic>)
                 .map<PlayerModel>((e) => PlayerModel.fromJson(e))
                 .toList()
+          : map['players'] != null
+          ? (map['players'] as List<dynamic>)
+                .map<PlayerModel>((e) => PlayerModel.fromJson(e))
+                .toList()
           : [],
       location: map.containsKey('location')
           ? LocationModel.fromJson(map['location'] as Map<String, dynamic>)
