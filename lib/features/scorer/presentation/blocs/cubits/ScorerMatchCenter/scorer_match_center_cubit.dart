@@ -121,8 +121,8 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
       ),
       location: matchEntity.location,
       scorer: MatchScorerEntity(
-        playerId: matchEntity.scorer["playerId"],
-        name: matchEntity.scorer["playerName"],
+        playerId: matchEntity.scorer["profileId"],
+        name: matchEntity.scorer["name"],
         profilePic: "",
       ),
       innings: [],

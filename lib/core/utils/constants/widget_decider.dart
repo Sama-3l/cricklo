@@ -711,7 +711,7 @@ class WidgetDecider {
         });
       } else {
         batsmen.add({
-          'name': i.name,
+          'name': Methods.truncatePlayerName(i.name),
           'runs': i.stats.runs,
           'balls': i.stats.balls,
           'fours': i.stats.n4s,
@@ -800,7 +800,7 @@ class WidgetDecider {
       };
     } else {
       bowler = {
-        'name': bowlerData.name,
+        'name': Methods.truncatePlayerName(bowlerData.name),
         'overs': bowlerData.stats.overs,
         'runs': bowlerData.stats.runsGiven,
         'maidens': bowlerData.stats.maidens,
@@ -1071,7 +1071,9 @@ class WidgetDecider {
                   floatingActionButtonLocation:
                       FloatingActionButtonLocation.centerDocked,
                   floatingActionButton: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0,
+                    ).copyWith(bottom: 16),
                     child: SizedBox(
                       width: double.infinity,
                       child: PrimaryButton(
@@ -1553,5 +1555,24 @@ class WidgetDecider {
           ),
         )
         .toList();
+  }
+
+  static void showSnackBar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: ColorsConstants.defaultBlack,
+        content: Center(
+          child: Text(
+            message,
+            style: TextStyles.poppinsSemiBold.copyWith(
+              fontSize: 12,
+              letterSpacing: -0.5,
+              color: ColorsConstants.defaultWhite,
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

@@ -45,7 +45,7 @@ class TeamsGrid extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       CircleAvatar(
-                        radius: 50,
+                        radius: 48,
                         backgroundColor: ColorsConstants.accentOrange
                             .withValues(alpha: 0.2),
                         backgroundImage: CachedNetworkImageProvider(
@@ -67,7 +67,8 @@ class TeamsGrid extends StatelessWidget {
                         team.name,
                         textAlign: TextAlign.center,
                         style: TextStyles.poppinsSemiBold.copyWith(
-                          fontSize: 14,
+                          fontSize: 12,
+                          letterSpacing: -0.5,
                           color: ColorsConstants.defaultBlack,
                         ),
                       ),

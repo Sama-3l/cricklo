@@ -329,7 +329,7 @@ class _ScorerMatchInitialScreenState extends State<ScorerMatchInitialScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              widget.matchEntity.scorer["playerName"],
+                              widget.matchEntity.scorer["name"],
                               style: TextStyles.poppinsMedium.copyWith(
                                 fontSize: 16,
                                 letterSpacing: -0.8,
@@ -337,7 +337,7 @@ class _ScorerMatchInitialScreenState extends State<ScorerMatchInitialScreen> {
                               ),
                             ),
                             Text(
-                              widget.matchEntity.scorer["playerId"],
+                              widget.matchEntity.scorer["profileId"],
                               style: TextStyles.poppinsMedium.copyWith(
                                 fontSize: 12,
                                 letterSpacing: -0.4,

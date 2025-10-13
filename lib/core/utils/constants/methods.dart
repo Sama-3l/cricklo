@@ -421,4 +421,29 @@ class Methods {
       state: state,
     );
   }
+
+  static String truncatePlayerName(String fullName) {
+    // Split by spaces and clean up
+    final parts = fullName
+        .trim()
+        .split(RegExp(r'\s+'))
+        .where((p) => p.isNotEmpty)
+        .toList();
+
+    if (parts.isEmpty) return '';
+
+    // If only one word, return as-is (e.g., "Dhoni")
+    if (parts.length == 1) return parts.first;
+
+    // Last name is the surname
+    final lastName = parts.last;
+
+    // Initials from all but last
+    final initials = parts
+        .sublist(0, parts.length - 1)
+        .map((name) => '${name[0].toUpperCase()}.')
+        .join(' ');
+
+    return '$initials $lastName';
+  }
 }

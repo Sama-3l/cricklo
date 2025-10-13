@@ -29,7 +29,7 @@ class _PlayersPageState extends State<PlayersPage> {
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(top: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         color: ColorsConstants.defaultWhite,
         width: double.infinity,
         child: Row(

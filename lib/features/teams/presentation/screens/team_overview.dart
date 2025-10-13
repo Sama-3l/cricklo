@@ -305,26 +305,29 @@ class _TeamOverviewState extends State<TeamOverview> {
             ),
             const SizedBox(height: 20),
           ],
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: SectionHeader(title: "Scheduled Matches", showIcon: false),
-          ),
-          const SizedBox(height: 16),
-          ...widget.matches
-              .where(
-                (e) =>
-                    e.dateAndTime.isAfter(DateTime.now()) &&
-                    e.tossWinner == null,
-              )
-              .map(
-                (e) => Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16.0,
-                    vertical: 4,
+          if (widget.matches.isNotEmpty) ...[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: SectionHeader(title: "Scheduled Matches", showIcon: false),
+            ),
+            const SizedBox(height: 16),
+            ...widget.matches
+                .where(
+                  (e) =>
+                      e.dateAndTime.isAfter(DateTime.now()) &&
+                      e.tossWinner == null,
+                )
+                .map(
+                  (e) => Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0,
+                      vertical: 4,
+                    ),
+                    child: ScheduledMatchesItem(match: e),
                   ),
-                  child: ScheduledMatchesItem(match: e),
                 ),
-              ),
+          ],
+          const SizedBox(height: 24),
         ],
       ),
     );

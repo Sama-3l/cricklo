@@ -239,21 +239,9 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
                           )) {
                             currentCubit.setExtraType(null);
                           } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                behavior: SnackBarBehavior.floating,
-                                backgroundColor: ColorsConstants.defaultBlack,
-                                content: Center(
-                                  child: Text(
-                                    "Please select striker",
-                                    style: TextStyles.poppinsSemiBold.copyWith(
-                                      fontSize: 12,
-                                      letterSpacing: -0.5,
-                                      color: ColorsConstants.defaultWhite,
-                                    ),
-                                  ),
-                                ),
-                              ),
+                            WidgetDecider.showSnackBar(
+                              context,
+                              "Please select striker",
                             );
                           }
                         },
@@ -335,24 +323,9 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
                                 );
                                 currentCubit.setExtraType(null);
                               } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    behavior: SnackBarBehavior.floating,
-                                    backgroundColor:
-                                        ColorsConstants.defaultBlack,
-                                    content: Center(
-                                      child: Text(
-                                        "Please select striker",
-                                        style: TextStyles.poppinsSemiBold
-                                            .copyWith(
-                                              fontSize: 12,
-                                              letterSpacing: -0.5,
-                                              color:
-                                                  ColorsConstants.defaultWhite,
-                                            ),
-                                      ),
-                                    ),
-                                  ),
+                                WidgetDecider.showSnackBar(
+                                  context,
+                                  "Please select striker",
                                 );
                               }
                             },
@@ -553,24 +526,9 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
                                   currentCubit.newWicket(false);
                                 }
                               } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    behavior: SnackBarBehavior.floating,
-                                    backgroundColor:
-                                        ColorsConstants.defaultBlack,
-                                    content: Center(
-                                      child: Text(
-                                        "Please select striker",
-                                        style: TextStyles.poppinsSemiBold
-                                            .copyWith(
-                                              fontSize: 12,
-                                              letterSpacing: -0.5,
-                                              color:
-                                                  ColorsConstants.defaultWhite,
-                                            ),
-                                      ),
-                                    ),
-                                  ),
+                                WidgetDecider.showSnackBar(
+                                  context,
+                                  "Please select striker",
                                 );
                               }
                             },
@@ -678,24 +636,9 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
                                 );
                                 currentCubit.optionType(null);
                               } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    behavior: SnackBarBehavior.floating,
-                                    backgroundColor:
-                                        ColorsConstants.defaultBlack,
-                                    content: Center(
-                                      child: Text(
-                                        "Please select striker",
-                                        style: TextStyles.poppinsSemiBold
-                                            .copyWith(
-                                              fontSize: 12,
-                                              letterSpacing: -0.5,
-                                              color:
-                                                  ColorsConstants.defaultWhite,
-                                            ),
-                                      ),
-                                    ),
-                                  ),
+                                WidgetDecider.showSnackBar(
+                                  context,
+                                  "Please select striker",
                                 );
                               }
                             },
@@ -763,24 +706,9 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
                                   );
                                   currentCubit.optionType(null);
                                 } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      behavior: SnackBarBehavior.floating,
-                                      backgroundColor:
-                                          ColorsConstants.defaultBlack,
-                                      content: Center(
-                                        child: Text(
-                                          "Please select striker",
-                                          style: TextStyles.poppinsSemiBold
-                                              .copyWith(
-                                                fontSize: 12,
-                                                letterSpacing: -0.5,
-                                                color: ColorsConstants
-                                                    .defaultWhite,
-                                              ),
-                                        ),
-                                      ),
-                                    ),
+                                  WidgetDecider.showSnackBar(
+                                    context,
+                                    "Please select striker",
                                   );
                                 }
                               },
@@ -863,24 +791,9 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
                                   );
                                   currentCubit.optionType(null);
                                 } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      behavior: SnackBarBehavior.floating,
-                                      backgroundColor:
-                                          ColorsConstants.defaultBlack,
-                                      content: Center(
-                                        child: Text(
-                                          "Please select striker",
-                                          style: TextStyles.poppinsSemiBold
-                                              .copyWith(
-                                                fontSize: 12,
-                                                letterSpacing: -0.5,
-                                                color: ColorsConstants
-                                                    .defaultWhite,
-                                              ),
-                                        ),
-                                      ),
-                                    ),
+                                  WidgetDecider.showSnackBar(
+                                    context,
+                                    "Please select striker",
                                   );
                                 }
                               },
@@ -926,9 +839,9 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
                   children: [
                     TableRow(
                       decoration: BoxDecoration(
-                        color: ColorsConstants.accentOrange.withValues(
-                          alpha: 0.15,
-                        ),
+                        // color: ColorsConstants.accentOrange.withValues(
+                        //   alpha: 0.15,
+                        // ),
                       ),
                       children: [
                         for (final label in ["1", "2", "3", "4", "6"])
@@ -971,24 +884,9 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
                                           .first,
                                     );
                                   } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        behavior: SnackBarBehavior.floating,
-                                        backgroundColor:
-                                            ColorsConstants.defaultBlack,
-                                        content: Center(
-                                          child: Text(
-                                            "Please select striker",
-                                            style: TextStyles.poppinsSemiBold
-                                                .copyWith(
-                                                  fontSize: 12,
-                                                  letterSpacing: -0.5,
-                                                  color: ColorsConstants
-                                                      .defaultWhite,
-                                                ),
-                                          ),
-                                        ),
-                                      ),
+                                    WidgetDecider.showSnackBar(
+                                      context,
+                                      "Please select striker",
                                     );
                                   }
                                 },
@@ -1001,9 +899,9 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
 
                     TableRow(
                       decoration: BoxDecoration(
-                        color: ColorsConstants.accentOrange.withValues(
-                          alpha: 0.15,
-                        ),
+                        // color: ColorsConstants.accentOrange.withValues(
+                        //   alpha: 0.15,
+                        // ),
                       ),
                       children: [
                         for (final label in ["LB", "Bye", "Wide", "NB"])
@@ -1077,9 +975,9 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
 
                     TableRow(
                       decoration: BoxDecoration(
-                        color: ColorsConstants.accentOrange.withValues(
-                          alpha: 0.15,
-                        ),
+                        // color: ColorsConstants.accentOrange.withValues(
+                        //   alpha: 0.15,
+                        // ),
                       ),
                       children: [
                         InkWell(
@@ -1136,22 +1034,9 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
                                         .last
                                         .balls
                                         .isEmpty)) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  behavior: SnackBarBehavior.floating,
-                                  backgroundColor: ColorsConstants.defaultBlack,
-                                  content: Center(
-                                    child: Text(
-                                      "Can't Undo Now",
-                                      style: TextStyles.poppinsSemiBold
-                                          .copyWith(
-                                            fontSize: 12,
-                                            letterSpacing: -0.5,
-                                            color: ColorsConstants.defaultWhite,
-                                          ),
-                                    ),
-                                  ),
-                                ),
+                              WidgetDecider.showSnackBar(
+                                context,
+                                "Can't Undo Now",
                               );
                             } else {
                               cubit.undoLastBall();

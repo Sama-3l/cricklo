@@ -171,7 +171,7 @@ class MatchModel {
       abandoned: map['abandoned'] as bool? ?? false,
       teamB: teamB,
       location: LocationModel.fromJson(map['location'] as Map<String, dynamic>),
-      scorer: map['scorer'] as Map<String, dynamic>,
+      scorer: map['scorerEntity'] as Map<String, dynamic>,
       tossWinner: map['tossWinner'] != null
           ? map['tossWinner'] as String
           : null,

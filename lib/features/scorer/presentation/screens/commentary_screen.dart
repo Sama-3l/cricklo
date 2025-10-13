@@ -26,10 +26,28 @@ class _CommentaryScreenState extends State<CommentaryScreen> {
         const SizedBox(height: 8),
         Expanded(
           child: selectedInnings == 1 && innings.length < 2
-              ? Center(child: Text("No Data Yet"))
+              ? Center(
+                  child: Text(
+                    "No Data To Show",
+                    style: TextStyles.poppinsSemiBold.copyWith(
+                      fontSize: 16,
+                      letterSpacing: -0.8,
+                      color: ColorsConstants.accentOrange,
+                    ),
+                  ),
+                )
               : selectedInnings == 0 &&
                     innings[selectedInnings].oversData.isEmpty
-              ? Center(child: Text("No Data Yet"))
+              ? Center(
+                  child: Text(
+                    "No Data To Show",
+                    style: TextStyles.poppinsSemiBold.copyWith(
+                      fontSize: 16,
+                      letterSpacing: -0.8,
+                      color: ColorsConstants.accentOrange,
+                    ),
+                  ),
+                )
               : ListView.builder(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 12,

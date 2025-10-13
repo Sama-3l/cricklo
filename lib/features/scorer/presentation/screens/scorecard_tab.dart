@@ -272,7 +272,7 @@ class _ScorecardScreenState extends State<ScorecardScreen> {
                     TableRow(
                       children: [
                         ScorecardTabItem(
-                          title: player.name,
+                          title: Methods.truncatePlayerName(player.name),
                           subTitle: Methods.getBatsmanSubtitle(player, match),
                         ),
                         ScorecardTabItem(title: "${player.stats.runs}"),
@@ -334,7 +334,9 @@ class _ScorecardScreenState extends State<ScorecardScreen> {
             for (final bowler in bowlers)
               TableRow(
                 children: [
-                  ScorecardTabItem(title: bowler.name),
+                  ScorecardTabItem(
+                    title: Methods.truncatePlayerName(bowler.name),
+                  ),
                   ScorecardTabItem(title: bowler.stats.overs),
                   ScorecardTabItem(title: "${bowler.stats.runsGiven}"),
                   ScorecardTabItem(title: "${bowler.stats.wickets}"),

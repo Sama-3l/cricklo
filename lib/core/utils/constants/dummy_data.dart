@@ -311,7 +311,7 @@ final MatchEntity dummyMatchScheduled = MatchEntity(
     lat: 0,
     lng: 0,
   ),
-  scorer: {"playerId": currUser.playerId, "playerName": currUser.name},
+  scorer: {"profileId": currUser.playerId, "name": currUser.name},
 );
 
 final MatchEntity dummyMatchLive = MatchEntity(
@@ -329,7 +329,7 @@ final MatchEntity dummyMatchLive = MatchEntity(
     lat: 0,
     lng: 0,
   ),
-  scorer: {"playerId": currUser.playerId, "playerName": currUser.name},
+  scorer: {"profileId": currUser.playerId, "name": currUser.name},
 );
 
 final MatchEntity dummyMatchTossDone = MatchEntity(
@@ -355,7 +355,7 @@ final MatchEntity dummyMatchTossDone = MatchEntity(
     lat: 0,
     lng: 0,
   ),
-  scorer: {"playerId": currUser.playerId, "playerName": currUser.name},
+  scorer: {"profileId": currUser.playerId, "name": currUser.name},
 );
 
 final MatchEntity dummyMatchInningsTwo = MatchEntity(
@@ -387,7 +387,7 @@ final MatchEntity dummyMatchInningsTwo = MatchEntity(
     lat: 0,
     lng: 0,
   ),
-  scorer: {"playerId": currUser.playerId, "playerName": currUser.name},
+  scorer: {"profileId": currUser.playerId, "name": currUser.name},
 );
 
 final MatchEntity dummyMatchDone = MatchEntity(
@@ -420,5 +420,5 @@ final MatchEntity dummyMatchDone = MatchEntity(
     lng: 0,
   ),
   winner: "t001",
-  scorer: {"playerId": currUser.playerId, "playerName": currUser.name},
+  scorer: {"profileId": currUser.playerId, "name": currUser.name},
 );

@@ -127,13 +127,12 @@ class ScorerMatchCenter extends StatelessWidget {
     required Widget child,
   }) {
     final state = context.watch<ScorerMatchCenterCubit>().state;
-    final isLoaded = state.loadedTabs.contains(index);
 
-    if (!isLoaded && index == state.currentIndex) {
+    if (index == state.currentIndex) {
       cubit.changeTab(index);
     }
 
-    return isLoaded ? child : const Center(child: CircularProgressIndicator());
+    return child;
   }
 }
 

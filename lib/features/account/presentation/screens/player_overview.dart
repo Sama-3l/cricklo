@@ -103,6 +103,7 @@ class _PlayerOverviewState extends State<PlayerOverview> {
               const SizedBox(height: 32),
               SectionHeader(title: "Yearly Review", showIcon: false),
               YearlyReview(),
+              const SizedBox(height: 32),
             ],
           ),
         ],

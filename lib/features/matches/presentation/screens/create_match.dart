@@ -102,7 +102,7 @@ class _CreateMatchState extends State<CreateMatch> {
             floatingActionButton: Container(
               padding: const EdgeInsets.symmetric(
                 horizontal: 16,
-              ).copyWith(top: 12),
+              ).copyWith(top: 12, bottom: 16),
               color: ColorsConstants.defaultWhite,
               width: double.infinity,
               child: PrimaryButton(
