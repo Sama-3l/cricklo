@@ -107,44 +107,58 @@ class _CreateMatchState extends State<CreateMatch> {
               width: double.infinity,
               child: PrimaryButton(
                 disabled: invalidMatchSetup,
-                child: Text(
-                  "Create Match",
-                  style: TextStyles.poppinsSemiBold.copyWith(
-                    fontSize: 16,
-                    letterSpacing: -0.6,
-                    color: ColorsConstants.defaultWhite,
-                  ),
-                ),
-                onPress: () => cubit.createMatch(
-                  context,
-                  teamA!,
-                  teamB!,
-                  PlayerEntity(
-                    profilePic: '',
-                    id: scorer!.id,
-                    playerId: scorer!.playerId,
-                    name: scorer!.name,
-                    captain: false,
-                    teamRole: TeamRole.invited,
-                    playerType: scorer!.playerType,
-                    batterType: scorer!.batterType,
-                    bowlerType: scorer!.bowlerType,
-                  ),
-                  Methods.getLocationEntity(venueArea.text, venueLocation.text),
-                  _selectedDate!,
-                  _selectedTime!,
-                  _selectedFormat!,
-                  _selectedFormat!.toLowerCase() == "odi"
-                      ? 50
-                      : _selectedFormat!.toLowerCase() == "t10"
-                      ? 10
-                      : _selectedFormat!.toLowerCase() == "t20"
-                      ? 20
-                      : _selectedFormat!.toLowerCase() == "t30"
-                      ? 30
-                      : 0,
-                  widget.onComplete,
-                ),
+                child: state.loading
+                    ? SizedBox(
+                        height: 24,
+                        width: 24,
+                        child: CircularProgressIndicator(
+                          color: ColorsConstants.defaultWhite,
+                          strokeWidth: 2.4,
+                        ),
+                      )
+                    : Text(
+                        "Create Match",
+                        style: TextStyles.poppinsSemiBold.copyWith(
+                          fontSize: 16,
+                          letterSpacing: -0.6,
+                          color: ColorsConstants.defaultWhite,
+                        ),
+                      ),
+                onPress: () => state.loading
+                    ? {}
+                    : cubit.createMatch(
+                        context,
+                        teamA!,
+                        teamB!,
+                        PlayerEntity(
+                          profilePic: '',
+                          id: scorer!.id,
+                          playerId: scorer!.playerId,
+                          name: scorer!.name,
+                          captain: false,
+                          teamRole: TeamRole.invited,
+                          playerType: scorer!.playerType,
+                          batterType: scorer!.batterType,
+                          bowlerType: scorer!.bowlerType,
+                        ),
+                        Methods.getLocationEntity(
+                          venueArea.text,
+                          venueLocation.text,
+                        ),
+                        _selectedDate!,
+                        _selectedTime!,
+                        _selectedFormat!,
+                        _selectedFormat!.toLowerCase() == "odi"
+                            ? 50
+                            : _selectedFormat!.toLowerCase() == "t10"
+                            ? 10
+                            : _selectedFormat!.toLowerCase() == "t20"
+                            ? 20
+                            : _selectedFormat!.toLowerCase() == "t30"
+                            ? 30
+                            : 0,
+                        widget.onComplete,
+                      ),
               ),
             ),
             body: SafeArea(

@@ -76,7 +76,9 @@ class _ScorerMatchInitialScreenState extends State<ScorerMatchInitialScreen> {
         color: ColorsConstants.defaultWhite,
         width: double.infinity,
         child: PrimaryButton(
-          disabled: false,
+          disabled:
+              widget.matchEntity.teamA.inviteStatus! == "PENDING" ||
+              widget.matchEntity.teamB.inviteStatus! == "PENDING",
           child: Text(
             "Start Match",
             style: TextStyles.poppinsSemiBold.copyWith(

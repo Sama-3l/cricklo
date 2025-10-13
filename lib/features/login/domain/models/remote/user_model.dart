@@ -6,6 +6,8 @@ import 'package:cricklo/features/login/domain/entities/user_entitiy.dart';
 class UserModel {
   final String profileId;
   final String name;
+  final String? profilePic;
+  final int unreadNotifications;
   final String email;
   final String? phoneNumber;
   final String? countryCode;
@@ -16,8 +18,10 @@ class UserModel {
 
   UserModel({
     required this.profileId,
+    required this.unreadNotifications,
     required this.name,
     required this.email,
+    required this.profilePic,
     this.phoneNumber,
     this.countryCode = "+91",
     required this.location,
@@ -28,7 +32,9 @@ class UserModel {
 
   factory UserModel.fromEntity(UserEntity entity) {
     return UserModel(
+      profilePic: entity.profilePic,
       profileId: entity.profileId,
+      unreadNotifications: entity.unreadNotifications,
       name: entity.name,
       email: entity.email,
       phoneNumber: entity.phoneNumber,
@@ -103,6 +109,8 @@ class UserModel {
     }
 
     return UserModel(
+      unreadNotifications: data["unreadNotifications"] as int? ?? 0,
+      profilePic: data['Profile_Photo'],
       profileId: data['profileId'],
       name: data['Name'] ?? '',
       email: data['Email'] ?? '',
@@ -124,12 +132,16 @@ class UserModel {
       playerType: playerType,
       batterType: batterType,
       bowlerType: bowlerType,
+      unreadNotifications: unreadNotifications,
+      profilePic: profilePic,
     );
   }
 
   UserModel copyWith({
     String? profileId,
     String? name,
+    String? profilePic,
+    int? unreadNotifications,
     String? email,
     String? phoneNumber,
     String? countryCode,
@@ -141,6 +153,8 @@ class UserModel {
     return UserModel(
       profileId: profileId ?? this.profileId,
       name: name ?? this.name,
+      profilePic: profilePic ?? this.profilePic,
+      unreadNotifications: unreadNotifications ?? this.unreadNotifications,
       email: email ?? this.email,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       countryCode: countryCode ?? this.countryCode,

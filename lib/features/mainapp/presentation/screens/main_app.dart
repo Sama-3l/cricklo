@@ -80,6 +80,7 @@ class _ContentViewState extends State<ContentView> {
                 Padding(
                   padding: const EdgeInsets.only(right: 8.0),
                   child: NotificationsButton(
+                    unread: state.user?.unreadNotifications ?? 0,
                     onPressed: () {
                       context.read<NotificationBloc>().add(
                         NotificationReadAll(),

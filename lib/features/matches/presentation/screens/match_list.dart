@@ -18,7 +18,10 @@ class _MatchListState extends State<MatchList> {
   @override
   Widget build(BuildContext context) {
     final state = context.read<MainAppCubit>().state;
-    final matches = state.matches.reversed.toList();
+    final matches = state.matches
+        .where((e) => e.teamA.inviteStatus != null)
+        .toList();
+    matches.sort((a, b) => a.dateAndTime.compareTo(b.dateAndTime));
     return Column(
       children: [
         SizedBox(
@@ -39,24 +42,25 @@ class _MatchListState extends State<MatchList> {
         const SizedBox(height: 8),
 
         // Dot indicators
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: List.generate(state.matches.length, (index) {
-            final isActive = index == _currentPage;
-            return AnimatedContainer(
-              duration: const Duration(milliseconds: 250),
-              margin: const EdgeInsets.symmetric(horizontal: 3),
-              height: 6,
-              width: isActive ? 14 : 6,
-              decoration: BoxDecoration(
-                color: isActive
-                    ? ColorsConstants.accentOrange
-                    : ColorsConstants.accentOrange.withValues(alpha: 0.3),
-                borderRadius: BorderRadius.circular(4),
-              ),
-            );
-          }),
-        ),
+        if (matches.length > 1)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(matches.length, (index) {
+              final isActive = index == _currentPage;
+              return AnimatedContainer(
+                duration: const Duration(milliseconds: 250),
+                margin: const EdgeInsets.symmetric(horizontal: 3),
+                height: 6,
+                width: isActive ? 14 : 6,
+                decoration: BoxDecoration(
+                  color: isActive
+                      ? ColorsConstants.accentOrange
+                      : ColorsConstants.accentOrange.withValues(alpha: 0.3),
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              );
+            }),
+          ),
       ],
     );
   }

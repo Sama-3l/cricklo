@@ -21,6 +21,8 @@ final dummyCurrUser = UserEntity(
   playerType: PlayerType.allRounder,
   batterType: BatterType.leftHand,
   bowlerType: BowlerType.leftArmPace,
+  unreadNotifications: 0,
+  profilePic: '',
 );
 
 final PlayerEntity currUser = PlayerEntity(

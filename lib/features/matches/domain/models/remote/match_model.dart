@@ -153,9 +153,18 @@ class MatchModel {
     final teamB = TeamModel.fromJson(
       map['teamBEntity'] as Map<String, dynamic>,
     );
+    final utcTime = DateTime.parse(map['dateAndTime'] as String);
+    final dateAndTime = DateTime(
+      utcTime.year,
+      utcTime.month,
+      utcTime.day,
+      utcTime.hour,
+      utcTime.minute,
+      utcTime.second,
+    );
     return MatchModel(
       matchID: map['matchId'] as String,
-      dateAndTime: DateTime.parse(map['dateAndTime'] as String),
+      dateAndTime: dateAndTime,
       overs: map['overs'] as int,
       matchType: matchType,
       teamA: teamA,

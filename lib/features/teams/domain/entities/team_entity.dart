@@ -29,4 +29,30 @@ class TeamEntity {
     required this.players,
     required this.location,
   });
+
+  TeamEntity copyWith({
+    String? uuid,
+    String? id,
+    String? inviteStatus,
+    String? name,
+    File? logoFile,
+    File? bannerFile,
+    String? teamLogo,
+    String? teamBanner,
+    List<PlayerEntity>? players,
+    LocationEntity? location,
+  }) {
+    return TeamEntity(
+      uuid: uuid ?? this.uuid,
+      id: id ?? this.id,
+      inviteStatus: inviteStatus ?? this.inviteStatus,
+      name: name ?? this.name,
+      logoFile: logoFile ?? this.logoFile,
+      bannerFile: bannerFile ?? this.bannerFile,
+      teamLogo: teamLogo ?? this.teamLogo,
+      teamBanner: teamBanner ?? this.teamBanner,
+      players: players ?? this.players,
+      location: location ?? this.location,
+    );
+  }
 }

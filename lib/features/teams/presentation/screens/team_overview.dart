@@ -303,7 +303,7 @@ class _TeamOverviewState extends State<TeamOverview> {
                     .toList(),
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 20),
           ],
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -318,7 +318,10 @@ class _TeamOverviewState extends State<TeamOverview> {
               )
               .map(
                 (e) => Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0,
+                    vertical: 4,
+                  ),
                   child: ScheduledMatchesItem(match: e),
                 ),
               ),

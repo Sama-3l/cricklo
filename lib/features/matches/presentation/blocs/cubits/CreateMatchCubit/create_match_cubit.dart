@@ -29,6 +29,7 @@ class CreateMatchCubit extends Cubit<CreateMatchState> {
     int overs,
     Function(MatchEntity matchEntity) onComplete,
   ) async {
+    emit(CreateMatchInitial(loading: true));
     final response = await _createMatchUsecase(
       CreateMatchUsecaseEntity(
         date: date,
@@ -41,6 +42,7 @@ class CreateMatchCubit extends Cubit<CreateMatchState> {
         scorer: scorer.id!,
       ),
     );
+    emit(CreateMatchInitial(loading: true));
     response.fold((_) {}, (response) {
       if (response.success) {
         final MatchEntity matchEntity = MatchEntity(
@@ -48,8 +50,8 @@ class CreateMatchCubit extends Cubit<CreateMatchState> {
           dateAndTime: Methods.combineDateAndTime(date, time),
           overs: overs,
           matchType: MatchType.values.where((e) => e.matchType == format).first,
-          teamA: teamA,
-          teamB: teamB,
+          teamA: teamA.copyWith(inviteStatus: "PENDING"),
+          teamB: teamB.copyWith(inviteStatus: "PENDING"),
           location: location,
           scorer: {"playerId": scorer.playerId, "playerName": scorer.name},
         );

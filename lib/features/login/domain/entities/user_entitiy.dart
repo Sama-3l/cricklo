@@ -6,6 +6,8 @@ class UserEntity {
   final String profileId;
   final String name;
   final String email;
+  final int unreadNotifications;
+  final String? profilePic;
   final String phoneNumber;
   final String countryCode;
   final LocationEntity location;
@@ -18,6 +20,8 @@ class UserEntity {
     this.playerType = PlayerType.batter,
     this.batterType,
     this.bowlerType,
+    required this.unreadNotifications,
+    required this.profilePic,
     required this.phoneNumber,
     this.countryCode = "+91",
     required this.name,
@@ -29,6 +33,8 @@ class UserEntity {
     String? profileId,
     String? name,
     String? email,
+    int? unreadNotifications,
+    String? profilePic,
     String? phoneNumber,
     String? countryCode,
     LocationEntity? location,
@@ -40,6 +46,8 @@ class UserEntity {
       profileId: profileId ?? this.profileId,
       name: name ?? this.name,
       email: email ?? this.email,
+      unreadNotifications: unreadNotifications ?? this.unreadNotifications,
+      profilePic: profilePic ?? this.profilePic,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       countryCode: countryCode ?? this.countryCode,
       location: location ?? this.location,

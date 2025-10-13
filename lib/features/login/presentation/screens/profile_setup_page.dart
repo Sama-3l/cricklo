@@ -139,6 +139,8 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
                   Routes.onboardingScreenOne,
                   extra: UserEntity(
                     profileId: "",
+                    profilePic: "",
+                    unreadNotifications: 0,
                     phoneNumber: widget.phoneNumber,
                     name: name.text,
                     email: emailText,
