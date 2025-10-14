@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:cricklo/core/utils/constants/enums.dart';
@@ -14,7 +15,9 @@ import 'package:cricklo/features/scorer/domain/entities/match_team_entity.dart';
 import 'package:cricklo/features/scorer/domain/entities/overs_entity.dart';
 import 'package:cricklo/features/scorer/domain/entities/partnership_entity.dart';
 import 'package:cricklo/features/scorer/domain/entities/scorer_entity.dart';
+import 'package:cricklo/features/scorer/domain/models/remote/match_center_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_launcher_icons/utils.dart';
 import 'package:go_router/go_router.dart';
 
 part 'scorer_match_center_state.dart';
@@ -861,8 +864,29 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
       editBowler(null);
     }
     setWinner();
-
+    print(
+      prettifyJsonEncode(
+        MatchCenterModel.fromEntity(state.matchCenterEntity!).toJson(),
+      ),
+    );
     emit(state.copyWith());
+  }
+
+  void prettyPrintJson(Map<String, dynamic> json) {
+    const encoder = JsonEncoder.withIndent('  ');
+    final prettyString = encoder.convert(json);
+    const chunkSize = 800; // prevents truncation
+
+    for (var i = 0; i < prettyString.length; i += chunkSize) {
+      print(
+        prettyString.substring(
+          i,
+          i + chunkSize > prettyString.length
+              ? prettyString.length
+              : i + chunkSize,
+        ),
+      );
+    }
   }
 
   Future<void> showAbandonMatchDialog(

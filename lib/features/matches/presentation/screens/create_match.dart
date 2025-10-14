@@ -31,12 +31,37 @@ class _CreateMatchState extends State<CreateMatch> {
 
   final FocusNode venueNode = FocusNode();
   final FocusNode areaNode = FocusNode();
+  bool commonPlayersFound = false;
 
-  bool get invalidMatchSetup {
+  bool invalidMatchSetup() {
     final sameTeam = teamA != null && teamB != null && teamA!.id == teamB!.id;
+
+    // ✅ Check for overlapping players
+    bool hasCommonPlayers = false;
+    if (teamA?.players != null && teamB?.players != null) {
+      final teamAIds = teamA!.players
+          .where((e) => e.teamRole != TeamRole.sub)
+          .map((p) => p.playerId)
+          .toSet();
+      final teamBIds = teamB!.players
+          .where((e) => e.teamRole != TeamRole.sub)
+          .map((p) => p.playerId)
+          .toSet();
+
+      hasCommonPlayers = teamAIds.intersection(teamBIds).isNotEmpty;
+    }
+    if (hasCommonPlayers) {
+      WidgetsFlutterBinding.ensureInitialized().addPostFrameCallback((_) {
+        setState(() {
+          commonPlayersFound = true;
+        });
+      });
+    }
+
     return teamA == null ||
         teamB == null ||
         sameTeam ||
+        hasCommonPlayers ||
         venueLocation.text.isEmpty ||
         venueArea.text.isEmpty ||
         scorer == null ||
@@ -106,7 +131,7 @@ class _CreateMatchState extends State<CreateMatch> {
               color: ColorsConstants.defaultWhite,
               width: double.infinity,
               child: PrimaryButton(
-                disabled: invalidMatchSetup,
+                disabled: invalidMatchSetup(),
                 child: state.loading
                     ? SizedBox(
                         height: 24,
@@ -173,7 +198,17 @@ class _CreateMatchState extends State<CreateMatch> {
                           Expanded(
                             child: Column(
                               children: [
-                                if (teamA != null)
+                                if (commonPlayersFound)
+                                  Text(
+                                    "COMMON PLAYER FOUND",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyles.poppinsLight.copyWith(
+                                      fontSize: 12,
+                                      letterSpacing: 1,
+                                      color: ColorsConstants.warningRed,
+                                    ),
+                                  ),
+                                if (!commonPlayersFound && teamA != null)
                                   Text(
                                     teamA!.name.toUpperCase(),
                                     textAlign: TextAlign.center,
@@ -183,7 +218,7 @@ class _CreateMatchState extends State<CreateMatch> {
                                       color: ColorsConstants.defaultBlack,
                                     ),
                                   ),
-                                if (teamA == null)
+                                if (!commonPlayersFound && teamA == null)
                                   Text(
                                     "SELECT TEAM",
                                     style: TextStyles.poppinsLight.copyWith(
@@ -236,7 +271,17 @@ class _CreateMatchState extends State<CreateMatch> {
                           Expanded(
                             child: Column(
                               children: [
-                                if (teamB != null)
+                                if (commonPlayersFound)
+                                  Text(
+                                    "COMMON PLAYER FOUND",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyles.poppinsLight.copyWith(
+                                      fontSize: 12,
+                                      letterSpacing: 1,
+                                      color: ColorsConstants.warningRed,
+                                    ),
+                                  ),
+                                if (!commonPlayersFound && teamB != null)
                                   Text(
                                     teamB!.name.toUpperCase(),
                                     textAlign: TextAlign.center,
@@ -246,7 +291,7 @@ class _CreateMatchState extends State<CreateMatch> {
                                       color: ColorsConstants.defaultBlack,
                                     ),
                                   ),
-                                if (teamB == null)
+                                if (!commonPlayersFound && teamB == null)
                                   Text(
                                     "SELECT TEAM",
                                     style: TextStyles.poppinsLight.copyWith(

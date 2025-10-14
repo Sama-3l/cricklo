@@ -45,27 +45,32 @@ class NotificationTile extends StatelessWidget {
             child: Center(child: Icon(Icons.person, size: 16)),
           ),
           const SizedBox(width: 8),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: TextStyles.poppinsSemiBold.copyWith(
-                  fontSize: 14,
-                  letterSpacing: -0.8,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyles.poppinsSemiBold.copyWith(
+                    fontSize: 14,
+                    letterSpacing: -0.8,
+                  ),
+                  maxLines: 2,
                 ),
-              ),
-              Text(
-                id,
-                style: TextStyles.poppinsMedium.copyWith(
-                  fontSize: 12,
-                  letterSpacing: -0.5,
-                  color: ColorsConstants.defaultBlack.withValues(alpha: 0.5),
+                Text(
+                  id,
+                  style: TextStyles.poppinsMedium.copyWith(
+                    fontSize: 12,
+                    letterSpacing: -0.5,
+                    color: ColorsConstants.defaultBlack.withValues(alpha: 0.5),
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-          Spacer(),
+          const SizedBox(width: 16),
           PrimaryButton(
             disabled: false,
             onPress: () => notificationType == NotificationType.team

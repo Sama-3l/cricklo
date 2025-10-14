@@ -96,4 +96,9 @@ abstract class ApiService {
   Future<GetTeamDetailsResponseModel> getTeamDetails(
     @Path("teamId") String teamId,
   );
+
+  // @POST(ApiEndpointConstants.scorerMatchStart)
+  // Future<GetTeamDetailsResponseModel> scorerMatchStart(
+  //   @Body() Map<String, dynamic> body,
+  // );
 }

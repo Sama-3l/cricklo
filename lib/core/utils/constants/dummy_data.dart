@@ -129,6 +129,7 @@ final PlayerEntity player8 = PlayerEntity(
 
 final TeamEntity dummyTeam = TeamEntity(
   uuid: "t002",
+  inviteStatus: null,
   id: "t001",
   name: "Hello World",
   teamLogo: "assets/images/team_1.png",
@@ -141,7 +142,6 @@ final TeamEntity dummyTeam = TeamEntity(
     lat: 0,
     lng: 0,
   ),
-  inviteStatus: null,
 );
 
 final TeamEntity dummyTeam2 = TeamEntity(

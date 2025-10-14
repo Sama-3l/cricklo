@@ -7,6 +7,7 @@ import 'package:cricklo/features/home/presentation/widgets/match_tile.dart';
 import 'package:cricklo/features/home/presentation/widgets/section_header.dart';
 import 'package:cricklo/features/login/domain/entities/user_entitiy.dart';
 import 'package:cricklo/features/mainapp/presentation/blocs/cubits/MainAppCubit/main_app_cubit.dart';
+import 'package:cricklo/features/matches/presentation/screens/match_list.dart';
 import 'package:cricklo/routes/app_route_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,7 +29,7 @@ class _HomePageState extends State<HomePage>
   late final Animation<double> _rotation;
   late final Animation<double> _opacity;
   late final Animation<Offset> _slide;
-  final matches = [];
+  // final matches = [];
   final tournaments = [];
 
   @override
@@ -74,86 +75,97 @@ class _HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<MainAppCubit>();
+    final state = cubit.state;
     return Scaffold(
       backgroundColor: ColorsConstants.defaultWhite,
       body: Stack(
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          RefreshIndicator(
+            onRefresh: () async {
+              await cubit.getUserMatches();
+            },
+            color: ColorsConstants.accentOrange,
             child: ListView(
+              physics: const AlwaysScrollableScrollPhysics(),
               children: [
-                // if (widget.userEntity != null)
                 const SizedBox(height: 24),
-                SectionHeader(title: "Matches"),
-                matches.isEmpty
-                    ? Container(
-                        height: 200,
-                        margin: EdgeInsets.only(top: 12),
-                        padding: EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          color: ColorsConstants.defaultBlack.withValues(
-                            alpha: 0.07,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: SectionHeader(title: "Matches"),
+                ),
+                state.matches.isEmpty
+                    ? Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Container(
+                          height: 200,
+                          margin: const EdgeInsets.only(top: 12),
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                            color: ColorsConstants.defaultBlack.withValues(
+                              alpha: 0.07,
+                            ),
                           ),
-                        ),
-                        child: Center(
-                          child: Text(
-                            "No Matches Yet",
-                            style: TextStyles.poppinsRegular.copyWith(
-                              fontSize: 16,
-                              letterSpacing: -0.8,
-                              color: ColorsConstants.defaultBlack.withValues(
-                                alpha: 0.5,
+                          child: Center(
+                            child: Text(
+                              "No Matches Yet",
+                              style: TextStyles.poppinsRegular.copyWith(
+                                fontSize: 16,
+                                letterSpacing: -0.8,
+                                color: ColorsConstants.defaultBlack.withValues(
+                                  alpha: 0.5,
+                                ),
                               ),
                             ),
                           ),
                         ),
                       )
-                    : Container(
-                        // height: 200,
-                        margin: EdgeInsets.only(top: 12),
-                        // padding: EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          // color: ColorsConstants.defaultBlack.withValues(alpha: 0.07),
-                        ),
-                        child: MatchTile(matchEntity: dummyMatchScheduled),
+                    : const Padding(
+                        padding: EdgeInsets.only(top: 12.0),
+                        child: MatchList(),
                       ),
                 if (widget.userEntity != null) ...[
                   const SizedBox(height: 24),
-                  HomeProfileHeader(userEntity: widget.userEntity),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: HomeProfileHeader(userEntity: widget.userEntity),
+                  ),
                 ],
-
                 const SizedBox(height: 24),
-                SectionHeader(title: "Live Tournaments"),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: SectionHeader(title: "Live Tournaments"),
+                ),
                 tournaments.isEmpty
-                    ? Container(
-                        height: 200,
-                        margin: EdgeInsets.only(top: 12),
-                        padding: EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          color: ColorsConstants.defaultBlack.withValues(
-                            alpha: 0.07,
+                    ? Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Container(
+                          height: 200,
+                          margin: const EdgeInsets.only(top: 12),
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                            color: ColorsConstants.defaultBlack.withValues(
+                              alpha: 0.07,
+                            ),
                           ),
-                        ),
-                        child: Center(
-                          child: Text(
-                            "No Tournaments Yet",
-                            style: TextStyles.poppinsRegular.copyWith(
-                              fontSize: 16,
-                              letterSpacing: -0.8,
-                              color: ColorsConstants.defaultBlack.withValues(
-                                alpha: 0.5,
+                          child: Center(
+                            child: Text(
+                              "No Tournaments Yet",
+                              style: TextStyles.poppinsRegular.copyWith(
+                                fontSize: 16,
+                                letterSpacing: -0.8,
+                                color: ColorsConstants.defaultBlack.withValues(
+                                  alpha: 0.5,
+                                ),
                               ),
                             ),
                           ),
                         ),
                       )
                     : Container(
-                        // height: 200,
-                        margin: EdgeInsets.only(top: 12),
-                        // padding: EdgeInsets.all(16),
+                        margin: const EdgeInsets.only(top: 12),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(16),
                           color: ColorsConstants.defaultBlack.withValues(
@@ -164,16 +176,6 @@ class _HomePageState extends State<HomePage>
                           child: Image.asset(
                             "assets/images/tournament_Dummy_Image.png",
                           ),
-                          // child: Text(
-                          //   "No Tournaments Yet",
-                          //   style: TextStyles.poppinsRegular.copyWith(
-                          //     fontSize: 16,
-                          //     letterSpacing: -0.8,
-                          //     color: ColorsConstants.defaultBlack.withValues(
-                          //       alpha: 0.5,
-                          //     ),
-                          //   ),
-                          // ),
                         ),
                       ),
                 const SizedBox(height: 40),

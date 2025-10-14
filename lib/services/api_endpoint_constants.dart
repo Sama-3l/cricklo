@@ -21,4 +21,6 @@ class ApiEndpointConstants {
   static const getUserMatches = '/match/user';
   static const matchInviteResponse =
       '/match/{matchId}/invites/{inviteId}/respond';
+
+  static const scorerMatchStart = '/match/start';
 }
