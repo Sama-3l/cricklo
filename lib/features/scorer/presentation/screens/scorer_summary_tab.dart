@@ -1,3 +1,4 @@
+import 'package:cricklo/core/utils/constants/enums.dart';
 import 'package:cricklo/core/utils/constants/methods.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/core/utils/constants/widget_decider.dart';
@@ -35,6 +36,9 @@ class _ScorerSummaryTabState extends State<ScorerSummaryTab> {
             ),
           );
         }
+        final summary = Methods.getTargetOrLead(
+          state.matchCenterEntity!.innings,
+        );
         return Column(
           children: [
             Padding(
@@ -102,7 +106,7 @@ class _ScorerSummaryTabState extends State<ScorerSummaryTab> {
                             SummaryStatRow(
                               title: "Overs:",
                               stat:
-                                  "${currInnings.overs} / ${state.matchCenterEntity!.overs}",
+                                  "${currInnings.overs} ${state.matchCenterEntity!.matchType != MatchType.test ? "/ ${state.matchCenterEntity!.overs}" : ""}",
                               horizontalSpace:
                                   state.matchCenterEntity!.innings.length > 1
                                   ? 46
@@ -140,39 +144,49 @@ class _ScorerSummaryTabState extends State<ScorerSummaryTab> {
                             if (state.matchCenterEntity!.innings.length >
                                 1) ...[
                               const SizedBox(height: 4),
-                              SummaryStatRow(
-                                title: "Target:",
-                                stat: state
-                                    .matchCenterEntity!
-                                    .innings[state
-                                            .matchCenterEntity!
-                                            .innings
-                                            .length -
-                                        2]
-                                    .runs
-                                    .toString(),
+                              state.matchCenterEntity!.matchType ==
+                                      MatchType.test
+                                  ? SummaryStatRow(
+                                      title: summary["title"] ?? "",
+                                      stat: summary["value"] ?? "",
+                                      horizontalSpace: 43,
+                                    )
+                                  : SummaryStatRow(
+                                      title: "Target:",
+                                      stat: state
+                                          .matchCenterEntity!
+                                          .innings[state
+                                                  .matchCenterEntity!
+                                                  .innings
+                                                  .length -
+                                              2]
+                                          .runs
+                                          .toString(),
 
-                                horizontalSpace: 43,
-                              ),
-                              const SizedBox(height: 4),
-                              SummaryStatRow(
-                                title: "Req CRR",
-                                stat:
-                                    (state
-                                                .matchCenterEntity!
-                                                .innings[state
-                                                        .matchCenterEntity!
-                                                        .innings
-                                                        .length -
-                                                    2]
-                                                .runs /
-                                            (state.matchCenterEntity!.overs -
-                                                Methods.oversToDecimal(
-                                                  currInnings.overs,
-                                                )))
-                                        .toStringAsFixed(2),
-                                horizontalSpace: 32,
-                              ),
+                                      horizontalSpace: 43,
+                                    ),
+                              if (state.matchCenterEntity!.matchType !=
+                                  MatchType.test) ...[
+                                const SizedBox(height: 4),
+                                SummaryStatRow(
+                                  title: "Req CRR",
+                                  stat:
+                                      (state
+                                                  .matchCenterEntity!
+                                                  .innings[state
+                                                          .matchCenterEntity!
+                                                          .innings
+                                                          .length -
+                                                      2]
+                                                  .runs /
+                                              (state.matchCenterEntity!.overs -
+                                                  Methods.oversToDecimal(
+                                                    currInnings.overs,
+                                                  )))
+                                          .toStringAsFixed(2),
+                                  horizontalSpace: 32,
+                                ),
+                              ],
                             ],
                           ],
                         ),
@@ -224,6 +238,7 @@ class _ScorerSummaryTabState extends State<ScorerSummaryTab> {
             ),
             WidgetDecider.buildBowlingTable(
               state.matchCenterEntity!.bowlingTeam!.bowler,
+              state.matchCenterEntity!,
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16),

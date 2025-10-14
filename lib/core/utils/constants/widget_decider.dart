@@ -8,6 +8,7 @@ import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/matches/domain/entities/match_entity.dart';
 import 'package:cricklo/features/matches/domain/entities/overall_score_entity.dart';
 import 'package:cricklo/features/scorer/domain/entities/ball_entity.dart';
+import 'package:cricklo/features/scorer/domain/entities/match_center_entity.dart';
 import 'package:cricklo/features/scorer/domain/entities/match_player_entity.dart';
 import 'package:cricklo/features/scorer/domain/entities/overs_entity.dart';
 import 'package:cricklo/features/scorer/presentation/blocs/cubits/ScorerMatchCenter/scorer_match_center_cubit.dart';
@@ -698,7 +699,8 @@ class WidgetDecider {
     required ScorerMatchCenterCubit cubit,
   }) {
     List<Map<String, dynamic>> batsmen = [];
-
+    final state = cubit.state;
+    final inningsIndex = state.matchCenterEntity!.innings.length <= 2 ? 0 : 1;
     for (var i in players) {
       if (i == null) {
         batsmen.add({
@@ -712,11 +714,11 @@ class WidgetDecider {
       } else {
         batsmen.add({
           'name': Methods.truncatePlayerName(i.name),
-          'runs': i.stats.runs,
-          'balls': i.stats.balls,
-          'fours': i.stats.n4s,
-          'sixes': i.stats.n6s,
-          'strikeRate': i.stats.sr.toStringAsFixed(2),
+          'runs': i.stats[inningsIndex].runs,
+          'balls': i.stats[inningsIndex].balls,
+          'fours': i.stats[inningsIndex].n4s,
+          'sixes': i.stats[inningsIndex].n6s,
+          'strikeRate': i.stats[inningsIndex].sr.toStringAsFixed(2),
         });
       }
     }
@@ -767,7 +769,10 @@ class WidgetDecider {
             children: [
               _batsmanNameCell(
                 batsmen[i]['name'],
-                onStrike == null ? false : onStrike.name == batsmen[i]['name'],
+                onStrike == null
+                    ? false
+                    : Methods.truncatePlayerName(onStrike.name) ==
+                          batsmen[i]['name'],
                 () {
                   try {
                     cubit.setOnStrike(players[i]!);
@@ -787,7 +792,11 @@ class WidgetDecider {
     );
   }
 
-  static Widget buildBowlingTable(MatchPlayerEntity? bowlerData) {
+  static Widget buildBowlingTable(
+    MatchPlayerEntity? bowlerData,
+    MatchCenterEntity match,
+  ) {
+    final inningsIndex = match.innings.length <= 2 ? 0 : 1;
     Map<String, dynamic> bowler;
     if (bowlerData == null) {
       bowler = {
@@ -801,11 +810,11 @@ class WidgetDecider {
     } else {
       bowler = {
         'name': Methods.truncatePlayerName(bowlerData.name),
-        'overs': bowlerData.stats.overs,
-        'runs': bowlerData.stats.runsGiven,
-        'maidens': bowlerData.stats.maidens,
-        'wickets': bowlerData.stats.wickets,
-        'economy': bowlerData.stats.eco.toStringAsFixed(2),
+        'overs': bowlerData.stats[inningsIndex].overs,
+        'runs': bowlerData.stats[inningsIndex].runsGiven,
+        'maidens': bowlerData.stats[inningsIndex].maidens,
+        'wickets': bowlerData.stats[inningsIndex].wickets,
+        'economy': bowlerData.stats[inningsIndex].eco.toStringAsFixed(2),
       };
     }
     return Table(
@@ -1010,6 +1019,7 @@ class WidgetDecider {
     List<MatchPlayerEntity?>? currBatsmen, // 👈 NEW
     OversEntity? overEntity, // 👈 NEW
     required Function(List<MatchPlayerEntity>) onConfirm,
+    required int inningsIndex,
   }) {
     showModalBottomSheet(
       context: context,
@@ -1031,7 +1041,7 @@ class WidgetDecider {
                     currBatsmen?.any((p) => p?.playerId == player.playerId) ??
                     false;
                 if (isCurrentBatsman) return true;
-                if (player.stats.out) return true;
+                if (player.stats[inningsIndex].out) return true;
               }
 
               // 2️⃣ Bowler selection
@@ -1252,9 +1262,11 @@ class WidgetDecider {
                                                 ),
                                                 Text(
                                                   bowler
-                                                      ? "${player.stats.wickets}-${player.stats.runsGiven} (${player.stats.overs})"
-                                                      : player.stats.out
-                                                      ? "${player.stats.runs} (${player.stats.balls})"
+                                                      ? "${player.stats[inningsIndex].wickets}-${player.stats[inningsIndex].runsGiven} (${player.stats[inningsIndex].overs})"
+                                                      : player
+                                                            .stats[inningsIndex]
+                                                            .out
+                                                      ? "${player.stats[inningsIndex].runs} (${player.stats[inningsIndex].balls})"
                                                       : "",
                                                   style: TextStyles
                                                       .poppinsRegular
@@ -1295,6 +1307,7 @@ class WidgetDecider {
     List<MatchPlayerEntity> bowlingTeam,
     Function(MatchPlayerEntity batsman, MatchPlayerEntity fielder, int runs)
     onComplete,
+    int inningsIndex,
   ) async {
     MatchPlayerEntity? selectedBatsman;
     MatchPlayerEntity? selectedFielder;
@@ -1455,6 +1468,7 @@ class WidgetDecider {
                                   }
                                 });
                               },
+                              inningsIndex: inningsIndex,
                             );
                           },
                           child: Column(

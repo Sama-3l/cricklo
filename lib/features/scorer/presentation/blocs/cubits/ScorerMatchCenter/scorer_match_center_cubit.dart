@@ -30,8 +30,6 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
       );
 
   init(MatchEntity matchEntity) {
-    print(matchEntity.tossWinner);
-    print(matchEntity.tossChoice);
     final matchCenterEntity = MatchCenterEntity(
       matchID: matchEntity.matchID,
       dateAndTime: matchEntity.dateAndTime,
@@ -57,22 +55,24 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
                 playerType: e.playerType,
                 batterType: e.batterType,
                 bowlerType: e.bowlerType,
-                stats: MatchPlayerStatsEntity(
-                  runs: 0,
-                  balls: 0,
-                  n4s: 0,
-                  n6s: 0,
-                  sr: 0,
-                  overs: "0",
-                  runsGiven: 0,
-                  maidens: 0,
-                  wickets: 0,
-                  eco: 0,
-                  out: false,
-                  caught: 0,
-                  stumping: 0,
-                  runout: 0,
-                ),
+                stats: [
+                  MatchPlayerStatsEntity(
+                    runs: 0,
+                    balls: 0,
+                    n4s: 0,
+                    n6s: 0,
+                    sr: 0,
+                    overs: "0",
+                    runsGiven: 0,
+                    maidens: 0,
+                    wickets: 0,
+                    eco: 0,
+                    out: false,
+                    caught: 0,
+                    stumping: 0,
+                    runout: 0,
+                  ),
+                ],
               ),
             )
             .toList(),
@@ -97,22 +97,24 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
                 playerType: e.playerType,
                 batterType: e.batterType,
                 bowlerType: e.bowlerType,
-                stats: MatchPlayerStatsEntity(
-                  runs: 0,
-                  balls: 0,
-                  n4s: 0,
-                  n6s: 0,
-                  sr: 0,
-                  overs: "0",
-                  runsGiven: 0,
-                  maidens: 0,
-                  wickets: 0,
-                  eco: 0,
-                  out: false,
-                  caught: 0,
-                  stumping: 0,
-                  runout: 0,
-                ),
+                stats: [
+                  MatchPlayerStatsEntity(
+                    runs: 0,
+                    balls: 0,
+                    n4s: 0,
+                    n6s: 0,
+                    sr: 0,
+                    overs: "0",
+                    runsGiven: 0,
+                    maidens: 0,
+                    wickets: 0,
+                    eco: 0,
+                    out: false,
+                    caught: 0,
+                    stumping: 0,
+                    runout: 0,
+                  ),
+                ],
               ),
             )
             .toList(),
@@ -233,24 +235,28 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
 
   addStatsToBatsman(int runs, bool ballCounted, ExtraType? extraType) {
     final onStrike = state.matchCenterEntity!.battingTeam!.onStrike;
-    onStrike!.stats.runs += runs;
-    onStrike.stats.balls++;
+    final inningsIndex = state.matchCenterEntity!.innings.length <= 2 ? 0 : 1;
+    onStrike!.stats[inningsIndex].runs += runs;
+    onStrike.stats[inningsIndex].balls++;
     addRunsToPartnership(runs, ballCounted);
     if (runs == 4) {
       if ((extraType != null && (extraType == ExtraType.noBall))) {
-        onStrike.stats.n4s++;
+        onStrike.stats[inningsIndex].n4s++;
       } else if (extraType == null) {
-        onStrike.stats.n4s++;
+        onStrike.stats[inningsIndex].n4s++;
       }
     }
     if (runs == 6) {
       if ((extraType != null && (extraType == ExtraType.noBall))) {
-        onStrike.stats.n6s++;
+        onStrike.stats[inningsIndex].n6s++;
       } else if (extraType == null) {
-        onStrike.stats.n6s++;
+        onStrike.stats[inningsIndex].n6s++;
       }
     }
-    onStrike.stats.sr = (onStrike.stats.runs / onStrike.stats.balls) * 100;
+    onStrike.stats[inningsIndex].sr =
+        (onStrike.stats[inningsIndex].runs /
+            onStrike.stats[inningsIndex].balls) *
+        100;
     if (runs.isOdd) {
       final batsmen = state.matchCenterEntity!.battingTeam!.currBatsmen;
       if (onStrike.playerId == batsmen[0]!.playerId) {
@@ -263,29 +269,38 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
 
   addBowlerRuns(int runs, bool wicket, bool maiden, ExtraType? extraType) {
     final bowler = state.matchCenterEntity!.bowlingTeam!.bowler;
+    final inningsIndex = state.matchCenterEntity!.innings.length <= 2 ? 0 : 1;
     if (extraType != null) {
       if (extraType == ExtraType.legBye || extraType == ExtraType.bye) {
-        bowler!.stats.overs = Methods.incrementOver(bowler.stats.overs);
-        bowler.stats.runsGiven += runs;
+        bowler!.stats[inningsIndex].overs = Methods.incrementOver(
+          bowler.stats[inningsIndex].overs,
+        );
+        bowler.stats[inningsIndex].runsGiven += runs;
       } else if (extraType != ExtraType.bonus &&
           extraType != ExtraType.penalty) {
         if (extraType == ExtraType.moreRuns) {
-          bowler!.stats.overs = Methods.incrementOver(bowler.stats.overs);
+          bowler!.stats[inningsIndex].overs = Methods.incrementOver(
+            bowler.stats[inningsIndex].overs,
+          );
         }
-        bowler!.stats.runsGiven += runs;
+        bowler!.stats[inningsIndex].runsGiven += runs;
       }
     } else {
-      bowler!.stats.overs = Methods.incrementOver(bowler.stats.overs);
-      bowler.stats.runsGiven += runs;
+      bowler!.stats[inningsIndex].overs = Methods.incrementOver(
+        bowler.stats[inningsIndex].overs,
+      );
+      bowler.stats[inningsIndex].runsGiven += runs;
     }
     if (wicket) {
-      bowler!.stats.wickets++;
+      bowler!.stats[inningsIndex].wickets++;
     }
-    if (maiden) bowler!.stats.maidens++;
-    final oversDecimal = Methods.oversToDecimal(bowler!.stats.overs);
-    bowler.stats.eco = oversDecimal == 0
+    if (maiden) bowler!.stats[inningsIndex].maidens++;
+    final oversDecimal = Methods.oversToDecimal(
+      bowler!.stats[inningsIndex].overs,
+    );
+    bowler.stats[inningsIndex].eco = oversDecimal == 0
         ? 0
-        : (bowler.stats.runsGiven / oversDecimal);
+        : (bowler.stats[inningsIndex].runsGiven / oversDecimal);
   }
 
   bool addInningsRuns(BallEntity ball) {
@@ -314,16 +329,53 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
     if (ball.wicketType != null) {
       state.matchCenterEntity!.innings.last.wickets++;
     }
-    if (state.matchCenterEntity!.innings.last.overs.length >
-            state.matchCenterEntity!.overs ||
-        state.matchCenterEntity!.innings.last.wickets ==
-            state.matchCenterEntity!.innings.last.battingTeam.players.length -
-                1) {
-      print("endInnings");
-      endInnings();
-      return true;
+    final match = state.matchCenterEntity!;
+    final currentInnings = match.innings.last;
+
+    // Common checks
+    final bool oversCompleted = currentInnings.overs.length >= match.overs;
+    final bool allOut =
+        currentInnings.wickets >= currentInnings.battingTeam.players.length - 1;
+
+    if (match.matchType != MatchType.test) {
+      // 🏏 LIMITED OVERS MATCH
+      if (oversCompleted || allOut) {
+        print("endInnings (limited overs)");
+        endInnings();
+        return true;
+      }
+      return false;
+    } else {
+      // 🧠 TEST MATCH
+      // 1️⃣ Innings ends if all out.
+      if (allOut) {
+        print("endInnings (test - all out)");
+        endInnings();
+        return true;
+      }
+
+      // 2️⃣ In 4th innings, if chasing team reaches or surpasses target.
+      // if (match.innings.length == 4) {
+      //   final target =
+      //       match.innings[0].runs +
+      //       match.innings[2].runs -
+      //       match.innings[1].runs +
+      //       1;
+      //   if (currentInnings.runs >= target) {
+      //     print("endInnings (test - target achieved)");
+      //     endInnings();
+      //     return true;
+      //   }
+      // }
+      if (match.innings.length == 4) {
+        if (allOut) {
+          endInnings();
+          return true;
+        }
+      }
+
+      return false;
     }
-    return false;
   }
 
   void removeInningsRuns(BallEntity ball) {
@@ -382,11 +434,11 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
         setOnStrike(currBatsmen[0]!);
       }
     }
-
+    final inningsIndex = state.matchCenterEntity!.innings.length <= 2 ? 0 : 1;
     // 2️⃣ Subtract runs and ball
-    onStrike.stats.runs -= runs;
-    if (onStrike.stats.balls > 0) {
-      onStrike.stats.balls--;
+    onStrike.stats[inningsIndex].runs -= runs;
+    if (onStrike.stats[inningsIndex].balls > 0) {
+      onStrike.stats[inningsIndex].balls--;
     }
 
     // 3️⃣ Subtract from partnership
@@ -399,17 +451,24 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
 
     // 4️⃣ Revert 4s and 6s
     if (runs == 4 && (extraType == null || extraType == ExtraType.noBall)) {
-      if (onStrike.stats.n4s > 0) onStrike.stats.n4s--;
+      if (onStrike.stats[inningsIndex].n4s > 0) {
+        onStrike.stats[inningsIndex].n4s--;
+      }
     }
     if (runs == 6 && (extraType == null || extraType == ExtraType.noBall)) {
-      if (onStrike.stats.n6s > 0) onStrike.stats.n6s--;
+      if (onStrike.stats[inningsIndex].n6s > 0) {
+        onStrike.stats[inningsIndex].n6s--;
+      }
     }
 
     // 5️⃣ Recompute strike rate
-    if (onStrike.stats.balls > 0) {
-      onStrike.stats.sr = (onStrike.stats.runs / onStrike.stats.balls) * 100;
+    if (onStrike.stats[inningsIndex].balls > 0) {
+      onStrike.stats[inningsIndex].sr =
+          (onStrike.stats[inningsIndex].runs /
+              onStrike.stats[inningsIndex].balls) *
+          100;
     } else {
-      onStrike.stats.sr = 0;
+      onStrike.stats[inningsIndex].sr = 0;
     }
     emit(state.copyWith());
   }
@@ -423,44 +482,53 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
     MatchPlayerEntity bowler,
   ) {
     // Reverse over count
+    final inningsIndex = state.matchCenterEntity!.innings.length <= 2 ? 0 : 1;
     if (extraType != null) {
       if (extraType == ExtraType.legBye || extraType == ExtraType.bye) {
-        bowler.stats.overs = Methods.decrementOver(bowler.stats.overs);
-        bowler.stats.runsGiven -= runs;
+        bowler.stats[inningsIndex].overs = Methods.decrementOver(
+          bowler.stats[inningsIndex].overs,
+        );
+        bowler.stats[inningsIndex].runsGiven -= runs;
       } else if (extraType != ExtraType.bonus &&
           extraType != ExtraType.penalty) {
         if (extraType == ExtraType.moreRuns) {
-          bowler.stats.overs = Methods.decrementOver(bowler.stats.overs);
+          bowler.stats[inningsIndex].overs = Methods.decrementOver(
+            bowler.stats[inningsIndex].overs,
+          );
         }
-        bowler.stats.runsGiven -= runs;
+        bowler.stats[inningsIndex].runsGiven -= runs;
       }
     } else {
-      bowler.stats.overs = Methods.decrementOver(bowler.stats.overs);
-      bowler.stats.runsGiven -= runs;
+      bowler.stats[inningsIndex].overs = Methods.decrementOver(
+        bowler.stats[inningsIndex].overs,
+      );
+      bowler.stats[inningsIndex].runsGiven -= runs;
     }
 
     // Reverse wicket if previously counted
-    if (wicket && bowler.stats.wickets > 0) {
-      bowler.stats.wickets--;
+    if (wicket && bowler.stats[inningsIndex].wickets > 0) {
+      bowler.stats[inningsIndex].wickets--;
     }
 
     // Reverse maiden if previously counted
-    if (maiden && bowler.stats.maidens > 0) {
-      bowler.stats.maidens--;
+    if (maiden && bowler.stats[inningsIndex].maidens > 0) {
+      bowler.stats[inningsIndex].maidens--;
     }
 
     // Recalculate economy
-    final oversDecimal = Methods.oversToDecimal(bowler.stats.overs);
-    bowler.stats.eco = oversDecimal == 0
+    final oversDecimal = Methods.oversToDecimal(
+      bowler.stats[inningsIndex].overs,
+    );
+    bowler.stats[inningsIndex].eco = oversDecimal == 0
         ? 0
-        : (bowler.stats.runsGiven / oversDecimal);
+        : (bowler.stats[inningsIndex].runsGiven / oversDecimal);
 
     emit(state.copyWith());
   }
 
   undoWicketTakenBatsman(
-    MatchPlayerEntity overBatsman,
-    MatchPlayerEntity batsman,
+    MatchPlayerEntity outBatsman,
+    MatchPlayerEntity otherBatsman,
     bool lastDelivery, {
     WicketType? wicketType,
     MatchPlayerEntity? overBowler,
@@ -469,33 +537,29 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
     MatchPlayerEntity? fielderInvolved,
   }) {
     final currBatsmen = state.matchCenterEntity!.battingTeam!.currBatsmen;
-    final partnerships = state.matchCenterEntity!.battingTeam!.partnerships;
 
-    final last = partnerships[partnerships.length - 1];
-    final secondLast = partnerships[partnerships.length - 2];
+    final getBackBatsman = state.matchCenterEntity!.battingTeam!.players
+        .where((e) => e.playerId == outBatsman.playerId)
+        .first;
 
-    late final MatchPlayerEntity? repeatedPlayer;
-    if (last.player1!.playerId == secondLast.player1!.playerId ||
-        last.player1!.playerId == secondLast.player2!.playerId) {
-      repeatedPlayer = last.player1;
-    } else if (last.player2!.playerId == secondLast.player1!.playerId ||
-        last.player2!.playerId == secondLast.player2!.playerId) {
-      repeatedPlayer = last.player2;
-    }
+    final repeatedPlayer = state.matchCenterEntity!.battingTeam!.players
+        .where((e) => e.playerId == otherBatsman.playerId)
+        .first;
     // print(repeatedPlayer!.name);
     // print(currBatsmen[0]!.name);
     // print(currBatsmen[1]!.name);
     // Re-add batsman to the slot where he was removed
-    if (currBatsmen[0]!.playerId == repeatedPlayer!.playerId) {
-      currBatsmen[1] = batsman;
+    if (currBatsmen[0] != null &&
+        currBatsmen[0]!.playerId == repeatedPlayer.playerId) {
+      currBatsmen[1] = getBackBatsman;
     } else {
-      currBatsmen[0] = batsman;
+      currBatsmen[0] = getBackBatsman;
     }
     state.matchCenterEntity!.battingTeam!.partnerships.removeLast();
     // print(currBatsmen[0]!.name);
     // Reverse lastDelivery strike change and bowler edit
     if (lastDelivery) {
-      if (batsman.playerId ==
+      if (getBackBatsman.playerId ==
           state.matchCenterEntity!.battingTeam!.currBatsmen[0]!.playerId) {
         setOnStrike(state.matchCenterEntity!.battingTeam!.currBatsmen[1]!);
       } else {
@@ -504,14 +568,14 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
       // Revert editBowler(null)
       editBowler(bowler);
     }
-
+    final inningsIndex = state.matchCenterEntity!.innings.length <= 2 ? 0 : 1;
     // Revert batsman’s out status and wicket info
     for (var player in state.matchCenterEntity!.battingTeam!.players) {
-      if (player.playerId == batsman.playerId) {
-        player.stats.out = false;
-        player.stats.wicketType = null;
-        player.stats.bowler = null;
-        player.stats.fielder = null;
+      if (player.playerId == outBatsman.playerId) {
+        player.stats[inningsIndex].out = false;
+        player.stats[inningsIndex].wicketType = null;
+        player.stats[inningsIndex].bowler = null;
+        player.stats[inningsIndex].fielder = null;
         break;
       }
     }
@@ -541,14 +605,14 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
     } else {
       currBatsmen[1] = null;
     }
-
+    final inningsIndex = state.matchCenterEntity!.innings.length <= 2 ? 0 : 1;
     for (var player in state.matchCenterEntity!.battingTeam!.players) {
       if (player.playerId == batsmen.playerId) {
-        player.stats.out = true;
-        player.stats.wicketType = wicketType;
-        player.stats.bowler = bowler!.name;
+        player.stats[inningsIndex].out = true;
+        player.stats[inningsIndex].wicketType = wicketType;
+        player.stats[inningsIndex].bowler = bowler!.name;
         if (fielderInvolved != null) {
-          player.stats.fielder = fielderInvolved.name;
+          player.stats[inningsIndex].fielder = fielderInvolved.name;
         }
         break;
       }
@@ -650,6 +714,7 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
         addStatsToBatsman(0, true, extraType);
       }
     }
+    final inningsIndex = state.matchCenterEntity!.innings.length <= 2 ? 0 : 1;
     bool maiden = false;
     if (state.matchCenterEntity!.innings.last.oversData.last.overRuns == 0 &&
         state.matchCenterEntity!.innings.last.oversData.last.legalDeliveries ==
@@ -702,7 +767,7 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
         state.matchCenterEntity!.bowlingTeam!.players
             .where((e) => e.playerId == bowlingTeamPlayerInvolved!.playerId)
             .last
-            .stats
+            .stats[inningsIndex]
             .runout++;
       } else if (newBall.wicketType == WicketType.caught) {
         wicketTakenBatsman(
@@ -722,7 +787,7 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
         state.matchCenterEntity!.bowlingTeam!.players
             .where((e) => e.playerId == bowlingTeamPlayerInvolved!.playerId)
             .last
-            .stats
+            .stats[inningsIndex]
             .caught++;
       } else if (newBall.wicketType == WicketType.stumped) {
         wicketTakenBatsman(
@@ -742,7 +807,7 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
         state.matchCenterEntity!.bowlingTeam!.players
             .where((e) => e.playerId == bowlingTeamPlayerInvolved!.playerId)
             .last
-            .stats
+            .stats[inningsIndex]
             .stumping++;
       } else {
         wicketTakenBatsman(
@@ -763,20 +828,20 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
     final latestOver = state.matchCenterEntity!.innings.last.oversData.last;
     latestOver.player1Id = newBall.batsman!.playerId;
     latestOver.player1Name = newBall.batsman!.name;
-    latestOver.player1balls = newBall.batsman!.stats.balls;
-    latestOver.player1runs = newBall.batsman!.stats.runs;
+    latestOver.player1balls = newBall.batsman!.stats[inningsIndex].balls;
+    latestOver.player1runs = newBall.batsman!.stats[inningsIndex].runs;
 
     latestOver.player2Id = newBall.secondBatsman!.playerId;
     latestOver.player2Name = newBall.secondBatsman!.name;
-    latestOver.player2balls = newBall.secondBatsman!.stats.balls;
-    latestOver.player2runs = newBall.secondBatsman!.stats.runs;
+    latestOver.player2balls = newBall.secondBatsman!.stats[inningsIndex].balls;
+    latestOver.player2runs = newBall.secondBatsman!.stats[inningsIndex].runs;
 
     latestOver.bowlerId = newBall.bowler!.playerId;
     latestOver.bowlerName = newBall.bowler!.name;
-    latestOver.bowlerOvers = newBall.bowler!.stats.overs;
-    latestOver.bowlerRuns = newBall.bowler!.stats.runsGiven;
-    latestOver.bowlerMaidens = newBall.bowler!.stats.maidens;
-    latestOver.bowlerWickets = newBall.bowler!.stats.wickets;
+    latestOver.bowlerOvers = newBall.bowler!.stats[inningsIndex].overs;
+    latestOver.bowlerRuns = newBall.bowler!.stats[inningsIndex].runsGiven;
+    latestOver.bowlerMaidens = newBall.bowler!.stats[inningsIndex].maidens;
+    latestOver.bowlerWickets = newBall.bowler!.stats[inningsIndex].wickets;
 
     final inningsEnded = addInningsRuns(newBall);
 
@@ -903,7 +968,51 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
     final match = state.matchEntity!;
 
     // No winner logic for Test matches
-    if (match.matchType == MatchType.test) return;
+    if (match.matchType == MatchType.test) {
+      if (matchCenter.innings.length >= 3) {
+        final target =
+            state.matchCenterEntity!.innings[0].runs +
+            state.matchCenterEntity!.innings[2].runs -
+            state.matchCenterEntity!.innings[1].runs;
+
+        if (matchCenter.innings.length == 3 &&
+            target < 0 &&
+            state.matchCenterEntity!.innings[2].wickets ==
+                state.matchCenterEntity!.innings[2].battingTeam.players.length -
+                    1) {
+          matchCenter.winner =
+              state.matchCenterEntity!.innings[1].battingTeam.id;
+        } else if (matchCenter.innings.length == 4) {
+          final firstInnings = matchCenter.innings[0];
+          final secondInnings = matchCenter.innings[1];
+          final thirdInnings = matchCenter.innings[2];
+          final fourthInnings = matchCenter.innings[3];
+
+          // Total players in the batting side
+          final totalPlayers = fourthInnings.battingTeam.players.length;
+
+          // Check winning conditions
+          if (secondInnings.runs + fourthInnings.runs >
+              firstInnings.runs + thirdInnings.runs) {
+            // Chasing team won
+            matchCenter.winner = secondInnings.battingTeam.id;
+          } else if (fourthInnings.wickets == totalPlayers - 1) {
+            // Chasing team all out or overs finished
+            if (firstInnings.runs + thirdInnings.runs >
+                secondInnings.runs + fourthInnings.runs) {
+              matchCenter.winner = firstInnings.battingTeam.id;
+            } else if (firstInnings.runs == secondInnings.runs) {
+              matchCenter.winner = null;
+            }
+          } else {
+            // Match still in progress
+            matchCenter.winner = null;
+          }
+        }
+      }
+
+      return;
+    }
 
     // Ensure both innings exist
     if (matchCenter.innings.length < 2) return;
@@ -945,13 +1054,19 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
 
     final lastOver = innings.oversData.last;
     final over = state.matchCenterEntity!.innings.last.oversData.last;
+    MatchPlayerEntity? otherBatsman;
     MatchPlayerEntity? batsmanInvolved;
     MatchPlayerEntity? bowlerInvolved;
     MatchPlayerEntity? fiedlerInvolved;
-
+    final inningsIndex = state.matchCenterEntity!.innings.length <= 2 ? 0 : 1;
     if (undoBall.batsman != null) {
       batsmanInvolved = state.matchCenterEntity!.battingTeam!.players
           .where((e) => e.playerId == undoBall.batsman!.playerId)
+          .first;
+    }
+    if (undoBall.secondBatsman != null) {
+      otherBatsman = state.matchCenterEntity!.battingTeam!.players
+          .where((e) => e.playerId == undoBall.secondBatsman!.playerId)
           .first;
     }
     if (undoBall.bowler != null) {
@@ -967,8 +1082,8 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
     if (undoBall.wicketType != null) {
       if (undoBall.wicketType == WicketType.runOut) {
         undoWicketTakenBatsman(
-          undoBall.batsman!,
           batsmanInvolved!,
+          otherBatsman!,
           over.legalDeliveries == 0 ? true : false,
           wicketType: undoBall.wicketType,
           bowler: bowlerInvolved,
@@ -977,11 +1092,13 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
         final fielder = state.matchCenterEntity!.bowlingTeam!.players
             .where((e) => e.playerId == undoBall.fielder!.playerId)
             .last;
-        if (fielder.stats.runout > 0) fielder.stats.runout--;
+        if (fielder.stats[inningsIndex].runout > 0) {
+          fielder.stats[inningsIndex].runout--;
+        }
       } else if (undoBall.wicketType == WicketType.caught) {
         undoWicketTakenBatsman(
-          undoBall.batsman!,
           batsmanInvolved!,
+          otherBatsman!,
           over.legalDeliveries == 0 ? true : false,
           wicketType: undoBall.wicketType,
           bowler: bowlerInvolved,
@@ -990,11 +1107,13 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
         final fielder = state.matchCenterEntity!.bowlingTeam!.players
             .where((e) => e.playerId == undoBall.fielder!.playerId)
             .last;
-        if (fielder.stats.caught > 0) fielder.stats.caught--;
+        if (fielder.stats[inningsIndex].caught > 0) {
+          fielder.stats[inningsIndex].caught--;
+        }
       } else if (undoBall.wicketType == WicketType.stumped) {
         undoWicketTakenBatsman(
-          undoBall.batsman!,
           batsmanInvolved!,
+          otherBatsman!,
           over.legalDeliveries == 0 ? true : false,
           wicketType: undoBall.wicketType,
           bowler: bowlerInvolved,
@@ -1003,11 +1122,13 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
         final fielder = state.matchCenterEntity!.bowlingTeam!.players
             .where((e) => e.playerId == undoBall.fielder!.playerId)
             .last;
-        if (fielder.stats.stumping > 0) fielder.stats.stumping--;
+        if (fielder.stats[inningsIndex].stumping > 0) {
+          fielder.stats[inningsIndex].stumping--;
+        }
       } else {
         undoWicketTakenBatsman(
-          undoBall.batsman!,
           batsmanInvolved!,
+          otherBatsman!,
           over.legalDeliveries == 0 ? true : false,
           wicketType: undoBall.wicketType,
           bowler: bowlerInvolved,
@@ -1089,20 +1210,20 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
     final latestOver = state.matchCenterEntity!.innings.last.oversData.last;
     latestOver.player1Id = undoBall.batsman!.playerId;
     latestOver.player1Name = undoBall.batsman!.name;
-    latestOver.player1balls = undoBall.batsman!.stats.balls;
-    latestOver.player1runs = undoBall.batsman!.stats.runs;
+    latestOver.player1balls = undoBall.batsman!.stats[inningsIndex].balls;
+    latestOver.player1runs = undoBall.batsman!.stats[inningsIndex].runs;
 
     latestOver.player2Id = undoBall.secondBatsman!.playerId;
     latestOver.player2Name = undoBall.secondBatsman!.name;
-    latestOver.player2balls = undoBall.secondBatsman!.stats.balls;
-    latestOver.player2runs = undoBall.secondBatsman!.stats.runs;
+    latestOver.player2balls = undoBall.secondBatsman!.stats[inningsIndex].balls;
+    latestOver.player2runs = undoBall.secondBatsman!.stats[inningsIndex].runs;
 
     latestOver.bowlerId = undoBall.bowler!.playerId;
     latestOver.bowlerName = undoBall.bowler!.name;
-    latestOver.bowlerOvers = undoBall.bowler!.stats.overs;
-    latestOver.bowlerRuns = undoBall.bowler!.stats.runsGiven;
-    latestOver.bowlerMaidens = undoBall.bowler!.stats.maidens;
-    latestOver.bowlerWickets = undoBall.bowler!.stats.wickets;
+    latestOver.bowlerOvers = undoBall.bowler!.stats[inningsIndex].overs;
+    latestOver.bowlerRuns = undoBall.bowler!.stats[inningsIndex].runsGiven;
+    latestOver.bowlerMaidens = undoBall.bowler!.stats[inningsIndex].maidens;
+    latestOver.bowlerWickets = undoBall.bowler!.stats[inningsIndex].wickets;
 
     if (lastOver.balls.length == 1 && innings.oversData.length == 1) {
       innings.oversData.removeLast();
@@ -1118,29 +1239,180 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
       lastOver.balls.removeLast();
       editBowler(innings.oversData.last.bowler);
     }
-
     removeInningsRuns(undoBall);
     setWinner();
     emit(state.copyWith());
   }
 
-  endInnings() {
-    final format = state.matchCenterEntity!.matchType;
-    if (format != MatchType.test &&
-        state.matchCenterEntity!.innings.length == 1) {
-      state.matchCenterEntity!.innings.add(
-        InningsEntity(
-          battingTeam: state.matchCenterEntity!.bowlingTeam!,
-          runs: 0,
-          wickets: 0,
-          overs: "0",
-          number: 2,
-          crr: 0,
-          extras: 0,
-          oversData: [],
-        ),
-      );
-      state.copyWith();
+  void endInnings() {
+    final match = state.matchCenterEntity!;
+    final format = match.matchType;
+    final inningsCount = match.innings.length;
+
+    // 🏏 LIMITED OVERS MATCH (2 innings max)
+    if (format != MatchType.test) {
+      if (inningsCount == 1) {
+        match.innings.add(
+          InningsEntity(
+            battingTeam: match.bowlingTeam!,
+            runs: 0,
+            wickets: 0,
+            overs: "0",
+            number: 2,
+            crr: 0,
+            extras: 0,
+            oversData: [],
+          ),
+        );
+      } else {
+        // Match complete after 2 innings
+        match.winner = Methods.getWinner(match);
+      }
+
+      emit(state.copyWith(matchCenterEntity: match));
+      return;
+    }
+
+    // TEST MATCH (Up to 4 innings)
+    if (format == MatchType.test) {
+      if (inningsCount < 4) {
+        if (inningsCount == 3) {
+          final target =
+              state.matchCenterEntity!.innings[0].runs +
+              state.matchCenterEntity!.innings[2].runs -
+              state.matchCenterEntity!.innings[1].runs;
+          if (target < 0) {
+            match.winner = Methods.getWinner(match);
+          } else {
+            final nextBattingTeam = match.bowlingTeam!;
+
+            match.innings.add(
+              InningsEntity(
+                battingTeam: nextBattingTeam,
+                runs: 0,
+                wickets: 0,
+                overs: "0",
+                number: inningsCount + 1,
+                crr: 0,
+                extras: 0,
+                oversData: [],
+              ),
+            );
+            match.teamA.currBatsmen = [null, null];
+            match.teamA.bowler = null;
+            match.teamA.onStrike = null;
+            match.teamB.currBatsmen = [null, null];
+            match.teamB.bowler = null;
+            match.teamB.onStrike = null;
+            for (var player in match.teamA.players) {
+              player.stats.add(
+                MatchPlayerStatsEntity(
+                  runs: 0,
+                  balls: 0,
+                  n4s: 0,
+                  n6s: 0,
+                  sr: 0,
+                  overs: "0",
+                  runsGiven: 0,
+                  maidens: 0,
+                  wickets: 0,
+                  eco: 0,
+                  out: false,
+                  caught: 0,
+                  stumping: 0,
+                  runout: 0,
+                ),
+              );
+            }
+            for (var player in match.teamB.players) {
+              player.stats.add(
+                MatchPlayerStatsEntity(
+                  runs: 0,
+                  balls: 0,
+                  n4s: 0,
+                  n6s: 0,
+                  sr: 0,
+                  overs: "0",
+                  runsGiven: 0,
+                  maidens: 0,
+                  wickets: 0,
+                  eco: 0,
+                  out: false,
+                  caught: 0,
+                  stumping: 0,
+                  runout: 0,
+                ),
+              );
+            }
+          }
+        } else {
+          final nextBattingTeam = match.bowlingTeam!;
+
+          match.innings.add(
+            InningsEntity(
+              battingTeam: nextBattingTeam,
+              runs: 0,
+              wickets: 0,
+              overs: "0",
+              number: inningsCount + 1,
+              crr: 0,
+              extras: 0,
+              oversData: [],
+            ),
+          );
+          match.teamA.currBatsmen = [null, null];
+          match.teamA.bowler = null;
+          match.teamA.onStrike = null;
+          match.teamB.currBatsmen = [null, null];
+          match.teamB.bowler = null;
+          match.teamB.onStrike = null;
+          for (var player in match.teamA.players) {
+            player.stats.add(
+              MatchPlayerStatsEntity(
+                runs: 0,
+                balls: 0,
+                n4s: 0,
+                n6s: 0,
+                sr: 0,
+                overs: "0",
+                runsGiven: 0,
+                maidens: 0,
+                wickets: 0,
+                eco: 0,
+                out: false,
+                caught: 0,
+                stumping: 0,
+                runout: 0,
+              ),
+            );
+          }
+          for (var player in match.teamB.players) {
+            player.stats.add(
+              MatchPlayerStatsEntity(
+                runs: 0,
+                balls: 0,
+                n4s: 0,
+                n6s: 0,
+                sr: 0,
+                overs: "0",
+                runsGiven: 0,
+                maidens: 0,
+                wickets: 0,
+                eco: 0,
+                out: false,
+                caught: 0,
+                stumping: 0,
+                runout: 0,
+              ),
+            );
+          }
+        }
+      } else {
+        // After 4 innings, match ends — decide winner or draw
+        match.winner = Methods.getWinner(match);
+      }
+
+      emit(state.copyWith(matchCenterEntity: match));
     }
   }
 

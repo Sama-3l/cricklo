@@ -12,6 +12,7 @@ class MatchModel {
   final MatchType matchType;
   final TeamModel teamA;
   bool abandoned;
+  bool draw;
   final TeamModel teamB;
   final LocationModel location;
   final Map<String, dynamic> scorer;
@@ -32,6 +33,7 @@ class MatchModel {
     required this.teamB,
     required this.location,
     required this.scorer,
+    this.draw = false,
     this.tossWinner,
     this.tossChoice,
     this.winner,
@@ -50,6 +52,7 @@ class MatchModel {
     TeamModel? teamA,
     TeamModel? teamB,
     bool? abandoned,
+    bool? draw,
     LocationModel? location,
     Map<String, dynamic>? scorer,
   }) {
@@ -60,6 +63,7 @@ class MatchModel {
       overs: overs ?? this.overs,
       matchType: matchType ?? this.matchType,
       teamA: teamA ?? this.teamA,
+      draw: draw ?? this.draw,
       teamB: teamB ?? this.teamB,
       location: location ?? this.location,
       scorer: scorer ?? this.scorer,
@@ -78,6 +82,7 @@ class MatchModel {
       'teamB': teamB.toJson(),
       'location': location.toJson(),
       'scorer': scorer,
+      'draw': draw,
       'tossWinner': tossWinner,
       'tossChoice': tossChoice?.name,
       'winner': winner,
@@ -94,6 +99,7 @@ class MatchModel {
       overs: overs,
       matchType: matchType,
       teamA: teamA.toEntity(),
+      draw: draw,
       abandoned: abandoned,
       teamB: teamB.toEntity(),
       location: location.toEntity(),
@@ -166,6 +172,7 @@ class MatchModel {
       matchID: map['matchId'] as String,
       dateAndTime: dateAndTime,
       overs: map['overs'] as int,
+      draw: map['draw'] as bool? ?? false,
       matchType: matchType,
       teamA: teamA,
       abandoned: map['abandoned'] as bool? ?? false,

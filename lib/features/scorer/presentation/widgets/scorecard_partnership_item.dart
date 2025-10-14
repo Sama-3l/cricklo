@@ -1,6 +1,8 @@
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/scorer/domain/entities/partnership_entity.dart';
+import 'package:cricklo/features/scorer/presentation/blocs/cubits/ScorerMatchCenter/scorer_match_center_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ScorecardPartnershipItem extends StatelessWidget {
   const ScorecardPartnershipItem({super.key, required this.partnershipEntity});
@@ -9,6 +11,8 @@ class ScorecardPartnershipItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final state = context.read<ScorerMatchCenterCubit>().state;
+    final inningsIndex = state.matchCenterEntity!.innings.length <= 2 ? 0 : 1;
     return Container(
       decoration: BoxDecoration(
         border: Border(
@@ -36,7 +40,7 @@ class ScorecardPartnershipItem extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    "${partnershipEntity.player1!.stats.runs} (${partnershipEntity.player1!.stats.balls})",
+                    "${partnershipEntity.player1!.stats[inningsIndex].runs} (${partnershipEntity.player1!.stats[inningsIndex].balls})",
                     style: TextStyles.poppinsSemiBold.copyWith(
                       fontSize: 12,
                       letterSpacing: -0.5,
@@ -87,7 +91,7 @@ class ScorecardPartnershipItem extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    "${partnershipEntity.player2!.stats.runs} (${partnershipEntity.player2!.stats.balls})",
+                    "${partnershipEntity.player2!.stats[inningsIndex].runs} (${partnershipEntity.player2!.stats[inningsIndex].balls})",
                     style: TextStyles.poppinsSemiBold.copyWith(
                       fontSize: 12,
                       letterSpacing: -0.5,

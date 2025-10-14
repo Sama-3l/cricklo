@@ -30,6 +30,9 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
           final currBatsmen = state.matchCenterEntity!.battingTeam!.currBatsmen;
 
           final strike = state.matchCenterEntity!.battingTeam!.onStrike;
+          final inningsIndex = state.matchCenterEntity!.innings.length <= 2
+              ? 0
+              : 1;
           if (state.matchCenterEntity!.winner != null) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -132,6 +135,7 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
                             ? 2
                             : 1,
                         onConfirm: (batsmen) => cubit.addBatsman(batsmen),
+                        inningsIndex: inningsIndex,
                       );
                     },
                     color: ColorsConstants.defaultWhite,
@@ -180,6 +184,7 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
                       players: state.matchCenterEntity!.bowlingTeam!.players,
                       maxSelection: 1,
                       onConfirm: (bowler) => cubit.editBowler(bowler.first),
+                      inningsIndex: inningsIndex,
                     ),
                     color: ColorsConstants.defaultWhite,
                   ),
@@ -424,6 +429,7 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
                                         currentCubit.newWicket(false);
                                       }
                                     },
+                                    inningsIndex: inningsIndex,
                                   );
                                 } else if (label == WicketType.stumped) {
                                   WidgetDecider.showSelectBatsmenBottomSheet(
@@ -464,6 +470,7 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
                                         currentCubit.newWicket(false);
                                       }
                                     },
+                                    inningsIndex: inningsIndex,
                                   );
                                 } else if (label == WicketType.runOut) {
                                   WidgetDecider.showOnRunOut(
@@ -497,6 +504,7 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
                                       );
                                       currentCubit.newWicket(false);
                                     },
+                                    inningsIndex,
                                   );
                                 } else {
                                   cubit.addBall(

@@ -11,7 +11,7 @@ class MatchPlayerEntity {
   final PlayerType playerType;
   final BatterType? batterType;
   final BowlerType? bowlerType;
-  final MatchPlayerStatsEntity stats;
+  final List<MatchPlayerStatsEntity> stats;
 
   MatchPlayerEntity({
     required this.id,
@@ -34,7 +34,7 @@ class MatchPlayerEntity {
     PlayerType? playerType,
     BatterType? batterType,
     BowlerType? bowlerType,
-    MatchPlayerStatsEntity? stats,
+    List<MatchPlayerStatsEntity>? stats,
   }) {
     return MatchPlayerEntity(
       id: id ?? this.id,
@@ -45,7 +45,9 @@ class MatchPlayerEntity {
       playerType: playerType ?? this.playerType,
       batterType: batterType ?? this.batterType,
       bowlerType: bowlerType ?? this.bowlerType,
-      stats: stats != null ? stats.copyWith() : this.stats.copyWith(),
+      stats: stats != null
+          ? stats.map((e) => e.copyWith()).toList()
+          : this.stats.map((e) => e.copyWith()).toList(),
     );
   }
 }

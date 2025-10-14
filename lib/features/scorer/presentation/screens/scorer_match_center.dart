@@ -103,12 +103,7 @@ class ScorerMatchCenter extends StatelessWidget {
                     physics: const BouncingScrollPhysics(),
                     children: List.generate(
                       _tabs.length,
-                      (index) => _buildLazyTab(
-                        context,
-                        cubit: cubit,
-                        index: index,
-                        child: _buildTabContent(index, state),
-                      ),
+                      (index) => _buildTabContent(index, state),
                     ),
                   ),
                 );
@@ -120,20 +115,20 @@ class ScorerMatchCenter extends StatelessWidget {
     );
   }
 
-  Widget _buildLazyTab(
-    BuildContext context, {
-    required ScorerMatchCenterCubit cubit,
-    required int index,
-    required Widget child,
-  }) {
-    final state = context.watch<ScorerMatchCenterCubit>().state;
+  // Widget _buildLazyTab(
+  //   BuildContext context, {
+  //   required ScorerMatchCenterCubit cubit,
+  //   required int index,
+  //   required Widget child,
+  // }) {
+  //   final state = context.watch<ScorerMatchCenterCubit>().state;
 
-    if (index == state.currentIndex) {
-      cubit.changeTab(index);
-    }
+  //   if (index == state.currentIndex) {
+  //     cubit.changeTab(index);
+  //   }
 
-    return child;
-  }
+  //   return child;
+  // }
 }
 
 class WagonWheelTab extends StatelessWidget {

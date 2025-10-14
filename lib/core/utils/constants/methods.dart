@@ -6,6 +6,7 @@ import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/login/domain/entities/location_entity.dart';
 import 'package:cricklo/features/login/domain/entities/user_entitiy.dart';
 import 'package:cricklo/features/matches/domain/entities/match_entity.dart';
+import 'package:cricklo/features/scorer/domain/entities/innings_entity.dart';
 import 'package:cricklo/features/scorer/domain/entities/match_center_entity.dart';
 import 'package:cricklo/features/scorer/domain/entities/match_player_entity.dart';
 import 'package:cricklo/features/scorer/domain/entities/overs_entity.dart';
@@ -349,35 +350,36 @@ class Methods {
     final isCurrBatsman = match.battingTeam!.currBatsmen.any(
       (b) => b?.playerId == player.playerId,
     );
+    final inningsIndex = match.innings.length <= 2 ? 0 : 1;
     final matchOverOrAbandoned = match.winner != null || match.abandoned;
 
     // Player is not out but match ended
-    if (matchOverOrAbandoned && player.stats.out == false) {
+    if (matchOverOrAbandoned && player.stats[inningsIndex].out == false) {
       return "not out";
     }
 
     // Player still batting
-    if (!player.stats.out && isCurrBatsman) {
+    if (!player.stats[inningsIndex].out && isCurrBatsman) {
       return "batting";
     }
 
     // Player is out
-    if (player.stats.out) {
-      switch (player.stats.wicketType) {
+    if (player.stats[inningsIndex].out) {
+      switch (player.stats[inningsIndex].wicketType) {
         case WicketType.retired:
           return "retired hurt";
         case WicketType.caught:
-          return "c ${player.stats.fielder} b ${player.stats.bowler}";
+          return "c ${player.stats[inningsIndex].fielder} b ${player.stats[inningsIndex].bowler}";
         case WicketType.stumped:
-          return "st ${player.stats.fielder} b ${player.stats.bowler}";
+          return "st ${player.stats[inningsIndex].fielder} b ${player.stats[inningsIndex].bowler}";
         case WicketType.bowled:
-          return "b ${player.stats.bowler}";
+          return "b ${player.stats[inningsIndex].bowler}";
         case WicketType.lbw:
-          return "lbw b ${player.stats.bowler}";
+          return "lbw b ${player.stats[inningsIndex].bowler}";
         case WicketType.hitWicket:
-          return "hit wicket b ${player.stats.bowler}";
+          return "hit wicket b ${player.stats[inningsIndex].bowler}";
         case WicketType.runOut:
-          return "run out (${player.stats.fielder})";
+          return "run out (${player.stats[inningsIndex].fielder})";
         default:
           return "";
       }
@@ -445,5 +447,86 @@ class Methods {
         .join(' ');
 
     return '$initials $lastName';
+  }
+
+  static Map<String, String> getTargetOrLead(List<InningsEntity> innings) {
+    final int count = innings.length;
+
+    if (count == 1) return {"title": "", "value": ""};
+
+    // Get total runs for each team
+    final teamARuns = innings
+        .where((inn) => inn.battingTeam.id == innings.first.battingTeam.id)
+        .fold(0, (sum, inn) => sum + inn.runs);
+
+    final teamBRuns = innings
+        .where((inn) => inn.battingTeam.id != innings.first.battingTeam.id)
+        .fold(0, (sum, inn) => sum + inn.runs);
+
+    // --- 2nd Innings ---
+    if (count == 2) {
+      final int difference = teamBRuns - teamARuns;
+      if (difference < 0) {
+        return {"title": "Trail:", "value": "${difference.abs()}"};
+      } else if (difference > 0) {
+        return {"title": "Lead:", "value": "$difference"};
+      } else {
+        return {"title": "Scores Level", "value": ""};
+      }
+    }
+
+    // --- 3rd Innings ---
+    if (count == 3) {
+      // Compare (Team A total after 3 innings) vs (Team B total after 2)
+      final int difference = teamARuns - teamBRuns;
+      if (difference < 0) {
+        return {"title": "Trail:", "value": "${difference.abs()}"};
+      } else if (difference > 0) {
+        return {"title": "Lead:", "value": "$difference"};
+      } else {
+        return {"title": "Scores Level", "value": ""};
+      }
+    }
+
+    // --- 4th Innings ---
+    if (count == 4) {
+      // Team B chasing → Target = (Team A total) - (Team B total after 2 innings) + 1
+      final target = (teamARuns - teamBRuns) + 1;
+      return {"title": "Target:", "value": "${target >= 0 ? target : 0}"};
+    }
+
+    return {"title": "", "value": ""};
+  }
+
+  static String? getWinner(MatchCenterEntity match) {
+    if (match.matchType != MatchType.test) {
+      final innings = match.innings;
+      if (innings.length < 2) return null;
+      final teamARuns = innings
+          .where((inn) => inn.battingTeam.id == match.teamA.id)
+          .fold(0, (sum, inn) => sum + inn.runs);
+      final teamBRuns = innings
+          .where((inn) => inn.battingTeam.id == match.teamB.id)
+          .fold(0, (sum, inn) => sum + inn.runs);
+
+      if (teamARuns > teamBRuns) return match.teamA.id;
+      if (teamBRuns > teamARuns) return match.teamB.id;
+      return null; // tie
+    } else {
+      // TEST match winner (after 4 innings)
+      final innings = match.innings;
+      final teamARuns = innings
+          .where((inn) => inn.battingTeam.id == match.teamA.id)
+          .fold(0, (sum, inn) => sum + inn.runs);
+      final teamBRuns = innings
+          .where((inn) => inn.battingTeam.id == match.teamB.id)
+          .fold(0, (sum, inn) => sum + inn.runs);
+
+      // if (innings.length < 4) return null;
+
+      if (teamARuns > teamBRuns) return match.teamA.id;
+      if (teamBRuns > teamARuns) return match.teamB.id;
+      return null; // draw
+    }
   }
 }
