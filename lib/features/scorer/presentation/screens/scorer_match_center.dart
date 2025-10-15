@@ -2,6 +2,7 @@ import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/matches/domain/entities/match_entity.dart';
 import 'package:cricklo/features/scorer/presentation/blocs/cubits/ScorerMatchCenter/scorer_match_center_cubit.dart';
 import 'package:cricklo/features/scorer/presentation/screens/commentary_screen.dart';
+import 'package:cricklo/features/scorer/presentation/screens/scorecard_info_tab.dart';
 import 'package:cricklo/features/scorer/presentation/screens/scorecard_tab.dart';
 import 'package:cricklo/features/scorer/presentation/screens/scorer_summary_tab.dart';
 import 'package:cricklo/features/scorer/presentation/screens/wagon_wheel_screen.dart';
@@ -34,7 +35,7 @@ class ScorerMatchCenter extends StatelessWidget {
       case 3:
         return CommentaryScreen(matchCenterEntity: state.matchCenterEntity!);
       case 4:
-        return const InfoTab();
+        return MatchInfoPage(match: state.matchEntity!);
       default:
         return const SizedBox.shrink();
     }

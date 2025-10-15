@@ -29,7 +29,7 @@ class BallModel {
     return <String, dynamic>{
       'runs': runs,
       'isExtra': isExtra,
-      'extraType': extraType,
+      'extraType': extraType?.name,
       'wicketType': wicketType?.title,
       'secondBatsman': secondBatsman?.playerId,
       'batsman': batsman?.playerId,

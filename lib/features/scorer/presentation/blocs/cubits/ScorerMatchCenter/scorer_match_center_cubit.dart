@@ -828,23 +828,26 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
         );
       }
     }
-    final latestOver = state.matchCenterEntity!.innings.last.oversData.last;
-    latestOver.player1Id = newBall.batsman!.playerId;
-    latestOver.player1Name = newBall.batsman!.name;
-    latestOver.player1balls = newBall.batsman!.stats[inningsIndex].balls;
-    latestOver.player1runs = newBall.batsman!.stats[inningsIndex].runs;
+    if (newBall.isExtra && newBall.extraType != ExtraType.bonus) {
+      final latestOver = state.matchCenterEntity!.innings.last.oversData.last;
+      latestOver.player1Id = newBall.batsman!.playerId;
+      latestOver.player1Name = newBall.batsman!.name;
+      latestOver.player1balls = newBall.batsman!.stats[inningsIndex].balls;
+      latestOver.player1runs = newBall.batsman!.stats[inningsIndex].runs;
 
-    latestOver.player2Id = newBall.secondBatsman!.playerId;
-    latestOver.player2Name = newBall.secondBatsman!.name;
-    latestOver.player2balls = newBall.secondBatsman!.stats[inningsIndex].balls;
-    latestOver.player2runs = newBall.secondBatsman!.stats[inningsIndex].runs;
+      latestOver.player2Id = newBall.secondBatsman!.playerId;
+      latestOver.player2Name = newBall.secondBatsman!.name;
+      latestOver.player2balls =
+          newBall.secondBatsman!.stats[inningsIndex].balls;
+      latestOver.player2runs = newBall.secondBatsman!.stats[inningsIndex].runs;
 
-    latestOver.bowlerId = newBall.bowler!.playerId;
-    latestOver.bowlerName = newBall.bowler!.name;
-    latestOver.bowlerOvers = newBall.bowler!.stats[inningsIndex].overs;
-    latestOver.bowlerRuns = newBall.bowler!.stats[inningsIndex].runsGiven;
-    latestOver.bowlerMaidens = newBall.bowler!.stats[inningsIndex].maidens;
-    latestOver.bowlerWickets = newBall.bowler!.stats[inningsIndex].wickets;
+      latestOver.bowlerId = newBall.bowler!.playerId;
+      latestOver.bowlerName = newBall.bowler!.name;
+      latestOver.bowlerOvers = newBall.bowler!.stats[inningsIndex].overs;
+      latestOver.bowlerRuns = newBall.bowler!.stats[inningsIndex].runsGiven;
+      latestOver.bowlerMaidens = newBall.bowler!.stats[inningsIndex].maidens;
+      latestOver.bowlerWickets = newBall.bowler!.stats[inningsIndex].wickets;
+    }
 
     final inningsEnded = addInningsRuns(newBall);
 
@@ -1217,7 +1220,7 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
         undoBall.extraType,
         bowlerInvolved!,
       );
-    } else {
+    } else if (undoBall.extraType != ExtraType.bonus) {
       undoBowlerRuns(
         undoBall.totalRuns,
         undoBall.wicketType != null &&
@@ -1231,23 +1234,26 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
         bowlerInvolved!,
       );
     }
-    final latestOver = state.matchCenterEntity!.innings.last.oversData.last;
-    latestOver.player1Id = undoBall.batsman!.playerId;
-    latestOver.player1Name = undoBall.batsman!.name;
-    latestOver.player1balls = undoBall.batsman!.stats[inningsIndex].balls;
-    latestOver.player1runs = undoBall.batsman!.stats[inningsIndex].runs;
+    if (undoBall.isExtra && undoBall.extraType != ExtraType.bonus) {
+      final latestOver = state.matchCenterEntity!.innings.last.oversData.last;
+      latestOver.player1Id = undoBall.batsman!.playerId;
+      latestOver.player1Name = undoBall.batsman!.name;
+      latestOver.player1balls = undoBall.batsman!.stats[inningsIndex].balls;
+      latestOver.player1runs = undoBall.batsman!.stats[inningsIndex].runs;
 
-    latestOver.player2Id = undoBall.secondBatsman!.playerId;
-    latestOver.player2Name = undoBall.secondBatsman!.name;
-    latestOver.player2balls = undoBall.secondBatsman!.stats[inningsIndex].balls;
-    latestOver.player2runs = undoBall.secondBatsman!.stats[inningsIndex].runs;
+      latestOver.player2Id = undoBall.secondBatsman!.playerId;
+      latestOver.player2Name = undoBall.secondBatsman!.name;
+      latestOver.player2balls =
+          undoBall.secondBatsman!.stats[inningsIndex].balls;
+      latestOver.player2runs = undoBall.secondBatsman!.stats[inningsIndex].runs;
 
-    latestOver.bowlerId = undoBall.bowler!.playerId;
-    latestOver.bowlerName = undoBall.bowler!.name;
-    latestOver.bowlerOvers = undoBall.bowler!.stats[inningsIndex].overs;
-    latestOver.bowlerRuns = undoBall.bowler!.stats[inningsIndex].runsGiven;
-    latestOver.bowlerMaidens = undoBall.bowler!.stats[inningsIndex].maidens;
-    latestOver.bowlerWickets = undoBall.bowler!.stats[inningsIndex].wickets;
+      latestOver.bowlerId = undoBall.bowler!.playerId;
+      latestOver.bowlerName = undoBall.bowler!.name;
+      latestOver.bowlerOvers = undoBall.bowler!.stats[inningsIndex].overs;
+      latestOver.bowlerRuns = undoBall.bowler!.stats[inningsIndex].runsGiven;
+      latestOver.bowlerMaidens = undoBall.bowler!.stats[inningsIndex].maidens;
+      latestOver.bowlerWickets = undoBall.bowler!.stats[inningsIndex].wickets;
+    }
 
     if (lastOver.balls.length == 1 && innings.oversData.length == 1) {
       innings.oversData.removeLast();
