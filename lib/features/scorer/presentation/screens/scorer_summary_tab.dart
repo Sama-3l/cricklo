@@ -23,6 +23,30 @@ class _ScorerSummaryTabState extends State<ScorerSummaryTab> {
       builder: (context, state) {
         final cubit = context.read<ScorerMatchCenterCubit>();
         final state = cubit.state;
+        if (state.loading) {
+          return Center(
+            child: SizedBox(
+              height: 24,
+              width: 24,
+              child: CircularProgressIndicator(
+                strokeWidth: 2.5,
+                color: ColorsConstants.accentOrange,
+              ),
+            ),
+          );
+        }
+        if (state.matchCenterEntity == null) {
+          return Center(
+            child: Text(
+              "No Data Yet",
+              style: TextStyles.poppinsSemiBold.copyWith(
+                fontSize: 24,
+                letterSpacing: -1.2,
+                color: ColorsConstants.accentOrange,
+              ),
+            ),
+          );
+        }
         final currInnings = state.matchCenterEntity!.innings.last;
         if (state.matchCenterEntity!.abandoned) {
           return Center(
@@ -54,7 +78,7 @@ class _ScorerSummaryTabState extends State<ScorerSummaryTab> {
                         children: [
                           Text(
                             Methods.battingTeamAbbr(
-                              currInnings.battingTeam.name,
+                              state.matchCenterEntity!.battingTeam!.name,
                             ),
                             style: TextStyles.poppinsBold.copyWith(
                               fontSize: 24,
@@ -255,12 +279,15 @@ class _ScorerSummaryTabState extends State<ScorerSummaryTab> {
                     overs: state.matchCenterEntity!.innings.last.oversData,
                   ),
             const SizedBox(height: 8),
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(color: ColorsConstants.accentOrange),
-                child: Center(child: ScoreKeepingCenter()),
+            if (!state.spectator)
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: ColorsConstants.accentOrange,
+                  ),
+                  child: Center(child: ScoreKeepingCenter()),
+                ),
               ),
-            ),
           ],
         );
       },

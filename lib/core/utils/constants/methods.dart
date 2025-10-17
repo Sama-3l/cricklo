@@ -280,7 +280,6 @@ class Methods {
       }
       result.add(recent[i]["ball"]);
     }
-
     return result;
   }
 
@@ -527,6 +526,41 @@ class Methods {
       if (teamARuns > teamBRuns) return match.teamA.id;
       if (teamBRuns > teamARuns) return match.teamB.id;
       return null; // draw
+    }
+  }
+
+  static double toDouble(dynamic value) {
+    if (value == null) return 0.0;
+    if (value is int) return value.toDouble();
+    if (value is double) return value;
+    if (value is String) return double.tryParse(value) ?? 0.0;
+    return 0.0;
+  }
+
+  static List<dynamic> calculateResultMessage(List<InningsEntity> innings) {
+    if (innings.length < 2) return ["Match not completed"];
+
+    final first = innings[0];
+    final second = innings[1];
+
+    if (second.runs > first.runs) {
+      // Team B chased successfully
+      final wicketsRemaining = 10 - second.wickets;
+      return [
+        second.battingTeam.teamLogo,
+        second.battingTeam.name,
+        "${second.battingTeam.name} won by $wicketsRemaining wickets",
+      ];
+    } else if (first.runs > second.runs) {
+      // Team A defended successfully
+      final runsDiff = first.runs - second.runs;
+      return [
+        first.battingTeam.teamLogo,
+        first.battingTeam.name,
+        "${first.battingTeam.name} won by $runsDiff runs",
+      ];
+    } else {
+      return ["Match tied"];
     }
   }
 }

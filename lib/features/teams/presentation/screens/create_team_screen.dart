@@ -56,6 +56,7 @@ class _CreateTeamScreenState extends State<CreateTeamScreen> {
         builder: (context, state) {
           final cubit = context.read<CreateTeamCubit>();
           return Scaffold(
+            resizeToAvoidBottomInset: false,
             backgroundColor: ColorsConstants.defaultWhite,
             appBar: AppBar(
               backgroundColor: ColorsConstants.accentOrange,
@@ -79,7 +80,9 @@ class _CreateTeamScreenState extends State<CreateTeamScreen> {
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.centerDocked,
             floatingActionButton: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+              ).copyWith(bottom: 16),
               child: SizedBox(
                 width: double.infinity,
                 child: PrimaryButton(

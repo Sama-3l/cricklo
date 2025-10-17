@@ -1,9 +1,7 @@
 import 'dart:ui';
-import 'package:cricklo/core/utils/constants/dummy_data.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/core/utils/constants/widget_decider.dart';
 import 'package:cricklo/features/home/presentation/widgets/home_profile_header.dart';
-import 'package:cricklo/features/home/presentation/widgets/match_tile.dart';
 import 'package:cricklo/features/home/presentation/widgets/section_header.dart';
 import 'package:cricklo/features/login/domain/entities/user_entitiy.dart';
 import 'package:cricklo/features/mainapp/presentation/blocs/cubits/MainAppCubit/main_app_cubit.dart';
@@ -94,7 +92,7 @@ class _HomePageState extends State<HomePage>
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: SectionHeader(title: "Matches"),
                 ),
-                state.matches.isEmpty
+                state.matches.where((e) => e.teamA.inviteStatus != null).isEmpty
                     ? Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
                         child: Container(

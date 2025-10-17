@@ -7,6 +7,10 @@ class BallModel {
   final bool isExtra;
   final ExtraType? extraType;
   final WicketType? wicketType;
+  String? secondBatsmanId;
+  String? batsmanId;
+  String? bowlerId;
+  String? fielderId;
   MatchPlayerModel? secondBatsman;
   MatchPlayerModel? batsman;
   MatchPlayerModel? bowler;
@@ -23,6 +27,10 @@ class BallModel {
     this.batsman,
     this.bowler,
     this.fielder,
+    this.secondBatsmanId,
+    this.batsmanId,
+    this.bowlerId,
+    this.fielderId,
   });
 
   Map<String, dynamic> toJson() {
@@ -50,6 +58,10 @@ class BallModel {
       bowler: bowler?.toEntity(),
       fielder: fielder?.toEntity(),
       sector: sector,
+      secondBatsmanId: secondBatsmanId,
+      batsmanId: batsmanId,
+      bowlerId: bowlerId,
+      fielderId: fielderId,
     );
   }
 
@@ -72,27 +84,32 @@ class BallModel {
           ? null
           : MatchPlayerModel.fromEntity(entity.fielder!),
       sector: entity.sector,
+      secondBatsmanId: entity.secondBatsmanId,
+      batsmanId: entity.batsmanId,
+      bowlerId: entity.bowlerId,
+      fielderId: entity.fielderId,
     );
   }
 
+  // PARSE THE MATCHPLAYERMODELS DEPENDING ON THE BATTING/BOWLING TEAMS
   factory BallModel.fromJson(
-    Map<String, dynamic> map,
-    List<MatchPlayerModel> battingTeam,
-    List<MatchPlayerModel> bowlingTeam,
-  ) {
+    Map<String, dynamic> map, {
+    List<MatchPlayerModel>? battingTeam,
+    List<MatchPlayerModel>? bowlingTeam,
+  }) {
     final batsman = battingTeam
-        .where((e) => e.playerId == map['batsman'])
+        ?.where((e) => e.playerId == map['batsman'])
         .firstOrNull;
     final secondBatsman = battingTeam
-        .where((e) => e.playerId == map['secondBatsman'])
+        ?.where((e) => e.playerId == map['secondBatsman'])
         .firstOrNull;
 
     final bowler = bowlingTeam
-        .where((e) => e.playerId == map['bowler'])
+        ?.where((e) => e.playerId == map['bowler'])
         .firstOrNull;
 
     final fielder = bowlingTeam
-        .where((e) => e.playerId == map['fielder'])
+        ?.where((e) => e.playerId == map['fielder'])
         .firstOrNull;
     return BallModel(
       runs: map['runs'] as int,
@@ -101,12 +118,16 @@ class BallModel {
           ? ExtraType.values.where((e) => e.name == map['extraType']).first
           : null,
       wicketType: map['wicketType'] != null
-          ? WicketType.values.where((e) => e.name == map['extraType']).first
+          ? WicketType.values.where((e) => e.title == map['wicketType']).first
           : null,
       secondBatsman: secondBatsman,
       batsman: batsman,
       bowler: bowler,
       fielder: fielder,
+      secondBatsmanId: map['secondBatsman'],
+      batsmanId: map['batsman'],
+      bowlerId: map['bowler'],
+      fielderId: map['fielder'],
       sector: map['sector'] != null ? map['sector'] as int : null,
     );
   }

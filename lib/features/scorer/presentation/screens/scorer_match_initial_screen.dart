@@ -42,6 +42,8 @@ class _ScorerMatchInitialScreenState extends State<ScorerMatchInitialScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.matchEntity.tossChoice);
+    print(widget.matchEntity.tossWinner);
     return Scaffold(
       backgroundColor: ColorsConstants.defaultWhite,
       appBar: AppBar(
@@ -72,15 +74,21 @@ class _ScorerMatchInitialScreenState extends State<ScorerMatchInitialScreen> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(top: 12),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16,
+        ).copyWith(top: 12, bottom: 16),
         color: ColorsConstants.defaultWhite,
         width: double.infinity,
         child: PrimaryButton(
           disabled:
               widget.matchEntity.teamA.inviteStatus! == "PENDING" ||
-              widget.matchEntity.teamB.inviteStatus! == "PENDING",
+              widget.matchEntity.teamB.inviteStatus! == "PENDING" ||
+              widget.matchEntity.winner != null,
           child: Text(
-            "Start Match",
+            (widget.matchEntity.tossChoice == null &&
+                    widget.matchEntity.tossWinner == null)
+                ? "Start Match"
+                : "Resume Match",
             style: TextStyles.poppinsSemiBold.copyWith(
               fontSize: 16,
               letterSpacing: -0.6,
@@ -88,30 +96,39 @@ class _ScorerMatchInitialScreenState extends State<ScorerMatchInitialScreen> {
             ),
           ),
           onPress: () async {
-            final result = await showTossDialog(
-              context,
-              teamAId: widget.matchEntity.teamA.id,
-              teamBId: widget.matchEntity.teamB.id,
-              teamAName: widget.matchEntity.teamA.name,
-              teamALogo: widget.matchEntity.teamA.teamLogo,
-              teamBName: widget.matchEntity.teamB.name,
-              teamBLogo: widget.matchEntity.teamB.teamLogo,
-            );
-
-            if (result != null) {
-              final winner = result["winner"];
-              final choice = result["choice"];
-
-              print("Winner: $winner | Choice: $choice");
-
-              widget.matchEntity.tossWinner = winner;
-              widget.matchEntity.tossChoice = choice!.split(" ")[0] == "Bat"
-                  ? TossChoice.batting
-                  : TossChoice.bowling;
-
-              GoRouter.of(
+            if (widget.matchEntity.tossChoice == null &&
+                widget.matchEntity.tossWinner == null) {
+              final result = await showTossDialog(
                 context,
-              ).pushNamed(Routes.scorerMatchCenter, extra: widget.matchEntity);
+                teamAId: widget.matchEntity.teamA.id,
+                teamBId: widget.matchEntity.teamB.id,
+                teamAName: widget.matchEntity.teamA.name,
+                teamALogo: widget.matchEntity.teamA.teamLogo,
+                teamBName: widget.matchEntity.teamB.name,
+                teamBLogo: widget.matchEntity.teamB.teamLogo,
+              );
+
+              if (result != null) {
+                final winner = result["winner"];
+                final choice = result["choice"];
+
+                print("Winner: $winner | Choice: $choice");
+
+                widget.matchEntity.tossWinner = winner;
+                widget.matchEntity.tossChoice = choice!.split(" ")[0] == "Bat"
+                    ? TossChoice.batting
+                    : TossChoice.bowling;
+
+                GoRouter.of(context).pushNamed(
+                  Routes.scorerMatchCenter,
+                  extra: [widget.matchEntity, false],
+                );
+              }
+            } else {
+              GoRouter.of(context).pushNamed(
+                Routes.scorerMatchCenter,
+                extra: [widget.matchEntity, false],
+              );
             }
           },
         ),

@@ -42,7 +42,7 @@ class MatchCenterModel {
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
       'matchID': matchID,
-      'dateAndTime': dateAndTime.millisecondsSinceEpoch,
+      'dateAndTime': dateAndTime.toIso8601String(),
       'overs': overs,
       'matchType': matchType.matchType,
       'location': location.toJson(),
@@ -50,7 +50,7 @@ class MatchCenterModel {
       'tossChoice': tossChoice?.name,
       'winner': winner,
       'abandoned': abandoned,
-      'endDateTime': endDateTime?.millisecondsSinceEpoch,
+      'endDateTime': endDateTime?.toIso8601String(),
       'teamA': teamA.toJson(),
       'teamB': teamB.toJson(),
       'scorer': scorer.toJson(),
@@ -59,6 +59,8 @@ class MatchCenterModel {
   }
 
   MatchCenterEntity toEntity() {
+    final teamAEntity = teamA.toEntity();
+    final teamBEntity = teamB.toEntity();
     return MatchCenterEntity(
       matchID: matchID,
       dateAndTime: dateAndTime,
@@ -70,10 +72,12 @@ class MatchCenterModel {
       winner: winner,
       abandoned: abandoned,
       endDateTime: endDateTime,
-      teamA: teamA.toEntity(),
-      teamB: teamB.toEntity(),
+      teamA: teamAEntity,
+      teamB: teamBEntity,
       scorer: scorer.toEntity(),
-      innings: innings.map((x) => x.toEntity()).toList(),
+      innings: innings
+          .map((x) => x.toEntity(teamAEntity, teamBEntity))
+          .toList(),
     );
   }
 
@@ -96,17 +100,17 @@ class MatchCenterModel {
     );
   }
 
-  factory MatchCenterModel.fromMap(Map<String, dynamic> map) {
+  factory MatchCenterModel.fromJson(Map<String, dynamic> map) {
     final teamA = MatchTeamModel.fromJson(map['teamA'] as Map<String, dynamic>);
-    final teamB = MatchTeamModel.fromJson(map['teamA'] as Map<String, dynamic>);
-    final utcTime = DateTime.parse(map['dateAndTime'] as String);
+    final teamB = MatchTeamModel.fromJson(map['teamB'] as Map<String, dynamic>);
+    final utcDateAndTime = DateTime.parse(map['dateAndTime'] as String);
     final dateAndTime = DateTime(
-      utcTime.year,
-      utcTime.month,
-      utcTime.day,
-      utcTime.hour,
-      utcTime.minute,
-      utcTime.second,
+      utcDateAndTime.year,
+      utcDateAndTime.month,
+      utcDateAndTime.day,
+      utcDateAndTime.hour,
+      utcDateAndTime.minute,
+      utcDateAndTime.second,
     );
     final utcEndDateAndTime = map['endDateAndTime'] == null
         ? null
@@ -115,12 +119,12 @@ class MatchCenterModel {
     final endDateAndTime = utcEndDateAndTime == null
         ? null
         : DateTime(
-            utcTime.year,
-            utcTime.month,
-            utcTime.day,
-            utcTime.hour,
-            utcTime.minute,
-            utcTime.second,
+            utcEndDateAndTime.year,
+            utcEndDateAndTime.month,
+            utcEndDateAndTime.day,
+            utcEndDateAndTime.hour,
+            utcEndDateAndTime.minute,
+            utcEndDateAndTime.second,
           );
     return MatchCenterModel(
       matchID: map['matchID'] as String,
@@ -129,7 +133,7 @@ class MatchCenterModel {
       matchType: MatchType.values
           .where((e) => e.matchType == map['matchType'])
           .first,
-      location: LocationModel.fromJson(map['location'] as Map<String, dynamic>),
+      location: LocationModel.fromJson(map['location']),
       tossWinner: map['tossWinner'] as String?,
       tossChoice: map['tossChoice'] != null
           ? TossChoice.values.where((e) => e.name == map['tossChoice']).first
@@ -141,10 +145,7 @@ class MatchCenterModel {
       teamB: teamB,
       scorer: MatchScorerModel.fromMap(map['scorer'] as Map<String, dynamic>),
       innings: (map['innings'] as List<dynamic>)
-          .map<InningsModel>(
-            (x) =>
-                InningsModel.fromJson(x as Map<String, dynamic>, teamA, teamB),
-          )
+          .map<InningsModel>((x) => InningsModel.fromJson(x, teamA, teamB))
           .toList(),
     );
   }

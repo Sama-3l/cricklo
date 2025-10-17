@@ -38,7 +38,7 @@ class _MatchesPageState extends State<MatchesPage> {
                   child: SectionHeader(title: "Your Matches"),
                 ),
                 const SizedBox(height: 12),
-                state.matches.isEmpty
+                state.matches.where((e) => e.teamA.inviteStatus != null).isEmpty
                     ? Container(
                         height: 200,
                         padding: const EdgeInsets.all(16),

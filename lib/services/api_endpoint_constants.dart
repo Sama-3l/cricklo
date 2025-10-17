@@ -22,5 +22,10 @@ class ApiEndpointConstants {
   static const matchInviteResponse =
       '/match/{matchId}/invites/{inviteId}/respond';
 
-  static const scorerMatchStart = '/match/start';
+  static const getMatchState = '/scorer/{matchId}';
+  static const scorerMatchStart = '/scorer/start';
+  static const scorerUpdate = '/scorer/score-update';
+  static const scorerEndOver = '/scorer/over-end';
+  static const scorerInningsChange = '/scorer/innings-change';
+  static const scorerMatchComplete = '/scorer/complete';
 }

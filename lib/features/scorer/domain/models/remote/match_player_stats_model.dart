@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:cricklo/core/utils/constants/enums.dart';
+import 'package:cricklo/core/utils/constants/methods.dart';
 import 'package:cricklo/features/scorer/domain/entities/match_player_stats_entity.dart';
 
 class MatchPlayerStatsModel {
@@ -107,12 +108,12 @@ class MatchPlayerStatsModel {
       balls: map['balls'] as int,
       n4s: map['n4s'] as int,
       n6s: map['n6s'] as int,
-      sr: map['sr'] as double,
+      sr: Methods.toDouble(map['sr']),
       overs: map['overs'] as String,
       runsGiven: map['runsGiven'] as int,
       maidens: map['maidens'] as int,
       wickets: map['wickets'] as int,
-      eco: map['eco'] as double,
+      eco: Methods.toDouble(map['eco']),
       out: map['out'] as bool,
       bowler: map['bowler'] != null ? map['bowler'] as String : null,
       fielder: map['fielder'] != null ? map['fielder'] as String : null,

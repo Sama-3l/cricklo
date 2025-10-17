@@ -41,7 +41,7 @@ class CreateMatchResponseModel {
   factory CreateMatchResponseModel.fromJson(Map<String, dynamic> map) {
     return CreateMatchResponseModel(
       success: map['success'] as bool,
-      matchId: map['data']['matchId'] as String,
+      matchId: map['data']['match']['matchId'] as String,
       message: map['message'] != null ? map['message'] as String : null,
       status: map['status'] != null ? map['status'] as int : null,
       errorCode: map['errorCode'] != null ? map['errorCode'] as String : null,

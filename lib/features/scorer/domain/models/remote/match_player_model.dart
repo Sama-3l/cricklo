@@ -127,7 +127,7 @@ class MatchPlayerModel {
       }
     }
     TeamRole teamRole = TeamRole.invited;
-    final role = data['playerRole'];
+    final role = data['teamRole'];
     if (role != null) {
       switch (role) {
         case 'Active_Squad':
@@ -138,9 +138,6 @@ class MatchPlayerModel {
           break;
         case 'Substitute':
           teamRole = TeamRole.sub;
-          break;
-        case 'Member':
-          teamRole = TeamRole.member;
           break;
       }
     }
@@ -153,11 +150,9 @@ class MatchPlayerModel {
       playerType: playerType,
       batterType: batterType,
       bowlerType: bowlerType,
-      stats: List<MatchPlayerStatsModel>.from(
-        (map['stats'] as List<dynamic>).map<MatchPlayerStatsModel>(
-          (x) => MatchPlayerStatsModel.fromJson(x as Map<String, dynamic>),
-        ),
-      ),
+      stats: (map['stats'] as List<dynamic>)
+          .map<MatchPlayerStatsModel>((x) => MatchPlayerStatsModel.fromJson(x))
+          .toList(),
     );
   }
 }

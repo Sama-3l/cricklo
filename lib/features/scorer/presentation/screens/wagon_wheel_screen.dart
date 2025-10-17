@@ -65,6 +65,30 @@ class _WagonWheelScreenState extends State<WagonWheelScreen> {
   Widget build(BuildContext context) {
     final cubit = context.read<ScorerMatchCenterCubit>();
     final state = cubit.state;
+    if (state.loading) {
+      return Center(
+        child: SizedBox(
+          height: 24,
+          width: 24,
+          child: CircularProgressIndicator(
+            strokeWidth: 2.5,
+            color: ColorsConstants.accentOrange,
+          ),
+        ),
+      );
+    }
+    if (state.matchCenterEntity == null) {
+      return Center(
+        child: Text(
+          "No Data Yet",
+          style: TextStyles.poppinsSemiBold.copyWith(
+            fontSize: 24,
+            letterSpacing: -1.2,
+            color: ColorsConstants.accentOrange,
+          ),
+        ),
+      );
+    }
 
     final teamA =
         state.matchCenterEntity!.battingTeam!.id ==

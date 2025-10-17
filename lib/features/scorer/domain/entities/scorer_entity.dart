@@ -2,7 +2,7 @@
 class MatchScorerEntity {
   final String playerId;
   final String name;
-  final String profilePic;
+  final String? profilePic;
 
   MatchScorerEntity({
     required this.playerId,

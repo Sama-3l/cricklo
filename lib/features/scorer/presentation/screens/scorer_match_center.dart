@@ -6,21 +6,27 @@ import 'package:cricklo/features/scorer/presentation/screens/scorecard_info_tab.
 import 'package:cricklo/features/scorer/presentation/screens/scorecard_tab.dart';
 import 'package:cricklo/features/scorer/presentation/screens/scorer_summary_tab.dart';
 import 'package:cricklo/features/scorer/presentation/screens/wagon_wheel_screen.dart';
+import 'package:cricklo/injection_container.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class ScorerMatchCenter extends StatelessWidget {
-  const ScorerMatchCenter({super.key, required this.match});
+  const ScorerMatchCenter({
+    super.key,
+    required this.match,
+    required this.spectator,
+  });
 
   final MatchEntity match;
+  final bool spectator;
 
   final List<String> _tabs = const [
     "Summary",
     "Scorecard",
     "Wagon Wheel",
-    "Commentary",
+    "Live",
     "Info",
   ];
 
@@ -33,9 +39,9 @@ class ScorerMatchCenter extends StatelessWidget {
       case 2:
         return const WagonWheelScreen();
       case 3:
-        return CommentaryScreen(matchCenterEntity: state.matchCenterEntity!);
+        return CommentaryScreen(matchCenterEntity: state.matchCenterEntity);
       case 4:
-        return MatchInfoPage(match: state.matchEntity!);
+        return MatchInfoPage(match: state.matchEntity);
       default:
         return const SizedBox.shrink();
     }
@@ -44,7 +50,8 @@ class ScorerMatchCenter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => ScorerMatchCenterCubit()..init(match),
+      create: (_) =>
+          sl<ScorerMatchCenterCubit>()..init(context, match, spectator),
       child: Builder(
         builder: (context) {
           final cubit = context.read<ScorerMatchCenterCubit>();
@@ -115,38 +122,4 @@ class ScorerMatchCenter extends StatelessWidget {
       ),
     );
   }
-
-  // Widget _buildLazyTab(
-  //   BuildContext context, {
-  //   required ScorerMatchCenterCubit cubit,
-  //   required int index,
-  //   required Widget child,
-  // }) {
-  //   final state = context.watch<ScorerMatchCenterCubit>().state;
-
-  //   if (index == state.currentIndex) {
-  //     cubit.changeTab(index);
-  //   }
-
-  //   return child;
-  // }
-}
-
-class WagonWheelTab extends StatelessWidget {
-  const WagonWheelTab({super.key});
-  @override
-  Widget build(BuildContext context) =>
-      const Center(child: Text("Wagon Wheel"));
-}
-
-class CommentaryTab extends StatelessWidget {
-  const CommentaryTab({super.key});
-  @override
-  Widget build(BuildContext context) => const Center(child: Text("Commentary"));
-}
-
-class InfoTab extends StatelessWidget {
-  const InfoTab({super.key});
-  @override
-  Widget build(BuildContext context) => const Center(child: Text("Info"));
 }

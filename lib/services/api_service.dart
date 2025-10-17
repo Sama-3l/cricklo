@@ -7,6 +7,8 @@ import 'package:cricklo/features/matches/domain/models/remote/get_user_matches_r
 import 'package:cricklo/features/notifications/domain/models/remote/get_notifications_response_model.dart';
 import 'package:cricklo/features/notifications/domain/models/remote/logout_model_remote.dart';
 import 'package:cricklo/features/notifications/domain/models/remote/invite_response_response_model.dart';
+import 'package:cricklo/features/scorer/domain/models/remote/get_match_state_model.dart';
+import 'package:cricklo/features/scorer/domain/models/remote/scorer_response_model.dart';
 import 'package:cricklo/features/teams/domain/models/remote/create_team_response_model.dart';
 import 'package:cricklo/features/teams/domain/models/remote/get_team_details_response_model.dart';
 import 'package:cricklo/features/teams/domain/models/remote/invite_player_response_model.dart';
@@ -97,8 +99,27 @@ abstract class ApiService {
     @Path("teamId") String teamId,
   );
 
-  // @POST(ApiEndpointConstants.scorerMatchStart)
-  // Future<GetTeamDetailsResponseModel> scorerMatchStart(
-  //   @Body() Map<String, dynamic> body,
-  // );
+  @POST(ApiEndpointConstants.scorerMatchStart)
+  Future<ScorerResponseModel> startScoring(@Body() Map<String, dynamic> body);
+
+  @POST(ApiEndpointConstants.scorerUpdate)
+  Future<ScorerResponseModel> updateScoring(@Body() Map<String, dynamic> body);
+
+  @POST(ApiEndpointConstants.scorerEndOver)
+  Future<ScorerResponseModel> endOver(@Body() Map<String, dynamic> body);
+
+  @POST(ApiEndpointConstants.scorerInningsChange)
+  Future<ScorerResponseModel> scorerInningsChange(
+    @Body() Map<String, dynamic> request,
+  );
+
+  @POST(ApiEndpointConstants.scorerMatchComplete)
+  Future<ScorerResponseModel> scorerComplete(
+    @Body() Map<String, dynamic> request,
+  );
+
+  @GET(ApiEndpointConstants.getMatchState)
+  Future<GetMatchStateResponseModel> getMatchState(
+    @Path("matchId") String matchId,
+  );
 }

@@ -1,3 +1,4 @@
+import 'package:cricklo/core/utils/constants/global_variables.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/core/utils/constants/widget_decider.dart';
 import 'package:cricklo/features/home/presentation/widgets/match_tile_header.dart';
@@ -25,9 +26,16 @@ class MatchTile extends StatelessWidget {
         if (onTap != null) {
           onTap!();
         } else {
-          GoRouter.of(
-            context,
-          ).pushNamed(Routes.scorerInitialPage, extra: matchEntity);
+          if (GlobalVariables.user!.profileId ==
+              matchEntity.scorer["profileId"]) {
+            GoRouter.of(
+              context,
+            ).pushNamed(Routes.scorerInitialPage, extra: matchEntity);
+          } else {
+            GoRouter.of(
+              context,
+            ).pushNamed(Routes.scorerMatchCenter, extra: [matchEntity, true]);
+          }
         }
       },
       borderRadius: BorderRadius.circular(12),

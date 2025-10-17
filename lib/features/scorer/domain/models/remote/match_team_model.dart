@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:cricklo/features/login/domain/models/remote/location_model.dart';
+import 'package:cricklo/features/scorer/domain/entities/match_player_entity.dart';
 import 'package:cricklo/features/scorer/domain/entities/match_team_entity.dart';
 import 'package:cricklo/features/scorer/domain/models/remote/match_player_model.dart';
 import 'package:cricklo/features/scorer/domain/models/remote/partnership_model.dart';
@@ -49,23 +50,44 @@ class MatchTeamModel {
       'battingOrder': battingOrder.map(
         (key, value) => MapEntry(key.toString(), value.toJson()),
       ),
-
       'partnerships': partnerships.map((x) => x.toJson()).toList(),
       'location': location.toJson(),
     };
   }
 
   MatchTeamEntity toEntity() {
+    final playerEntities = players.map((e) => e.toEntity()).toList();
+    final playerById = {for (final p in playerEntities) p.playerId: p};
+
+    MatchPlayerEntity? getEntityByPlayer(MatchPlayerModel? model) {
+      if (model == null) return null;
+      return playerById[model.playerId];
+    }
+
+    final onStrikeEntity = getEntityByPlayer(onStrike);
+    final bowlerEntity = getEntityByPlayer(bowler);
+    final currBatsmenEntities = currBatsmen
+        .map<MatchPlayerEntity?>((e) => getEntityByPlayer(e))
+        .toList();
+
+    final battingOrderEntities = battingOrder.map<int, MatchPlayerEntity>(
+      (k, v) => MapEntry(k, playerById[v.playerId]!),
+    );
+
+    final partnershipsEntities = partnerships.map((p) => p.toEntity()).toList();
+
     return MatchTeamEntity(
-      currBatsmen: currBatsmen.map((e) => e?.toEntity()).toList(),
       id: id,
       name: name,
       teamLogo: teamLogo,
       teamBanner: teamBanner,
-      players: players.map((e) => e.toEntity()).toList(),
+      players: playerEntities,
       location: location.toEntity(),
-      battingOrder: battingOrder.map((e, v) => MapEntry(e, v.toEntity())),
-      partnerships: partnerships.map((e) => e.toEntity()).toList(),
+      onStrike: onStrikeEntity,
+      bowler: bowlerEntity,
+      currBatsmen: currBatsmenEntities,
+      battingOrder: battingOrderEntities,
+      partnerships: partnershipsEntities,
     );
   }
 
@@ -80,6 +102,12 @@ class MatchTeamModel {
       name: entity.name,
       teamLogo: entity.teamLogo,
       teamBanner: entity.teamBanner,
+      onStrike: entity.onStrike == null
+          ? null
+          : MatchPlayerModel.fromEntity(entity.onStrike!),
+      bowler: entity.bowler == null
+          ? null
+          : MatchPlayerModel.fromEntity(entity.bowler!),
       players: entity.players
           .map((e) => MatchPlayerModel.fromEntity(e))
           .toList(),
@@ -94,17 +122,17 @@ class MatchTeamModel {
   }
 
   factory MatchTeamModel.fromJson(Map<String, dynamic> map) {
-    final players = List<MatchPlayerModel>.from(
-      (map['players'] as List<dynamic>).map<MatchPlayerModel>(
-        (x) => MatchPlayerModel.fromMap(x),
-      ),
-    );
-    final onStrike = players
-        .where((e) => e.playerId == map['onStrike'])
-        .firstOrNull;
-    final bowler = players
-        .where((e) => e.playerId == map['bowler'])
-        .firstOrNull;
+    final players = (map['players'] as List<dynamic>)
+        .map<MatchPlayerModel>((x) => MatchPlayerModel.fromMap(x))
+        .toList();
+
+    final onStrike = map['onStrike'] == null
+        ? null
+        : players.firstWhere((e) => e.playerId == map['onStrike']);
+
+    final bowler = map['bowler'] == null
+        ? null
+        : players.where((e) => e.playerId == map['bowler']).firstOrNull;
     final currBatsmen = [
       map["currBatsmen"][0] == null
           ? null
@@ -117,6 +145,12 @@ class MatchTeamModel {
                 .where((e) => e.playerId == map["currBatsmen"][1])
                 .firstOrNull,
     ];
+    final battingOrder = (map['battingOrder'] as Map<dynamic, dynamic>).map(
+      (e, v) => MapEntry(
+        int.parse(e),
+        players.where((e) => e.playerId == v["id"]).first,
+      ),
+    );
     return MatchTeamModel(
       id: map['id'] as String,
       name: map['name'] as String,
@@ -126,11 +160,9 @@ class MatchTeamModel {
       currBatsmen: currBatsmen,
       bowler: bowler,
       players: players,
-      battingOrder: (map['battingOrder'] as Map<int, dynamic>).map(
-        (e, v) => MapEntry(e, MatchPlayerModel.fromMap(v)),
-      ),
+      battingOrder: battingOrder,
       partnerships: (map['partnerships'] as List<dynamic>)
-          .map((x) => PartnershipModel.fromJson(x))
+          .map((x) => PartnershipModel.fromJson(x, players))
           .toList(),
       location: LocationModel.fromJson(map['location']),
     );

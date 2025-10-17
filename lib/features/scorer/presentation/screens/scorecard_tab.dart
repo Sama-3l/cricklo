@@ -25,16 +25,35 @@ class _ScorecardScreenState extends State<ScorecardScreen> {
   Widget build(BuildContext context) {
     final cubit = context.read<ScorerMatchCenterCubit>();
     final state = cubit.state;
+    if (state.loading) {
+      return Center(
+        child: SizedBox(
+          height: 24,
+          width: 24,
+          child: CircularProgressIndicator(
+            strokeWidth: 2.5,
+            color: ColorsConstants.accentOrange,
+          ),
+        ),
+      );
+    }
+    if (state.matchCenterEntity == null) {
+      return Center(
+        child: Text(
+          "No Data Yet",
+          style: TextStyles.poppinsSemiBold.copyWith(
+            fontSize: 24,
+            letterSpacing: -1.2,
+            color: ColorsConstants.accentOrange,
+          ),
+        ),
+      );
+    }
     final match = state.matchCenterEntity!;
     final isTest = match.matchType == MatchType.test;
 
-    final teamA = match.teamA;
-    final teamB = match.teamB;
-
-    final battingTeam = match.innings.isEmpty
-        ? teamA
-        : match.innings.first.battingTeam;
-    final bowlingTeam = teamA.id == battingTeam.id ? teamB : teamA;
+    final battingTeam = state.matchCenterEntity!.battingTeam!;
+    final bowlingTeam = state.matchCenterEntity!.bowlingTeam!;
 
     final selectedTeam = selectedTeamIndex == 0 ? battingTeam : bowlingTeam;
     final inningsForTeam = match.innings

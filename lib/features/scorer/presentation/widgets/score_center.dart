@@ -5,8 +5,10 @@ import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/core/utils/constants/widget_decider.dart';
 import 'package:cricklo/features/scorer/presentation/blocs/cubits/ScorerMatchCenter/scorer_match_center_cubit.dart';
 import 'package:cricklo/features/scorer/presentation/blocs/cubits/cubit/scorer_center_cubit.dart';
+import 'package:cricklo/routes/app_route_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class ScoreKeepingCenter extends StatefulWidget {
   const ScoreKeepingCenter({super.key});
@@ -75,14 +77,20 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
                         SecondaryButton(
                           title: "End Match",
                           onTap: () {
-                            // cubit.showAbandonMatchDialog(context, () {});
+                            cubit.endMatch(context);
+                            GoRouter.of(context).pushReplacement(
+                              Routes.scorerMatchComplete,
+                              extra: Methods.calculateResultMessage(
+                                state.matchCenterEntity!.innings,
+                              ),
+                            );
                           },
                           color: ColorsConstants.defaultWhite,
                         ),
                         SecondaryButton(
                           title: "Undo",
                           onTap: () {
-                            cubit.undoLastBall();
+                            cubit.undoLastBall(context);
                           },
                           color: ColorsConstants.defaultWhite,
                         ),
@@ -302,6 +310,7 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
                                       );
                                 }
                                 cubit.addBall(
+                                  context,
                                   label,
                                   true,
                                   extraType: extraType,
@@ -401,6 +410,7 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
                                     onConfirm: (player) {
                                       if (player.isNotEmpty) {
                                         cubit.addBall(
+                                          context,
                                           0,
                                           false,
                                           bowlingTeamPlayerInvolved:
@@ -442,6 +452,7 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
                                     onConfirm: (player) {
                                       if (player.isNotEmpty) {
                                         cubit.addBall(
+                                          context,
                                           0,
                                           false,
                                           bowlingTeamPlayerInvolved:
@@ -485,6 +496,7 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
                                         .players,
                                     (batsman, fielder, runs) {
                                       cubit.addBall(
+                                        context,
                                         runs,
                                         false,
                                         batsmanInvolved: batsman,
@@ -508,6 +520,7 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
                                   );
                                 } else {
                                   cubit.addBall(
+                                    context,
                                     0,
                                     false,
                                     wicketType: label,
@@ -602,7 +615,7 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
                           SecondaryButton(
                             title: "End Innings",
                             onTap: () {
-                              cubit.endInnings();
+                              cubit.endInnings(context, addBall: false);
                               currentCubit.optionType(null);
                             },
                             color: ColorsConstants.defaultWhite,
@@ -610,7 +623,8 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
                           // SecondaryButton(
                           //   title: "Change Target",
                           //   onTap: () {
-                          //     // cubit.addBall(0, false, wicketType: label);
+                          //     // cubit.addBall(
+                          //context,0, false, wicketType: label);
                           //     // currentCubit.newWicket(false);
                           //   },
                           //   color: ColorsConstants.defaultWhite,
@@ -623,6 +637,7 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
                                 strike,
                               )) {
                                 cubit.addBall(
+                                  context,
                                   0,
                                   false,
                                   wicketType: WicketType.retired,
@@ -701,13 +716,15 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
                             SecondaryButton(
                               title: "+$i",
                               onTap: () {
-                                // cubit.addBall(0, false, wicketType: label);
+                                // cubit.addBall(
+                                //context,0, false, wicketType: label);
                                 // currentCubit.newWicket(false)
                                 if (Methods.validScorerOperation(
                                   currBatsmen,
                                   strike,
                                 )) {
                                   cubit.addBall(
+                                    context,
                                     i,
                                     true,
                                     extraType: ExtraType.bonus,
@@ -771,13 +788,15 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
                             SecondaryButton(
                               title: "$i",
                               onTap: () {
-                                // cubit.addBall(0, false, wicketType: label);
+                                // cubit.addBall(
+                                //context,0, false, wicketType: label);
                                 // currentCubit.newWicket(false);
                                 if (Methods.validScorerOperation(
                                   currBatsmen,
                                   strike,
                                 )) {
                                   cubit.addBall(
+                                    context,
                                     i,
                                     true,
                                     extraType: ExtraType.moreRuns,
@@ -868,6 +887,7 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
                                           int.parse(label),
                                         );
                                     cubit.addBall(
+                                      context,
                                       int.parse(label),
                                       false,
                                       sector: sector,
@@ -946,6 +966,7 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
                           ),
                         InkWell(
                           onTap: () => cubit.addBall(
+                            context,
                             0,
                             false,
                             bowlerInvolved:
@@ -1047,7 +1068,7 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
                                 "Can't Undo Now",
                               );
                             } else {
-                              cubit.undoLastBall();
+                              cubit.undoLastBall(context);
                             }
                           },
                           child: SizedBox(

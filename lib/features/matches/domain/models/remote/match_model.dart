@@ -74,7 +74,7 @@ class MatchModel {
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
       'matchID': matchID,
-      'dateAndTime': dateAndTime.millisecondsSinceEpoch,
+      'dateAndTime': dateAndTime.toIso8601String(),
       'overs': overs,
       'matchType': matchType.matchType,
       'teamA': teamA.toJson(),
@@ -88,7 +88,7 @@ class MatchModel {
       'winner': winner,
       'teamAScore': teamAScore?.toJson(),
       'teamBScore': teamBScore?.toJson(),
-      'endDateTime': endDateTime?.millisecondsSinceEpoch,
+      'endDateTime': endDateTime?.toIso8601String(),
     };
   }
 

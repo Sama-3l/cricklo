@@ -39,6 +39,17 @@ import 'package:cricklo/features/notifications/data/usecases/team_response_invit
 import 'package:cricklo/features/notifications/domain/repo/notification_repo.dart';
 import 'package:cricklo/features/notifications/presentation/blocs/blocs/NotificationBloc/notification_bloc.dart';
 import 'package:cricklo/features/notifications/presentation/blocs/cubits/NotificationCubit/notification_cubit.dart';
+import 'package:cricklo/features/scorer/data/datasource/scorer_datasource.dart';
+import 'package:cricklo/features/scorer/data/repo/scorer_repo_impl.dart';
+import 'package:cricklo/features/scorer/data/usecases/get_match_state_usecase.dart';
+import 'package:cricklo/features/scorer/data/usecases/listen_to_match_usecase.dart';
+import 'package:cricklo/features/scorer/data/usecases/scorer_innings_change_usecase.dart';
+import 'package:cricklo/features/scorer/data/usecases/scorer_match_complete_usecase.dart';
+import 'package:cricklo/features/scorer/data/usecases/scorer_over_end_usecase.dart';
+import 'package:cricklo/features/scorer/data/usecases/scorer_update_usecase.dart';
+import 'package:cricklo/features/scorer/data/usecases/start_match_usecase.dart';
+import 'package:cricklo/features/scorer/domain/repo/scorer_repo.dart';
+import 'package:cricklo/features/scorer/presentation/blocs/cubits/ScorerMatchCenter/scorer_match_center_cubit.dart';
 import 'package:cricklo/features/teams/data/datasource/team_datasource_remote.dart';
 import 'package:cricklo/features/teams/data/repo/team_repo_impl.dart';
 import 'package:cricklo/features/teams/data/usecases/create_team_usecase.dart';
@@ -122,6 +133,7 @@ Future<void> initializeDependencies() async {
   _teamDependencies();
   _notificationDependencies();
   _matchDependencies();
+  _scorerMatchDependencies();
 }
 
 void _authDependencies() {
@@ -295,5 +307,55 @@ void _matchDependencies() {
   //cubits
   sl.registerFactory<CreateMatchCubit>(
     () => CreateMatchCubit(sl<CreateMatchUsecase>()),
+  );
+}
+
+void _scorerMatchDependencies() {
+  sl.registerLazySingleton<ScorerDatasourceRemote>(
+    () => ScorerDatasourceRemoteImpl(sl<ApiService>(), sl<SocketService>()),
+  );
+  // repo
+  sl.registerLazySingleton<ScorerRepo>(
+    () => ScorerRepoImpl(sl<ScorerDatasourceRemote>()),
+  );
+  //use-cases
+  sl.registerLazySingleton<ListenToMatchStreamUsecase>(
+    () => ListenToMatchStreamUsecase(sl<ScorerRepo>()),
+  );
+  sl.registerLazySingleton<GetMatchStateUsecase>(
+    () => GetMatchStateUsecase(sl<ScorerRepo>()),
+  );
+
+  sl.registerLazySingleton<ScorerInningsChangeUsecase>(
+    () => ScorerInningsChangeUsecase(sl<ScorerRepo>()),
+  );
+
+  sl.registerLazySingleton<ScorerCompleteUsecase>(
+    () => ScorerCompleteUsecase(sl<ScorerRepo>()),
+  );
+
+  sl.registerLazySingleton<ScorerOverEndUsecase>(
+    () => ScorerOverEndUsecase(sl<ScorerRepo>()),
+  );
+
+  sl.registerLazySingleton<ScorerUpdateUsecase>(
+    () => ScorerUpdateUsecase(sl<ScorerRepo>()),
+  );
+
+  sl.registerLazySingleton<StartMatchUsecase>(
+    () => StartMatchUsecase(sl<ScorerRepo>()),
+  );
+
+  //cubits
+  sl.registerFactory<ScorerMatchCenterCubit>(
+    () => ScorerMatchCenterCubit(
+      sl<ListenToMatchStreamUsecase>(),
+      sl<GetMatchStateUsecase>(),
+      sl<ScorerInningsChangeUsecase>(),
+      sl<ScorerCompleteUsecase>(),
+      sl<ScorerOverEndUsecase>(),
+      sl<ScorerUpdateUsecase>(),
+      sl<StartMatchUsecase>(),
+    ),
   );
 }

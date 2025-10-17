@@ -17,7 +17,7 @@ class _MatchListState extends State<MatchList> {
 
   @override
   Widget build(BuildContext context) {
-    final state = context.read<MainAppCubit>().state;
+    final state = context.watch<MainAppCubit>().state;
     final matches = state.matches
         .where((e) => e.teamA.inviteStatus != null)
         .toList();

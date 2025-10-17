@@ -123,6 +123,9 @@ class OversModel {
     List<MatchPlayerModel> battingTeamPlayers,
     List<MatchPlayerModel> bowlingTeamPlayers,
   ) {
+    final bowler = bowlingTeamPlayers
+        .where((e) => e.playerId == map['bowler'])
+        .first;
     return OversModel(
       overNumber: map['overNumber'] as int,
       runs: map['runs'] as int,
@@ -141,12 +144,16 @@ class OversModel {
       bowlerRuns: map['bowlerRuns'] as int,
       bowlerMaidens: map['bowlerMaidens'] as int,
       bowlerWickets: map['bowlerWickets'] as int,
-      bowler: MatchPlayerModel.fromMap(map['bowler']),
-      balls: List<BallModel>.from(
-        (map['balls'] as List<dynamic>).map<BallModel>(
-          (x) => BallModel.fromJson(x, battingTeamPlayers, bowlingTeamPlayers),
-        ),
-      ),
+      bowler: bowler,
+      balls: (map['balls'] as List<dynamic>)
+          .map<BallModel>(
+            (x) => BallModel.fromJson(
+              x,
+              battingTeam: battingTeamPlayers,
+              bowlingTeam: bowlingTeamPlayers,
+            ),
+          )
+          .toList(),
     );
   }
 }

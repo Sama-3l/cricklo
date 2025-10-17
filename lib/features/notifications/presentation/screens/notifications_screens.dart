@@ -53,6 +53,19 @@ class _NotificationsScreensState extends State<NotificationsScreens> {
                       ),
                     ),
                   )
+                : state.teamNotifications.isEmpty &&
+                      scorerInvites.isEmpty &&
+                      nonScorerInvites.isEmpty
+                ? Center(
+                    child: Text(
+                      "No Notifications",
+                      style: TextStyles.poppinsSemiBold.copyWith(
+                        fontSize: 24,
+                        letterSpacing: -1.2,
+                        color: ColorsConstants.accentOrange,
+                      ),
+                    ),
+                  )
                 : Padding(
                     padding: const EdgeInsets.only(left: 16, right: 8),
                     child: ListView(

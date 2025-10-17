@@ -4,7 +4,7 @@ import 'package:cricklo/features/scorer/domain/entities/scorer_entity.dart';
 class MatchScorerModel {
   final String playerId;
   final String name;
-  final String profilePic;
+  final String? profilePic;
 
   MatchScorerModel({
     required this.playerId,
@@ -40,7 +40,7 @@ class MatchScorerModel {
     return MatchScorerModel(
       playerId: map['playerId'] as String,
       name: map['name'] as String,
-      profilePic: map['profilePic'] as String,
+      profilePic: map['profilePic'] as String?,
     );
   }
 }

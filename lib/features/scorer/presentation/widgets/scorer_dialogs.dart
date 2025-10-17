@@ -31,8 +31,9 @@ Future<Map<String, String>?> showTossDialog(
                 Text(
                   "Toss Decision",
                   style: TextStyles.poppinsSemiBold.copyWith(
-                    fontSize: 18,
+                    fontSize: 24,
                     color: ColorsConstants.defaultBlack,
+                    letterSpacing: -1.2,
                   ),
                 ),
                 const SizedBox(height: 24),

@@ -35,7 +35,6 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
 
     socketService.socket?.on('notification:new', (data) {
       if (data is Map<String, dynamic>) {
-        print(data);
         controller.add(data);
       }
     });
@@ -63,8 +62,6 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
     String inviteId,
     String action,
   ) {
-    print(matchId);
-    print(inviteId);
     return _apiService.matchInviteResponse(matchId, inviteId, {
       "action": action,
     });

@@ -17,4 +17,5 @@ class Routes {
   static const createMatch = "/create-match";
   static const scorerInitialPage = "/scorer-intial-page";
   static const scorerMatchCenter = "/scorer-match-center";
+  static const scorerMatchComplete = "/scorer-match-complete";
 }

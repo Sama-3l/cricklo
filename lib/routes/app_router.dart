@@ -11,6 +11,7 @@ import 'package:cricklo/features/mainapp/presentation/screens/main_app.dart';
 import 'package:cricklo/features/matches/domain/entities/match_entity.dart';
 import 'package:cricklo/features/matches/presentation/screens/create_match.dart';
 import 'package:cricklo/features/notifications/presentation/screens/notifications_screens.dart';
+import 'package:cricklo/features/scorer/presentation/screens/match_result_screen.dart';
 import 'package:cricklo/features/scorer/presentation/screens/scorer_match_center.dart';
 import 'package:cricklo/features/scorer/presentation/screens/scorer_match_initial_screen.dart';
 import 'package:cricklo/features/teams/domain/entities/team_entity.dart';
@@ -150,8 +151,29 @@ class AppRouter {
         name: Routes.scorerMatchCenter,
         path: Routes.scorerMatchCenter,
         pageBuilder: (context, state) {
-          final match = state.extra as MatchEntity? ?? dummyMatchTossDone;
-          return MaterialPage(child: ScorerMatchCenter(match: match));
+          final extras = state.extra as List<dynamic>;
+          final match = extras[0] as MatchEntity? ?? dummyMatchTossDone;
+          final spectator = extras[1] as bool? ?? true;
+          return MaterialPage(
+            child: ScorerMatchCenter(match: match, spectator: spectator),
+          );
+        },
+      ),
+      GoRoute(
+        name: Routes.scorerMatchComplete,
+        path: Routes.scorerMatchComplete,
+        pageBuilder: (context, state) {
+          final extras = state.extra as List<dynamic>;
+          final logo = extras[0] as String;
+          final name = extras[1] as String;
+          final resultMessage = extras[2] as String;
+          return MaterialPage(
+            child: MatchResultScreen(
+              teamLogo: logo,
+              teamName: name,
+              resultMessage: resultMessage,
+            ),
+          );
         },
       ),
     ],

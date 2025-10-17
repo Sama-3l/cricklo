@@ -7,6 +7,10 @@ class BallEntity {
   final bool isExtra;
   final ExtraType? extraType;
   final WicketType? wicketType;
+  String? secondBatsmanId;
+  String? batsmanId;
+  String? bowlerId;
+  String? fielderId;
   MatchPlayerEntity? secondBatsman;
   MatchPlayerEntity? batsman;
   MatchPlayerEntity? bowler;
@@ -23,6 +27,10 @@ class BallEntity {
     this.batsman,
     this.bowler,
     this.fielder,
+    this.secondBatsmanId,
+    this.batsmanId,
+    this.bowlerId,
+    this.fielderId,
   });
 
   int get totalRuns =>

@@ -1,5 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:cricklo/core/utils/constants/methods.dart';
 import 'package:cricklo/features/scorer/domain/entities/innings_entity.dart';
+import 'package:cricklo/features/scorer/domain/entities/match_team_entity.dart';
 import 'package:cricklo/features/scorer/domain/models/remote/match_team_model.dart';
 import 'package:cricklo/features/scorer/domain/models/remote/overs_model.dart';
 
@@ -37,10 +39,11 @@ class InningsModel {
     };
   }
 
-  InningsEntity toEntity() {
+  InningsEntity toEntity(MatchTeamEntity teamA, MatchTeamEntity teamB) {
+    final battingTeamEntity = teamA.id == battingTeam.id ? teamA : teamB;
     return InningsEntity(
       number: number,
-      battingTeam: battingTeam.toEntity(),
+      battingTeam: battingTeamEntity,
       runs: runs,
       wickets: wickets,
       overs: overs,
@@ -76,7 +79,7 @@ class InningsModel {
       runs: map['runs'] as int,
       wickets: map['wickets'] as int,
       overs: map['overs'] as String,
-      crr: map['crr'] as double,
+      crr: Methods.toDouble(map['crr']),
       extras: map['extras'] as int,
       oversData: (map['oversData'] as List<dynamic>)
           .map<OversModel>(

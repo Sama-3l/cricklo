@@ -45,14 +45,19 @@ class PartnershipModel {
     );
   }
 
-  factory PartnershipModel.fromJson(Map<String, dynamic> map) {
+  factory PartnershipModel.fromJson(
+    Map<String, dynamic> map,
+    List<MatchPlayerModel> players,
+  ) {
+    final player1 = players
+        .where((e) => e.playerId == map['player1'])
+        .firstOrNull;
+    final player2 = players
+        .where((e) => e.playerId == map['player2'])
+        .firstOrNull;
     return PartnershipModel(
-      player1: map['player1'] != null
-          ? MatchPlayerModel.fromMap(map['player1'] as Map<String, dynamic>)
-          : null,
-      player2: map['player2'] != null
-          ? MatchPlayerModel.fromMap(map['player2'] as Map<String, dynamic>)
-          : null,
+      player1: player1,
+      player2: player2,
       runs: map['runs'] as int,
       balls: map['balls'] as int,
     );
