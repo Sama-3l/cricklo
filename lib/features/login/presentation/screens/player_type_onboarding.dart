@@ -46,15 +46,20 @@ class _PlayerTypeOnboardingState extends State<PlayerTypeOnboarding> {
               Padding(
                 padding: const EdgeInsets.only(top: 40.0),
                 child: CircleAvatar(
-                  radius: 32,
+                  radius: 48,
                   backgroundColor: ColorsConstants.accentOrange.withValues(
                     alpha: 0.2,
                   ),
-                  child: Icon(
-                    CupertinoIcons.person_fill,
-                    size: 24,
-                    color: ColorsConstants.defaultBlack,
-                  ),
+                  backgroundImage: widget.user.profilePicFile != null
+                      ? FileImage(widget.user.profilePicFile!)
+                      : null,
+                  child: widget.user.profilePicFile == null
+                      ? Icon(
+                          CupertinoIcons.person_fill,
+                          size: 24,
+                          color: ColorsConstants.defaultBlack,
+                        )
+                      : null,
                 ),
               ),
               const SizedBox(height: 24),

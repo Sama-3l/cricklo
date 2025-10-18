@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:io';
+
 import 'package:cricklo/core/utils/constants/enums.dart';
 import 'package:cricklo/features/login/domain/entities/location_entity.dart';
 
@@ -7,6 +9,7 @@ class UserEntity {
   final String name;
   final String email;
   final int unreadNotifications;
+  final File? profilePicFile;
   final String? profilePic;
   final String phoneNumber;
   final String countryCode;
@@ -20,6 +23,7 @@ class UserEntity {
     this.playerType = PlayerType.batter,
     this.batterType,
     this.bowlerType,
+    this.profilePicFile,
     required this.unreadNotifications,
     required this.profilePic,
     required this.phoneNumber,
@@ -34,6 +38,7 @@ class UserEntity {
     String? name,
     String? email,
     int? unreadNotifications,
+    File? profilePicFile,
     String? profilePic,
     String? phoneNumber,
     String? countryCode,
@@ -48,6 +53,7 @@ class UserEntity {
       email: email ?? this.email,
       unreadNotifications: unreadNotifications ?? this.unreadNotifications,
       profilePic: profilePic ?? this.profilePic,
+      profilePicFile: profilePicFile ?? this.profilePicFile,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       countryCode: countryCode ?? this.countryCode,
       location: location ?? this.location,

@@ -2,6 +2,7 @@ class OnboardingUsecaseEntity {
   final String name;
   final String email;
   final String playerType;
+  final String? profilePhoto;
   final String? batsmanType;
   final String? bowlerType;
   final String area;
@@ -16,6 +17,7 @@ class OnboardingUsecaseEntity {
     required this.playerType,
     this.batsmanType,
     this.bowlerType,
+    this.profilePhoto,
     required this.area,
     required this.city,
     required this.state,
@@ -29,6 +31,7 @@ class OnboardingUsecaseEntity {
     "Player_Type": playerType,
     "Batsman_Type": batsmanType,
     "Bowler_Type": bowlerType,
+    "Profile_Photo": profilePhoto,
     "Area": area,
     "City": city,
     "State": state,

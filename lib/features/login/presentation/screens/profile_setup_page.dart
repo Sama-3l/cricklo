@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cricklo/core/utils/common/primary_button.dart';
 import 'package:cricklo/core/utils/common/textfield.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
@@ -7,6 +9,7 @@ import 'package:cricklo/routes/app_route_constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProfileSetupPage extends StatefulWidget {
   const ProfileSetupPage({super.key, required this.phoneNumber});
@@ -30,6 +33,8 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
   final FocusNode _areaNode = FocusNode();
   final FocusNode _cityNode = FocusNode();
   final FocusNode _stateNode = FocusNode();
+
+  File? logo;
 
   @override
   void initState() {
@@ -91,6 +96,49 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
     super.dispose();
   }
 
+  Future<void> pickLogo() async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? pickedFile = await picker.pickImage(
+      source: ImageSource.gallery,
+    );
+
+    if (pickedFile != null) {
+      // final croppedFile = await ImageCropper().cropImage(
+      //   sourcePath: pickedFile.path,
+
+      //   uiSettings: [
+      //     AndroidUiSettings(
+      //       toolbarTitle: 'Edit Image',
+      //       toolbarColor: ColorsConstants.accentOrange,
+      //       toolbarWidgetColor: ColorsConstants.defaultWhite,
+      //       lockAspectRatio: false,
+      //       cropStyle: CropStyle.circle,
+      //       aspectRatioPresets: [
+      //         CropAspectRatioPreset.square,
+      //         CropAspectRatioPreset.ratio16x9,
+      //         CropAspectRatioPreset.original,
+      //       ],
+      //     ),
+      //     IOSUiSettings(
+      //       title: 'Edit Image',
+      //       cropStyle: CropStyle.circle,
+      //       aspectRatioPresets: [
+      //         CropAspectRatioPreset.square,
+      //         CropAspectRatioPreset.ratio16x9,
+      //         CropAspectRatioPreset.original,
+      //       ],
+      //     ),
+      //   ],
+      // );
+
+      if (pickedFile != null) {
+        setState(() {
+          logo = File(pickedFile.path);
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -138,6 +186,7 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
                 GoRouter.of(context).pushNamed(
                   Routes.onboardingScreenOne,
                   extra: UserEntity(
+                    profilePicFile: logo,
                     profileId: "",
                     profilePic: "",
                     unreadNotifications: 0,
@@ -166,15 +215,22 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
             children: [
               Padding(
                 padding: const EdgeInsets.only(top: 40.0),
-                child: CircleAvatar(
-                  radius: 32,
-                  backgroundColor: ColorsConstants.accentOrange.withValues(
-                    alpha: 0.2,
-                  ),
-                  child: Icon(
-                    CupertinoIcons.person_fill,
-                    size: 24,
-                    color: ColorsConstants.defaultBlack,
+                child: InkWell(
+                  onTap: () => pickLogo(),
+                  borderRadius: BorderRadius.circular(48),
+                  child: CircleAvatar(
+                    radius: 48,
+                    backgroundColor: ColorsConstants.accentOrange.withValues(
+                      alpha: 0.2,
+                    ),
+                    backgroundImage: logo != null ? FileImage(logo!) : null,
+                    child: logo == null
+                        ? Icon(
+                            CupertinoIcons.person_fill,
+                            size: 24,
+                            color: ColorsConstants.defaultBlack,
+                          )
+                        : null,
                   ),
                 ),
               ),

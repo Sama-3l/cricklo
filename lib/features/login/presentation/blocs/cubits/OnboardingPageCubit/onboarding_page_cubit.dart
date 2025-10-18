@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:cricklo/core/utils/constants/enums.dart';
+import 'package:cricklo/core/utils/constants/methods.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/login/data/entities/onboarding_usecase_entity.dart';
 import 'package:cricklo/features/login/data/usecases/onboarding_usecase.dart';
@@ -78,8 +79,12 @@ class OnboardingPageCubit extends Cubit<OnboardingPageState> {
         bowlerType = null;
     }
     emit(OnboardingPageLoading(loading: true));
+    final profilePic = userEntity.profilePicFile != null
+        ? await Methods.imageToBase64(userEntity.profilePicFile!)
+        : null;
     final response = await _onboardingUseCase(
       OnboardingUsecaseEntity(
+        profilePhoto: profilePic,
         name: userEntity.name,
         email: userEntity.email,
         playerType: playerType,

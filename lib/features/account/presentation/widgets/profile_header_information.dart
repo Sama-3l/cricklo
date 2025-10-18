@@ -27,16 +27,20 @@ class ProfileHeaderInformation extends StatelessWidget {
                 alpha: 0.2,
               ),
               backgroundImage: user != null
-                  ? null
+                  ? user!.profilePic != null
+                        ? CachedNetworkImageProvider(user!.profilePic!)
+                        : null
                   : team!.teamLogo.isNotEmpty
                   ? CachedNetworkImageProvider(team!.teamLogo)
                   : null,
               child: user != null
-                  ? Icon(
-                      CupertinoIcons.person_fill,
-                      size: 16,
-                      color: ColorsConstants.defaultBlack,
-                    )
+                  ? user!.profilePic != null
+                        ? null
+                        : Icon(
+                            CupertinoIcons.person_fill,
+                            size: 16,
+                            color: ColorsConstants.defaultBlack,
+                          )
                   : team!.teamLogo.isEmpty
                   ? Icon(
                       CupertinoIcons.person_2_fill,

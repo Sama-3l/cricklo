@@ -61,7 +61,7 @@ class MainAppCubit extends Cubit<MainAppState> {
           }
           emit(
             UpdateIndex(
-              matches: state.matches,
+              matches: [],
               currentIndex: 0,
               showOptions: false,
               user: null,
