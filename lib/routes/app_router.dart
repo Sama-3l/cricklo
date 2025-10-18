@@ -18,6 +18,8 @@ import 'package:cricklo/features/teams/domain/entities/team_entity.dart';
 import 'package:cricklo/features/teams/presentation/screens/add_players_screen.dart';
 import 'package:cricklo/features/teams/presentation/screens/create_team_screen.dart';
 import 'package:cricklo/features/teams/presentation/screens/team_page.dart';
+import 'package:cricklo/features/tournament/domain/entities/tournament_entity.dart';
+import 'package:cricklo/features/tournament/presentation/screens/create_tournament.dart';
 import 'package:cricklo/routes/app_route_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -173,6 +175,16 @@ class AppRouter {
               teamName: name,
               resultMessage: resultMessage,
             ),
+          );
+        },
+      ),
+      GoRoute(
+        name: Routes.createTournament,
+        path: Routes.createTournament,
+        pageBuilder: (context, state) {
+          final function = state.extra as Function(TournamentEntity match);
+          return MaterialPage(
+            child: CreateTournament(onCreate: (match) => function(match)),
           );
         },
       ),

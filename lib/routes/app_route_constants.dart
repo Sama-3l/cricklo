@@ -18,4 +18,6 @@ class Routes {
   static const scorerInitialPage = "/scorer-intial-page";
   static const scorerMatchCenter = "/scorer-match-center";
   static const scorerMatchComplete = "/scorer-match-complete";
+
+  static const createTournament = "/create-tournament";
 }

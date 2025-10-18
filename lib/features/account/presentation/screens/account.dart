@@ -31,7 +31,7 @@ class AccountPage extends StatelessWidget {
       child: BlocBuilder<AccountCubit, AccountPageState>(
         builder: (context, state) {
           final cubit = context.read<AccountCubit>();
-
+          final state = cubit.state;
           // MAIN TABS LIST
           final mainTabs = [
             'Player Overview',
@@ -69,11 +69,12 @@ class AccountPage extends StatelessWidget {
                     index: state.selectedMainTab,
                     children: [
                       // Player Overview
-                      PlayerOverview(),
+                      PlayerOverview(userEntity: state.userEntity!),
 
                       StatisticsPage(),
 
                       TeamsGrid(
+                        loading: state.teamsLoading,
                         teams: state.teams,
                         onTap: (team) => GoRouter.of(context).pushNamed(
                           Routes.teamPage,

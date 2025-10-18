@@ -1,95 +1,91 @@
 import 'package:cricklo/core/utils/constants/theme.dart';
-import 'package:cricklo/features/account/presentation/widgets/stat_tab.dart';
 import 'package:flutter/material.dart';
+// import your ColorsConstants and TextStyles if not already in scope
 
 class StatsTableFilterTabBar extends StatelessWidget {
+  final int selectedTab;
+  final Function(int) selectTab;
+  final List<String> options;
+
   const StatsTableFilterTabBar({
     super.key,
-    required this.options,
-    required this.selectTab,
     required this.selectedTab,
+    required this.selectTab,
+    required this.options,
   });
-
-  final List<String> options;
-  final Function(int) selectTab;
-  final int selectedTab;
 
   @override
   Widget build(BuildContext context) {
+    final width =
+        MediaQuery.of(context).size.width - 32; // adjust for screen padding
+    final segmentWidth = width / options.length;
+
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: ColorsConstants.accentOrange),
-        borderRadius: BorderRadius.circular(8),
+        color: ColorsConstants.defaultBlack.withValues(alpha: 0.07),
+        borderRadius: BorderRadius.circular(32),
       ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
+      padding: const EdgeInsets.all(4),
+      child: Stack(
+        alignment: Alignment.centerLeft,
         children: [
-          ...[
-            for (int i = 0; i < options.length; i++) ...[
-              StatTab(
-                lastIndex: options.length - 1,
-                label: options[i],
-                selected: selectedTab == i,
-                index: i,
-                onStatOptionTap: selectTab,
+          // Animated background for selected tab
+          AnimatedAlign(
+            alignment: _alignmentForIndex(selectedTab, options.length),
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeInOut,
+            child: Container(
+              width: segmentWidth - 8,
+              height: 36,
+              decoration: BoxDecoration(
+                color: ColorsConstants.accentOrange,
+                borderRadius: BorderRadius.circular(32),
               ),
-              if (i != options.length - 1)
-                Container(
-                  color: ColorsConstants.accentOrange,
-                  width: selectedTab == i || selectedTab == i + 1 ? 0 : 0.5,
-                  height: 16,
+            ),
+          ),
+
+          // Options row
+          Row(
+            children: List.generate(options.length, (index) {
+              final isSelected = selectedTab == index;
+              return Expanded(
+                child: InkWell(
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  borderRadius: BorderRadius.circular(32),
+                  onTap: () => selectTab(index),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    alignment: Alignment.center,
+                    child: Text(
+                      options[index],
+                      style: TextStyles.poppinsSemiBold.copyWith(
+                        fontSize: 12,
+                        letterSpacing: -0.5,
+                        color: isSelected
+                            ? ColorsConstants.defaultWhite
+                            : ColorsConstants.defaultBlack,
+                      ),
+                    ),
+                  ),
                 ),
-            ],
-          ],
-          // StatTab(
-          //   label: 'Bat',
-          //   selected: state.selectedStatisticsTab == 0,
-          //   index: 0,
-          // ),
-          // Container(
-          //   color: ColorsConstants.accentOrange,
-          //   width:
-          //       state.selectedStatisticsTab == 0 ||
-          //           state.selectedStatisticsTab == 1
-          //       ? 0
-          //       : 0.5,
-          //   height: 16,
-          // ),
-          // StatTab(
-          //   label: 'Bowl',
-          //   selected: state.selectedStatisticsTab == 1,
-          //   index: 1,
-          // ),
-          // Container(
-          //   color: ColorsConstants.accentOrange,
-          //   width:
-          //       state.selectedStatisticsTab == 1 ||
-          //           state.selectedStatisticsTab == 2
-          //       ? 0
-          //       : 0.5,
-          //   height: 16,
-          // ),
-          // StatTab(
-          //   label: 'Field',
-          //   selected: state.selectedStatisticsTab == 2,
-          //   index: 2,
-          // ),
-          // Container(
-          //   color: ColorsConstants.accentOrange,
-          //   width:
-          //       state.selectedStatisticsTab == 2 ||
-          //           state.selectedStatisticsTab == 3
-          //       ? 0
-          //       : 0.5,
-          //   height: 16,
-          // ),
-          // StatTab(
-          //   label: 'Match-wise',
-          //   selected: state.selectedStatisticsTab == 3,
-          //   index: 3,
-          // ),
+              );
+            }),
+          ),
         ],
       ),
     );
+  }
+
+  Alignment _alignmentForIndex(int index, int length) {
+    if (length == 1) return Alignment.center;
+    if (length == 2) {
+      return index == 0 ? Alignment.centerLeft : Alignment.centerRight;
+    }
+
+    // Evenly distribute for >2 options
+    final step = 2 / (length - 1);
+    final x = -1.0 + (index * step);
+    return Alignment(x, 0);
   }
 }

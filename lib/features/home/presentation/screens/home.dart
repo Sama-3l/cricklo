@@ -286,7 +286,38 @@ class _HomePageState extends State<HomePage>
 
                   WidgetDecider.buildOptionButton(
                     "Create Tournament",
-                    () {},
+                    () async {
+                      toggleShowOptions();
+                      final done = await GoRouter.of(context).pushNamed(
+                        Routes.createTournament,
+                        extra: (match) => {},
+                      );
+                      if (done != null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            behavior: SnackBarBehavior.floating,
+                            backgroundColor: ColorsConstants.defaultWhite,
+                            shape: RoundedRectangleBorder(
+                              side: BorderSide(
+                                color: ColorsConstants.accentOrange,
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadiusGeometry.circular(8),
+                            ),
+                            content: Center(
+                              child: Text(
+                                "Invites sent to all players",
+                                style: TextStyles.poppinsSemiBold.copyWith(
+                                  fontSize: 12,
+                                  color: ColorsConstants.accentOrange,
+                                  letterSpacing: -0.5,
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+                    },
                     _slide,
                     _opacity,
                   ),

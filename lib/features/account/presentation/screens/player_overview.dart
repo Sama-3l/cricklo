@@ -1,16 +1,17 @@
 import 'package:cricklo/core/utils/common/primary_button.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
-import 'package:cricklo/features/account/presentation/blocs/cubits/AccountPageCubit/account_page_cubit.dart';
 import 'package:cricklo/features/account/presentation/widgets/profile_header_information.dart';
 import 'package:cricklo/features/account/presentation/widgets/recent_form_stats.dart';
 import 'package:cricklo/features/account/presentation/widgets/yearly_review.dart';
 import 'package:cricklo/features/home/presentation/widgets/section_header.dart';
+import 'package:cricklo/features/login/domain/entities/user_entitiy.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PlayerOverview extends StatefulWidget {
-  const PlayerOverview({super.key});
+  const PlayerOverview({super.key, required this.userEntity});
+
+  final UserEntity userEntity;
 
   @override
   State<PlayerOverview> createState() => _PlayerOverviewState();
@@ -19,7 +20,6 @@ class PlayerOverview extends StatefulWidget {
 class _PlayerOverviewState extends State<PlayerOverview> {
   @override
   Widget build(BuildContext context) {
-    final state = context.read<AccountCubit>().state;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(top: 24),
       child: ListView(
@@ -29,7 +29,7 @@ class _PlayerOverviewState extends State<PlayerOverview> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  ProfileHeaderInformation(user: state.userEntity),
+                  ProfileHeaderInformation(user: widget.userEntity),
                   const SizedBox(height: 16),
                   Row(
                     children: [

@@ -1,6 +1,7 @@
 import 'package:cricklo/features/account/presentation/blocs/cubits/AccountPageCubit/account_page_cubit.dart';
-import 'package:cricklo/features/account/presentation/widgets/stats_table.dart';
 import 'package:cricklo/features/account/presentation/widgets/stats_table_filter_tab_bar.dart';
+import 'package:cricklo/features/account/presentation/widgets/stats_table.dart';
+// import 'package:cricklo/features/account/presentation/widgets/stats_table_filter_tab_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -17,7 +18,7 @@ class StatisticsPage extends StatelessWidget {
         children: [
           // Sub tabs
           Padding(
-            padding: const EdgeInsets.only(bottom: 8.0),
+            padding: EdgeInsets.only(bottom: 8),
             child: StatsTableFilterTabBar(
               selectedTab: state.selectedStatisticsTab,
               selectTab: (index) => cubit.changeStatisticsTab(index),
@@ -34,6 +35,8 @@ class StatisticsPage extends StatelessWidget {
                     horizontal: 8.0,
                   ).copyWith(top: 8),
                   child: StatsTable(
+                    horizontalLine: true,
+                    verticalLine: false,
                     stats: {
                       'Matches': ['0', '0', '0'],
                       'Innings': ['0', '0', '0'],
@@ -55,6 +58,8 @@ class StatisticsPage extends StatelessWidget {
                     horizontal: 8.0,
                   ).copyWith(top: 8),
                   child: StatsTable(
+                    horizontalLine: true,
+                    verticalLine: false,
                     stats: {
                       'Matches': ['0', '0', '0'],
                       'Innings': ['0', '0', '0'],
@@ -76,6 +81,8 @@ class StatisticsPage extends StatelessWidget {
                     horizontal: 8.0,
                   ).copyWith(top: 8),
                   child: StatsTable(
+                    horizontalLine: true,
+                    verticalLine: false,
                     stats: {
                       'Catches': ['0', '0', '0'],
                       'Stumping': ['0', '0', '0'],

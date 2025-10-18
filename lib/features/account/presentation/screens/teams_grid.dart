@@ -1,20 +1,23 @@
 import 'package:cricklo/core/utils/constants/theme.dart';
-import 'package:cricklo/features/account/presentation/blocs/cubits/AccountPageCubit/account_page_cubit.dart';
 import 'package:cricklo/features/teams/domain/entities/team_entity.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class TeamsGrid extends StatelessWidget {
   final List<TeamEntity> teams;
+  final bool loading;
   final void Function(TeamEntity) onTap;
 
-  const TeamsGrid({super.key, required this.teams, required this.onTap});
+  const TeamsGrid({
+    super.key,
+    required this.teams,
+    required this.loading,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final state = context.read<AccountCubit>().state;
-    return state.teamsLoading
+    return loading
         ? Center(
             child: SizedBox(
               height: 24,
