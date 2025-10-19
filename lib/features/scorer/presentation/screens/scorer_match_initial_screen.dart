@@ -355,37 +355,43 @@ class _ScorerMatchInitialScreenState extends State<ScorerMatchInitialScreen> {
                         ],
                       ),
                       const SizedBox(height: 8),
-                      Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: ColorsConstants.onSurfaceGrey.withValues(
-                            alpha: 0.2,
-                          ),
-                          borderRadius: BorderRadius.circular(8),
+                      InkWell(
+                        borderRadius: BorderRadius.circular(8),
+                        onTap: () => GoRouter.of(context).push(
+                          Routes.profilePage,
+                          extra: widget.matchEntity.scorer["profileId"],
                         ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              widget.matchEntity.scorer["name"],
-                              style: TextStyles.poppinsMedium.copyWith(
-                                fontSize: 16,
-                                letterSpacing: -0.8,
-                                color: ColorsConstants.defaultBlack,
-                              ),
+                        child: Container(
+                          width: double.infinity,
+                          padding: EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: ColorsConstants.onSurfaceGrey.withValues(
+                              alpha: 0.2,
                             ),
-                            Text(
-                              widget.matchEntity.scorer["profileId"],
-                              style: TextStyles.poppinsMedium.copyWith(
-                                fontSize: 12,
-                                letterSpacing: -0.4,
-                                color: ColorsConstants.defaultBlack.withValues(
-                                  alpha: 0.5,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                widget.matchEntity.scorer["name"],
+                                style: TextStyles.poppinsMedium.copyWith(
+                                  fontSize: 16,
+                                  letterSpacing: -0.8,
+                                  color: ColorsConstants.defaultBlack,
                                 ),
                               ),
-                            ),
-                          ],
+                              Text(
+                                widget.matchEntity.scorer["profileId"],
+                                style: TextStyles.poppinsMedium.copyWith(
+                                  fontSize: 12,
+                                  letterSpacing: -0.4,
+                                  color: ColorsConstants.defaultBlack
+                                      .withValues(alpha: 0.5),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ],

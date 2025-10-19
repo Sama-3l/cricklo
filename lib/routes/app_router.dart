@@ -1,5 +1,6 @@
 import 'package:cricklo/core/utils/constants/dummy_data.dart';
 import 'package:cricklo/core/utils/constants/global_variables.dart';
+import 'package:cricklo/features/account/presentation/screens/profile_page.dart';
 import 'package:cricklo/features/login/domain/entities/user_entitiy.dart';
 import 'package:cricklo/features/login/presentation/screens/login_page.dart';
 import 'package:cricklo/features/login/presentation/screens/otp_page.dart';
@@ -206,6 +207,14 @@ class AppRouter {
         pageBuilder: (context, state) {
           final tournament = state.extra as TournamentEntity;
           return MaterialPage(child: AddModeratorsPage(tournament: tournament));
+        },
+      ),
+      GoRoute(
+        name: Routes.profilePage,
+        path: Routes.profilePage,
+        pageBuilder: (context, state) {
+          final userId = state.extra as String;
+          return MaterialPage(child: ProfilePage(userId: userId));
         },
       ),
     ],

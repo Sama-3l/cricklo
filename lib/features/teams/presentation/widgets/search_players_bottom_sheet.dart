@@ -5,6 +5,7 @@ import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/teams/domain/entities/search_user_entity.dart';
 import 'package:cricklo/features/teams/presentation/blocs/cubits/SearchPlayersCubit/search_players_cubit.dart';
 import 'package:cricklo/injection_container.dart';
+import 'package:cricklo/routes/app_route_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -169,6 +170,10 @@ class _SearchPlayersBottomSheetState extends State<SearchPlayersBottomSheet> {
                                     : 0,
                               ),
                               child: ListTile(
+                                onLongPress: () => GoRouter.of(context).push(
+                                  Routes.profilePage,
+                                  extra: player.playerId,
+                                ),
                                 selected: selected,
                                 selectedTileColor: ColorsConstants.accentOrange,
                                 leading: Icon(

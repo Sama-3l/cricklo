@@ -16,6 +16,7 @@ class ScorerInitialScreenTeamsHeader extends StatelessWidget {
         children: [
           Expanded(
             child: ScorerTeamHeaderItem(
+              team: matchEntity.teamA,
               teamId: matchEntity.teamA.id,
               teamLogo: matchEntity.teamA.teamLogo,
               teamName: matchEntity.teamA.name,
@@ -25,6 +26,7 @@ class ScorerInitialScreenTeamsHeader extends StatelessWidget {
           const SizedBox(width: 16),
           Expanded(
             child: ScorerTeamHeaderItem(
+              team: matchEntity.teamB,
               teamId: matchEntity.teamB.id,
               teamLogo: matchEntity.teamB.teamLogo,
               teamName: matchEntity.teamB.name,

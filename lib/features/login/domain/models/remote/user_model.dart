@@ -107,7 +107,6 @@ class UserModel {
           break;
       }
     }
-
     return UserModel(
       unreadNotifications: data["unreadNotifications"] as int? ?? 0,
       profilePic: data['Profile_Photo'],
@@ -135,6 +134,22 @@ class UserModel {
       unreadNotifications: unreadNotifications,
       profilePic: profilePic,
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      "profileId": profileId,
+      "name": name,
+      "email": email,
+      "phoneNumber": phoneNumber ?? "1234567890",
+      "countryCode": countryCode ?? "+91",
+      "location": location,
+      "playerType": playerType,
+      "batterType": batterType,
+      "bowlerType": bowlerType,
+      "unreadNotifications": unreadNotifications,
+      "profilePic": profilePic,
+    };
   }
 
   UserModel copyWith({

@@ -2,9 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cricklo/core/utils/common/primary_button.dart';
 import 'package:cricklo/core/utils/common/textfield.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
+import 'package:cricklo/features/matches/domain/entities/match_entity.dart';
 import 'package:cricklo/features/matches/presentation/blocs/cubits/SearchTeamCubit/search_team_cubit.dart';
 import 'package:cricklo/features/teams/domain/entities/team_entity.dart';
 import 'package:cricklo/injection_container.dart';
+import 'package:cricklo/routes/app_route_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -152,6 +154,13 @@ class _SearchTeamsBottomSheetState extends State<SearchTeamsBottomSheet> {
                                   : 0,
                             ).copyWith(top: 6, bottom: 6),
                             child: InkWell(
+                              onLongPress: () => GoRouter.of(context).push(
+                                Routes.teamPage,
+                                extra: [
+                                  state.searchResults[index],
+                                  <MatchEntity>[],
+                                ],
+                              ),
                               onTap: () {
                                 setState(() {
                                   if (selected) {
@@ -167,7 +176,7 @@ class _SearchTeamsBottomSheetState extends State<SearchTeamsBottomSheet> {
                               child: Container(
                                 padding: EdgeInsets.symmetric(
                                   horizontal: 16,
-                                  vertical: 4,
+                                  vertical: 16,
                                 ),
                                 decoration: BoxDecoration(
                                   color: selected
@@ -177,7 +186,7 @@ class _SearchTeamsBottomSheetState extends State<SearchTeamsBottomSheet> {
                                 child: Row(
                                   children: [
                                     CircleAvatar(
-                                      radius: 16,
+                                      radius: 24,
                                       backgroundImage:
                                           CachedNetworkImageProvider(
                                             team.teamLogo,

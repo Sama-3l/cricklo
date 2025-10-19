@@ -1,7 +1,9 @@
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:cricklo/core/utils/constants/global_variables.dart';
+import 'package:cricklo/features/account/data/usecases/get_profile_usecase.dart';
 import 'package:cricklo/features/account/data/usecases/get_teams_usecase.dart';
 import 'package:cricklo/features/account/presentation/blocs/cubits/AccountPageCubit/account_page_cubit.dart';
+import 'package:cricklo/features/account/presentation/blocs/cubits/cubit/profile_page_cubit.dart';
 import 'package:cricklo/features/login/data/datasource/login_remote_datasource.dart';
 import 'package:cricklo/features/login/data/repo/auth_repo_impl.dart';
 import 'package:cricklo/features/login/data/usecases/login_usecase.dart';
@@ -190,6 +192,9 @@ void _mainAppDependencies() {
   sl.registerLazySingleton<LogoutUsecase>(
     () => LogoutUsecase(sl<MainAppRepository>()),
   );
+  sl.registerLazySingleton<GetProfileUsecase>(
+    () => GetProfileUsecase(sl<MainAppRepository>()),
+  );
   //cubits
   sl.registerFactory<MainAppCubit>(
     () => MainAppCubit(
@@ -197,6 +202,9 @@ void _mainAppDependencies() {
       sl<LogoutUsecase>(),
       sl<GetUserMatchesUsecase>(),
     ),
+  );
+  sl.registerFactory<ProfilePageCubit>(
+    () => ProfilePageCubit(sl<GetTeamsUsecase>(), sl<GetProfileUsecase>()),
   );
 }
 

@@ -1,3 +1,4 @@
+import 'package:cricklo/features/account/domain/models/remote/get_profile_response_model.dart';
 import 'package:cricklo/features/account/domain/models/remote/get_teams_response_model.dart';
 import 'package:cricklo/features/login/domain/models/remote/login_response_model.dart';
 import 'package:cricklo/features/login/domain/models/remote/set_pin_response_model.dart';
@@ -40,6 +41,9 @@ abstract class ApiService {
 
   @GET(ApiEndpointConstants.getCurrentUser)
   Future<UserModel> getCurrentUser();
+
+  @GET(ApiEndpointConstants.getProfile)
+  Future<GetProfileResponseModel> getProfile(@Path("userId") String userId);
 
   @POST(ApiEndpointConstants.logout)
   Future<LogoutModelRemote> logout();

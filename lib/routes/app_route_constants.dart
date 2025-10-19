@@ -9,6 +9,7 @@ class Routes {
   static const notifications = "/notifications";
 
   static const mainAppScreen = "/";
+  static const profilePage = "/profile-page";
 
   static const createTeam = "/create-team";
   static const addPlayersToTeam = "/add-players-to-team";

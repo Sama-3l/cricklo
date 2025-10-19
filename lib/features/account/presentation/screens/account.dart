@@ -71,7 +71,11 @@ class AccountPage extends StatelessWidget {
                       // Player Overview
                       PlayerOverview(userEntity: state.userEntity!),
 
-                      StatisticsPage(),
+                      StatisticsPage(
+                        selectedStatisticsTab: state.selectedStatisticsTab,
+                        changeStatisticsTab: (index) =>
+                            cubit.changeStatisticsTab(index),
+                      ),
 
                       TeamsGrid(
                         loading: state.teamsLoading,

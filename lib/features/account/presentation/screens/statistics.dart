@@ -1,17 +1,22 @@
-import 'package:cricklo/features/account/presentation/blocs/cubits/AccountPageCubit/account_page_cubit.dart';
 import 'package:cricklo/features/account/presentation/widgets/stats_table_filter_tab_bar.dart';
 import 'package:cricklo/features/account/presentation/widgets/stats_table.dart';
 // import 'package:cricklo/features/account/presentation/widgets/stats_table_filter_tab_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class StatisticsPage extends StatelessWidget {
-  const StatisticsPage({super.key});
+  const StatisticsPage({
+    super.key,
+    required this.selectedStatisticsTab,
+    required this.changeStatisticsTab,
+  });
+
+  final int selectedStatisticsTab;
+  final Function(int index) changeStatisticsTab;
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<AccountCubit>();
-    final state = context.read<AccountCubit>().state;
+    // final cubit = context.read<AccountCubit>();
+    // final state = context.read<AccountCubit>().state;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0).copyWith(top: 24),
       child: Column(
@@ -20,15 +25,15 @@ class StatisticsPage extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(bottom: 8),
             child: StatsTableFilterTabBar(
-              selectedTab: state.selectedStatisticsTab,
-              selectTab: (index) => cubit.changeStatisticsTab(index),
+              selectedTab: selectedStatisticsTab,
+              selectTab: (index) => changeStatisticsTab(index),
               options: ["Bat", "Bowl", "Field", "Match-wise"],
             ),
           ),
 
           Expanded(
             child: IndexedStack(
-              index: state.selectedStatisticsTab,
+              index: selectedStatisticsTab,
               children: [
                 Padding(
                   padding: EdgeInsets.symmetric(
