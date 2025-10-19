@@ -32,9 +32,20 @@ class MatchTile extends StatelessWidget {
               context,
             ).pushNamed(Routes.scorerInitialPage, extra: matchEntity);
           } else {
-            GoRouter.of(
-              context,
-            ).pushNamed(Routes.scorerMatchCenter, extra: [matchEntity, true]);
+            if (!(DateTime.now()
+                        .difference(matchEntity.dateAndTime)
+                        .inSeconds >=
+                    0 &&
+                matchEntity.tossWinner != null &&
+                matchEntity.winner == null)) {
+              GoRouter.of(
+                context,
+              ).pushNamed(Routes.scorerInitialPage, extra: matchEntity);
+            } else {
+              GoRouter.of(
+                context,
+              ).pushNamed(Routes.scorerMatchCenter, extra: [matchEntity, true]);
+            }
           }
         }
       },

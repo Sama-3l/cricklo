@@ -1,6 +1,7 @@
 import 'package:cricklo/core/utils/common/primary_button.dart';
 import 'package:cricklo/core/utils/common/textfield.dart';
 import 'package:cricklo/core/utils/constants/enums.dart';
+import 'package:cricklo/core/utils/constants/global_variables.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/matches/domain/entities/match_entity.dart';
 import 'package:cricklo/features/scorer/presentation/widgets/scorer_dialogs.dart';
@@ -42,8 +43,6 @@ class _ScorerMatchInitialScreenState extends State<ScorerMatchInitialScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.matchEntity.tossChoice);
-    print(widget.matchEntity.tossWinner);
     return Scaffold(
       backgroundColor: ColorsConstants.defaultWhite,
       appBar: AppBar(
@@ -62,7 +61,11 @@ class _ScorerMatchInitialScreenState extends State<ScorerMatchInitialScreen> {
           },
         ),
         title: Text(
-          "Start Match",
+          GlobalVariables.user != null &&
+                  widget.matchEntity.scorer["profileId"] ==
+                      GlobalVariables.user!.profileId
+              ? "Start Match"
+              : "Match Details",
           style: TextStyles.poppinsMedium.copyWith(
             fontSize: 24,
             letterSpacing: -1.2,
@@ -73,66 +76,72 @@ class _ScorerMatchInitialScreenState extends State<ScorerMatchInitialScreen> {
         centerTitle: true,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 16,
-        ).copyWith(top: 12, bottom: 16),
-        color: ColorsConstants.defaultWhite,
-        width: double.infinity,
-        child: PrimaryButton(
-          disabled:
-              widget.matchEntity.teamA.inviteStatus! == "PENDING" ||
-              widget.matchEntity.teamB.inviteStatus! == "PENDING" ||
-              widget.matchEntity.winner != null,
-          child: Text(
-            (widget.matchEntity.tossChoice == null &&
-                    widget.matchEntity.tossWinner == null)
-                ? "Start Match"
-                : "Resume Match",
-            style: TextStyles.poppinsSemiBold.copyWith(
-              fontSize: 16,
-              letterSpacing: -0.6,
+      floatingActionButton:
+          GlobalVariables.user != null &&
+              widget.matchEntity.scorer["profileId"] ==
+                  GlobalVariables.user!.profileId
+          ? Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+              ).copyWith(top: 12, bottom: 16),
               color: ColorsConstants.defaultWhite,
-            ),
-          ),
-          onPress: () async {
-            if (widget.matchEntity.tossChoice == null &&
-                widget.matchEntity.tossWinner == null) {
-              final result = await showTossDialog(
-                context,
-                teamAId: widget.matchEntity.teamA.id,
-                teamBId: widget.matchEntity.teamB.id,
-                teamAName: widget.matchEntity.teamA.name,
-                teamALogo: widget.matchEntity.teamA.teamLogo,
-                teamBName: widget.matchEntity.teamB.name,
-                teamBLogo: widget.matchEntity.teamB.teamLogo,
-              );
+              width: double.infinity,
+              child: PrimaryButton(
+                disabled:
+                    widget.matchEntity.teamA.inviteStatus! == "PENDING" ||
+                    widget.matchEntity.teamB.inviteStatus! == "PENDING" ||
+                    widget.matchEntity.winner != null,
+                child: Text(
+                  (widget.matchEntity.tossChoice == null &&
+                          widget.matchEntity.tossWinner == null)
+                      ? "Start Match"
+                      : "Resume Match",
+                  style: TextStyles.poppinsSemiBold.copyWith(
+                    fontSize: 16,
+                    letterSpacing: -0.6,
+                    color: ColorsConstants.defaultWhite,
+                  ),
+                ),
+                onPress: () async {
+                  if (widget.matchEntity.tossChoice == null &&
+                      widget.matchEntity.tossWinner == null) {
+                    final result = await showTossDialog(
+                      context,
+                      teamAId: widget.matchEntity.teamA.id,
+                      teamBId: widget.matchEntity.teamB.id,
+                      teamAName: widget.matchEntity.teamA.name,
+                      teamALogo: widget.matchEntity.teamA.teamLogo,
+                      teamBName: widget.matchEntity.teamB.name,
+                      teamBLogo: widget.matchEntity.teamB.teamLogo,
+                    );
 
-              if (result != null) {
-                final winner = result["winner"];
-                final choice = result["choice"];
+                    if (result != null) {
+                      final winner = result["winner"];
+                      final choice = result["choice"];
 
-                print("Winner: $winner | Choice: $choice");
+                      print("Winner: $winner | Choice: $choice");
 
-                widget.matchEntity.tossWinner = winner;
-                widget.matchEntity.tossChoice = choice!.split(" ")[0] == "Bat"
-                    ? TossChoice.batting
-                    : TossChoice.bowling;
+                      widget.matchEntity.tossWinner = winner;
+                      widget.matchEntity.tossChoice =
+                          choice!.split(" ")[0] == "Bat"
+                          ? TossChoice.batting
+                          : TossChoice.bowling;
 
-                GoRouter.of(context).pushNamed(
-                  Routes.scorerMatchCenter,
-                  extra: [widget.matchEntity, false],
-                );
-              }
-            } else {
-              GoRouter.of(context).pushNamed(
-                Routes.scorerMatchCenter,
-                extra: [widget.matchEntity, false],
-              );
-            }
-          },
-        ),
-      ),
+                      GoRouter.of(context).pushNamed(
+                        Routes.scorerMatchCenter,
+                        extra: [widget.matchEntity, false],
+                      );
+                    }
+                  } else {
+                    GoRouter.of(context).pushNamed(
+                      Routes.scorerMatchCenter,
+                      extra: [widget.matchEntity, false],
+                    );
+                  }
+                },
+              ),
+            )
+          : null,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
