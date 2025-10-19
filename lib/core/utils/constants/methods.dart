@@ -280,6 +280,7 @@ class Methods {
       }
       result.add(recent[i]["ball"]);
     }
+
     return result;
   }
 

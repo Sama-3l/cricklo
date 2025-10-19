@@ -109,7 +109,10 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
                         .where((e) => e.playerId == ball.fielderId)
                         .firstOrNull;
               if (ball.batsman != null && ball.secondBatsman != null) {
-                addBatsman([ball.batsman!, ball.secondBatsman!]);
+                addBatsman([
+                  ball.batsman!,
+                  ball.secondBatsman!,
+                ], newBatsman: false);
               }
               if (ball.bowler != null) {
                 editBowler(ball.bowler);
@@ -473,7 +476,7 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
     }
   }
 
-  addBatsman(List<MatchPlayerEntity> batsman) {
+  addBatsman(List<MatchPlayerEntity> batsman, {bool newBatsman = true}) {
     final team = state.matchCenterEntity!.battingTeam!;
     final currentBatting = team.currBatsmen;
 
@@ -491,49 +494,51 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
       }
     }
 
-    // Update current batsmen
-    if (batsman.length == 2) {
-      currentBatting[0] = batsman[0];
-      currentBatting[1] = batsman[1];
-      setOnStrike(batsman[0]);
-      // Save batting order
-      addToBattingOrder(batsman[0]);
-      addToBattingOrder(batsman[1]);
-      // Add partnership
-      state.matchCenterEntity!.battingTeam!.partnerships.add(
-        PartnershipEntity(
-          player1: batsman[0],
-          player2: batsman[1],
-          runs: 0,
-          balls: 0,
-        ),
-      );
-    } else if (currentBatting[0] == null) {
-      currentBatting[0] = batsman[0];
-      setOnStrike(currentBatting[0]!);
-      addToBattingOrder(batsman[0]);
-      late final MatchPlayerEntity stillPlaying = currentBatting[1]!;
-      state.matchCenterEntity!.battingTeam!.partnerships.add(
-        PartnershipEntity(
-          player1: stillPlaying,
-          player2: batsman[0],
-          runs: 0,
-          balls: 0,
-        ),
-      );
-    } else {
-      currentBatting[1] = batsman[0];
-      setOnStrike(currentBatting[1]!);
-      addToBattingOrder(batsman[0]);
-      late final MatchPlayerEntity stillPlaying = currentBatting[0]!;
-      state.matchCenterEntity!.battingTeam!.partnerships.add(
-        PartnershipEntity(
-          player1: stillPlaying,
-          player2: batsman[0],
-          runs: 0,
-          balls: 0,
-        ),
-      );
+    if (newBatsman) {
+      // Update current batsmen
+      if (batsman.length == 2) {
+        currentBatting[0] = batsman[0];
+        currentBatting[1] = batsman[1];
+        setOnStrike(batsman[0]);
+        // Save batting order
+        addToBattingOrder(batsman[0]);
+        addToBattingOrder(batsman[1]);
+        // Add partnership
+        state.matchCenterEntity!.battingTeam!.partnerships.add(
+          PartnershipEntity(
+            player1: batsman[0],
+            player2: batsman[1],
+            runs: 0,
+            balls: 0,
+          ),
+        );
+      } else if (currentBatting[0] == null) {
+        currentBatting[0] = batsman[0];
+        setOnStrike(currentBatting[0]!);
+        addToBattingOrder(batsman[0]);
+        late final MatchPlayerEntity stillPlaying = currentBatting[1]!;
+        state.matchCenterEntity!.battingTeam!.partnerships.add(
+          PartnershipEntity(
+            player1: stillPlaying,
+            player2: batsman[0],
+            runs: 0,
+            balls: 0,
+          ),
+        );
+      } else {
+        currentBatting[1] = batsman[0];
+        setOnStrike(currentBatting[1]!);
+        addToBattingOrder(batsman[0]);
+        late final MatchPlayerEntity stillPlaying = currentBatting[0]!;
+        state.matchCenterEntity!.battingTeam!.partnerships.add(
+          PartnershipEntity(
+            player1: stillPlaying,
+            player2: batsman[0],
+            runs: 0,
+            balls: 0,
+          ),
+        );
+      }
     }
 
     emit(state.copyWith());
@@ -985,7 +990,8 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
           OversEntity(
             runs: state.matchCenterEntity!.innings.last.runs,
             wickets: state.matchCenterEntity!.innings.last.wickets,
-            overNumber: state.matchCenterEntity!.innings.last.overs.length + 1,
+            overNumber:
+                state.matchCenterEntity!.innings.last.oversData.length + 1,
             bowler: bowler!,
             balls: [newBall],
             player1runs: 0,
@@ -1008,7 +1014,6 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
         state.matchCenterEntity!.innings.last.oversData.last.balls.add(newBall);
       }
     }
-
     if (!newBall.isExtra) {
       if (newBall.wicketType != null &&
           newBall.wicketType == WicketType.retired) {

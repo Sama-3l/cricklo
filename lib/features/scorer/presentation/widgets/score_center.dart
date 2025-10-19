@@ -641,6 +641,10 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
                                   0,
                                   false,
                                   wicketType: WicketType.retired,
+                                  bowlerInvolved: state
+                                      .matchCenterEntity!
+                                      .bowlingTeam!
+                                      .bowler,
                                   batsmanInvolved: state
                                       .matchCenterEntity!
                                       .battingTeam!
@@ -728,6 +732,25 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
                                     i,
                                     true,
                                     extraType: ExtraType.bonus,
+                                    bowlerInvolved: state
+                                        .matchCenterEntity!
+                                        .bowlingTeam!
+                                        .bowler,
+                                    batsmanInvolved: state
+                                        .matchCenterEntity!
+                                        .battingTeam!
+                                        .onStrike,
+                                    secondBatsman: currBatsmen
+                                        .where(
+                                          (e) =>
+                                              e!.playerId !=
+                                              state
+                                                  .matchCenterEntity!
+                                                  .battingTeam!
+                                                  .onStrike!
+                                                  .playerId,
+                                        )
+                                        .first,
                                   );
                                   currentCubit.optionType(null);
                                 } else {
@@ -800,6 +823,10 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
                                     i,
                                     true,
                                     extraType: ExtraType.moreRuns,
+                                    bowlerInvolved: state
+                                        .matchCenterEntity!
+                                        .bowlingTeam!
+                                        .bowler,
                                     batsmanInvolved: state
                                         .matchCenterEntity!
                                         .battingTeam!
