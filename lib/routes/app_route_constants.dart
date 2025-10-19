@@ -19,5 +19,7 @@ class Routes {
   static const scorerMatchCenter = "/scorer-match-center";
   static const scorerMatchComplete = "/scorer-match-complete";
 
-  static const createTournament = "/create-tournament";
+  static const createTournament = "/createTournament";
+  static const addTournamentVenues = "/add-tournament-venue";
+  static const addTournamentModerators = "/add-tournament-moderators";
 }

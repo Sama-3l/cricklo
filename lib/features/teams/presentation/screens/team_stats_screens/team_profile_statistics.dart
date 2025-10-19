@@ -37,7 +37,12 @@ class TeamProfileStatistics extends StatelessWidget {
       children: [
         // Sub tabs
         Padding(
-          padding: const EdgeInsets.only(bottom: 8.0, top: 24),
+          padding: const EdgeInsets.only(
+            bottom: 8.0,
+            top: 24,
+            left: 16,
+            right: 16,
+          ),
           child: StatsTableFilterTabBar(
             selectedTab: state.selectedStatsTab,
             selectTab: (index) => cubit.changeStatsTab(index),

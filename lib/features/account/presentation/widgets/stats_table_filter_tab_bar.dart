@@ -35,7 +35,9 @@ class StatsTableFilterTabBar extends StatelessWidget {
             duration: const Duration(milliseconds: 200),
             curve: Curves.easeInOut,
             child: Container(
-              width: segmentWidth - 8,
+              width: selectedTab == 0 || selectedTab == options.length - 1
+                  ? segmentWidth
+                  : segmentWidth - 8,
               height: 36,
               decoration: BoxDecoration(
                 color: ColorsConstants.accentOrange,

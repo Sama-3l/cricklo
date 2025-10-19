@@ -565,15 +565,20 @@ class WidgetDecider {
       child: Row(
         children: [
           CircleAvatar(
-            radius: 24,
+            radius: 32,
             backgroundColor: ColorsConstants.accentOrange.withValues(
               alpha: 0.2,
             ),
-            child: Icon(
-              CupertinoIcons.person_fill,
-              size: 16,
-              color: ColorsConstants.defaultBlack,
-            ),
+            backgroundImage: p.profilePic != null
+                ? CachedNetworkImageProvider(p.profilePic!)
+                : null,
+            child: p.profilePic != null
+                ? null
+                : Icon(
+                    CupertinoIcons.person_fill,
+                    size: 16,
+                    color: ColorsConstants.defaultBlack,
+                  ),
           ),
           const SizedBox(width: 12),
           Expanded(

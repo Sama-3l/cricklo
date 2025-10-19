@@ -43,7 +43,8 @@ class MatchTile extends StatelessWidget {
         width: MediaQuery.of(context).size.width - 32,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-          color: ColorsConstants.defaultBlack.withValues(alpha: 0.07),
+          // color: ColorsConstants.defaultBlack.withValues(alpha: 0.07),
+          color: ColorsConstants.defaultWhite,
         ),
         child: Padding(
           padding: const EdgeInsets.all(12.0),

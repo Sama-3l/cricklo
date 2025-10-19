@@ -19,6 +19,8 @@ import 'package:cricklo/features/teams/presentation/screens/add_players_screen.d
 import 'package:cricklo/features/teams/presentation/screens/create_team_screen.dart';
 import 'package:cricklo/features/teams/presentation/screens/team_page.dart';
 import 'package:cricklo/features/tournament/domain/entities/tournament_entity.dart';
+import 'package:cricklo/features/tournament/presentation/screens/add_moderators.dart';
+import 'package:cricklo/features/tournament/presentation/screens/add_venues.dart';
 import 'package:cricklo/features/tournament/presentation/screens/create_tournament.dart';
 import 'package:cricklo/routes/app_route_constants.dart';
 import 'package:flutter/material.dart';
@@ -182,10 +184,28 @@ class AppRouter {
         name: Routes.createTournament,
         path: Routes.createTournament,
         pageBuilder: (context, state) {
-          final function = state.extra as Function(TournamentEntity match);
+          final function =
+              state.extra as Function(TournamentEntity match)? ??
+              (tournament) => {};
           return MaterialPage(
             child: CreateTournament(onCreate: (match) => function(match)),
           );
+        },
+      ),
+      GoRoute(
+        name: Routes.addTournamentVenues,
+        path: Routes.addTournamentVenues,
+        pageBuilder: (context, state) {
+          final tournament = state.extra as TournamentEntity;
+          return MaterialPage(child: AddVenuesPage(tournament: tournament));
+        },
+      ),
+      GoRoute(
+        name: Routes.addTournamentModerators,
+        path: Routes.addTournamentModerators,
+        pageBuilder: (context, state) {
+          final tournament = state.extra as TournamentEntity;
+          return MaterialPage(child: AddModeratorsPage(tournament: tournament));
         },
       ),
     ],

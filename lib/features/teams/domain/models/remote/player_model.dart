@@ -150,6 +150,8 @@ class PlayerModel {
       teamRole: teamRole,
       profilePic: json['profilePic'] != null
           ? json['profilePic'] as String
+          : json['profilePhoto'] != null
+          ? json['profilePhoto'] as String
           : null,
       playerType: playerType,
       batterType: batterType,

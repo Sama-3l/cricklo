@@ -49,7 +49,6 @@ class ProfileHeaderInformation extends StatelessWidget {
                     )
                   : null,
             ),
-
             const SizedBox(width: 16),
             Expanded(
               child: Column(
@@ -83,8 +82,12 @@ class ProfileHeaderInformation extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (user!.location.state.isNotEmpty ||
-                      user!.location.city.isNotEmpty) ...[
+                  if ((user != null &&
+                          (user!.location.state.isNotEmpty ||
+                              user!.location.city.isNotEmpty)) ||
+                      (team != null &&
+                          (team!.location.state.isNotEmpty ||
+                              team!.location.city.isNotEmpty))) ...[
                     Text(
                       user != null
                           ? "${user!.location.city}, ${user!.location.state}"

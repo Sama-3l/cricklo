@@ -17,7 +17,7 @@ class _MatchesPageState extends State<MatchesPage> {
   Widget build(BuildContext context) {
     final state = context.read<MainAppCubit>().state;
     return Scaffold(
-      backgroundColor: ColorsConstants.defaultWhite,
+      backgroundColor: ColorsConstants.defaultBlack.withValues(alpha: 0.07),
       body: RefreshIndicator(
         color: ColorsConstants.accentOrange,
         onRefresh: () async {
@@ -42,12 +42,13 @@ class _MatchesPageState extends State<MatchesPage> {
                     ? Container(
                         height: 200,
                         padding: const EdgeInsets.all(16),
-                        margin: const EdgeInsets.symmetric(horizontal: 16),
+                        // margin: const EdgeInsets.symmetric(horizontal: 16),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          color: ColorsConstants.defaultBlack.withValues(
-                            alpha: 0.07,
-                          ),
+                          // borderRadius: BorderRadius.circular(16),
+                          // color: ColorsConstants.defaultBlack.withValues(
+                          //   alpha: 0.07,
+                          // ),
+                          color: ColorsConstants.defaultWhite,
                         ),
                         child: Center(
                           child: Text(
@@ -74,10 +75,10 @@ class _MatchesPageState extends State<MatchesPage> {
                 Container(
                   height: 200,
                   padding: const EdgeInsets.all(16),
-                  margin: const EdgeInsets.symmetric(horizontal: 16),
+                  // margin: const EdgeInsets.symmetric(horizontal: 16),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    color: ColorsConstants.defaultBlack.withValues(alpha: 0.07),
+                    // borderRadius: BorderRadius.circular(16),
+                    color: ColorsConstants.defaultWhite,
                   ),
                   child: Center(
                     child: Text(
@@ -103,10 +104,10 @@ class _MatchesPageState extends State<MatchesPage> {
                 Container(
                   height: 200,
                   padding: const EdgeInsets.all(16),
-                  margin: const EdgeInsets.symmetric(horizontal: 16),
+                  // margin: const EdgeInsets.symmetric(horizontal: 16),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    color: ColorsConstants.defaultBlack.withValues(alpha: 0.07),
+                    // borderRadius: BorderRadius.circular(16),
+                    color: ColorsConstants.defaultWhite,
                   ),
                   child: Center(
                     child: Text(

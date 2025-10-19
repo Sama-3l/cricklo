@@ -27,50 +27,51 @@ class _PlayersPageState extends State<PlayersPage> {
   Widget build(BuildContext context) {
     final state = context.read<TeamPageCubit>().state;
     return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        color: ColorsConstants.defaultWhite,
-        width: double.infinity,
-        child: Row(
-          children: [
-            Expanded(
-              child: PrimaryButton(
-                disabled: false,
-                child: Text(
-                  "Find More Players",
-                  style: TextStyles.poppinsSemiBold.copyWith(
-                    fontSize: 16,
-                    letterSpacing: -0.6,
-                    color: ColorsConstants.defaultWhite,
-                  ),
-                ),
-                onPress: () {},
-              ),
-            ),
-          ],
-        ),
-      ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      // floatingActionButton: Container(
+      //   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      //   color: ColorsConstants.defaultWhite,
+      //   width: double.infinity,
+      //   child: Row(
+      //     children: [
+      //       Expanded(
+      //         child: PrimaryButton(
+      //           disabled: false,
+      //           child: Text(
+      //             "Find More Players",
+      //             style: TextStyles.poppinsSemiBold.copyWith(
+      //               fontSize: 16,
+      //               letterSpacing: -0.6,
+      //               color: ColorsConstants.defaultWhite,
+      //             ),
+      //           ),
+      //           onPress: () {},
+      //         ),
+      //       ),
+      //     ],
+      //   ),
+      // ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 24.0),
-            child: StatsTableFilterTabBar(
-              options: ["Role", "A-Z", "Squad", "Invites"],
-              selectTab: widget.selectTab,
-              selectedTab: widget.selectedTab,
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.only(top: 24.0),
+          //   child: StatsTableFilterTabBar(
+          //     options: ["Role", "A-Z", "Squad", "Invites"],
+          //     selectTab: widget.selectTab,
+          //     selectedTab: widget.selectedTab,
+          //   ),
+          // ),
           Expanded(
-            child: IndexedStack(
-              index: widget.selectedTab,
-              children: [
-                PlayersRolePage(teamEntity: state.team),
-                AlphabeticalOrderPlayers(team: state.team),
-                ActiveSquad(team: state.team),
-                PlayersRolePage(teamEntity: state.team, invites: true),
-              ],
-            ),
+            child: AlphabeticalOrderPlayers(team: state.team),
+            // child: IndexedStack(
+            //   index: widget.selectedTab,
+            //   children: [
+            //     PlayersRolePage(teamEntity: state.team),
+            //     AlphabeticalOrderPlayers(team: state.team),
+            //     ActiveSquad(team: state.team),
+            //     PlayersRolePage(teamEntity: state.team, invites: true),
+            //   ],
+            // ),
           ),
         ],
       ),

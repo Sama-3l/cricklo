@@ -76,7 +76,7 @@ class _HomePageState extends State<HomePage>
     final cubit = context.read<MainAppCubit>();
     final state = cubit.state;
     return Scaffold(
-      backgroundColor: ColorsConstants.defaultWhite,
+      backgroundColor: ColorsConstants.defaultBlack.withValues(alpha: 0.07),
       body: Stack(
         children: [
           RefreshIndicator(
@@ -94,16 +94,17 @@ class _HomePageState extends State<HomePage>
                 ),
                 state.matches.where((e) => e.teamA.inviteStatus != null).isEmpty
                     ? Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 0.0),
                         child: Container(
                           height: 200,
                           margin: const EdgeInsets.only(top: 12),
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16),
-                            color: ColorsConstants.defaultBlack.withValues(
-                              alpha: 0.07,
-                            ),
+                            // borderRadius: BorderRadius.circular(16),
+                            // color: ColorsConstants.defaultBlack.withValues(
+                            //   alpha: 0.07,
+                            // ),
+                            color: ColorsConstants.defaultWhite,
                           ),
                           child: Center(
                             child: Text(
@@ -126,7 +127,7 @@ class _HomePageState extends State<HomePage>
                 if (widget.userEntity != null) ...[
                   const SizedBox(height: 24),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 0.0),
                     child: HomeProfileHeader(userEntity: widget.userEntity),
                   ),
                 ],
@@ -137,16 +138,18 @@ class _HomePageState extends State<HomePage>
                 ),
                 tournaments.isEmpty
                     ? Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 0.0),
                         child: Container(
                           height: 200,
                           margin: const EdgeInsets.only(top: 12),
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16),
-                            color: ColorsConstants.defaultBlack.withValues(
-                              alpha: 0.07,
-                            ),
+                            // borderRadius: BorderRadius.circular(16),
+
+                            // color: ColorsConstants.defaultBlack.withValues(
+                            //   alpha: 0.07,
+                            // ),
+                            color: ColorsConstants.defaultWhite,
                           ),
                           child: Center(
                             child: Text(

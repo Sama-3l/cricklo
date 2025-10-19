@@ -17,13 +17,17 @@ class HomeProfileHeader extends StatelessWidget {
     // final cubit = context.read<MainAppCubit>();
     return Column(
       children: [
-        SectionHeader(title: "Following"),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: SectionHeader(title: "Following"),
+        ),
         Container(
           margin: EdgeInsets.only(top: 12),
           padding: EdgeInsets.all(16),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            color: ColorsConstants.defaultBlack.withValues(alpha: 0.07),
+            // borderRadius: BorderRadius.circular(16),
+            // color: ColorsConstants.defaultBlack.withValues(alpha: 0.07),
+            color: ColorsConstants.defaultWhite,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
