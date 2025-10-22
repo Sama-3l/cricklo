@@ -436,6 +436,12 @@ final tournament = TournamentEntity(
   tournamentType: TournamentType.league,
   overs: 50,
   moderators: [],
-  venues: [],
+  venues: [
+    LocationEntity(area: "Academy", city: "Bareilly", state: "Uttar Pradesh"),
+  ],
   ballType: BallType.leather,
+  teams: [],
+  matches: [],
+  groups: [],
+  playerStats: [],
 );

@@ -3,7 +3,7 @@ import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/teams/domain/entities/search_user_entity.dart';
 import 'package:cricklo/features/teams/presentation/widgets/search_players_bottom_sheet.dart';
 import 'package:cricklo/features/tournament/domain/entities/tournament_entity.dart';
-import 'package:cricklo/features/tournament/presentation/blocs/cubits/CreateTournament/create_tournament_cubit.dart';
+import 'package:cricklo/features/tournament/presentation/blocs/cubits/CreateTournamentCubit/create_tournament_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';

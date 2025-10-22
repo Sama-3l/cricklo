@@ -46,4 +46,13 @@ class OverallScoreModel {
       wickets: map['wickets'] as int,
     );
   }
+
+  factory OverallScoreModel.fromEntity(OverallScoreEntity entity) {
+    return OverallScoreModel(
+      team: TeamModel.fromEntity(entity.team),
+      score: entity.score,
+      overs: entity.overs,
+      wickets: entity.wickets,
+    );
+  }
 }

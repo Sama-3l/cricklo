@@ -23,6 +23,7 @@ import 'package:cricklo/features/tournament/domain/entities/tournament_entity.da
 import 'package:cricklo/features/tournament/presentation/screens/add_moderators.dart';
 import 'package:cricklo/features/tournament/presentation/screens/add_venues.dart';
 import 'package:cricklo/features/tournament/presentation/screens/create_tournament.dart';
+import 'package:cricklo/features/tournament/presentation/screens/tournament_page.dart';
 import 'package:cricklo/routes/app_route_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -226,6 +227,17 @@ class AppRouter {
         pageBuilder: (context, state) {
           final userId = state.extra as String;
           return MaterialPage(child: ProfilePage(userId: userId));
+        },
+      ),
+      GoRoute(
+        name: Routes.tournamentPage,
+        path: Routes.tournamentPage,
+        pageBuilder: (context, state) {
+          final tournamentEntity =
+              state.extra as TournamentEntity? ?? tournament;
+          return MaterialPage(
+            child: TournamentPage(tournamentEntity: tournamentEntity),
+          );
         },
       ),
     ],

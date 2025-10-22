@@ -67,7 +67,7 @@ import 'package:cricklo/features/tournament/data/datasource/tournament_datasourc
 import 'package:cricklo/features/tournament/data/repo/tournament_repo_impl.dart';
 import 'package:cricklo/features/tournament/data/usecases/create_tournament_usecase.dart';
 import 'package:cricklo/features/tournament/domain/repo/tournament_repo.dart';
-import 'package:cricklo/features/tournament/presentation/blocs/cubits/CreateTournament/create_tournament_cubit.dart';
+import 'package:cricklo/features/tournament/presentation/blocs/cubits/CreateTournamentCubit/create_tournament_cubit.dart';
 import 'package:cricklo/services/api_service.dart';
 import 'package:cricklo/services/auth_helper.dart';
 import 'package:cricklo/services/socket_service.dart';

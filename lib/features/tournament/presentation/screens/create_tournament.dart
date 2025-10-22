@@ -4,7 +4,7 @@ import 'package:cricklo/core/utils/constants/enums.dart';
 import 'package:cricklo/core/utils/constants/methods.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/tournament/domain/entities/tournament_entity.dart';
-import 'package:cricklo/features/tournament/presentation/blocs/cubits/CreateTournament/create_tournament_cubit.dart';
+import 'package:cricklo/features/tournament/presentation/blocs/cubits/CreateTournamentCubit/create_tournament_cubit.dart';
 import 'package:cricklo/routes/app_route_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -135,6 +135,10 @@ class _CreateTournamentState extends State<CreateTournament> {
                         : 0,
                     moderators: [],
                     venues: [],
+                    teams: [],
+                    matches: [],
+                    groups: [],
+                    playerStats: [],
                   );
                   GoRouter.of(context).push(
                     Routes.addTournamentVenues,

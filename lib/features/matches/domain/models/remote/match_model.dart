@@ -203,4 +203,29 @@ class MatchModel {
           : null,
     );
   }
+
+  factory MatchModel.fromEntity(MatchEntity entity) {
+    return MatchModel(
+      matchID: entity.matchID,
+      dateAndTime: entity.dateAndTime,
+      overs: entity.overs,
+      draw: entity.draw,
+      matchType: entity.matchType,
+      teamA: TeamModel.fromEntity(entity.teamA),
+      abandoned: entity.abandoned,
+      teamB: TeamModel.fromEntity(entity.teamB),
+      location: LocationModel.fromEntity(entity.location),
+      scorer: entity.scorer,
+      tossWinner: entity.tossWinner,
+      tossChoice: entity.tossChoice,
+      winner: entity.winner,
+      teamAScore: entity.teamAScore != null
+          ? OverallScoreModel.fromEntity(entity.teamAScore!)
+          : null,
+      teamBScore: entity.teamBScore != null
+          ? OverallScoreModel.fromEntity(entity.teamBScore!)
+          : null,
+      endDateTime: entity.endDateTime,
+    );
+  }
 }
