@@ -8,7 +8,7 @@ class Routes {
   static const setPin = "/setPin";
   static const notifications = "/notifications";
 
-  static const mainAppScreen = "/m";
+  static const mainAppScreen = "/";
   static const profilePage = "/profile-page";
 
   static const createTeam = "/create-team";
@@ -23,5 +23,5 @@ class Routes {
   static const createTournament = "/createTournament";
   static const addTournamentVenues = "/add-tournament-venue";
   static const addTournamentModerators = "/add-tournament-moderators";
-  static const tournamentPage = "/";
+  static const tournamentPage = "/tournament-page";
 }
