@@ -112,6 +112,7 @@ class _CreateTournamentState extends State<CreateTournament> {
                   final tournament = TournamentEntity(
                     tournamentType: TournamentType.knockout,
                     id: "",
+                    spotsLeft: int.parse(teamsLimitController.text),
                     name: nameController.text,
                     banner: banner,
                     maxTeams: int.parse(teamsLimitController.text),

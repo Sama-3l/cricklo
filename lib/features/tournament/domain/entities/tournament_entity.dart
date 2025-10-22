@@ -10,6 +10,7 @@ import 'package:cricklo/features/tournament/domain/entities/tournament_player_st
 class TournamentEntity {
   final String id;
   final String name;
+  final int spotsLeft;
   final String banner;
   final DateTime inviteDeadline;
   final DateTime startDate;
@@ -29,6 +30,7 @@ class TournamentEntity {
   TournamentEntity({
     required this.id,
     required this.name,
+    required this.spotsLeft,
     required this.banner,
     required this.inviteDeadline,
     required this.startDate,
@@ -57,6 +59,7 @@ class TournamentEntity {
     MatchType? matchType,
     BallType? ballType,
     int? maxTeams,
+    int? spotsLeft,
     int? overs,
     List<SearchUserEntity>? moderators,
     List<LocationEntity>? venues,
@@ -74,6 +77,7 @@ class TournamentEntity {
       inviteDeadline: inviteDeadline ?? this.inviteDeadline,
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
+      spotsLeft: spotsLeft ?? this.spotsLeft,
       tournamentType: tournamentType ?? this.tournamentType,
       matchType: matchType ?? this.matchType,
       overs: overs ?? this.overs,

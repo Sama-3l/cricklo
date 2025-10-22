@@ -28,6 +28,17 @@ class TeamsGrid extends StatelessWidget {
               ),
             ),
           )
+        : teams.isEmpty
+        ? Center(
+            child: Text(
+              "No Teams Yet",
+              style: TextStyles.poppinsSemiBold.copyWith(
+                fontSize: 24,
+                letterSpacing: -1.2,
+                color: ColorsConstants.accentOrange,
+              ),
+            ),
+          )
         : Padding(
             padding: const EdgeInsets.only(top: 24.0),
             child: GridView.builder(

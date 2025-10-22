@@ -1,8 +1,13 @@
 import 'package:cricklo/core/utils/constants/theme.dart';
+import 'package:cricklo/features/account/presentation/screens/teams_grid.dart';
 import 'package:cricklo/features/account/presentation/widgets/profile_tab_bar.dart';
+import 'package:cricklo/features/matches/domain/entities/match_entity.dart';
 import 'package:cricklo/features/tournament/domain/entities/tournament_entity.dart';
 import 'package:cricklo/features/tournament/presentation/blocs/cubits/TournamentCubit/tournament_cubit.dart';
+import 'package:cricklo/features/tournament/presentation/screens/points_page.dart';
+import 'package:cricklo/features/tournament/presentation/screens/stats_page.dart';
 import 'package:cricklo/features/tournament/presentation/screens/tournament_overview.dart';
+import 'package:cricklo/routes/app_route_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -64,9 +69,16 @@ class TournamentPage extends StatelessWidget {
                         children: [
                           TournamentOverview(),
                           const Center(child: Text("No Match History")),
-                          const Center(child: Text("No Teams History")),
-                          const Center(child: Text("No Points History")),
-                          const Center(child: Text("Statistics")),
+                          TeamsGrid(
+                            loading: false,
+                            teams: state.tournamentEntity!.teams,
+                            onTap: (team) => GoRouter.of(context).pushNamed(
+                              Routes.teamPage,
+                              extra: [team, <MatchEntity>[]],
+                            ),
+                          ),
+                          PointsPage(),
+                          StatsPage(),
                         ],
                       ),
                     ),

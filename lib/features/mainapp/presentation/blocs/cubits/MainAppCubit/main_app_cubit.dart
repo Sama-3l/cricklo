@@ -3,10 +3,12 @@ import 'package:cricklo/core/usecase/usecase.dart';
 import 'package:cricklo/core/utils/constants/global_variables.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/login/domain/entities/user_entitiy.dart';
+import 'package:cricklo/features/mainapp/data/usecases/get_all_tournaments_usecase.dart';
 import 'package:cricklo/features/mainapp/data/usecases/get_current_user_usecase.dart';
 import 'package:cricklo/features/mainapp/data/usecases/get_user_matches_usecase.dart';
 import 'package:cricklo/features/mainapp/data/usecases/logout_usecase.dart';
 import 'package:cricklo/features/matches/domain/entities/match_entity.dart';
+import 'package:cricklo/features/tournament/domain/entities/tournament_entity.dart';
 import 'package:cricklo/injection_container.dart';
 import 'package:cricklo/routes/app_route_constants.dart';
 import 'package:dio/dio.dart';
@@ -19,17 +21,27 @@ part 'main_app_state.dart';
 class MainAppCubit extends Cubit<MainAppState> {
   final GetCurrentUserUsecase _currentUserUsecase;
   final GetUserMatchesUsecase _getUserMatchesUsecase;
+  final GetAllTournamentsUsecase _getAllTournamentsUsecase;
   final LogoutUsecase _logoutUsecase;
 
   MainAppCubit(
     this._currentUserUsecase,
     this._logoutUsecase,
     this._getUserMatchesUsecase,
-  ) : super(UpdateIndex(currentIndex: 0, showOptions: false, matches: []));
+    this._getAllTournamentsUsecase,
+  ) : super(
+        UpdateIndex(
+          currentIndex: 0,
+          showOptions: false,
+          matches: [],
+          tournaments: [],
+        ),
+      );
 
   logout(BuildContext context) async {
     emit(
       UpdateIndex(
+        tournaments: state.tournaments,
         currentIndex: 0,
         showOptions: false,
         user: state.user,
@@ -42,6 +54,7 @@ class MainAppCubit extends Cubit<MainAppState> {
       (_) {
         emit(
           UpdateIndex(
+            tournaments: state.tournaments,
             currentIndex: 0,
             showOptions: false,
             user: state.user,
@@ -61,6 +74,7 @@ class MainAppCubit extends Cubit<MainAppState> {
           }
           emit(
             UpdateIndex(
+              tournaments: [],
               matches: [],
               currentIndex: 0,
               showOptions: false,
@@ -71,6 +85,7 @@ class MainAppCubit extends Cubit<MainAppState> {
         } else {
           emit(
             UpdateIndex(
+              tournaments: state.tournaments,
               matches: state.matches,
               currentIndex: 0,
               showOptions: false,
@@ -86,6 +101,7 @@ class MainAppCubit extends Cubit<MainAppState> {
   readNotifications() {
     emit(
       UpdateIndex(
+        tournaments: state.tournaments,
         currentIndex: state.currentIndex,
         showOptions: state.showOptions,
         matches: state.matches,
@@ -125,9 +141,50 @@ class MainAppCubit extends Cubit<MainAppState> {
                 e.teamB.inviteStatus == "DENIED" ||
                 e.scorer["inviteStatus"] == "DENIED",
           );
+          getTournaments();
           emit(
             UpdateIndex(
+              tournaments: state.tournaments,
               matches: response.matches,
+              currentIndex: state.currentIndex,
+              showOptions: state.showOptions,
+              user: state.user,
+              loading: false,
+            ),
+          );
+        }
+      },
+    );
+  }
+
+  Future<void> getTournaments() async {
+    final response = await _getAllTournamentsUsecase(NoParams());
+    response.fold(
+      (_) {
+        ScaffoldMessenger.of(
+          GlobalVariables.navigatorKey!.currentContext!,
+        ).showSnackBar(
+          SnackBar(
+            // behavior: SnackBarBehavior.floating,
+            backgroundColor: ColorsConstants.defaultBlack,
+            padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+            content: Text(
+              "Couldn't load tournaments",
+              style: TextStyles.poppinsSemiBold.copyWith(
+                fontSize: 16,
+                letterSpacing: -0.8,
+                color: ColorsConstants.defaultWhite,
+              ),
+            ),
+          ),
+        );
+      },
+      (response) {
+        if (response.success) {
+          emit(
+            UpdateIndex(
+              tournaments: response.tournaments ?? [],
+              matches: state.matches,
               currentIndex: state.currentIndex,
               showOptions: state.showOptions,
               user: state.user,
@@ -143,6 +200,7 @@ class MainAppCubit extends Cubit<MainAppState> {
     state.matches.add(match);
     emit(
       UpdateIndex(
+        tournaments: state.tournaments,
         loading: state.loading,
         user: state.user,
         currentIndex: state.currentIndex,
@@ -155,6 +213,7 @@ class MainAppCubit extends Cubit<MainAppState> {
   init(UserEntity? user) async {
     emit(
       UpdateIndex(
+        tournaments: state.tournaments,
         matches: state.matches,
         currentIndex: 0,
         showOptions: false,
@@ -178,6 +237,7 @@ class MainAppCubit extends Cubit<MainAppState> {
       if (cookies.isNotEmpty) {
         emit(
           UpdateIndex(
+            tournaments: state.tournaments,
             matches: state.matches,
             currentIndex: 0,
             showOptions: false,
@@ -193,6 +253,7 @@ class MainAppCubit extends Cubit<MainAppState> {
             GlobalVariables.setUser(user);
             emit(
               UpdateIndex(
+                tournaments: state.tournaments,
                 matches: state.matches,
                 currentIndex: 0,
                 showOptions: false,
@@ -205,6 +266,7 @@ class MainAppCubit extends Cubit<MainAppState> {
             GlobalVariables.setUser(response);
             emit(
               UpdateIndex(
+                tournaments: state.tournaments,
                 matches: state.matches,
                 currentIndex: 0,
                 showOptions: false,
@@ -214,6 +276,7 @@ class MainAppCubit extends Cubit<MainAppState> {
             );
             emit(
               UpdateIndex(
+                tournaments: state.tournaments,
                 matches: state.matches,
                 currentIndex: 0,
                 showOptions: false,
@@ -237,6 +300,7 @@ class MainAppCubit extends Cubit<MainAppState> {
     } else {
       emit(
         UpdateIndex(
+          tournaments: state.tournaments,
           matches: state.matches,
           currentIndex: index,
           showOptions: false,
@@ -254,6 +318,7 @@ class MainAppCubit extends Cubit<MainAppState> {
     }
     emit(
       UpdateIndex(
+        tournaments: state.tournaments,
         matches: state.matches,
         currentIndex: state.currentIndex,
         showOptions: !state.showOptions,

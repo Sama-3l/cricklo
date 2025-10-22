@@ -31,4 +31,5 @@ class ApiEndpointConstants {
   static const scorerMatchComplete = '/scorer/complete';
 
   static const tournamentCreate = '/tournament/create';
+  static const tournamentGetAll = '/tournament/all-tournaments';
 }

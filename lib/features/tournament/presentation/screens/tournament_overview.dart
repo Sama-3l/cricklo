@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:clipboard/clipboard.dart';
 import 'package:cricklo/core/utils/common/primary_button.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
+import 'package:cricklo/features/home/presentation/widgets/section_header.dart';
 import 'package:cricklo/features/tournament/presentation/blocs/cubits/TournamentCubit/tournament_cubit.dart';
+import 'package:cricklo/features/tournament/presentation/widgets/team_item.dart';
+import 'package:cricklo/features/tournament/presentation/widgets/tournament_details_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -32,152 +34,7 @@ class TournamentOverview extends StatelessWidget {
               ),
             ),
           ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                flex: 2,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16.0,
-                  ).copyWith(top: 16, bottom: 16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        state.tournamentEntity!.name,
-                        style: TextStyles.poppinsSemiBold.copyWith(
-                          fontSize: 16,
-                          letterSpacing: -0.8,
-                          color: ColorsConstants.defaultBlack,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        "${state.tournamentEntity!.venues[0].city}, ${state.tournamentEntity!.venues[0].state}",
-                        style: TextStyles.poppinsMedium.copyWith(
-                          fontSize: 14,
-                          letterSpacing: -0.5,
-                          color: ColorsConstants.defaultBlack.withValues(
-                            alpha: 0.7,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-
-                      InkWell(
-                        onTap: () {
-                          FlutterClipboard.copy(state.tournamentEntity!.id);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              behavior: SnackBarBehavior.floating,
-                              backgroundColor: ColorsConstants.defaultWhite,
-                              shape: RoundedRectangleBorder(
-                                side: BorderSide(
-                                  color: ColorsConstants.accentOrange,
-                                  width: 1,
-                                ),
-                                borderRadius: BorderRadiusGeometry.circular(8),
-                              ),
-                              content: Center(
-                                child: Text(
-                                  "Tournament ID copied to Clipboard",
-                                  style: TextStyles.poppinsSemiBold.copyWith(
-                                    fontSize: 12,
-                                    color: ColorsConstants.accentOrange,
-                                    letterSpacing: -0.5,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                        borderRadius: BorderRadius.circular(4),
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(4),
-                            color: ColorsConstants.surfaceOrange,
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(
-                                Icons.copy,
-                                size: 10,
-                                color: ColorsConstants.defaultBlack,
-                              ),
-                              const SizedBox(width: 8),
-                              Text(
-                                "Tournament ID: ",
-                                style: TextStyles.poppinsRegular.copyWith(
-                                  fontSize: 10,
-                                  letterSpacing: -0.2,
-                                  color: ColorsConstants.defaultBlack,
-                                ),
-                              ),
-                              Text(
-                                state.tournamentEntity!.id,
-                                maxLines: 2,
-                                style: TextStyles.poppinsSemiBold.copyWith(
-                                  fontSize: 10,
-                                  letterSpacing: -0.2,
-                                  color: ColorsConstants.defaultBlack,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                flex: 1,
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(24),
-                    border: Border.all(
-                      width: 1,
-                      color: ColorsConstants.defaultBlack,
-                    ),
-                  ),
-                  padding: EdgeInsets.all(8),
-                  margin: EdgeInsets.only(top: 16, right: 16),
-                  child: Center(
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          "20",
-                          style: TextStyles.poppinsBold.copyWith(
-                            color: ColorsConstants.defaultBlack,
-                            fontSize: 12,
-                            letterSpacing: -0.5,
-                          ),
-                        ),
-                        const SizedBox(width: 2),
-                        Text(
-                          "followers",
-                          style: TextStyles.poppinsBold.copyWith(
-                            color: ColorsConstants.defaultBlack,
-                            fontSize: 12,
-                            letterSpacing: -0.5,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
+          TournamentDetailsHeader(),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Row(
@@ -224,6 +81,110 @@ class TournamentOverview extends StatelessWidget {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             child: Divider(color: ColorsConstants.onSurfaceGrey, thickness: 2),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16.0,
+            ).copyWith(bottom: 16),
+            child: SectionHeader(title: "Teams", showIcon: false),
+          ),
+          SizedBox(
+            height: 120,
+            child: ListView.separated(
+              itemCount: 10,
+              scrollDirection: Axis.horizontal,
+              separatorBuilder: (context, index) => SizedBox(width: 40),
+              itemBuilder: (context, index) => Padding(
+                padding: EdgeInsets.only(
+                  left: index == 0 ? 16.0 : 0,
+                  right: index == 9 ? 16.0 : 0,
+                ),
+                child: OverviewItem(title: 'Aviral All Stars'),
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            child: Divider(color: ColorsConstants.onSurfaceGrey, thickness: 2),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16.0,
+            ).copyWith(bottom: 16),
+            child: SectionHeader(title: "Top Players", showIcon: false),
+          ),
+          SizedBox(
+            height: 156,
+            child: ListView.separated(
+              itemCount: 10,
+              scrollDirection: Axis.horizontal,
+              separatorBuilder: (context, index) => SizedBox(width: 40),
+              itemBuilder: (context, index) => Padding(
+                padding: EdgeInsets.only(
+                  left: index == 0 ? 16.0 : 0,
+                  right: index == 9 ? 16.0 : 0,
+                ),
+                child: OverviewItem(
+                  topTitle: "Most Runs",
+                  title: 'Aryan Vaish',
+                  subtitle: 'Aviral All Stars',
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            child: Divider(color: ColorsConstants.onSurfaceGrey, thickness: 2),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16.0,
+            ).copyWith(bottom: 16),
+            child: SectionHeader(
+              title: "Tournament Boundaries",
+              showIcon: false,
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Column(
+                children: [
+                  Text(
+                    "SIXES",
+                    style: TextStyles.poppinsLight.copyWith(
+                      fontSize: 16,
+                      color: ColorsConstants.defaultBlack,
+                    ),
+                  ),
+                  Text(
+                    "72",
+                    style: TextStyles.poppinsBold.copyWith(
+                      fontSize: 32,
+                      letterSpacing: -1.6,
+                    ),
+                  ),
+                ],
+              ),
+              Column(
+                children: [
+                  Text(
+                    "FOURS",
+                    style: TextStyles.poppinsLight.copyWith(
+                      fontSize: 16,
+                      color: ColorsConstants.defaultBlack,
+                    ),
+                  ),
+                  Text(
+                    "126",
+                    style: TextStyles.poppinsBold.copyWith(
+                      fontSize: 32,
+                      letterSpacing: -1.6,
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ],
       ),

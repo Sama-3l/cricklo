@@ -12,6 +12,7 @@ import 'package:cricklo/features/scorer/domain/entities/match_player_entity.dart
 import 'package:cricklo/features/scorer/domain/entities/overs_entity.dart';
 import 'package:cricklo/features/teams/domain/entities/player_entity.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class Methods {
   static String getPlayerType(UserEntity user) {
@@ -169,6 +170,57 @@ class Methods {
     final period = dateTime.hour >= 12 ? 'PM' : 'AM';
 
     return '$day$suffix $month${addLineBreak ? ", $year\n" : " at "}$hour:$minute $period';
+  }
+
+  static String getDateRangeFormatted(DateTime start, DateTime end) {
+    final startDay = start.day;
+    final endDay = end.day;
+    final startMonth = DateFormat('MMM').format(start);
+    final endMonth = DateFormat('MMM').format(end);
+    final startYearShort = DateFormat("''yy").format(start);
+    final endYearShort = DateFormat("''yy").format(end);
+
+    String startSuffix = getDaySuffix(startDay);
+    String endSuffix = getDaySuffix(endDay);
+
+    if (start.year == end.year) {
+      // SAME YEAR
+      if (start.month == end.month) {
+        // Same month → 19ᵗʰ – 27ᵗʰ Oct '25
+        return '$startDay$startSuffix – $endDay$endSuffix $endMonth $endYearShort';
+      } else {
+        // Different months, same year → 19ᵗʰ Oct – 2ⁿᵈ Nov '25
+        return '$startDay$startSuffix $startMonth – $endDay$endSuffix $endMonth $endYearShort';
+      }
+    } else {
+      // DIFFERENT YEARS → 29ᵗʰ Dec '25 – 3ʳᵈ Jan '26
+      return '$startDay$startSuffix $startMonth $startYearShort – '
+          '$endDay$endSuffix $endMonth $endYearShort';
+    }
+  }
+
+  static String getFormattedDate(DateTime date) {
+    final day = date.day;
+    final month = DateFormat('MMM').format(date);
+    final yearShort = DateFormat("''yy").format(date); // e.g. '25
+    final suffix = getDaySuffix(day);
+
+    return '$day$suffix $month $yearShort';
+  }
+
+  /// Returns ordinal suffix in superscript form
+  static String getDaySuffix(int day) {
+    if (day >= 11 && day <= 13) return 'ᵗʰ';
+    switch (day % 10) {
+      case 1:
+        return 'ˢᵗ';
+      case 2:
+        return 'ⁿᵈ';
+      case 3:
+        return 'ʳᵈ';
+      default:
+        return 'ᵗʰ';
+    }
   }
 
   static MatchStage getStage(MatchEntity match) {

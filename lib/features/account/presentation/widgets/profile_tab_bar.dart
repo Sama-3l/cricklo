@@ -31,6 +31,7 @@ class ProfileTabBar extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 4),
           child: InkWell(
             onTap: () => onTap(index),
+            borderRadius: BorderRadius.circular(32),
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
@@ -82,6 +83,7 @@ class ProfileTabBar extends StatelessWidget {
                     right: index == mainTabs.length - 1 ? 8 : 0,
                   ),
                   child: InkWell(
+                    borderRadius: BorderRadius.circular(32),
                     onTap: () => onTap(index),
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 16),

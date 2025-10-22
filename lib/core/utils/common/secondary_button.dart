@@ -24,12 +24,14 @@ class SecondaryButton extends StatelessWidget {
           border: Border.all(color: color ?? ColorsConstants.accentOrange),
           borderRadius: BorderRadius.circular(8),
         ),
-        child: Text(
-          title,
-          style: TextStyles.poppinsSemiBold.copyWith(
-            fontSize: 12,
-            color: color ?? ColorsConstants.accentOrange,
-            letterSpacing: -0.5,
+        child: Center(
+          child: Text(
+            title,
+            style: TextStyles.poppinsSemiBold.copyWith(
+              fontSize: 12,
+              color: color ?? ColorsConstants.accentOrange,
+              letterSpacing: -0.5,
+            ),
           ),
         ),
       ),

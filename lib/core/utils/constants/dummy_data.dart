@@ -428,6 +428,7 @@ final tournament = TournamentEntity(
   id: "TOUR_001",
   name: "Punjab League",
   maxTeams: 12,
+  spotsLeft: 12,
   banner: "",
   inviteDeadline: DateTime.now().add(Duration(days: 1)),
   startDate: DateTime.now().add(Duration(days: 2)),

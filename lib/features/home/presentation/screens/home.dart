@@ -6,6 +6,7 @@ import 'package:cricklo/features/home/presentation/widgets/section_header.dart';
 import 'package:cricklo/features/login/domain/entities/user_entitiy.dart';
 import 'package:cricklo/features/mainapp/presentation/blocs/cubits/MainAppCubit/main_app_cubit.dart';
 import 'package:cricklo/features/matches/presentation/screens/match_list.dart';
+import 'package:cricklo/features/tournament/presentation/widgets/tournaments_list.dart';
 import 'package:cricklo/routes/app_route_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -136,7 +137,7 @@ class _HomePageState extends State<HomePage>
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: SectionHeader(title: "Live Tournaments"),
                 ),
-                tournaments.isEmpty
+                state.tournaments.isEmpty
                     ? Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 0.0),
                         child: Container(
@@ -165,19 +166,9 @@ class _HomePageState extends State<HomePage>
                           ),
                         ),
                       )
-                    : Container(
-                        margin: const EdgeInsets.only(top: 12),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          color: ColorsConstants.defaultBlack.withValues(
-                            alpha: 0.07,
-                          ),
-                        ),
-                        child: Center(
-                          child: Image.asset(
-                            "assets/images/tournament_Dummy_Image.png",
-                          ),
-                        ),
+                    : const Padding(
+                        padding: EdgeInsets.only(top: 12.0),
+                        child: TournamentsList(),
                       ),
                 const SizedBox(height: 40),
               ],

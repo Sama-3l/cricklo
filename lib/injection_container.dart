@@ -20,6 +20,7 @@ import 'package:cricklo/features/mainapp/data/datasource/main_app_remote_datasou
 import 'package:cricklo/features/mainapp/data/repo/main_app_repo_impl.dart';
 import 'package:cricklo/features/mainapp/data/repo/socket_auth_repo_impl.dart';
 import 'package:cricklo/features/mainapp/data/usecases/fetch_notifications_usecase.dart';
+import 'package:cricklo/features/mainapp/data/usecases/get_all_tournaments_usecase.dart';
 import 'package:cricklo/features/mainapp/data/usecases/get_current_user_usecase.dart';
 import 'package:cricklo/features/mainapp/data/usecases/get_user_matches_usecase.dart';
 import 'package:cricklo/features/mainapp/data/usecases/logout_usecase.dart';
@@ -207,6 +208,7 @@ void _mainAppDependencies() {
       sl<GetCurrentUserUsecase>(),
       sl<LogoutUsecase>(),
       sl<GetUserMatchesUsecase>(),
+      sl<GetAllTournamentsUsecase>(),
     ),
   );
   sl.registerFactory<ProfilePageCubit>(
@@ -386,7 +388,9 @@ void _tournamentDependencies() {
   sl.registerLazySingleton<CreateTournamentUsecase>(
     () => CreateTournamentUsecase(sl<TournamentRepo>()),
   );
-
+  sl.registerLazySingleton<GetAllTournamentsUsecase>(
+    () => GetAllTournamentsUsecase(sl<TournamentRepo>()),
+  );
   //cubits
   sl.registerFactory<CreateTournamentCubit>(
     () => CreateTournamentCubit(sl<CreateTournamentUsecase>()),

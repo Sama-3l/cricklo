@@ -2,9 +2,10 @@ import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:flutter/material.dart';
 
 class LeaderboardTable extends StatelessWidget {
-  const LeaderboardTable({super.key, required this.headings});
+  const LeaderboardTable({super.key, required this.headings, this.team});
 
   final List<String> headings;
+  final String? team;
 
   @override
   Widget build(BuildContext context) {
@@ -82,13 +83,29 @@ class LeaderboardTable extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 8),
-                    Text(
-                      'Aaryan Ji',
-                      style: TextStyles.poppinsMedium.copyWith(
-                        fontSize: 16,
-                        letterSpacing: -0.8,
-                        color: ColorsConstants.defaultBlack,
-                      ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Aaryan Ji',
+                          style: TextStyles.poppinsMedium.copyWith(
+                            fontSize: 16,
+                            letterSpacing: -0.8,
+                            color: ColorsConstants.defaultBlack,
+                          ),
+                        ),
+                        if (team != null)
+                          Text(
+                            'Aviral All Stars',
+                            style: TextStyles.poppinsMedium.copyWith(
+                              fontSize: 12,
+                              letterSpacing: -0.5,
+                              color: ColorsConstants.defaultBlack.withValues(
+                                alpha: 0.5,
+                              ),
+                            ),
+                          ),
+                      ],
                     ),
                   ],
                 ),
@@ -127,13 +144,29 @@ class LeaderboardTable extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 8),
-                    Text(
-                      'Aaryan Ji',
-                      style: TextStyles.poppinsMedium.copyWith(
-                        fontSize: 16,
-                        letterSpacing: -0.8,
-                        color: ColorsConstants.defaultBlack,
-                      ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Aaryan Ji',
+                          style: TextStyles.poppinsMedium.copyWith(
+                            fontSize: 16,
+                            letterSpacing: -0.8,
+                            color: ColorsConstants.defaultBlack,
+                          ),
+                        ),
+                        if (team != null)
+                          Text(
+                            'Aviral All Stars',
+                            style: TextStyles.poppinsMedium.copyWith(
+                              fontSize: 12,
+                              letterSpacing: -0.5,
+                              color: ColorsConstants.defaultBlack.withValues(
+                                alpha: 0.5,
+                              ),
+                            ),
+                          ),
+                      ],
                     ),
                   ],
                 ),
@@ -172,13 +205,29 @@ class LeaderboardTable extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 8),
-                    Text(
-                      'Aaryan Ji',
-                      style: TextStyles.poppinsMedium.copyWith(
-                        fontSize: 16,
-                        letterSpacing: -0.8,
-                        color: ColorsConstants.defaultBlack,
-                      ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Aaryan Ji',
+                          style: TextStyles.poppinsMedium.copyWith(
+                            fontSize: 16,
+                            letterSpacing: -0.8,
+                            color: ColorsConstants.defaultBlack,
+                          ),
+                        ),
+                        if (team != null)
+                          Text(
+                            'Aviral All Stars',
+                            style: TextStyles.poppinsMedium.copyWith(
+                              fontSize: 12,
+                              letterSpacing: -0.5,
+                              color: ColorsConstants.defaultBlack.withValues(
+                                alpha: 0.5,
+                              ),
+                            ),
+                          ),
+                      ],
                     ),
                   ],
                 ),
@@ -217,13 +266,29 @@ class LeaderboardTable extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 8),
-                    Text(
-                      'Aaryan Ji',
-                      style: TextStyles.poppinsMedium.copyWith(
-                        fontSize: 16,
-                        letterSpacing: -0.8,
-                        color: ColorsConstants.defaultBlack,
-                      ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Aaryan Ji',
+                          style: TextStyles.poppinsMedium.copyWith(
+                            fontSize: 16,
+                            letterSpacing: -0.8,
+                            color: ColorsConstants.defaultBlack,
+                          ),
+                        ),
+                        if (team != null)
+                          Text(
+                            'Aviral All Stars',
+                            style: TextStyles.poppinsMedium.copyWith(
+                              fontSize: 12,
+                              letterSpacing: -0.5,
+                              color: ColorsConstants.defaultBlack.withValues(
+                                alpha: 0.5,
+                              ),
+                            ),
+                          ),
+                      ],
                     ),
                   ],
                 ),

@@ -20,6 +20,7 @@ class TournamentModel {
   final BallType ballType;
   final int overs;
   final int maxTeams;
+  final int spotsLeft;
   final List<SearchUserModel> moderators;
   final List<LocationModel> venues;
   final List<TeamModel> teams;
@@ -39,6 +40,7 @@ class TournamentModel {
     required this.maxTeams,
     required this.tournamentType,
     required this.overs,
+    required this.spotsLeft,
     required this.moderators,
     required this.venues,
     required this.teams,
@@ -49,6 +51,7 @@ class TournamentModel {
 
   TournamentEntity toEntity() {
     return TournamentEntity(
+      spotsLeft: spotsLeft,
       ballType: ballType,
       id: id,
       name: name,
@@ -71,6 +74,7 @@ class TournamentModel {
 
   factory TournamentModel.fromEntity(TournamentEntity entity) {
     return TournamentModel(
+      spotsLeft: entity.spotsLeft,
       id: entity.id,
       name: entity.name,
       banner: entity.banner,
@@ -113,6 +117,7 @@ class TournamentModel {
         'ballType': ballType.title,
         'overs': overs,
         'maxTeams': maxTeams,
+        'spotsLeft': spotsLeft,
         'moderators': moderators.map((x) => x.toJson()).toList(),
         'venues': venues.map((x) => x.toJson()).toList(),
         'teams': teams.map((x) => x.toJson()).toList(),
@@ -140,25 +145,128 @@ class TournamentModel {
     };
   }
 
-  // factory TournamentModel.fromMap(Map<String, dynamic> map) {
-  //   return TournamentModel(
-  //     id: map['id'] as String,
-  //     name: map['name'] as String,
-  //     banner: map['banner'] as String,
-  //     inviteDeadline: DateTime.fromMillisecondsSinceEpoch(map['inviteDeadline'] as int),
-  //     startDate: DateTime.fromMillisecondsSinceEpoch(map['startDate'] as int),
-  //     endDate: DateTime.fromMillisecondsSinceEpoch(map['endDate'] as int),
-  //     tournamentType: TournamentType.fromMap(map['tournamentType'] as Map<String,dynamic>),
-  //     matchType: MatchType.fromMap(map['matchType'] as Map<String,dynamic>),
-  //     ballType: BallType.fromMap(map['ballType'] as Map<String,dynamic>),
-  //     overs: map['overs'] as int,
-  //     maxTeams: map['maxTeams'] as int,
-  //     moderators: List<SearchUserModel>.from((map['moderators'] as List<int>).map<SearchUserModel>((x) => SearchUserModel.fromMap(x as Map<String,dynamic>),),),
-  //     venues: List<LocationModel>.from((map['venues'] as List<int>).map<LocationModel>((x) => LocationModel.fromMap(x as Map<String,dynamic>),),),
-  //     teams: List<TeamModel>.from((map['teams'] as List<int>).map<TeamModel>((x) => TeamModel.fromMap(x as Map<String,dynamic>),),),
-  //     matches: List<MatchModel>.from((map['matches'] as List<int>).map<MatchModel>((x) => MatchModel.fromMap(x as Map<String,dynamic>),),),
-  //     groups: List<GroupModel>.from((map['groups'] as List<int>).map<GroupModel>((x) => GroupModel.fromMap(x as Map<String,dynamic>),),),
-  //     playerStats: List<TournamentPlayerStatsModel>.from((map['playerStats'] as List<int>).map<TournamentPlayerStatsModel>((x) => TournamentPlayerStatsModel.fromMap(x as Map<String,dynamic>),),),
-  //   );
-  // }
+  factory TournamentModel.fromMap(Map<String, dynamic> map) {
+    MatchType matchType = MatchType.t10;
+    final format = map["matchType"] as String?;
+    if (format != null) {
+      switch (format) {
+        case "T10":
+          matchType = MatchType.t10;
+          break;
+        case "T20":
+          matchType = MatchType.t20;
+          break;
+        case "T30":
+          matchType = MatchType.t30;
+          break;
+        case "ODI":
+          matchType = MatchType.odi;
+          break;
+        case "Test":
+          matchType = MatchType.test;
+          break;
+        default:
+          matchType = MatchType.t20;
+          break;
+      }
+    }
+    final inviteDeadlineDateTime = DateTime.parse(
+      map['inviteDeadline'] as String,
+    );
+    final startDateDateTime = DateTime.parse(map['startDate'] as String);
+    final endDateDateTime = DateTime.parse(map['endDate'] as String);
+    final inviteDeadline = DateTime(
+      inviteDeadlineDateTime.year,
+      inviteDeadlineDateTime.month,
+      inviteDeadlineDateTime.day,
+      inviteDeadlineDateTime.hour,
+      inviteDeadlineDateTime.minute,
+      inviteDeadlineDateTime.second,
+    );
+    final startDate = DateTime(
+      startDateDateTime.year,
+      startDateDateTime.month,
+      startDateDateTime.day,
+      startDateDateTime.hour,
+      startDateDateTime.minute,
+      startDateDateTime.second,
+    );
+    final endDate = DateTime(
+      endDateDateTime.year,
+      endDateDateTime.month,
+      endDateDateTime.day,
+      endDateDateTime.hour,
+      endDateDateTime.minute,
+      endDateDateTime.second,
+    );
+    return TournamentModel(
+      id: map['tournamentId'] as String,
+      name: map['name'] as String,
+      banner: map['banner'] as String,
+      inviteDeadline: inviteDeadline,
+      startDate: startDate,
+      endDate: endDate,
+      tournamentType: map['tournamentType'] == null
+          ? TournamentType.knockout
+          : TournamentType.values
+                .where((e) => e.title.toUpperCase() == map['tournamentType'])
+                .first,
+      spotsLeft: map['spotsLeft'] as int,
+      matchType: matchType,
+      ballType: BallType.leather,
+      overs: (map['format'] as String).toLowerCase() == "odi"
+          ? 50
+          : (map['format'] as String).toLowerCase() == "t10"
+          ? 10
+          : (map['format'] as String).toLowerCase() == "t20"
+          ? 20
+          : (map['format'] as String).toLowerCase() == "t30"
+          ? 30
+          : 0,
+      maxTeams: map['maxTeams'] as int,
+      moderators: map['moderators'] == null
+          ? []
+          : List<SearchUserModel>.from(
+              (map['moderators'] as List<dynamic>).map<SearchUserModel>(
+                (x) => SearchUserModel.fromJson(x),
+              ),
+            ),
+      venues: map['venues'] == null
+          ? []
+          : List<LocationModel>.from(
+              (map['venues'] as List<dynamic>).map<LocationModel>(
+                (x) => LocationModel.fromJson(x),
+              ),
+            ),
+      teams: map['teams'] == null
+          ? []
+          : List<TeamModel>.from(
+              (map['teams'] as List<dynamic>).map<TeamModel>(
+                (x) => TeamModel.fromJson(x),
+              ),
+            ),
+      matches: map['matches'] == null
+          ? []
+          : List<MatchModel>.from(
+              (map['matches'] as List<dynamic>).map<MatchModel>(
+                (x) => MatchModel.fromJson(x),
+              ),
+            ),
+      groups: map['groups'] == null
+          ? []
+          : List<GroupModel>.from(
+              (map['groups'] as List<dynamic>).map<GroupModel>(
+                (x) => GroupModel.fromJson(x),
+              ),
+            ),
+      playerStats: map['playerStats'] == null
+          ? []
+          : List<TournamentPlayerStatsModel>.from(
+              (map['playerStats'] as List<dynamic>)
+                  .map<TournamentPlayerStatsModel>(
+                    (x) => TournamentPlayerStatsModel.fromJson(x),
+                  ),
+            ),
+    );
+  }
 }

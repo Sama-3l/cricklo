@@ -16,6 +16,7 @@ import 'package:cricklo/features/teams/domain/models/remote/invite_player_respon
 import 'package:cricklo/features/teams/domain/models/remote/search_players_response_model.dart';
 import 'package:cricklo/features/teams/domain/models/remote/search_team_response_model.dart';
 import 'package:cricklo/features/tournament/domain/models/remote/create_tournament_response_model.dart';
+import 'package:cricklo/features/tournament/domain/models/remote/get_all_tournaments_model.dart';
 import 'package:cricklo/services/api_endpoint_constants.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/error_logger.dart';
@@ -132,4 +133,7 @@ abstract class ApiService {
   Future<CreateTournamentResponseModel> createTournament(
     @Body() Map<String, dynamic> body,
   );
+
+  @GET(ApiEndpointConstants.tournamentGetAll)
+  Future<GetAllTournamentsModel> getAllTournaments();
 }

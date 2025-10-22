@@ -48,7 +48,7 @@ class OverallScreen extends StatelessWidget {
             children: [
               TableRow(
                 decoration: BoxDecoration(
-                  color: ColorsConstants.onSurfaceOrange,
+                  color: ColorsConstants.surfaceOrange,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(8),
                     topRight: Radius.circular(8),
@@ -171,7 +171,7 @@ class OverallScreen extends StatelessWidget {
               children: [
                 TableRow(
                   decoration: BoxDecoration(
-                    color: ColorsConstants.onSurfaceOrange,
+                    color: ColorsConstants.surfaceOrange,
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(8),
                       topRight: Radius.circular(8),
@@ -322,7 +322,7 @@ class OverallScreen extends StatelessWidget {
             children: [
               TableRow(
                 decoration: BoxDecoration(
-                  color: ColorsConstants.onSurfaceOrange,
+                  color: ColorsConstants.surfaceOrange,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(8),
                     topRight: Radius.circular(8),
@@ -507,7 +507,7 @@ class OverallScreen extends StatelessWidget {
             children: [
               TableRow(
                 decoration: BoxDecoration(
-                  color: ColorsConstants.onSurfaceOrange,
+                  color: ColorsConstants.surfaceOrange,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(8),
                     topRight: Radius.circular(8),
