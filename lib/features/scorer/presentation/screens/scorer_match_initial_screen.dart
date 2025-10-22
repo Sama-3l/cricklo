@@ -205,8 +205,7 @@ class _ScorerMatchInitialScreenState extends State<ScorerMatchInitialScreen> {
                               child: InputDecorator(
                                 decoration: InputDecoration(
                                   filled: true,
-                                  fillColor: ColorsConstants.onSurfaceGrey
-                                      .withValues(alpha: 0.2),
+                                  fillColor: ColorsConstants.onSurfaceGrey,
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide.none,
                                   ),
@@ -252,8 +251,7 @@ class _ScorerMatchInitialScreenState extends State<ScorerMatchInitialScreen> {
                               child: InputDecorator(
                                 decoration: InputDecoration(
                                   filled: true,
-                                  fillColor: ColorsConstants.onSurfaceGrey
-                                      .withValues(alpha: 0.2),
+                                  fillColor: ColorsConstants.onSurfaceGrey,
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide.none,
                                   ),
@@ -311,9 +309,7 @@ class _ScorerMatchInitialScreenState extends State<ScorerMatchInitialScreen> {
                         width: double.infinity,
                         padding: EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: ColorsConstants.onSurfaceGrey.withValues(
-                            alpha: 0.2,
-                          ),
+                          color: ColorsConstants.onSurfaceGrey,
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
@@ -365,9 +361,7 @@ class _ScorerMatchInitialScreenState extends State<ScorerMatchInitialScreen> {
                           width: double.infinity,
                           padding: EdgeInsets.all(12),
                           decoration: BoxDecoration(
-                            color: ColorsConstants.onSurfaceGrey.withValues(
-                              alpha: 0.2,
-                            ),
+                            color: ColorsConstants.onSurfaceGrey,
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Column(

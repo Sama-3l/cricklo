@@ -21,7 +21,7 @@ class MatchNotificationTile extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        color: ColorsConstants.defaultBlack.withValues(alpha: 0.07),
+        color: ColorsConstants.onSurfaceGrey,
       ),
       margin: EdgeInsets.symmetric(vertical: 6),
       child: Padding(
@@ -162,7 +162,7 @@ class MatchNotificationTile extends StatelessWidget {
                       matchNotificationEntity,
                       "deny",
                     ),
-                    color: ColorsConstants.accentOrange.withValues(alpha: 0.2),
+                    color: ColorsConstants.surfaceOrange,
                     noShadow: true,
                     child: Text(
                       "Deny",

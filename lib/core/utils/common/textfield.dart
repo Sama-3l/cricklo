@@ -143,7 +143,7 @@ class _InputFieldState extends State<InputField> with TickerProviderStateMixin {
                       letterSpacing: -0.5,
                     ),
                     filled: true,
-                    fillColor: onSurfaceGrey.withValues(alpha: 0.2),
+                    fillColor: onSurfaceGrey,
                     contentPadding: const EdgeInsets.symmetric(
                       vertical: 12,
                       horizontal: 8,

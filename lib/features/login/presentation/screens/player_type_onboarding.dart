@@ -23,6 +23,7 @@ class _PlayerTypeOnboardingState extends State<PlayerTypeOnboarding> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ColorsConstants.defaultWhite,
       appBar: AppBar(
         leading: IconButton(
           onPressed: () => GoRouter.of(context).pop(),
@@ -47,9 +48,7 @@ class _PlayerTypeOnboardingState extends State<PlayerTypeOnboarding> {
                 padding: const EdgeInsets.only(top: 40.0),
                 child: CircleAvatar(
                   radius: 48,
-                  backgroundColor: ColorsConstants.accentOrange.withValues(
-                    alpha: 0.2,
-                  ),
+                  backgroundColor: ColorsConstants.surfaceOrange,
                   backgroundImage: widget.user.profilePicFile != null
                       ? FileImage(widget.user.profilePicFile!)
                       : null,

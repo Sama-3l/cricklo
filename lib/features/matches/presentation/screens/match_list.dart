@@ -55,7 +55,7 @@ class _MatchListState extends State<MatchList> {
                 decoration: BoxDecoration(
                   color: isActive
                       ? ColorsConstants.accentOrange
-                      : ColorsConstants.accentOrange.withValues(alpha: 0.3),
+                      : ColorsConstants.surfaceOrange,
                   borderRadius: BorderRadius.circular(4),
                 ),
               );

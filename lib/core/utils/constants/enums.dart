@@ -72,3 +72,20 @@ enum WicketType {
 }
 
 enum OptionType { more, bonusRuns, moreRuns }
+
+enum TournamentType {
+  knockout("Knockout"),
+  league("League");
+
+  final String title;
+  const TournamentType(this.title);
+}
+
+enum BallType {
+  rubber("Rubber"),
+  tennis("Tennis"),
+  leather("Leather");
+
+  final String title;
+  const BallType(this.title);
+}

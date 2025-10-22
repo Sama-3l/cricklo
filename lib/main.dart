@@ -1,13 +1,17 @@
+import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/login/presentation/blocs/cubits/OtpPageCubit/otp_page_cubit.dart';
 import 'package:cricklo/features/login/presentation/blocs/cubits/SetPinCubit/set_pin_cubit.dart';
 import 'package:cricklo/features/login/presentation/blocs/cubits/OnboardingPageCubit/onboarding_page_cubit.dart';
 import 'package:cricklo/features/notifications/presentation/blocs/blocs/NotificationBloc/notification_bloc.dart';
+import 'package:cricklo/features/tournament/presentation/blocs/cubits/CreateTournament/create_tournament_cubit.dart';
 import 'package:cricklo/injection_container.dart';
 import 'package:cricklo/routes/app_router.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'dart:io' as io;
 
 Future<bool> hasInternet() async {
   final connectivityResult = await Connectivity().checkConnectivity();
@@ -33,6 +37,10 @@ Future<void> main() async {
   await initializeDependencies();
   await DotEnv().load(fileName: ".env");
   hasInternet();
+
+  if (kDebugMode) {
+    io.HttpClient.enableTimelineLogging = true;
+  }
   runApp(MyApp());
 }
 
@@ -47,13 +55,23 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (context) => sl<OtpPageCubit>()),
         BlocProvider(create: (context) => sl<SetPinCubit>()),
-        // BlocProvider(create: (_) => sl<AccountCubit>()),
+        BlocProvider(create: (_) => sl<CreateTournamentCubit>()),
         BlocProvider(create: (_) => sl<OnboardingPageCubit>()),
         BlocProvider(create: (context) => sl<NotificationBloc>()),
       ],
       child: MaterialApp.router(
+        theme: ThemeData.light(),
+        darkTheme: ThemeData.dark(),
+        themeMode: ThemeMode.light,
         debugShowCheckedModeBanner: false,
         routerConfig: AppRouter().router,
+        builder: (context, child) {
+          final brightness = Theme.of(context).brightness;
+          print(brightness);
+          ColorsConstants.isDarkMode = brightness == Brightness.dark;
+          print(ColorsConstants.isDarkMode);
+          return child!;
+        },
       ),
     );
   }

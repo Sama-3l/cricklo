@@ -40,9 +40,7 @@ class ScorerTeamHeaderItem extends StatelessWidget {
           ).push(Routes.teamPage, extra: [team, <MatchEntity>[]]),
           child: CircleAvatar(
             radius: 40,
-            backgroundColor: ColorsConstants.accentOrange.withValues(
-              alpha: 0.2,
-            ),
+            backgroundColor: ColorsConstants.surfaceOrange,
             child: Icon(
               Icons.people,
               size: 24,

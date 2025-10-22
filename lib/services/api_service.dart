@@ -15,6 +15,7 @@ import 'package:cricklo/features/teams/domain/models/remote/get_team_details_res
 import 'package:cricklo/features/teams/domain/models/remote/invite_player_response_model.dart';
 import 'package:cricklo/features/teams/domain/models/remote/search_players_response_model.dart';
 import 'package:cricklo/features/teams/domain/models/remote/search_team_response_model.dart';
+import 'package:cricklo/features/tournament/domain/models/remote/create_tournament_response_model.dart';
 import 'package:cricklo/services/api_endpoint_constants.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/error_logger.dart';
@@ -125,5 +126,10 @@ abstract class ApiService {
   @GET(ApiEndpointConstants.getMatchState)
   Future<GetMatchStateResponseModel> getMatchState(
     @Path("matchId") String matchId,
+  );
+
+  @POST(ApiEndpointConstants.tournamentCreate)
+  Future<CreateTournamentResponseModel> createTournament(
+    @Body() Map<String, dynamic> body,
   );
 }

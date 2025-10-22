@@ -1337,7 +1337,9 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
                     style: TextStyles.poppinsSemiBold.copyWith(
                       fontSize: 12,
                       letterSpacing: -0.5,
-                      color: ColorsConstants.defaultWhite,
+                      color: remainingSeconds > 0
+                          ? ColorsConstants.defaultBlack
+                          : ColorsConstants.defaultWhite,
                     ),
                   ),
                 ),

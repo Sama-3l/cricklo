@@ -28,7 +28,7 @@ class _YearlyReviewState extends State<YearlyReview> {
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        color: ColorsConstants.defaultBlack.withValues(alpha: 0.07),
+        color: ColorsConstants.onSurfaceGrey,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -119,7 +119,7 @@ class _YearlyReviewState extends State<YearlyReview> {
               left: BorderSide.none,
               right: BorderSide.none,
               verticalInside: BorderSide(
-                color: ColorsConstants.onSurfaceGrey,
+                color: ColorsConstants.defaultBlack,
                 width: 0.5,
               ),
             ),

@@ -6,12 +6,14 @@ class StatsTableFilterTabBar extends StatelessWidget {
   final int selectedTab;
   final Function(int) selectTab;
   final List<String> options;
+  final bool whiteBackground;
 
   const StatsTableFilterTabBar({
     super.key,
     required this.selectedTab,
     required this.selectTab,
     required this.options,
+    this.whiteBackground = false,
   });
 
   @override
@@ -22,7 +24,9 @@ class StatsTableFilterTabBar extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: ColorsConstants.defaultBlack.withValues(alpha: 0.07),
+        color: whiteBackground
+            ? ColorsConstants.defaultWhite
+            : ColorsConstants.onSurfaceGrey,
         borderRadius: BorderRadius.circular(32),
       ),
       padding: const EdgeInsets.all(4),

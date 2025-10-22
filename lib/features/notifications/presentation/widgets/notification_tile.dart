@@ -39,9 +39,7 @@ class NotificationTile extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 24,
-            backgroundColor: ColorsConstants.accentOrange.withValues(
-              alpha: 0.2,
-            ),
+            backgroundColor: ColorsConstants.surfaceOrange,
             child: Center(child: Icon(Icons.person, size: 16)),
           ),
           const SizedBox(width: 8),

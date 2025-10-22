@@ -74,9 +74,20 @@ class AuthRepositoryImpl implements AuthRepository {
       return Right(response.toEntity());
     } on DioException catch (e) {
       final data = e.response?.data;
-
+      final status = data?['error']?['status'] as int;
       final code = data?['error']?['code'];
       final message = data?['error']?['message'];
+
+      if (status == 500) {
+        return Right(
+          LoginResponseEntity(
+            success: false,
+            message: message ?? "User already exists",
+            errorCode: code,
+            status: status,
+          ),
+        );
+      }
 
       if (code == "OTP_EXPIRED") {
         return Right(

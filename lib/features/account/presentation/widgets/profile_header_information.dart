@@ -23,9 +23,7 @@ class ProfileHeaderInformation extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 40,
-              backgroundColor: ColorsConstants.accentOrange.withValues(
-                alpha: 0.2,
-              ),
+              backgroundColor: ColorsConstants.surfaceOrange,
               backgroundImage: user != null
                   ? user!.profilePic != null
                         ? CachedNetworkImageProvider(user!.profilePic!)
@@ -106,7 +104,9 @@ class ProfileHeaderInformation extends StatelessWidget {
                   ],
                   InkWell(
                     onTap: () {
-                      FlutterClipboard.copy(user!.profileId);
+                      FlutterClipboard.copy(
+                        user != null ? user!.profileId : team!.id,
+                      );
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           behavior: SnackBarBehavior.floating,
@@ -136,9 +136,7 @@ class ProfileHeaderInformation extends StatelessWidget {
                       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(4),
-                        color: ColorsConstants.accentOrange.withValues(
-                          alpha: 0.2,
-                        ),
+                        color: ColorsConstants.surfaceOrange,
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,

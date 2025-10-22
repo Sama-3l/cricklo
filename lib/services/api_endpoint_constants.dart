@@ -29,4 +29,6 @@ class ApiEndpointConstants {
   static const scorerEndOver = '/scorer/over-end';
   static const scorerInningsChange = '/scorer/innings-change';
   static const scorerMatchComplete = '/scorer/complete';
+
+  static const tournamentCreate = '/tournament/create';
 }

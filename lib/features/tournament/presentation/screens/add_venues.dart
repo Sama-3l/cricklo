@@ -8,9 +8,14 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class AddVenuesPage extends StatefulWidget {
-  const AddVenuesPage({super.key, required this.tournament});
+  const AddVenuesPage({
+    super.key,
+    required this.tournament,
+    required this.onCreate,
+  });
 
   final TournamentEntity tournament;
+  final Function(TournamentEntity tournament) onCreate;
 
   @override
   State<AddVenuesPage> createState() => _AddVenuesPageState();
@@ -98,9 +103,10 @@ class _AddVenuesPageState extends State<AddVenuesPage> {
                     )
                     .toList(),
               );
-              GoRouter.of(
-                context,
-              ).push(Routes.addTournamentModerators, extra: tournament);
+              GoRouter.of(context).push(
+                Routes.addTournamentModerators,
+                extra: [tournament, widget.onCreate],
+              );
             },
           ),
         ),

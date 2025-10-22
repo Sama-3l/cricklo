@@ -39,36 +39,36 @@ class CreateTeamCubit extends Cubit<CreateTeamState> {
     );
 
     if (pickedFile != null) {
-      // final croppedFile = await ImageCropper().cropImage(
-      //   sourcePath: pickedFile.path,
+      final croppedFile = await ImageCropper().cropImage(
+        sourcePath: pickedFile.path,
 
-      //   uiSettings: [
-      //     AndroidUiSettings(
-      //       toolbarTitle: 'Edit Image',
-      //       toolbarColor: ColorsConstants.accentOrange,
-      //       toolbarWidgetColor: ColorsConstants.defaultWhite,
-      //       lockAspectRatio: false,
-      //       cropStyle: CropStyle.circle,
-      //       aspectRatioPresets: [
-      //         CropAspectRatioPreset.square,
-      //         CropAspectRatioPreset.ratio16x9,
-      //         CropAspectRatioPreset.original,
-      //       ],
-      //     ),
-      //     IOSUiSettings(
-      //       title: 'Edit Image',
-      //       cropStyle: CropStyle.circle,
-      //       aspectRatioPresets: [
-      //         CropAspectRatioPreset.square,
-      //         CropAspectRatioPreset.ratio16x9,
-      //         CropAspectRatioPreset.original,
-      //       ],
-      //     ),
-      //   ],
-      // );
+        uiSettings: [
+          AndroidUiSettings(
+            toolbarTitle: 'Edit Image',
+            toolbarColor: ColorsConstants.accentOrange,
+            toolbarWidgetColor: ColorsConstants.defaultWhite,
+            lockAspectRatio: false,
+            cropStyle: CropStyle.circle,
+            aspectRatioPresets: [
+              CropAspectRatioPreset.square,
+              CropAspectRatioPreset.ratio16x9,
+              CropAspectRatioPreset.original,
+            ],
+          ),
+          IOSUiSettings(
+            title: 'Edit Image',
+            cropStyle: CropStyle.circle,
+            aspectRatioPresets: [
+              CropAspectRatioPreset.square,
+              CropAspectRatioPreset.ratio16x9,
+              CropAspectRatioPreset.original,
+            ],
+          ),
+        ],
+      );
 
-      if (pickedFile != null) {
-        emit(state.copyWith(logo: File(pickedFile.path), logoLoading: false));
+      if (croppedFile != null) {
+        emit(state.copyWith(logo: File(croppedFile.path), logoLoading: false));
       } else {
         emit(state.copyWith(logoLoading: false));
       }
@@ -85,37 +85,37 @@ class CreateTeamCubit extends Cubit<CreateTeamState> {
     );
 
     if (pickedFile != null) {
-      // final croppedFile = await ImageCropper().cropImage(
-      //   sourcePath: pickedFile.path,
+      final croppedFile = await ImageCropper().cropImage(
+        sourcePath: pickedFile.path,
 
-      //   uiSettings: [
-      //     AndroidUiSettings(
-      //       toolbarTitle: 'Edit Image',
-      //       toolbarColor: ColorsConstants.accentOrange,
-      //       toolbarWidgetColor: ColorsConstants.defaultWhite,
-      //       lockAspectRatio: false,
+        uiSettings: [
+          AndroidUiSettings(
+            toolbarTitle: 'Edit Image',
+            toolbarColor: ColorsConstants.accentOrange,
+            toolbarWidgetColor: ColorsConstants.defaultWhite,
+            lockAspectRatio: false,
 
-      //       aspectRatioPresets: [
-      //         CropAspectRatioPreset.square,
-      //         CropAspectRatioPreset.ratio16x9,
-      //         CropAspectRatioPreset.original,
-      //       ],
-      //     ),
+            aspectRatioPresets: [
+              CropAspectRatioPreset.square,
+              CropAspectRatioPreset.ratio16x9,
+              CropAspectRatioPreset.original,
+            ],
+          ),
 
-      //     IOSUiSettings(
-      //       title: 'Edit Image',
-      //       aspectRatioPresets: [
-      //         CropAspectRatioPreset.square,
-      //         CropAspectRatioPreset.ratio16x9,
-      //         CropAspectRatioPreset.original,
-      //       ],
-      //     ),
-      //   ],
-      // );
+          IOSUiSettings(
+            title: 'Edit Image',
+            aspectRatioPresets: [
+              CropAspectRatioPreset.square,
+              CropAspectRatioPreset.ratio16x9,
+              CropAspectRatioPreset.original,
+            ],
+          ),
+        ],
+      );
 
-      if (pickedFile != null) {
+      if (croppedFile != null) {
         emit(
-          state.copyWith(banner: File(pickedFile.path), bannerLoading: true),
+          state.copyWith(banner: File(croppedFile.path), bannerLoading: true),
         );
       } else {
         emit(state.copyWith(bannerLoading: false));

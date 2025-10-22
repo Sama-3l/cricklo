@@ -31,14 +31,19 @@ class StatsTable extends StatelessWidget {
 
             border: TableBorder(
               horizontalInside: horizontalLine
-                  ? BorderSide(color: ColorsConstants.onSurfaceGrey, width: 0.5)
+                  ? BorderSide(
+                      color: ColorsConstants.defaultBlack.withValues(
+                        alpha: 0.5,
+                      ),
+                      width: 0.5,
+                    )
                   : BorderSide.none,
               top: BorderSide.none,
               bottom: BorderSide.none,
               left: BorderSide.none,
               right: BorderSide.none,
               verticalInside: verticalLine
-                  ? BorderSide(color: ColorsConstants.onSurfaceGrey, width: 0.5)
+                  ? BorderSide(color: ColorsConstants.defaultBlack, width: 0.5)
                   : BorderSide.none,
             ),
             children: [

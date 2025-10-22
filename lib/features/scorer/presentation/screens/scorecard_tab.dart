@@ -92,9 +92,7 @@ class _ScorecardScreenState extends State<ScorecardScreen> {
                           decoration: BoxDecoration(
                             color: selectedTeamIndex == i
                                 ? ColorsConstants.accentOrange
-                                : ColorsConstants.accentOrange.withValues(
-                                    alpha: 0.1,
-                                  ),
+                                : ColorsConstants.surfaceOrange,
                             borderRadius: BorderRadius.circular(8),
                           ),
                           alignment: Alignment.center,
@@ -137,9 +135,7 @@ class _ScorecardScreenState extends State<ScorecardScreen> {
                             decoration: BoxDecoration(
                               color: selectedInningsIndex == i
                                   ? ColorsConstants.accentOrange
-                                  : ColorsConstants.accentOrange.withValues(
-                                      alpha: 0.1,
-                                    ),
+                                  : ColorsConstants.surfaceOrange,
                               borderRadius: BorderRadius.circular(8),
                             ),
                             alignment: Alignment.center,
@@ -236,9 +232,7 @@ class _ScorecardScreenState extends State<ScorecardScreen> {
                 children: [
                   TableRow(
                     decoration: BoxDecoration(
-                      color: ColorsConstants.accentOrange.withValues(
-                        alpha: 0.15,
-                      ),
+                      color: ColorsConstants.surfaceOrange,
                     ),
                     children: [
                       WidgetDecider.headerCell("Batsman"),
@@ -316,9 +310,7 @@ class _ScorecardScreenState extends State<ScorecardScreen> {
 
           children: [
             TableRow(
-              decoration: BoxDecoration(
-                color: ColorsConstants.accentOrange.withValues(alpha: 0.15),
-              ),
+              decoration: BoxDecoration(color: ColorsConstants.surfaceOrange),
               children: [
                 WidgetDecider.headerCell("Bowler"),
                 WidgetDecider.headerCell("O"),

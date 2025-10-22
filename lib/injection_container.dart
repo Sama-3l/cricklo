@@ -63,6 +63,11 @@ import 'package:cricklo/features/teams/presentation/blocs/cubits/AddPlayersCubit
 import 'package:cricklo/features/teams/presentation/blocs/cubits/CreateTeamCubit/create_team_cubit.dart';
 import 'package:cricklo/features/teams/presentation/blocs/cubits/SearchPlayersCubit/search_players_cubit.dart';
 import 'package:cricklo/features/teams/presentation/blocs/cubits/TeamPageCubit/team_page_cubit.dart';
+import 'package:cricklo/features/tournament/data/datasource/tournament_datasource_remote.dart';
+import 'package:cricklo/features/tournament/data/repo/tournament_repo_impl.dart';
+import 'package:cricklo/features/tournament/data/usecases/create_tournament_usecase.dart';
+import 'package:cricklo/features/tournament/domain/repo/tournament_repo.dart';
+import 'package:cricklo/features/tournament/presentation/blocs/cubits/CreateTournament/create_tournament_cubit.dart';
 import 'package:cricklo/services/api_service.dart';
 import 'package:cricklo/services/auth_helper.dart';
 import 'package:cricklo/services/socket_service.dart';
@@ -136,6 +141,7 @@ Future<void> initializeDependencies() async {
   _notificationDependencies();
   _matchDependencies();
   _scorerMatchDependencies();
+  _tournamentDependencies();
 }
 
 void _authDependencies() {
@@ -365,5 +371,24 @@ void _scorerMatchDependencies() {
       sl<ScorerUpdateUsecase>(),
       sl<StartMatchUsecase>(),
     ),
+  );
+}
+
+void _tournamentDependencies() {
+  sl.registerLazySingleton<TournamentDatasourceRemote>(
+    () => TournamentDatasourceRemoteImpl(sl<ApiService>()),
+  );
+  // repo
+  sl.registerLazySingleton<TournamentRepo>(
+    () => TournamentRepoImpl(sl<TournamentDatasourceRemote>()),
+  );
+  //use-cases
+  sl.registerLazySingleton<CreateTournamentUsecase>(
+    () => CreateTournamentUsecase(sl<TournamentRepo>()),
+  );
+
+  //cubits
+  sl.registerFactory<CreateTournamentCubit>(
+    () => CreateTournamentCubit(sl<CreateTournamentUsecase>()),
   );
 }

@@ -12,7 +12,7 @@ class PartnershipStat extends StatelessWidget {
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24),
-        color: ColorsConstants.defaultBlack.withValues(alpha: 0.07),
+        color: ColorsConstants.onSurfaceGrey,
       ),
       child: Row(
         children: [

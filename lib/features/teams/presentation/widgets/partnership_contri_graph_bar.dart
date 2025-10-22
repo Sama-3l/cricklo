@@ -17,7 +17,7 @@ class PartnershipContriGraphBar extends StatelessWidget {
             topRight: Radius.circular(4),
             bottomRight: Radius.circular(4),
           ),
-          color: ColorsConstants.accentOrange.withValues(alpha: 0.4),
+          color: ColorsConstants.surfaceOrange,
         ),
       ),
     );

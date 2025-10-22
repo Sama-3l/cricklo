@@ -29,6 +29,7 @@ class _PlayerTypeOnboardingTwoState extends State<PlayerTypeOnboardingTwo> {
       builder: (context, state) {
         final cubit = context.read<OnboardingPageCubit>();
         return Scaffold(
+          backgroundColor: ColorsConstants.defaultWhite,
           appBar: AppBar(
             leading: IconButton(
               onPressed: () => GoRouter.of(context).pop(),
@@ -53,9 +54,7 @@ class _PlayerTypeOnboardingTwoState extends State<PlayerTypeOnboardingTwo> {
                     padding: const EdgeInsets.only(top: 40.0),
                     child: CircleAvatar(
                       radius: 48,
-                      backgroundColor: ColorsConstants.accentOrange.withValues(
-                        alpha: 0.2,
-                      ),
+                      backgroundColor: ColorsConstants.surfaceOrange,
                       backgroundImage: widget.user.profilePicFile != null
                           ? FileImage(widget.user.profilePicFile!)
                           : null,

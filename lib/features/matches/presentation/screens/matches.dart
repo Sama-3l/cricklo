@@ -17,7 +17,7 @@ class _MatchesPageState extends State<MatchesPage> {
   Widget build(BuildContext context) {
     final state = context.read<MainAppCubit>().state;
     return Scaffold(
-      backgroundColor: ColorsConstants.defaultBlack.withValues(alpha: 0.07),
+      backgroundColor: ColorsConstants.onSurfaceGrey,
       body: RefreshIndicator(
         color: ColorsConstants.accentOrange,
         onRefresh: () async {

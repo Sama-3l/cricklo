@@ -41,7 +41,7 @@ class _TeamOverviewState extends State<TeamOverview> {
                   height: 150,
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: ColorsConstants.accentOrange.withValues(alpha: 0.2),
+                    color: ColorsConstants.surfaceOrange,
                     image: DecorationImage(
                       image: CachedNetworkImageProvider(widget.team.teamBanner),
                       fit: BoxFit.cover,
@@ -113,12 +113,13 @@ class _TeamOverviewState extends State<TeamOverview> {
             margin: const EdgeInsets.symmetric(horizontal: 16.0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
-              color: ColorsConstants.defaultBlack.withValues(alpha: 0.07),
+              color: ColorsConstants.onSurfaceGrey,
             ),
             child: Column(
               children: [
                 // Toggle
                 StatsTableFilterTabBar(
+                  whiteBackground: true,
                   options: ["Both", "Bat First", "Bowl First"],
                   selectTab: (index) => setState(() {
                     selectedTab = index;
@@ -240,7 +241,7 @@ class _TeamOverviewState extends State<TeamOverview> {
               margin: const EdgeInsets.symmetric(horizontal: 16.0),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
-                color: ColorsConstants.defaultBlack.withValues(alpha: 0.07),
+                color: ColorsConstants.onSurfaceGrey,
               ),
               child: Column(
                 children: state.team!.players

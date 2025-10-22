@@ -62,9 +62,7 @@ class _AddPlayersScreenState extends State<AddPlayersScreen> {
                     child: PrimaryButton(
                       noShadow: true,
                       disabled: false,
-                      color: ColorsConstants.accentOrange.withValues(
-                        alpha: 0.2,
-                      ),
+                      color: ColorsConstants.surfaceOrange,
                       child: Text(
                         "Find Players",
                         style: TextStyles.poppinsSemiBold.copyWith(

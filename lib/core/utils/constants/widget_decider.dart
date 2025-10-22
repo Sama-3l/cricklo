@@ -39,7 +39,7 @@ class WidgetDecider {
           padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           decoration: BoxDecoration(
             color: selected
-                ? ColorsConstants.accentOrange.withValues(alpha: 0.2)
+                ? ColorsConstants.surfaceOrange
                 : ColorsConstants.onSurfaceOrange,
             borderRadius: BorderRadius.circular(8),
             border: selected
@@ -193,9 +193,7 @@ class WidgetDecider {
                             DismissDirection.horizontal, // swipe right only
                         background: Container(
                           decoration: BoxDecoration(
-                            color: ColorsConstants.accentOrange.withValues(
-                              alpha: 0.2,
-                            ),
+                            color: ColorsConstants.surfaceOrange,
                             borderRadius: BorderRadius.circular(8),
                           ),
                           padding: const EdgeInsets.only(left: 24),
@@ -207,9 +205,7 @@ class WidgetDecider {
                         ),
                         secondaryBackground: Container(
                           decoration: BoxDecoration(
-                            color: ColorsConstants.accentOrange.withValues(
-                              alpha: 0.2,
-                            ),
+                            color: ColorsConstants.surfaceOrange,
                             borderRadius: BorderRadius.circular(8),
                           ),
                           padding: const EdgeInsets.only(right: 24),
@@ -566,9 +562,7 @@ class WidgetDecider {
         children: [
           CircleAvatar(
             radius: 32,
-            backgroundColor: ColorsConstants.accentOrange.withValues(
-              alpha: 0.2,
-            ),
+            backgroundColor: ColorsConstants.surfaceOrange,
             backgroundImage: p.profilePic != null
                 ? CachedNetworkImageProvider(p.profilePic!)
                 : null,
@@ -755,9 +749,7 @@ class WidgetDecider {
       children: [
         // 🟠 Header Row
         TableRow(
-          decoration: BoxDecoration(
-            color: ColorsConstants.accentOrange.withValues(alpha: 0.15),
-          ),
+          decoration: BoxDecoration(color: ColorsConstants.surfaceOrange),
           children: [
             headerCell("Batsman"),
             headerCell("R"),
@@ -839,9 +831,7 @@ class WidgetDecider {
       ),
       children: [
         TableRow(
-          decoration: BoxDecoration(
-            color: ColorsConstants.accentOrange.withValues(alpha: 0.15),
-          ),
+          decoration: BoxDecoration(color: ColorsConstants.surfaceOrange),
           children: [
             headerCell("Bowler"),
             headerCell("O"),
@@ -1397,9 +1387,7 @@ class WidgetDecider {
                               padding: EdgeInsets.all(8),
                               decoration: BoxDecoration(
                                 color: isSelected
-                                    ? ColorsConstants.accentOrange.withValues(
-                                        alpha: 0.2,
-                                      )
+                                    ? ColorsConstants.surfaceOrange
                                     : ColorsConstants.defaultWhite,
                                 borderRadius: BorderRadius.circular(12),
                                 border: Border.all(
@@ -1481,10 +1469,8 @@ class WidgetDecider {
                               CircleAvatar(
                                 radius: 30,
                                 backgroundColor: selectedFielder == null
-                                    ? Colors.grey.shade300
-                                    : ColorsConstants.accentOrange.withValues(
-                                        alpha: 0.2,
-                                      ),
+                                    ? ColorsConstants.onSurfaceGrey
+                                    : ColorsConstants.surfaceOrange,
                                 child: selectedFielder == null
                                     ? Icon(
                                         Icons.add,

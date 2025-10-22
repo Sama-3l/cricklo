@@ -81,7 +81,8 @@ class _LoginPageState extends State<LoginPage> {
                       const SizedBox(height: 32),
                       Text(
                         "Welcome to Cricklo!",
-                        style: TextStyles.poppinsSemiBold.defaultBlack.copyWith(
+                        style: TextStyles.poppinsSemiBold.copyWith(
+                          color: ColorsConstants.defaultBlack,
                           fontSize: 32,
                           letterSpacing: -1.6,
                         ),

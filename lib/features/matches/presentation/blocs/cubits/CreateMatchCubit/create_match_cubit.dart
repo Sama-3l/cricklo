@@ -53,7 +53,11 @@ class CreateMatchCubit extends Cubit<CreateMatchState> {
           teamA: teamA.copyWith(inviteStatus: "PENDING"),
           teamB: teamB.copyWith(inviteStatus: "PENDING"),
           location: location,
-          scorer: {"profileId": scorer.playerId, "name": scorer.name},
+          scorer: {
+            "profileId": scorer.playerId,
+            "name": scorer.name,
+            "inviteStatus": "PENDING",
+          },
         );
         onComplete(matchEntity);
         GoRouter.of(context).pop();

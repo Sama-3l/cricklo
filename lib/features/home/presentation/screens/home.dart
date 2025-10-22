@@ -76,7 +76,7 @@ class _HomePageState extends State<HomePage>
     final cubit = context.read<MainAppCubit>();
     final state = cubit.state;
     return Scaffold(
-      backgroundColor: ColorsConstants.defaultBlack.withValues(alpha: 0.07),
+      backgroundColor: ColorsConstants.onSurfaceGrey,
       body: Stack(
         children: [
           RefreshIndicator(

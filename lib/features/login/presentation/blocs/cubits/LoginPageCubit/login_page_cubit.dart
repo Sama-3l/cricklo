@@ -29,7 +29,7 @@ class LoginPageCubit extends Cubit<LoginPageState> {
     );
     emit(LoginPageLoading(controller: state.controller, loading: false));
     response.fold(
-      (_) {
+      (failure) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             // behavior: SnackBarBehavior.floating,
@@ -48,7 +48,23 @@ class LoginPageCubit extends Cubit<LoginPageState> {
       },
 
       (response) {
-        if (response.success) {
+        if (response.status != null && response.status == 500) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              // behavior: SnackBarBehavior.floating,
+              backgroundColor: ColorsConstants.defaultBlack,
+              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+              content: Text(
+                "Database Down. Try Again in 5 minutes",
+                style: TextStyles.poppinsSemiBold.copyWith(
+                  fontSize: 16,
+                  letterSpacing: -0.8,
+                  color: ColorsConstants.defaultWhite,
+                ),
+              ),
+            ),
+          );
+        } else if (response.success) {
           GoRouter.of(
             context,
           ).pushNamed(Routes.otpPage, extra: state.controller!.text);

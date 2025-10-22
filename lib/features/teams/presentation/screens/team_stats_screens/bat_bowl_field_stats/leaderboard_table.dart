@@ -21,7 +21,7 @@ class LeaderboardTable extends StatelessWidget {
 
         border: TableBorder(
           horizontalInside: BorderSide(
-            color: ColorsConstants.onSurfaceGrey,
+            color: ColorsConstants.defaultBlack.withValues(alpha: 0.5),
             width: 0.5,
           ),
           top: BorderSide.none,

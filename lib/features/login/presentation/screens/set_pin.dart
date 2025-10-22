@@ -89,9 +89,10 @@ class _SetPinPageState extends State<SetPinPage> {
                   ),
                   Text(
                     widget.loginPin ? "Enter Pin" : "Set Pin",
-                    style: TextStyles.poppinsSemiBold.defaultBlack.copyWith(
+                    style: TextStyles.poppinsSemiBold.copyWith(
                       fontSize: 32,
                       letterSpacing: -1.6,
+                      color: ColorsConstants.defaultBlack,
                     ),
                   ),
                   Text(

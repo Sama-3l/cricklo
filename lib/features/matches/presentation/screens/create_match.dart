@@ -421,8 +421,8 @@ class _CreateMatchState extends State<CreateMatch> {
                                     child: InputDecorator(
                                       decoration: InputDecoration(
                                         filled: true,
-                                        fillColor: ColorsConstants.onSurfaceGrey
-                                            .withValues(alpha: 0.2),
+                                        fillColor:
+                                            ColorsConstants.onSurfaceGrey,
                                         border: OutlineInputBorder(
                                           borderSide: BorderSide.none,
                                         ),
@@ -484,8 +484,8 @@ class _CreateMatchState extends State<CreateMatch> {
                                     child: InputDecorator(
                                       decoration: InputDecoration(
                                         filled: true,
-                                        fillColor: ColorsConstants.onSurfaceGrey
-                                            .withValues(alpha: 0.2),
+                                        fillColor:
+                                            ColorsConstants.onSurfaceGrey,
                                         border: OutlineInputBorder(
                                           borderSide: BorderSide.none,
                                         ),
@@ -557,8 +557,7 @@ class _CreateMatchState extends State<CreateMatch> {
                                   color: ColorsConstants.defaultBlack
                                       .withValues(alpha: 0.2),
                                 ),
-                                fillColor: ColorsConstants.onSurfaceGrey
-                                    .withValues(alpha: 0.2),
+                                fillColor: ColorsConstants.onSurfaceGrey,
                                 border: OutlineInputBorder(
                                   borderSide: BorderSide.none,
                                 ),
@@ -625,8 +624,7 @@ class _CreateMatchState extends State<CreateMatch> {
                                 width: double.infinity,
                                 padding: EdgeInsets.all(12),
                                 decoration: BoxDecoration(
-                                  color: ColorsConstants.onSurfaceGrey
-                                      .withValues(alpha: 0.2),
+                                  color: ColorsConstants.onSurfaceGrey,
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: Column(

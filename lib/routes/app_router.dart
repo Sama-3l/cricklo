@@ -197,16 +197,27 @@ class AppRouter {
         name: Routes.addTournamentVenues,
         path: Routes.addTournamentVenues,
         pageBuilder: (context, state) {
-          final tournament = state.extra as TournamentEntity;
-          return MaterialPage(child: AddVenuesPage(tournament: tournament));
+          final extra = state.extra as List<dynamic>;
+          final tournament = extra[0] as TournamentEntity;
+          final onCreate = extra[1] as Function(TournamentEntity tournament);
+          return MaterialPage(
+            child: AddVenuesPage(tournament: tournament, onCreate: onCreate),
+          );
         },
       ),
       GoRoute(
         name: Routes.addTournamentModerators,
         path: Routes.addTournamentModerators,
         pageBuilder: (context, state) {
-          final tournament = state.extra as TournamentEntity;
-          return MaterialPage(child: AddModeratorsPage(tournament: tournament));
+          final extra = state.extra as List<dynamic>;
+          final tournament = extra[0] as TournamentEntity;
+          final onCreate = extra[1] as Function(TournamentEntity tournament);
+          return MaterialPage(
+            child: AddModeratorsPage(
+              tournament: tournament,
+              onCreate: onCreate,
+            ),
+          );
         },
       ),
       GoRoute(

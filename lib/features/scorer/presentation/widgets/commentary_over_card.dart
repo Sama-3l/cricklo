@@ -21,7 +21,7 @@ class CommentaryOverCard extends StatelessWidget {
           margin: const EdgeInsets.symmetric(vertical: 10),
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: ColorsConstants.defaultBlack.withValues(alpha: 0.07),
+            color: ColorsConstants.onSurfaceGrey,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Column(

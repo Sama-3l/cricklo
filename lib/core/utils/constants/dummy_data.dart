@@ -5,6 +5,7 @@ import 'package:cricklo/features/matches/domain/entities/match_entity.dart';
 import 'package:cricklo/features/matches/domain/entities/overall_score_entity.dart';
 import 'package:cricklo/features/teams/domain/entities/player_entity.dart';
 import 'package:cricklo/features/teams/domain/entities/team_entity.dart';
+import 'package:cricklo/features/tournament/domain/entities/tournament_entity.dart';
 
 final dummyCurrUser = UserEntity(
   profileId: "P009",
@@ -421,4 +422,20 @@ final MatchEntity dummyMatchDone = MatchEntity(
   ),
   winner: "t001",
   scorer: {"profileId": currUser.playerId, "name": currUser.name},
+);
+
+final tournament = TournamentEntity(
+  id: "TOUR_001",
+  name: "Punjab League",
+  maxTeams: 12,
+  banner: "",
+  inviteDeadline: DateTime.now().add(Duration(days: 1)),
+  startDate: DateTime.now().add(Duration(days: 2)),
+  endDate: DateTime.now().add(Duration(days: 10)),
+  matchType: MatchType.odi,
+  tournamentType: TournamentType.league,
+  overs: 50,
+  moderators: [],
+  venues: [],
+  ballType: BallType.leather,
 );

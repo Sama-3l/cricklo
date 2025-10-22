@@ -1,14 +1,22 @@
 import 'package:cricklo/core/utils/common/primary_button.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
+import 'package:cricklo/features/teams/domain/entities/search_user_entity.dart';
 import 'package:cricklo/features/teams/presentation/widgets/search_players_bottom_sheet.dart';
 import 'package:cricklo/features/tournament/domain/entities/tournament_entity.dart';
+import 'package:cricklo/features/tournament/presentation/blocs/cubits/CreateTournament/create_tournament_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class AddModeratorsPage extends StatefulWidget {
-  const AddModeratorsPage({super.key, required this.tournament});
+  const AddModeratorsPage({
+    super.key,
+    required this.tournament,
+    required this.onCreate,
+  });
 
   final TournamentEntity tournament;
+  final Function(TournamentEntity tournament) onCreate;
 
   @override
   State<AddModeratorsPage> createState() => _AddModeratorsPageState();
@@ -41,103 +49,117 @@ class _AddModeratorsPageState extends State<AddModeratorsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: ColorsConstants.defaultWhite,
-      appBar: AppBar(
-        backgroundColor: ColorsConstants.accentOrange,
-        leading: IconButton(
-          onPressed: () => GoRouter.of(context).pop(),
-          icon: Icon(Icons.chevron_left, color: ColorsConstants.defaultWhite),
-          iconSize: 32,
-        ),
-        title: Text(
-          "Add Moderators",
-          style: TextStyles.poppinsMedium.copyWith(
-            fontSize: 24,
-            letterSpacing: -1.2,
-            color: ColorsConstants.defaultWhite,
-          ),
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 16,
-        ).copyWith(bottom: 16),
-        child: SizedBox(
-          width: double.infinity,
-          child: PrimaryButton(
-            disabled: false,
-
-            child: Text(
-              "Continue",
-              style: TextStyles.poppinsSemiBold.copyWith(
-                fontSize: 16,
-                letterSpacing: -0.6,
+    return BlocBuilder<CreateTournamentCubit, CreateTournamentState>(
+      builder: (context, state) {
+        final cubit = context.read<CreateTournamentCubit>();
+        return Scaffold(
+          resizeToAvoidBottomInset: false,
+          backgroundColor: ColorsConstants.defaultWhite,
+          appBar: AppBar(
+            backgroundColor: ColorsConstants.accentOrange,
+            leading: IconButton(
+              onPressed: () => GoRouter.of(context).pop(),
+              icon: Icon(
+                Icons.chevron_left,
+                color: ColorsConstants.defaultWhite,
+              ),
+              iconSize: 32,
+            ),
+            title: Text(
+              "Add Moderators",
+              style: TextStyles.poppinsMedium.copyWith(
+                fontSize: 24,
+                letterSpacing: -1.2,
                 color: ColorsConstants.defaultWhite,
               ),
             ),
-            onPress: () {
-              // final tournament = widget.tournament.copyWith(
-              //   venues: _moderators
-              //       .map(
-              //         (e) => Methods.getLocationEntity(
-              //           e.areaController.text,
-              //           e.locationController.text,
-              //         ),
-              //       )
-              //       .toList(),
-              // );
-            },
           ),
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: ListView(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
+          floatingActionButton: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16,
+            ).copyWith(bottom: 16),
+            child: SizedBox(
+              width: double.infinity,
+              child: PrimaryButton(
+                disabled: false,
+
+                child: state.loading
+                    ? SizedBox(
+                        height: 24,
+                        width: 24,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2.5,
+                          color: ColorsConstants.defaultWhite,
+                        ),
+                      )
+                    : Text(
+                        "Continue",
+                        style: TextStyles.poppinsSemiBold.copyWith(
+                          fontSize: 16,
+                          letterSpacing: -0.6,
+                          color: ColorsConstants.defaultWhite,
+                        ),
+                      ),
+                onPress: () {
+                  final tournament = widget.tournament.copyWith(
+                    moderators: _moderators
+                        .map((e) => e.selectedModerator!)
+                        .toList(),
+                  );
+                  cubit.createTournament(context, tournament, widget.onCreate);
+                },
+              ),
+            ),
+          ),
+          body: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ListView(
               children: [
-                Text(
-                  "Moderators",
-                  style: TextStyles.poppinsSemiBold.copyWith(
-                    fontSize: 16,
-                    letterSpacing: -0.8,
-                  ),
-                ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    IconButton(
-                      icon: const Icon(Icons.remove_circle_outline),
-                      onPressed: _moderators.length > 1
-                          ? _removeModerator
-                          : null,
-                      tooltip: "Remove last moderator",
+                    Text(
+                      "Moderators",
+                      style: TextStyles.poppinsSemiBold.copyWith(
+                        fontSize: 16,
+                        letterSpacing: -0.8,
+                      ),
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.add_circle_outline),
-                      onPressed: _addModerator,
-                      tooltip: "Add moderator",
+                    Row(
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.remove_circle_outline),
+                          onPressed: _moderators.length > 1
+                              ? _removeModerator
+                              : null,
+                          tooltip: "Remove last moderator",
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.add_circle_outline),
+                          onPressed: _addModerator,
+                          tooltip: "Add moderator",
+                        ),
+                      ],
                     ),
                   ],
                 ),
+                const SizedBox(height: 16),
+                ..._moderators.map((m) => m.build(context)).toList(),
+                const SizedBox(height: 24),
               ],
             ),
-            const SizedBox(height: 16),
-            ..._moderators.map((m) => m.build(context)).toList(),
-            const SizedBox(height: 24),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
 
 class _ModeratorSelector {
   final VoidCallback onUpdate;
-  dynamic selectedModerator;
+  SearchUserEntity? selectedModerator;
 
   _ModeratorSelector({required this.onUpdate});
 
@@ -175,7 +197,7 @@ class _ModeratorSelector {
               width: double.infinity,
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: ColorsConstants.onSurfaceGrey.withValues(alpha: 0.2),
+                color: ColorsConstants.onSurfaceGrey,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Column(

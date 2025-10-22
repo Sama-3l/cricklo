@@ -9,6 +9,7 @@ import 'package:cricklo/routes/app_route_constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ProfileSetupPage extends StatefulWidget {
@@ -103,37 +104,37 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
     );
 
     if (pickedFile != null) {
-      // final croppedFile = await ImageCropper().cropImage(
-      //   sourcePath: pickedFile.path,
+      final croppedFile = await ImageCropper().cropImage(
+        sourcePath: pickedFile.path,
 
-      //   uiSettings: [
-      //     AndroidUiSettings(
-      //       toolbarTitle: 'Edit Image',
-      //       toolbarColor: ColorsConstants.accentOrange,
-      //       toolbarWidgetColor: ColorsConstants.defaultWhite,
-      //       lockAspectRatio: false,
-      //       cropStyle: CropStyle.circle,
-      //       aspectRatioPresets: [
-      //         CropAspectRatioPreset.square,
-      //         CropAspectRatioPreset.ratio16x9,
-      //         CropAspectRatioPreset.original,
-      //       ],
-      //     ),
-      //     IOSUiSettings(
-      //       title: 'Edit Image',
-      //       cropStyle: CropStyle.circle,
-      //       aspectRatioPresets: [
-      //         CropAspectRatioPreset.square,
-      //         CropAspectRatioPreset.ratio16x9,
-      //         CropAspectRatioPreset.original,
-      //       ],
-      //     ),
-      //   ],
-      // );
+        uiSettings: [
+          AndroidUiSettings(
+            toolbarTitle: 'Edit Image',
+            toolbarColor: ColorsConstants.accentOrange,
+            toolbarWidgetColor: ColorsConstants.defaultWhite,
+            lockAspectRatio: false,
+            cropStyle: CropStyle.circle,
+            aspectRatioPresets: [
+              CropAspectRatioPreset.square,
+              CropAspectRatioPreset.ratio16x9,
+              CropAspectRatioPreset.original,
+            ],
+          ),
+          IOSUiSettings(
+            title: 'Edit Image',
+            cropStyle: CropStyle.circle,
+            aspectRatioPresets: [
+              CropAspectRatioPreset.square,
+              CropAspectRatioPreset.ratio16x9,
+              CropAspectRatioPreset.original,
+            ],
+          ),
+        ],
+      );
 
-      if (pickedFile != null) {
+      if (croppedFile != null) {
         setState(() {
-          logo = File(pickedFile.path);
+          logo = File(croppedFile.path);
         });
       }
     }
@@ -143,6 +144,7 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      backgroundColor: ColorsConstants.defaultWhite,
       appBar: AppBar(
         leading: IconButton(
           onPressed: () => GoRouter.of(context).pop(),
@@ -220,9 +222,7 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
                   borderRadius: BorderRadius.circular(48),
                   child: CircleAvatar(
                     radius: 48,
-                    backgroundColor: ColorsConstants.accentOrange.withValues(
-                      alpha: 0.2,
-                    ),
+                    backgroundColor: ColorsConstants.surfaceOrange,
                     backgroundImage: logo != null ? FileImage(logo!) : null,
                     child: logo == null
                         ? Icon(

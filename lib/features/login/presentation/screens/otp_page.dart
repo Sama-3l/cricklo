@@ -113,7 +113,8 @@ class _OtpPageState extends State<OtpPage> {
                   ),
                   Text(
                     "Enter OTP",
-                    style: TextStyles.poppinsSemiBold.defaultBlack.copyWith(
+                    style: TextStyles.poppinsSemiBold.copyWith(
+                      color: ColorsConstants.defaultBlack,
                       fontSize: 32,
                       letterSpacing: -1.6,
                     ),

@@ -35,9 +35,7 @@ class RecentFormStats extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 6.0),
               child: CircleAvatar(
                 radius: 24,
-                backgroundColor: ColorsConstants.accentOrange.withValues(
-                  alpha: 0.3,
-                ),
+                backgroundColor: ColorsConstants.surfaceOrange,
                 child: Padding(
                   padding: const EdgeInsets.all(4),
                   child: Text(

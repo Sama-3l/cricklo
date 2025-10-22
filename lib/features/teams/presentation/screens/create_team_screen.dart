@@ -152,9 +152,7 @@ class _CreateTeamScreenState extends State<CreateTeamScreen> {
                           child: Container(
                             height: 150,
                             width: double.infinity,
-                            color: ColorsConstants.accentOrange.withValues(
-                              alpha: 0.2,
-                            ),
+                            color: ColorsConstants.surfaceOrange,
                             child: Center(
                               child: state.bannerLoading
                                   ? SizedBox(

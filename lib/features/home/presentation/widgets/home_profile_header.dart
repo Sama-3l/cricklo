@@ -37,9 +37,7 @@ class HomeProfileHeader extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 24,
-                    backgroundColor: ColorsConstants.accentOrange.withValues(
-                      alpha: 0.2,
-                    ),
+                    backgroundColor: ColorsConstants.surfaceOrange,
                     child: Icon(
                       CupertinoIcons.person_fill,
                       size: 16,

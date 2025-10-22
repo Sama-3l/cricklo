@@ -33,25 +33,22 @@ class OverallScreen extends StatelessWidget {
             border: TableBorder(
               borderRadius: BorderRadius.circular(8),
               horizontalInside: BorderSide(
-                color: ColorsConstants.onSurfaceGrey,
+                color: ColorsConstants.defaultBlack,
                 width: 1,
               ),
-              top: BorderSide(color: ColorsConstants.onSurfaceGrey, width: 1),
-              bottom: BorderSide(
-                color: ColorsConstants.onSurfaceGrey,
-                width: 1,
-              ),
-              left: BorderSide(color: ColorsConstants.onSurfaceGrey, width: 1),
-              right: BorderSide(color: ColorsConstants.onSurfaceGrey, width: 1),
+              top: BorderSide(color: ColorsConstants.defaultBlack, width: 1),
+              bottom: BorderSide(color: ColorsConstants.defaultBlack, width: 1),
+              left: BorderSide(color: ColorsConstants.defaultBlack, width: 1),
+              right: BorderSide(color: ColorsConstants.defaultBlack, width: 1),
               verticalInside: BorderSide(
-                color: ColorsConstants.onSurfaceGrey,
+                color: ColorsConstants.defaultBlack,
                 width: 1,
               ),
             ),
             children: [
               TableRow(
                 decoration: BoxDecoration(
-                  color: ColorsConstants.accentOrange.withValues(alpha: 0.2),
+                  color: ColorsConstants.onSurfaceOrange,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(8),
                     topRight: Radius.circular(8),
@@ -153,31 +150,28 @@ class OverallScreen extends StatelessWidget {
               border: TableBorder(
                 borderRadius: BorderRadius.circular(8),
                 horizontalInside: BorderSide(
-                  color: ColorsConstants.onSurfaceGrey,
+                  color: ColorsConstants.defaultBlack,
                   width: 1,
                 ),
-                top: BorderSide(color: ColorsConstants.onSurfaceGrey, width: 1),
+                top: BorderSide(color: ColorsConstants.defaultBlack, width: 1),
                 bottom: BorderSide(
-                  color: ColorsConstants.onSurfaceGrey,
+                  color: ColorsConstants.defaultBlack,
                   width: 1,
                 ),
-                left: BorderSide(
-                  color: ColorsConstants.onSurfaceGrey,
-                  width: 1,
-                ),
+                left: BorderSide(color: ColorsConstants.defaultBlack, width: 1),
                 right: BorderSide(
-                  color: ColorsConstants.onSurfaceGrey,
+                  color: ColorsConstants.defaultBlack,
                   width: 1,
                 ),
                 verticalInside: BorderSide(
-                  color: ColorsConstants.onSurfaceGrey,
+                  color: ColorsConstants.defaultBlack,
                   width: 1,
                 ),
               ),
               children: [
                 TableRow(
                   decoration: BoxDecoration(
-                    color: ColorsConstants.accentOrange.withValues(alpha: 0.2),
+                    color: ColorsConstants.onSurfaceOrange,
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(8),
                       topRight: Radius.circular(8),
@@ -313,25 +307,22 @@ class OverallScreen extends StatelessWidget {
             border: TableBorder(
               borderRadius: BorderRadius.circular(8),
               horizontalInside: BorderSide(
-                color: ColorsConstants.onSurfaceGrey,
+                color: ColorsConstants.defaultBlack,
                 width: 1,
               ),
-              top: BorderSide(color: ColorsConstants.onSurfaceGrey, width: 1),
-              bottom: BorderSide(
-                color: ColorsConstants.onSurfaceGrey,
-                width: 1,
-              ),
-              left: BorderSide(color: ColorsConstants.onSurfaceGrey, width: 1),
-              right: BorderSide(color: ColorsConstants.onSurfaceGrey, width: 1),
+              top: BorderSide(color: ColorsConstants.defaultBlack, width: 1),
+              bottom: BorderSide(color: ColorsConstants.defaultBlack, width: 1),
+              left: BorderSide(color: ColorsConstants.defaultBlack, width: 1),
+              right: BorderSide(color: ColorsConstants.defaultBlack, width: 1),
               verticalInside: BorderSide(
-                color: ColorsConstants.onSurfaceGrey,
+                color: ColorsConstants.defaultBlack,
                 width: 1,
               ),
             ),
             children: [
               TableRow(
                 decoration: BoxDecoration(
-                  color: ColorsConstants.accentOrange.withValues(alpha: 0.2),
+                  color: ColorsConstants.onSurfaceOrange,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(8),
                     topRight: Radius.circular(8),
@@ -501,25 +492,22 @@ class OverallScreen extends StatelessWidget {
             border: TableBorder(
               borderRadius: BorderRadius.circular(8),
               horizontalInside: BorderSide(
-                color: ColorsConstants.onSurfaceGrey,
+                color: ColorsConstants.defaultBlack,
                 width: 1,
               ),
-              top: BorderSide(color: ColorsConstants.onSurfaceGrey, width: 1),
-              bottom: BorderSide(
-                color: ColorsConstants.onSurfaceGrey,
-                width: 1,
-              ),
-              left: BorderSide(color: ColorsConstants.onSurfaceGrey, width: 1),
-              right: BorderSide(color: ColorsConstants.onSurfaceGrey, width: 1),
+              top: BorderSide(color: ColorsConstants.defaultBlack, width: 1),
+              bottom: BorderSide(color: ColorsConstants.defaultBlack, width: 1),
+              left: BorderSide(color: ColorsConstants.defaultBlack, width: 1),
+              right: BorderSide(color: ColorsConstants.defaultBlack, width: 1),
               verticalInside: BorderSide(
-                color: ColorsConstants.onSurfaceGrey,
+                color: ColorsConstants.defaultBlack,
                 width: 1,
               ),
             ),
             children: [
               TableRow(
                 decoration: BoxDecoration(
-                  color: ColorsConstants.accentOrange.withValues(alpha: 0.2),
+                  color: ColorsConstants.onSurfaceOrange,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(8),
                     topRight: Radius.circular(8),

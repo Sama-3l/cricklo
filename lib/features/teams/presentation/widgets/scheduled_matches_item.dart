@@ -16,7 +16,7 @@ class ScheduledMatchesItem extends StatelessWidget {
       padding: EdgeInsets.all(8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(40),
-        color: ColorsConstants.defaultBlack.withValues(alpha: 0.07),
+        color: ColorsConstants.onSurfaceGrey,
       ),
       child: Row(
         children: [
