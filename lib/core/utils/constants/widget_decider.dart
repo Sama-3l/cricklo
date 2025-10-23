@@ -669,6 +669,7 @@ class WidgetDecider {
         CircleAvatar(
           radius: 16,
           backgroundImage: CachedNetworkImageProvider(team.teamLogo),
+          backgroundColor: ColorsConstants.surfaceOrange,
         ),
         const SizedBox(width: 8),
         Expanded(

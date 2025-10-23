@@ -3,6 +3,7 @@ import 'package:cricklo/features/login/presentation/blocs/cubits/OtpPageCubit/ot
 import 'package:cricklo/features/login/presentation/blocs/cubits/SetPinCubit/set_pin_cubit.dart';
 import 'package:cricklo/features/login/presentation/blocs/cubits/OnboardingPageCubit/onboarding_page_cubit.dart';
 import 'package:cricklo/features/notifications/presentation/blocs/blocs/NotificationBloc/notification_bloc.dart';
+import 'package:cricklo/features/theme/presentation/blocs/cubits/cubit/theme_cubit.dart';
 import 'package:cricklo/features/tournament/presentation/blocs/cubits/CreateTournamentCubit/create_tournament_cubit.dart';
 import 'package:cricklo/injection_container.dart';
 import 'package:cricklo/routes/app_router.dart';
@@ -58,19 +59,22 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => sl<CreateTournamentCubit>()),
         BlocProvider(create: (_) => sl<OnboardingPageCubit>()),
         BlocProvider(create: (context) => sl<NotificationBloc>()),
+        BlocProvider(create: (context) => ThemeCubit()),
       ],
-      child: MaterialApp.router(
-        theme: ThemeData.light(),
-        darkTheme: ThemeData.dark(),
-        themeMode: ThemeMode.light,
-        debugShowCheckedModeBanner: false,
-        routerConfig: AppRouter().router,
-        builder: (context, child) {
-          final brightness = Theme.of(context).brightness;
-          print(brightness);
-          ColorsConstants.isDarkMode = brightness == Brightness.dark;
-          print(ColorsConstants.isDarkMode);
-          return child!;
+      child: BlocBuilder<ThemeCubit, ThemeMode>(
+        buildWhen: (previous, current) => previous != current,
+        builder: (context, mode) {
+          return MaterialApp.router(
+            debugShowCheckedModeBanner: false,
+            themeMode: mode,
+            theme: ThemeData.light(),
+            darkTheme: ThemeData.dark(),
+            routerConfig: AppRouter().router,
+            builder: (context, child) {
+              ColorsConstants.isDarkMode = mode == ThemeMode.dark;
+              return child!;
+            },
+          );
         },
       ),
     );

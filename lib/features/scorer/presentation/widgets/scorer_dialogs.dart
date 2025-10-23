@@ -184,6 +184,7 @@ class _TeamOption extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 32,
+              backgroundColor: ColorsConstants.surfaceOrange,
               child: Icon(
                 Icons.people,
                 size: 24,

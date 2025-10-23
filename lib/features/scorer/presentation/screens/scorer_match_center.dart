@@ -90,7 +90,7 @@ class ScorerMatchCenter extends StatelessWidget {
                           labelPadding: const EdgeInsets.symmetric(
                             horizontal: 16,
                           ),
-                          indicatorColor: ColorsConstants.accentOrange,
+                          indicatorColor: ColorsConstants.defaultWhite,
                           labelColor: ColorsConstants.defaultWhite,
                           unselectedLabelColor: ColorsConstants.defaultWhite
                               .withValues(alpha: 0.5),
@@ -101,6 +101,7 @@ class ScorerMatchCenter extends StatelessWidget {
                           unselectedLabelStyle: TextStyles.poppinsMedium
                               .copyWith(fontSize: 12, letterSpacing: -0.5),
                           indicatorWeight: 2.5,
+
                           onTap: cubit.changeTab,
                           tabs: _tabs.map((t) => Tab(text: t)).toList(),
                         ),

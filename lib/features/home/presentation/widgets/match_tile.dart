@@ -28,9 +28,15 @@ class MatchTile extends StatelessWidget {
         } else {
           if (GlobalVariables.user!.profileId ==
               matchEntity.scorer["profileId"]) {
-            GoRouter.of(
-              context,
-            ).pushNamed(Routes.scorerInitialPage, extra: matchEntity);
+            if (matchEntity.winner != null) {
+              GoRouter.of(
+                context,
+              ).pushNamed(Routes.scorerMatchCenter, extra: [matchEntity, true]);
+            } else {
+              GoRouter.of(
+                context,
+              ).pushNamed(Routes.scorerInitialPage, extra: matchEntity);
+            }
           } else {
             if (!(DateTime.now()
                         .difference(matchEntity.dateAndTime)

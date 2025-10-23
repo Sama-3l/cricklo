@@ -117,7 +117,7 @@ class _CommentaryScreenState extends State<CommentaryScreen> {
                   borderRadius: BorderRadius.circular(8),
                   color: selectedInnings == 0
                       ? ColorsConstants.accentOrange
-                      : Colors.grey.shade300,
+                      : ColorsConstants.surfaceOrange,
                 ),
                 child: Center(
                   child: Text(
@@ -147,7 +147,7 @@ class _CommentaryScreenState extends State<CommentaryScreen> {
                   borderRadius: BorderRadius.circular(8),
                   color: selectedInnings == 1
                       ? ColorsConstants.accentOrange
-                      : Colors.grey.shade300,
+                      : ColorsConstants.surfaceOrange,
                 ),
                 child: Center(
                   child: Text(

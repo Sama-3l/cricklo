@@ -8,6 +8,7 @@ import 'package:cricklo/features/mainapp/presentation/widgets/custom_tab_bar.dar
 import 'package:cricklo/features/matches/presentation/screens/matches.dart';
 import 'package:cricklo/features/notifications/presentation/blocs/blocs/NotificationBloc/notification_bloc.dart';
 import 'package:cricklo/features/notifications/presentation/screens/notifications_button.dart';
+import 'package:cricklo/features/theme/presentation/blocs/cubits/cubit/theme_cubit.dart';
 import 'package:cricklo/injection_container.dart';
 import 'package:cricklo/routes/app_route_constants.dart';
 import 'package:flutter/material.dart';
@@ -137,8 +138,34 @@ class _ContentViewState extends State<ContentView> {
               style: TextStyles.poppinsSemiBold.copyWith(
                 fontSize: 16,
                 letterSpacing: -0.8,
-                color: ColorsConstants.defaultBlack,
+                color: ColorsConstants.defaultWhite,
               ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Row(
+              children: [
+                Text(
+                  "Toggle Theme",
+                  style: TextStyles.poppinsSemiBold.copyWith(
+                    color: ColorsConstants.defaultBlack,
+                    fontSize: 16,
+                    letterSpacing: -0.8,
+                  ),
+                ),
+                const Spacer(),
+                Switch(
+                  value: context.watch<ThemeCubit>().state == ThemeMode.dark,
+                  onChanged: (_) => context.read<ThemeCubit>().toggleTheme(),
+                  activeColor: ColorsConstants.defaultWhite,
+                  inactiveThumbColor: ColorsConstants.defaultBlack,
+                  inactiveTrackColor: ColorsConstants.defaultWhite.withOpacity(
+                    0.4,
+                  ),
+                  activeTrackColor: ColorsConstants.defaultBlack,
+                ),
+              ],
             ),
           ),
           if (state.user != null)

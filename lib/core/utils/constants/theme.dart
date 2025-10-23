@@ -48,7 +48,7 @@ abstract class ColorsConstants {
   static bool isDarkMode = false;
 
   static Color get accentOrange =>
-      isDarkMode ? const Color(0xffFF784E) : const Color(0xffF5490F);
+      isDarkMode ? const Color(0xffF3D750) : const Color(0xffF5490F);
   static Color get urlBlue =>
       isDarkMode ? const Color(0xff64B5F6) : const Color(0xff1A90FF);
   static Color get warningRed =>
@@ -60,9 +60,10 @@ abstract class ColorsConstants {
   static Color get defaultWhite =>
       isDarkMode ? const Color(0xFF121212) : const Color(0xFFFFFFFF);
   static Color get onSurfaceGrey =>
-      isDarkMode ? const Color(0xFF333333) : const Color(0xFFEEEEEE);
-  static Color get surfaceOrange =>
-      isDarkMode ? const Color(0xFF442C25) : const Color(0xFFF6D0C5);
+      isDarkMode ? const Color(0xFF262626) : const Color(0xFFEEEEEE);
+  static Color get surfaceOrange => isDarkMode
+      ? const Color.fromARGB(255, 137, 121, 46)
+      : const Color(0xFFF6D0C5);
   static Color get onSurfaceOrange =>
       isDarkMode ? const Color(0xFF3B2E2B) : const Color(0xFFF4E6E3);
   static Color get correctGreen =>
@@ -71,22 +72,15 @@ abstract class ColorsConstants {
   static Color get scorerCenter =>
       isDarkMode ? const Color(0xffD7C230) : const Color(0xffF3D750);
 
-  static Color get wagonWheelField =>
-      isDarkMode ? const Color(0xff336633) : const Color(0xff419B44);
-  static Color get wagonWheelPitch =>
-      isDarkMode ? const Color(0xffD4A21A) : const Color(0xffFFC21F);
+  static Color get wagonWheelField => const Color(0xff419B44);
+  static Color get wagonWheelPitch => const Color(0xffFFC21F);
   static Color get wagonWheelStatBackground =>
-      isDarkMode ? const Color(0xff1E272B) : const Color(0xff2E3C43);
-  static Color get wagonWheelStat1s =>
-      isDarkMode ? const Color(0xff999999) : const Color(0xffB5B6B7);
-  static Color get wagonWheelStat2s =>
-      isDarkMode ? const Color(0xff5C6BC0) : const Color(0xff3F51B5);
-  static Color get wagonWheelStat3s =>
-      isDarkMode ? const Color(0xffBA68C8) : const Color(0xff9C28B1);
-  static Color get wagonWheelStat4s =>
-      isDarkMode ? const Color(0xffFFEB3C) : const Color(0xffFFEB3C);
-  static Color get wagonWheelStat6s =>
-      isDarkMode ? const Color(0xffFF7043) : const Color(0xffFE5722);
+      isDarkMode ? const Color(0xff64B5F6) : const Color(0xff2E3C43);
+  static Color get wagonWheelStat1s => const Color(0xffB5B6B7);
+  static Color get wagonWheelStat2s => const Color(0xff3F51B5);
+  static Color get wagonWheelStat3s => const Color(0xff9C28B1);
+  static Color get wagonWheelStat4s => const Color(0xffFFEB3C);
+  static Color get wagonWheelStat6s => const Color(0xffFE5722);
 }
 
 class TextStyles {

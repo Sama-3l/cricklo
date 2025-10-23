@@ -15,13 +15,11 @@ class PointsPage extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Spacer(flex: 2),
+              const Spacer(),
 
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 16.0),
-                  child: SecondaryButton(onTap: () {}, title: "Create Group"),
-                ),
+              Padding(
+                padding: const EdgeInsets.only(right: 16.0),
+                child: SecondaryButton(onTap: () {}, title: "Create Group"),
               ),
             ],
           ),

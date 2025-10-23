@@ -92,6 +92,19 @@ class MatchNotificationModel {
       utcTime.minute,
       utcTime.second,
     );
+    print(inviteId);
+    print(map['recordId'] as String);
+    print(notifcationType);
+    print(
+      MatchNotificationTeamModel.fromJson(map['teamA'] as Map<String, dynamic>),
+    );
+    print(
+      MatchNotificationTeamModel.fromJson(map['teamB'] as Map<String, dynamic>),
+    );
+    print(LocationModel.fromJson(map['location'] as Map<String, dynamic>));
+    print(dateAndTime);
+    print(matchType);
+    print(map['overs'] as int);
     return MatchNotificationModel(
       inviteId: inviteId,
       matchId: map['recordId'] as String,

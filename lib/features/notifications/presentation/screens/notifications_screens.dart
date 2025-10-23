@@ -110,7 +110,7 @@ class _NotificationsScreensState extends State<NotificationsScreens> {
                             ),
                           ),
                         ],
-                        if (scorerInvites.isNotEmpty) ...[
+                        if (nonScorerInvites.isNotEmpty) ...[
                           Padding(
                             padding: const EdgeInsets.only(top: 24.0),
                             child: Text(

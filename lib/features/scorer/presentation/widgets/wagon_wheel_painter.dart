@@ -150,7 +150,11 @@ class WagonWheelPainter extends CustomPainter {
         final shot = shotsInSector[j];
 
         final endPoint = Offset(
-          center.dx + radius * 0.7 * math.cos(angle),
+          center.dx +
+              radius *
+                  (shot.runs == 4 || shot.runs == 6 ? 1 : 0.8) *
+                  0.7 *
+                  math.cos(angle),
           center.dy + radius * 0.7 * math.sin(angle),
         );
         final linePaint = Paint()

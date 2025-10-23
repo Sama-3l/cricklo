@@ -1,5 +1,6 @@
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/mainapp/presentation/blocs/cubits/MainAppCubit/main_app_cubit.dart';
+import 'package:cricklo/features/theme/presentation/blocs/cubits/cubit/theme_cubit.dart';
 import 'package:cricklo/features/tournament/presentation/widgets/tournament_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,7 +19,11 @@ class _TournamentsListState extends State<TournamentsList> {
   @override
   Widget build(BuildContext context) {
     final state = context.watch<MainAppCubit>().state;
+    final themeMode = context.watch<ThemeCubit>().state; // 👈 Add this
+    final isDark = themeMode == ThemeMode.dark;
+
     final tournaments = state.tournaments;
+
     return Column(
       children: [
         SizedBox(
@@ -38,7 +43,6 @@ class _TournamentsListState extends State<TournamentsList> {
         ),
         const SizedBox(height: 8),
 
-        // Dot indicators
         if (tournaments.length > 1)
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -51,8 +55,12 @@ class _TournamentsListState extends State<TournamentsList> {
                 width: isActive ? 14 : 6,
                 decoration: BoxDecoration(
                   color: isActive
-                      ? ColorsConstants.accentOrange
-                      : ColorsConstants.surfaceOrange,
+                      ? (isDark
+                            ? ColorsConstants.accentOrange
+                            : ColorsConstants.accentOrange)
+                      : (isDark
+                            ? ColorsConstants.surfaceOrange
+                            : ColorsConstants.surfaceOrange),
                   borderRadius: BorderRadius.circular(4),
                 ),
               );
