@@ -1,14 +1,17 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:flutter/material.dart';
 
 class OverviewItem extends StatelessWidget {
   const OverviewItem({
     super.key,
+    this.logo,
     required this.title,
     this.subtitle,
     this.topTitle,
   });
 
+  final String? logo;
   final String title;
   final String? subtitle;
   final String? topTitle;
@@ -30,6 +33,9 @@ class OverviewItem extends StatelessWidget {
         CircleAvatar(
           radius: 40,
           backgroundColor: ColorsConstants.surfaceOrange,
+          backgroundImage: logo != null
+              ? CachedNetworkImageProvider(logo!)
+              : null,
           child: Icon(
             Icons.people,
             size: 24,

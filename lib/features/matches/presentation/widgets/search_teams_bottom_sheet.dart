@@ -13,15 +13,20 @@ import 'package:go_router/go_router.dart';
 
 class SearchTeamsBottomSheet extends StatefulWidget {
   final List<TeamEntity> initiallySelected; // Pass selected players here
+  final bool multiSelect;
 
-  const SearchTeamsBottomSheet({super.key, this.initiallySelected = const []});
+  const SearchTeamsBottomSheet({
+    super.key,
+    this.initiallySelected = const [],
+    this.multiSelect = false,
+  });
 
   @override
   State<SearchTeamsBottomSheet> createState() => _SearchTeamsBottomSheetState();
 }
 
 class _SearchTeamsBottomSheetState extends State<SearchTeamsBottomSheet> {
-  late List<TeamEntity> selectedTeams;
+  late List<TeamEntity> selectedTeams = [];
   late List<TeamEntity> filteredTeams;
   final TextEditingController searchController = TextEditingController();
   final FocusNode searchNode = FocusNode();
@@ -30,7 +35,7 @@ class _SearchTeamsBottomSheetState extends State<SearchTeamsBottomSheet> {
   void initState() {
     super.initState();
     // start with already selected players
-    selectedTeams = List<TeamEntity>.from(widget.initiallySelected);
+    // selectedTeams = List<TeamEntity>.from(widget.initiallySelected);
     searchNode.addListener(_refresh);
   }
 
@@ -143,9 +148,12 @@ class _SearchTeamsBottomSheetState extends State<SearchTeamsBottomSheet> {
                           }
 
                           final team = state.searchResults[index];
-                          final bool selected = selectedTeams.any(
+                          bool selected = selectedTeams.any(
                             (p) => p.id == team.id,
                           );
+                          final bool initiallySeleted = widget.initiallySelected
+                              .any((e) => e.id == team.id);
+                          selected = selected || initiallySeleted;
 
                           return Padding(
                             padding: EdgeInsets.only(
@@ -163,13 +171,17 @@ class _SearchTeamsBottomSheetState extends State<SearchTeamsBottomSheet> {
                               ),
                               onTap: () {
                                 setState(() {
-                                  if (selected) {
-                                    selectedTeams.removeWhere(
-                                      (p) => p.id == team.id,
-                                    );
-                                  } else {
-                                    selectedTeams.clear();
-                                    selectedTeams.add(team);
+                                  if (!initiallySeleted) {
+                                    if (selected) {
+                                      selectedTeams.removeWhere(
+                                        (p) => p.id == team.id,
+                                      );
+                                    } else {
+                                      if (!widget.multiSelect) {
+                                        selectedTeams.clear();
+                                      }
+                                      selectedTeams.add(team);
+                                    }
                                   }
                                 });
                               },

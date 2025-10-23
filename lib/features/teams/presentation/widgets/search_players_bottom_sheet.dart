@@ -170,10 +170,9 @@ class _SearchPlayersBottomSheetState extends State<SearchPlayersBottomSheet> {
                                     : 0,
                               ),
                               child: ListTile(
-                                onLongPress: () => GoRouter.of(context).push(
-                                  Routes.profilePage,
-                                  extra: player.playerId,
-                                ),
+                                onLongPress: () => GoRouter.of(
+                                  context,
+                                ).push(Routes.profilePage, extra: player.id),
                                 selected: selected,
                                 selectedTileColor: ColorsConstants.accentOrange,
                                 leading: Icon(

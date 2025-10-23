@@ -113,37 +113,54 @@ class TournamentDetailsHeader extends StatelessWidget {
         const SizedBox(width: 16),
         Expanded(
           flex: 1,
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(24),
-              border: Border.all(width: 1, color: ColorsConstants.defaultBlack),
-            ),
-            padding: EdgeInsets.all(8),
-            margin: EdgeInsets.only(top: 16, right: 16),
-            child: Center(
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    "20",
-                    style: TextStyles.poppinsSemiBold.copyWith(
-                      color: ColorsConstants.defaultBlack,
-                      fontSize: 16,
-                      letterSpacing: -0.8,
-                    ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(24),
+                  border: Border.all(
+                    width: 1,
+                    color: ColorsConstants.defaultBlack,
                   ),
-                  const SizedBox(width: 4),
-                  Text(
-                    "followers",
-                    style: TextStyles.poppinsSemiBold.copyWith(
-                      color: ColorsConstants.defaultBlack,
-                      fontSize: 12,
-                      letterSpacing: -0.5,
-                    ),
+                ),
+                padding: EdgeInsets.all(8),
+                margin: EdgeInsets.only(top: 16, right: 16),
+                child: Center(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        "20",
+                        style: TextStyles.poppinsSemiBold.copyWith(
+                          color: ColorsConstants.defaultBlack,
+                          fontSize: 16,
+                          letterSpacing: -0.8,
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        "followers",
+                        style: TextStyles.poppinsSemiBold.copyWith(
+                          color: ColorsConstants.defaultBlack,
+                          fontSize: 12,
+                          letterSpacing: -0.5,
+                        ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
-            ),
+              const SizedBox(height: 8),
+              Padding(
+                padding: const EdgeInsets.only(right: 16.0),
+                child: Icon(
+                  Icons.share,
+                  color: ColorsConstants.defaultBlack,
+                  size: 24,
+                ),
+              ),
+            ],
           ),
         ),
       ],

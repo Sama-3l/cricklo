@@ -1,0 +1,163 @@
+{
+  "id": "tourn_001",
+  "name": "Intercollege Premier League 2025",
+  "spotsLeft": 4,
+  "banner": "https://example.com/images/tournament_banner.jpg",
+  "inviteDeadline": "2025-11-15",
+  "startDate": "2025-12-01",
+  "endDate": "2025-12-30",
+  "maxTeams": 16,
+  "tournamentType": "league",
+  "matchType": "t20",
+  "ballType": "leather",
+  "overs": 20,
+
+  "moderators": [
+    {
+      "id": "6f7a8b9c-1234-4a5b-8e9f-0a1b2c3d4e5f",
+      "playerId": "player_101",
+      "name": "Raghvendra Mishra",
+      "playerType": "allRounder",
+      "batterType": "rightHanded",
+      "bowlerType": "offSpin",
+      "inviteStatus": "accepted"
+    },
+    {
+      "id": "123e4567-e89b-12d3-a456-426614174000",
+      "playerId": "player_102",
+      "name": "Anjali Singh",
+      "playerType": "batsman",
+      "batterType": "leftHanded",
+      "bowlerType": null,
+      "inviteStatus": "pending"
+    }
+  ],
+
+  "venues": [
+    {
+      "location": "City Sports Ground",
+      "area": "Sector 21",
+      "city": "Lucknow",
+      "state": "Uttar Pradesh",
+      "lat": 26.8467,
+      "lng": 80.9462
+    },
+    {
+      "location": "Green Park Stadium",
+      "area": "Civil Lines",
+      "city": "Kanpur",
+      "state": "Uttar Pradesh",
+      "lat": 26.4725,
+      "lng": 80.3463
+    }
+  ],
+
+  "teams": [
+    {
+      "id": "team_01",
+      "name": "Lucknow Warriors",
+      "teamLogo": "https://example.com/images/teams/lucknow_warriors.png",
+      "teamBanner": "https://example.com/images/teams/lucknow_warriors_banner.jpg",
+      "players": [
+        {
+          "id": "teamPlayer_001",
+          "playerId": "player_001",
+          "name": "Rahul Verma",
+          "captain": true,
+          "teamRole": "captain",
+          "playerType": "batsman",
+          "batterType": "rightHanded",
+          "bowlerType": null,
+          "stats": [
+            
+          ]
+        },
+        {
+          "id": "teamPlayer_002",
+          "playerId": "player_002",
+          "name": "Arjun Sharma",
+          "captain": false,
+          "teamRole": "bowler",
+          "playerType": "bowler",
+          "batterType": null,
+          "bowlerType": "fast",
+          "stats": [
+          ]
+        }
+      ],
+      "location": {
+        "location": "City Sports Ground",
+        "area": "Sector 21",
+        "city": "Lucknow",
+        "state": "Uttar Pradesh",
+        "lat": 26.8467,
+        "lng": 80.9462
+      },
+      "matches": 3,
+      "won": 2,
+      "loss": 1,
+      "points": 4,
+      "nrr": 1.25,
+      "eliminated": false,
+      "inviteStatus": "accepted"
+    },
+    {
+      "id": "team_02",
+      "name": "Kanpur Kings",
+      "teamLogo": "https://example.com/images/teams/kanpur_kings.png",
+      "teamBanner": "https://example.com/images/teams/kanpur_kings_banner.jpg",
+      "players": [
+        {
+          "id": "teamPlayer_003",
+          "playerId": "player_003",
+          "name": "Viraj Tiwari",
+          "captain": true,
+          "teamRole": "captain",
+          "playerType": "allRounder",
+          "batterType": "rightHanded",
+          "bowlerType": "legSpin",
+          "stats": [
+          ]
+        }
+      ],
+      "location": {
+        "location": "Green Park Stadium",
+        "area": "Civil Lines",
+        "city": "Kanpur",
+        "state": "Uttar Pradesh",
+        "lat": 26.4725,
+        "lng": 80.3463
+      },
+      "matches": 3,
+      "won": 3,
+      "loss": 0,
+      "points": 6,
+      "nrr": 1.78,
+      "eliminated": false,
+      "inviteStatus": "accepted"
+    }
+  ],
+
+  "matches": [
+    {
+    }
+  ],
+
+  "groups": [
+    {
+      "name": "Group A",
+      "teams": ["team_01", "team_02", "team_03", "team_04"],
+      "matches": ["match_001", "match_002"]
+    },
+    {
+      "name": "Group B",
+      "teams": ["team_05", "team_06", "team_07", "team_08"],
+      "matches": ["match_003", "match_004"]
+    }
+  ],
+
+  "playerStats": [
+    {
+    }
+  ]
+}

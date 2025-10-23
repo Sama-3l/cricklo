@@ -9,6 +9,7 @@ class SearchUserModel {
   final PlayerType playerType;
   final BatterType? batterType;
   final BowlerType? bowlerType;
+  final InviteStatus? inviteStatus;
 
   SearchUserModel({
     required this.id,
@@ -17,6 +18,7 @@ class SearchUserModel {
     required this.playerType,
     this.batterType,
     this.bowlerType,
+    this.inviteStatus,
   });
 
   Map<String, dynamic> toJson() {
@@ -27,6 +29,7 @@ class SearchUserModel {
       'playerType': playerType.name,
       'batterType': batterType?.title,
       'bowlerType': bowlerType?.title,
+      'inviteStatus': inviteStatus,
     };
   }
 
@@ -95,6 +98,11 @@ class SearchUserModel {
       playerType: playerType,
       batterType: batterType,
       bowlerType: bowlerType,
+      inviteStatus: data['inviteStatus'] == null
+          ? null
+          : InviteStatus.values
+                .where((e) => e.title == data['inviteStatus'] as String)
+                .first,
     );
   }
 

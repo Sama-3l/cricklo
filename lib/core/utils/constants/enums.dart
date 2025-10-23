@@ -89,3 +89,12 @@ enum BallType {
   final String title;
   const BallType(this.title);
 }
+
+enum InviteStatus {
+  accepted("ACCEPTED"),
+  invited("INVITED"),
+  denied("DENIED");
+
+  final String title;
+  const InviteStatus(this.title);
+}

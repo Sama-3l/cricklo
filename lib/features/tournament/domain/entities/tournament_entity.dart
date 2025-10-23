@@ -3,14 +3,13 @@ import 'package:cricklo/core/utils/constants/enums.dart';
 import 'package:cricklo/features/login/domain/entities/location_entity.dart';
 import 'package:cricklo/features/matches/domain/entities/match_entity.dart';
 import 'package:cricklo/features/teams/domain/entities/search_user_entity.dart';
-import 'package:cricklo/features/teams/domain/entities/team_entity.dart';
 import 'package:cricklo/features/tournament/domain/entities/group_entity.dart';
-import 'package:cricklo/features/tournament/domain/entities/tournament_player_stats_entity.dart';
+import 'package:cricklo/features/tournament/domain/entities/tournament_team_entity.dart';
 
 class TournamentEntity {
   final String id;
   final String name;
-  final int spotsLeft;
+  int spotsLeft;
   final String banner;
   final DateTime inviteDeadline;
   final DateTime startDate;
@@ -22,10 +21,9 @@ class TournamentEntity {
   final int overs;
   final List<SearchUserEntity> moderators;
   final List<LocationEntity> venues;
-  final List<TeamEntity> teams;
+  final List<TournamentTeamEntity> teams;
   final List<MatchEntity> matches;
   final List<GroupEntity> groups;
-  final List<TournamentPlayerStatsEntity> playerStats;
 
   TournamentEntity({
     required this.id,
@@ -45,7 +43,6 @@ class TournamentEntity {
     required this.teams,
     required this.matches,
     required this.groups,
-    required this.playerStats,
   });
 
   TournamentEntity copyWith({
@@ -63,10 +60,9 @@ class TournamentEntity {
     int? overs,
     List<SearchUserEntity>? moderators,
     List<LocationEntity>? venues,
-    List<TeamEntity>? teams,
+    List<TournamentTeamEntity>? teams,
     List<MatchEntity>? matches,
     List<GroupEntity>? groups,
-    List<TournamentPlayerStatsEntity>? playerStats,
   }) {
     return TournamentEntity(
       maxTeams: maxTeams ?? this.maxTeams,
@@ -86,7 +82,6 @@ class TournamentEntity {
       teams: teams ?? this.teams,
       matches: matches ?? this.matches,
       groups: groups ?? this.groups,
-      playerStats: playerStats ?? this.playerStats,
     );
   }
 }

@@ -1,12 +1,30 @@
 import 'package:bloc/bloc.dart';
+import 'package:cricklo/core/utils/constants/dummy_data.dart';
+import 'package:cricklo/core/utils/constants/widget_decider.dart';
+import 'package:cricklo/features/teams/domain/entities/search_user_entity.dart';
+import 'package:cricklo/features/tournament/data/entities/apply_tournament_usecase_entity.dart';
+import 'package:cricklo/features/tournament/data/entities/invite_moderators_usecase_entity.dart';
+import 'package:cricklo/features/tournament/data/entities/invite_teams_usecase_entity.dart';
+import 'package:cricklo/features/tournament/data/usecases/apply_tournament_usecase.dart';
+import 'package:cricklo/features/tournament/data/usecases/invite_moderators_usecase.dart';
+import 'package:cricklo/features/tournament/data/usecases/invite_teams_usecase.dart';
+import 'package:cricklo/features/tournament/domain/entities/group_entity.dart';
 import 'package:cricklo/features/tournament/domain/entities/tournament_entity.dart';
+import 'package:cricklo/features/tournament/domain/entities/tournament_team_entity.dart';
+import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
 
 part 'tournament_state.dart';
 
 class TournamentCubit extends Cubit<TournamentState> {
-  TournamentCubit()
-    : super(
+  final InviteModeratorsUsecase _inviteModeratorsUsecase;
+  final InviteTeamsUsecase _inviteTeamsUsecase;
+  final ApplyTournamentUsecase _applyTournamentUsecase;
+  TournamentCubit(
+    this._inviteModeratorsUsecase,
+    this._inviteTeamsUsecase,
+    this._applyTournamentUsecase,
+  ) : super(
         TournamentUpdate(
           tournamentEntity: null,
           selectedMainTab: 0,
@@ -29,5 +47,89 @@ class TournamentCubit extends Cubit<TournamentState> {
 
   void changeStatsTabTable(int index) {
     emit(state.copyWith(selectedStatsTabTableType: index));
+  }
+
+  void applyTournament(BuildContext context, String teamId) async {
+    emit(state.copyWith(applied: !state.applied));
+    final response = await _applyTournamentUsecase(
+      ApplyTournamentUsecaseEntity(
+        teamId: teamId,
+        tournamentId: state.tournamentEntity!.id,
+      ),
+    );
+    response.fold(
+      (_) {
+        WidgetDecider.showSnackBar(context, "Couldn't send invites");
+      },
+      (response) {
+        if (!response.success) {
+          WidgetDecider.showSnackBar(context, "Couldn't send invites");
+        } else {}
+      },
+    );
+  }
+
+  void addGroup() {
+    state.tournamentEntity!.groups.add(
+      GroupEntity(
+        teams: [],
+        name: "Group ${String.fromCharCode(65 + tournament.groups.length)}",
+        matches: [],
+      ),
+    );
+    emit(state.copyWith());
+  }
+
+  void addTeamToGroup(List<TournamentTeamEntity> teams, int index) {
+    state.tournamentEntity!.groups[index].teams.addAll(teams);
+    emit(state.copyWith());
+  }
+
+  void inviteTeams(
+    BuildContext context,
+    List<TournamentTeamEntity> teams,
+  ) async {
+    state.tournamentEntity!.teams.addAll(teams);
+    emit(state.copyWith());
+    final response = await _inviteTeamsUsecase(
+      InviteTeamsUsecaseEntity(
+        teams: teams,
+        tournamentId: state.tournamentEntity!.id,
+      ),
+    );
+    response.fold(
+      (_) {
+        WidgetDecider.showSnackBar(context, "Couldn't send invites");
+      },
+      (response) {
+        if (!response.success) {
+          WidgetDecider.showSnackBar(context, "Couldn't send invites");
+        }
+      },
+    );
+  }
+
+  void addModerator(
+    BuildContext context,
+    List<SearchUserEntity> moderators,
+  ) async {
+    state.tournamentEntity!.moderators.addAll(moderators);
+    emit(state.copyWith());
+    final response = await _inviteModeratorsUsecase(
+      InviteModeratorsUsecaseEntity(
+        users: moderators,
+        tournamentId: state.tournamentEntity!.id,
+      ),
+    );
+    response.fold(
+      (_) {
+        WidgetDecider.showSnackBar(context, "Couldn't send invites");
+      },
+      (response) {
+        if (!response.success) {
+          WidgetDecider.showSnackBar(context, "Couldn't send invites");
+        }
+      },
+    );
   }
 }

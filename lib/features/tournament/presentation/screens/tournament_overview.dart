@@ -13,6 +13,7 @@ class TournamentOverview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<TournamentCubit>();
     final state = context.read<TournamentCubit>().state;
     return Padding(
       padding: EdgeInsets.only(top: 24),
@@ -43,17 +44,40 @@ class TournamentOverview extends StatelessWidget {
                   child: PrimaryButton(
                     padding: EdgeInsets.symmetric(vertical: 12),
                     disabled: false,
-                    onPress: () {},
+                    onPress: () => cubit.applyTournament(context, ""),
                     noShadow: true,
                     radius: 16,
-                    child: Text(
-                      "Follow Tournament",
-                      style: TextStyles.poppinsSemiBold.copyWith(
-                        fontSize: 10,
-                        letterSpacing: -0.5,
-                        color: ColorsConstants.defaultWhite,
-                      ),
-                    ),
+                    color: state.applied
+                        ? ColorsConstants.defaultBlack
+                        : ColorsConstants.accentOrange,
+                    child: state.applied
+                        ? Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                "Applied",
+                                style: TextStyles.poppinsSemiBold.copyWith(
+                                  fontSize: 10,
+                                  letterSpacing: -0.5,
+                                  color: ColorsConstants.defaultWhite,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Icon(
+                                Icons.check_circle_outline_rounded,
+                                color: ColorsConstants.defaultWhite,
+                                size: 12,
+                              ),
+                            ],
+                          )
+                        : Text(
+                            "Apply",
+                            style: TextStyles.poppinsSemiBold.copyWith(
+                              fontSize: 10,
+                              letterSpacing: -0.5,
+                              color: ColorsConstants.defaultWhite,
+                            ),
+                          ),
                   ),
                 ),
                 const SizedBox(width: 4),
@@ -66,7 +90,7 @@ class TournamentOverview extends StatelessWidget {
                     noShadow: true,
                     radius: 16,
                     child: Text(
-                      "Share Tournament",
+                      "Follow Tournament",
                       style: TextStyles.poppinsSemiBold.copyWith(
                         fontSize: 10,
                         letterSpacing: -0.5,
@@ -90,18 +114,29 @@ class TournamentOverview extends StatelessWidget {
           ),
           SizedBox(
             height: 120,
-            child: ListView.separated(
-              itemCount: 10,
-              scrollDirection: Axis.horizontal,
-              separatorBuilder: (context, index) => SizedBox(width: 40),
-              itemBuilder: (context, index) => Padding(
-                padding: EdgeInsets.only(
-                  left: index == 0 ? 16.0 : 0,
-                  right: index == 9 ? 16.0 : 0,
-                ),
-                child: OverviewItem(title: 'Aviral All Stars'),
-              ),
-            ),
+            child: state.tournamentEntity!.teams.isEmpty
+                ? Center(
+                    child: Text(
+                      "No Teams Yet",
+                      style: TextStyles.poppinsMedium.copyWith(
+                        fontSize: 16,
+                        letterSpacing: -0.8,
+                        color: ColorsConstants.defaultBlack,
+                      ),
+                    ),
+                  )
+                : ListView.separated(
+                    itemCount: state.tournamentEntity!.teams.length,
+                    scrollDirection: Axis.horizontal,
+                    separatorBuilder: (context, index) => SizedBox(width: 40),
+                    itemBuilder: (context, index) => Padding(
+                      padding: EdgeInsets.only(
+                        left: index == 0 ? 16.0 : 0,
+                        right: index == 9 ? 16.0 : 0,
+                      ),
+                      child: OverviewItem(title: 'Aviral All Stars'),
+                    ),
+                  ),
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),

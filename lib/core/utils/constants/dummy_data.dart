@@ -444,5 +444,4 @@ final tournament = TournamentEntity(
   teams: [],
   matches: [],
   groups: [],
-  playerStats: [],
 );

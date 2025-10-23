@@ -66,9 +66,13 @@ import 'package:cricklo/features/teams/presentation/blocs/cubits/SearchPlayersCu
 import 'package:cricklo/features/teams/presentation/blocs/cubits/TeamPageCubit/team_page_cubit.dart';
 import 'package:cricklo/features/tournament/data/datasource/tournament_datasource_remote.dart';
 import 'package:cricklo/features/tournament/data/repo/tournament_repo_impl.dart';
+import 'package:cricklo/features/tournament/data/usecases/apply_tournament_usecase.dart';
 import 'package:cricklo/features/tournament/data/usecases/create_tournament_usecase.dart';
+import 'package:cricklo/features/tournament/data/usecases/invite_moderators_usecase.dart';
+import 'package:cricklo/features/tournament/data/usecases/invite_teams_usecase.dart';
 import 'package:cricklo/features/tournament/domain/repo/tournament_repo.dart';
 import 'package:cricklo/features/tournament/presentation/blocs/cubits/CreateTournamentCubit/create_tournament_cubit.dart';
+import 'package:cricklo/features/tournament/presentation/blocs/cubits/TournamentCubit/tournament_cubit.dart';
 import 'package:cricklo/services/api_service.dart';
 import 'package:cricklo/services/auth_helper.dart';
 import 'package:cricklo/services/socket_service.dart';
@@ -391,8 +395,24 @@ void _tournamentDependencies() {
   sl.registerLazySingleton<GetAllTournamentsUsecase>(
     () => GetAllTournamentsUsecase(sl<TournamentRepo>()),
   );
+  sl.registerLazySingleton<InviteModeratorsUsecase>(
+    () => InviteModeratorsUsecase(sl<TournamentRepo>()),
+  );
+  sl.registerLazySingleton<InviteTeamsUsecase>(
+    () => InviteTeamsUsecase(sl<TournamentRepo>()),
+  );
+  sl.registerLazySingleton<ApplyTournamentUsecase>(
+    () => ApplyTournamentUsecase(sl<TournamentRepo>()),
+  );
   //cubits
   sl.registerFactory<CreateTournamentCubit>(
     () => CreateTournamentCubit(sl<CreateTournamentUsecase>()),
+  );
+  sl.registerFactory<TournamentCubit>(
+    () => TournamentCubit(
+      sl<InviteModeratorsUsecase>(),
+      sl<InviteTeamsUsecase>(),
+      sl<ApplyTournamentUsecase>(),
+    ),
   );
 }

@@ -3,7 +3,7 @@ import 'package:cricklo/features/login/presentation/blocs/cubits/OtpPageCubit/ot
 import 'package:cricklo/features/login/presentation/blocs/cubits/SetPinCubit/set_pin_cubit.dart';
 import 'package:cricklo/features/login/presentation/blocs/cubits/OnboardingPageCubit/onboarding_page_cubit.dart';
 import 'package:cricklo/features/notifications/presentation/blocs/blocs/NotificationBloc/notification_bloc.dart';
-import 'package:cricklo/features/theme/presentation/blocs/cubits/cubit/theme_cubit.dart';
+import 'package:cricklo/features/theme/presentation/ThemeCubit/theme_cubit.dart';
 import 'package:cricklo/features/tournament/presentation/blocs/cubits/CreateTournamentCubit/create_tournament_cubit.dart';
 import 'package:cricklo/injection_container.dart';
 import 'package:cricklo/routes/app_router.dart';

@@ -1,4 +1,5 @@
 import 'package:cricklo/core/errors/failure.dart';
+import 'package:cricklo/features/notifications/domain/entities/invite_response_response_entity.dart';
 import 'package:cricklo/features/tournament/data/datasource/tournament_datasource_remote.dart';
 import 'package:cricklo/features/tournament/domain/entities/create_tournament_response_entity.dart';
 import 'package:cricklo/features/tournament/domain/entities/get_all_tournaments_entity.dart';
@@ -53,6 +54,93 @@ class TournamentRepoImpl extends TournamentRepo {
 
       return Right(
         GetAllTournamentsEntity(
+          success: false,
+          message: message,
+          errorCode: code,
+        ),
+      );
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, InviteResponseResponseEntity>> inviteModerators(
+    String tournamentId,
+    Map<String, dynamic> body,
+  ) async {
+    try {
+      final response = await _datasourceRemote.inviteModerators(
+        tournamentId,
+        body,
+      );
+      return Right(response.toEntity());
+    } on DioException catch (e) {
+      final data = e.response?.data;
+
+      final code = data?['error']?['code'];
+      final message = data?['error']?['message'];
+
+      return Right(
+        InviteResponseResponseEntity(
+          success: false,
+          message: message,
+          errorCode: code,
+        ),
+      );
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, InviteResponseResponseEntity>> inviteTeams(
+    String tournamentId,
+    Map<String, dynamic> body,
+  ) async {
+    try {
+      final response = await _datasourceRemote.inviteModerators(
+        tournamentId,
+        body,
+      );
+      return Right(response.toEntity());
+    } on DioException catch (e) {
+      final data = e.response?.data;
+
+      final code = data?['error']?['code'];
+      final message = data?['error']?['message'];
+
+      return Right(
+        InviteResponseResponseEntity(
+          success: false,
+          message: message,
+          errorCode: code,
+        ),
+      );
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, InviteResponseResponseEntity>> tournamentApply(
+    String tournamentId,
+    Map<String, dynamic> body,
+  ) async {
+    try {
+      final response = await _datasourceRemote.applyTournament(
+        tournamentId,
+        body,
+      );
+      return Right(response.toEntity());
+    } on DioException catch (e) {
+      final data = e.response?.data;
+
+      final code = data?['error']?['code'];
+      final message = data?['error']?['message'];
+
+      return Right(
+        InviteResponseResponseEntity(
           success: false,
           message: message,
           errorCode: code,

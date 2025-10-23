@@ -1,64 +1,113 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:cricklo/features/teams/domain/models/remote/team_model.dart';
+import 'package:cricklo/core/utils/constants/enums.dart';
+import 'package:cricklo/features/login/domain/models/remote/location_model.dart';
 import 'package:cricklo/features/tournament/domain/entities/tournament_team_entity.dart';
+import 'package:cricklo/features/tournament/domain/models/remote/tournament_player_model.dart';
 
 class TournamentTeamModel {
-  final TeamModel teamModel;
+  final String id;
+  final String name;
+  final String teamLogo;
+  final String teamBanner;
+  final List<TournamentPlayerModel> players;
+  final LocationModel location;
   final int matches;
   final int won;
   final int loss;
   final int points;
   final double nrr;
+  final bool eliminated;
+  final InviteStatus inviteStatus;
   TournamentTeamModel({
-    required this.teamModel,
+    required this.id,
+    required this.name,
+    required this.teamLogo,
+    required this.teamBanner,
+    required this.players,
+    required this.location,
+
     required this.matches,
     required this.won,
     required this.loss,
     required this.points,
     required this.nrr,
+    this.eliminated = false,
+    required this.inviteStatus,
   });
-
-  Map<String, dynamic> toJson() {
-    return <String, dynamic>{
-      'teamModel': teamModel.toJson(),
-      'matches': matches,
-      'won': won,
-      'loss': loss,
-      'points': points,
-      'nrr': nrr,
-    };
-  }
 
   TournamentTeamEntity toEntity() {
     return TournamentTeamEntity(
-      teamEntity: teamModel.toEntity(),
       matches: matches,
       won: won,
       loss: loss,
       points: points,
       nrr: nrr,
+      eliminated: eliminated,
+      inviteStatus: inviteStatus,
+      id: id,
+      name: name,
+      teamLogo: teamLogo,
+      teamBanner: teamBanner,
+      players: players.map((e) => e.toEntity()).toList(),
+      location: location.toEntity(),
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'matches': matches,
+      'won': won,
+      'loss': loss,
+      'points': points,
+      'nrr': nrr,
+      'eliminated': eliminated,
+      'inviteStatus': inviteStatus,
+      'id': id,
+      'name': name,
+      'teamLogo': teamLogo,
+      'teamBanner': teamBanner,
+      'players': players.map((e) => e.toJson()).toList(),
+      'location': location.toJson(),
+    };
   }
 
   factory TournamentTeamModel.fromJson(Map<String, dynamic> map) {
     return TournamentTeamModel(
-      teamModel: TeamModel.fromJson(map['teamModel'] as Map<String, dynamic>),
       matches: map['matches'] as int,
       won: map['won'] as int,
       loss: map['loss'] as int,
       points: map['points'] as int,
       nrr: map['nrr'] as double,
+      eliminated: map['eliminated'] as bool? ?? false,
+      inviteStatus: InviteStatus.values.firstWhere(
+        (e) => e.title == map['inviteStatus'],
+      ),
+      id: '',
+      name: '',
+      teamLogo: '',
+      teamBanner: '',
+      players: [],
+      location: LocationModel.fromJson(map["location"] as Map<String, dynamic>),
     );
   }
 
   factory TournamentTeamModel.fromEntity(TournamentTeamEntity entity) {
     return TournamentTeamModel(
-      teamModel: TeamModel.fromEntity(entity.teamEntity),
       matches: entity.matches,
       won: entity.won,
       loss: entity.loss,
       points: entity.points,
       nrr: entity.nrr,
+      eliminated: entity.eliminated,
+      inviteStatus: entity.inviteStatus,
+      id: entity.id,
+      name: entity.name,
+      teamLogo: entity.teamLogo,
+      teamBanner: entity.teamBanner,
+      players: entity.players
+          .map((e) => TournamentPlayerModel.fromEntity(e))
+          .toList(),
+      location: LocationModel.fromEntity(entity.location),
     );
   }
 }

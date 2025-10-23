@@ -9,6 +9,7 @@ class SearchUserEntity {
   final PlayerType playerType;
   final BatterType? batterType;
   final BowlerType? bowlerType;
+  final InviteStatus? inviteStatus;
 
   SearchUserEntity({
     required this.id,
@@ -17,6 +18,7 @@ class SearchUserEntity {
     required this.playerType,
     this.batterType,
     this.bowlerType,
+    this.inviteStatus,
   });
 
   PlayerEntity toPlayerEntity() {
@@ -30,6 +32,26 @@ class SearchUserEntity {
       playerType: playerType,
       batterType: batterType,
       bowlerType: bowlerType,
+    );
+  }
+
+  SearchUserEntity copyWith({
+    String? id,
+    String? playerId,
+    String? name,
+    PlayerType? playerType,
+    BatterType? batterType,
+    BowlerType? bowlerType,
+    InviteStatus? inviteStatus,
+  }) {
+    return SearchUserEntity(
+      id: id ?? this.id,
+      playerId: playerId ?? this.playerId,
+      name: name ?? this.name,
+      playerType: playerType ?? this.playerType,
+      batterType: batterType ?? this.batterType,
+      bowlerType: bowlerType ?? this.bowlerType,
+      inviteStatus: inviteStatus ?? this.inviteStatus,
     );
   }
 }

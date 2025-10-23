@@ -136,4 +136,22 @@ abstract class ApiService {
 
   @GET(ApiEndpointConstants.tournamentGetAll)
   Future<GetAllTournamentsModel> getAllTournaments();
+
+  @POST(ApiEndpointConstants.tournamentInviteModerators)
+  Future<InviteResponseResponseModel> inviteModerators(
+    @Query("tournamentId") String tournamentId,
+    @Body() Map<String, dynamic> body,
+  );
+
+  @POST(ApiEndpointConstants.tournamentInviteTeams)
+  Future<InviteResponseResponseModel> inviteTeams(
+    @Query("tournamentId") String tournamentId,
+    @Body() Map<String, dynamic> body,
+  );
+
+  @POST(ApiEndpointConstants.tournamentApply)
+  Future<InviteResponseResponseModel> tournamentApply(
+    @Query("tournamentId") String tournamentId,
+    @Body() Map<String, dynamic> body,
+  );
 }

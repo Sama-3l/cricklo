@@ -3,10 +3,10 @@ import 'package:cricklo/core/utils/constants/enums.dart';
 import 'package:cricklo/features/login/domain/models/remote/location_model.dart';
 import 'package:cricklo/features/matches/domain/models/remote/match_model.dart';
 import 'package:cricklo/features/teams/domain/models/remote/search_user_model.dart';
-import 'package:cricklo/features/teams/domain/models/remote/team_model.dart';
 import 'package:cricklo/features/tournament/domain/entities/tournament_entity.dart';
 import 'package:cricklo/features/tournament/domain/models/remote/group_model.dart';
 import 'package:cricklo/features/tournament/domain/models/remote/tournament_player_stats_model.dart';
+import 'package:cricklo/features/tournament/domain/models/remote/tournament_team_model.dart';
 
 class TournamentModel {
   final String id;
@@ -23,10 +23,9 @@ class TournamentModel {
   final int spotsLeft;
   final List<SearchUserModel> moderators;
   final List<LocationModel> venues;
-  final List<TeamModel> teams;
+  final List<TournamentTeamModel> teams;
   final List<MatchModel> matches;
   final List<GroupModel> groups;
-  final List<TournamentPlayerStatsModel> playerStats;
 
   TournamentModel({
     required this.id,
@@ -46,7 +45,6 @@ class TournamentModel {
     required this.teams,
     required this.matches,
     required this.groups,
-    required this.playerStats,
   });
 
   TournamentEntity toEntity() {
@@ -68,7 +66,6 @@ class TournamentModel {
       teams: teams.map((e) => e.toEntity()).toList(),
       matches: matches.map((e) => e.toEntity()).toList(),
       groups: groups.map((e) => e.toEntity()).toList(),
-      playerStats: playerStats.map((e) => e.toEntity()).toList(),
     );
   }
 
@@ -94,12 +91,11 @@ class TournamentModel {
       venues: List<LocationModel>.from(
         entity.venues.map<LocationModel>((x) => LocationModel.fromEntity(x)),
       ),
-      teams: entity.teams.map((e) => TeamModel.fromEntity(e)).toList(),
+      teams: entity.teams
+          .map((e) => TournamentTeamModel.fromEntity(e))
+          .toList(),
       matches: entity.matches.map((e) => MatchModel.fromEntity(e)).toList(),
       groups: entity.groups.map((e) => GroupModel.fromEntity(e)).toList(),
-      playerStats: entity.playerStats
-          .map((e) => TournamentPlayerStatsModel.fromEntity(e))
-          .toList(),
     );
   }
 
@@ -123,7 +119,6 @@ class TournamentModel {
         'teams': teams.map((x) => x.toJson()).toList(),
         'matches': matches.map((x) => x.toJson()).toList(),
         'groups': groups.map((x) => x.toJson()).toList(),
-        'playerStats': playerStats.map((x) => x.toJson()).toList(),
       };
     }
     return <String, dynamic>{
@@ -240,9 +235,9 @@ class TournamentModel {
             ),
       teams: map['teams'] == null
           ? []
-          : List<TeamModel>.from(
-              (map['teams'] as List<dynamic>).map<TeamModel>(
-                (x) => TeamModel.fromJson(x),
+          : List<TournamentTeamModel>.from(
+              (map['teams'] as List<dynamic>).map<TournamentTeamModel>(
+                (x) => TournamentTeamModel.fromJson(x),
               ),
             ),
       matches: map['matches'] == null
@@ -258,14 +253,6 @@ class TournamentModel {
               (map['groups'] as List<dynamic>).map<GroupModel>(
                 (x) => GroupModel.fromJson(x),
               ),
-            ),
-      playerStats: map['playerStats'] == null
-          ? []
-          : List<TournamentPlayerStatsModel>.from(
-              (map['playerStats'] as List<dynamic>)
-                  .map<TournamentPlayerStatsModel>(
-                    (x) => TournamentPlayerStatsModel.fromJson(x),
-                  ),
             ),
     );
   }

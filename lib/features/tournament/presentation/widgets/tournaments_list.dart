@@ -1,6 +1,6 @@
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/mainapp/presentation/blocs/cubits/MainAppCubit/main_app_cubit.dart';
-import 'package:cricklo/features/theme/presentation/blocs/cubits/cubit/theme_cubit.dart';
+import 'package:cricklo/features/theme/presentation/ThemeCubit/theme_cubit.dart';
 import 'package:cricklo/features/tournament/presentation/widgets/tournament_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
