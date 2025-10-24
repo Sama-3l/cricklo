@@ -8,6 +8,7 @@ import 'package:cricklo/features/tournament/domain/entities/tournament_team_enti
 
 class TournamentEntity {
   final String id;
+  final String organizerId;
   final String name;
   int spotsLeft;
   final String banner;
@@ -27,6 +28,7 @@ class TournamentEntity {
 
   TournamentEntity({
     required this.id,
+    required this.organizerId,
     required this.name,
     required this.spotsLeft,
     required this.banner,
@@ -47,6 +49,7 @@ class TournamentEntity {
 
   TournamentEntity copyWith({
     String? id,
+    String? organizerId,
     String? name,
     String? banner,
     DateTime? inviteDeadline,
@@ -66,6 +69,7 @@ class TournamentEntity {
   }) {
     return TournamentEntity(
       maxTeams: maxTeams ?? this.maxTeams,
+      organizerId: organizerId ?? this.organizerId,
       id: id ?? this.id,
       ballType: ballType ?? this.ballType,
       name: name ?? this.name,

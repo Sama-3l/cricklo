@@ -139,19 +139,19 @@ abstract class ApiService {
 
   @POST(ApiEndpointConstants.tournamentInviteModerators)
   Future<InviteResponseResponseModel> inviteModerators(
-    @Query("tournamentId") String tournamentId,
+    @Path("tournamentId") String tournamentId,
     @Body() Map<String, dynamic> body,
   );
 
   @POST(ApiEndpointConstants.tournamentInviteTeams)
   Future<InviteResponseResponseModel> inviteTeams(
-    @Query("tournamentId") String tournamentId,
+    @Path("tournamentId") String tournamentId,
     @Body() Map<String, dynamic> body,
   );
 
   @POST(ApiEndpointConstants.tournamentApply)
   Future<InviteResponseResponseModel> tournamentApply(
-    @Query("tournamentId") String tournamentId,
+    @Path("tournamentId") String tournamentId,
     @Body() Map<String, dynamic> body,
   );
 }

@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:cricklo/core/utils/constants/dummy_data.dart';
+import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/core/utils/constants/widget_decider.dart';
 import 'package:cricklo/features/teams/domain/entities/search_user_entity.dart';
 import 'package:cricklo/features/tournament/data/entities/apply_tournament_usecase_entity.dart';
@@ -11,6 +12,8 @@ import 'package:cricklo/features/tournament/data/usecases/invite_teams_usecase.d
 import 'package:cricklo/features/tournament/domain/entities/group_entity.dart';
 import 'package:cricklo/features/tournament/domain/entities/tournament_entity.dart';
 import 'package:cricklo/features/tournament/domain/entities/tournament_team_entity.dart';
+import 'package:cricklo/features/tournament/presentation/widgets/user_teams_bottom_sheet.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
 
@@ -49,24 +52,49 @@ class TournamentCubit extends Cubit<TournamentState> {
     emit(state.copyWith(selectedStatsTabTableType: index));
   }
 
-  void applyTournament(BuildContext context, String teamId) async {
-    emit(state.copyWith(applied: !state.applied));
-    final response = await _applyTournamentUsecase(
-      ApplyTournamentUsecaseEntity(
-        teamId: teamId,
-        tournamentId: state.tournamentEntity!.id,
+  Future<String?> showTeamSelectionSheet({
+    required BuildContext context,
+  }) async {
+    final teamId = await showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: ColorsConstants.defaultWhite,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
-    );
-    response.fold(
-      (_) {
-        WidgetDecider.showSnackBar(context, "Couldn't send invites");
+      builder: (context) {
+        return UserTeamsBottomSheet();
       },
-      (response) {
-        if (!response.success) {
+    );
+    return teamId;
+  }
+
+  void applyTournament(BuildContext context) async {
+    final teamId = await showTeamSelectionSheet(context: context);
+    if (teamId != null) {
+      emit(state.copyWith(applied: !state.applied));
+      final response = await _applyTournamentUsecase(
+        ApplyTournamentUsecaseEntity(
+          teamId: teamId,
+          tournamentId: state.tournamentEntity!.id,
+        ),
+      );
+      response.fold(
+        (_) {
           WidgetDecider.showSnackBar(context, "Couldn't send invites");
-        } else {}
-      },
-    );
+          emit(state.copyWith(applied: !state.applied));
+        },
+        (response) {
+          if (!response.success) {
+            WidgetDecider.showSnackBar(
+              context,
+              response.errorMessage ?? "Couldn't send invites",
+            );
+            emit(state.copyWith(applied: !state.applied));
+          } else {}
+        },
+      );
+    }
   }
 
   void addGroup() {
@@ -77,6 +105,11 @@ class TournamentCubit extends Cubit<TournamentState> {
         matches: [],
       ),
     );
+    emit(state.copyWith());
+  }
+
+  void removeGroup(int index) {
+    state.tournamentEntity!.groups.removeAt(index);
     emit(state.copyWith());
   }
 

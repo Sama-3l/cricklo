@@ -32,7 +32,8 @@ class ApiEndpointConstants {
 
   static const tournamentCreate = '/tournament/create';
   static const tournamentGetAll = '/tournament/all-tournaments';
-  static const tournamentInviteModerators = '/{tournamentId}/invite/moderator';
-  static const tournamentInviteTeams = '/{tournamentId}/invite/team';
-  static const tournamentApply = '/{tournamentId}/apply/team';
+  static const tournamentInviteModerators =
+      '/tournament/{tournamentId}/invite/moderator';
+  static const tournamentInviteTeams = '/tournament/{tournamentId}/invite/team';
+  static const tournamentApply = '/tournament/{tournamentId}/apply/team';
 }

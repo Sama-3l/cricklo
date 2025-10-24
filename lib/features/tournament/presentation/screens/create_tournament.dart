@@ -1,6 +1,7 @@
 import 'package:cricklo/core/utils/common/primary_button.dart';
 import 'package:cricklo/core/utils/common/textfield.dart';
 import 'package:cricklo/core/utils/constants/enums.dart';
+import 'package:cricklo/core/utils/constants/global_variables.dart';
 import 'package:cricklo/core/utils/constants/methods.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/tournament/domain/entities/tournament_entity.dart';
@@ -110,6 +111,7 @@ class _CreateTournamentState extends State<CreateTournament> {
                 onPress: () async {
                   final banner = await Methods.imageToBase64(state.banner!);
                   final tournament = TournamentEntity(
+                    organizerId: GlobalVariables.user!.profileId,
                     tournamentType: TournamentType.knockout,
                     id: "",
                     spotsLeft: int.parse(teamsLimitController.text),

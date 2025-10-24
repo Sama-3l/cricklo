@@ -425,6 +425,7 @@ final MatchEntity dummyMatchDone = MatchEntity(
 );
 
 final tournament = TournamentEntity(
+  organizerId: "",
   id: "TOUR_001",
   name: "Punjab League",
   maxTeams: 12,

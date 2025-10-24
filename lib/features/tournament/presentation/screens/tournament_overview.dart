@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cricklo/core/utils/common/primary_button.dart';
+import 'package:cricklo/core/utils/common/secondary_button.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/home/presentation/widgets/section_header.dart';
 import 'package:cricklo/features/tournament/presentation/blocs/cubits/TournamentCubit/tournament_cubit.dart';
@@ -38,13 +39,56 @@ class TournamentOverview extends StatelessWidget {
           TournamentDetailsHeader(),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Row(
+            child: Column(
               children: [
-                Expanded(
+                Row(
+                  children: [
+                    Expanded(
+                      child: PrimaryButton(
+                        padding: EdgeInsets.symmetric(vertical: 12),
+                        color: ColorsConstants.scorerCenter,
+                        disabled: false,
+                        onPress: () {},
+                        noShadow: true,
+                        radius: 16,
+                        child: Text(
+                          "Share Tournament",
+                          style: TextStyles.poppinsSemiBold.copyWith(
+                            fontSize: 10,
+                            letterSpacing: -0.5,
+                            color: ColorsConstants.defaultBlack,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    Expanded(
+                      child: PrimaryButton(
+                        padding: EdgeInsets.symmetric(vertical: 12),
+                        color: ColorsConstants.urlBlue,
+                        disabled: false,
+                        onPress: () {},
+                        noShadow: true,
+                        radius: 16,
+                        child: Text(
+                          "Follow Tournament",
+                          style: TextStyles.poppinsSemiBold.copyWith(
+                            fontSize: 10,
+                            letterSpacing: -0.5,
+                            color: ColorsConstants.defaultWhite,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                SizedBox(
+                  width: double.infinity,
                   child: PrimaryButton(
                     padding: EdgeInsets.symmetric(vertical: 12),
                     disabled: false,
-                    onPress: () => cubit.applyTournament(context, ""),
+                    onPress: () => cubit.applyTournament(context),
                     noShadow: true,
                     radius: 16,
                     color: state.applied
@@ -78,25 +122,6 @@ class TournamentOverview extends StatelessWidget {
                               color: ColorsConstants.defaultWhite,
                             ),
                           ),
-                  ),
-                ),
-                const SizedBox(width: 4),
-                Expanded(
-                  child: PrimaryButton(
-                    padding: EdgeInsets.symmetric(vertical: 12),
-                    color: ColorsConstants.urlBlue,
-                    disabled: false,
-                    onPress: () {},
-                    noShadow: true,
-                    radius: 16,
-                    child: Text(
-                      "Follow Tournament",
-                      style: TextStyles.poppinsSemiBold.copyWith(
-                        fontSize: 10,
-                        letterSpacing: -0.5,
-                        color: ColorsConstants.defaultWhite,
-                      ),
-                    ),
                   ),
                 ),
               ],

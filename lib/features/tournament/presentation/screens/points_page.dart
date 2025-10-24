@@ -73,7 +73,7 @@ class PointsPage extends StatelessWidget {
                                 ),
                               ),
                               InkWell(
-                                onTap: () {},
+                                onTap: () => cubit.removeGroup(index),
                                 borderRadius: BorderRadius.circular(24),
                                 child: Container(
                                   decoration: BoxDecoration(
@@ -85,7 +85,7 @@ class PointsPage extends StatelessWidget {
                                   ),
                                   padding: EdgeInsets.all(4),
                                   child: Icon(
-                                    Icons.edit,
+                                    Icons.delete,
                                     color: ColorsConstants.defaultBlack,
                                     size: 12,
                                   ),

@@ -72,6 +72,7 @@ import 'package:cricklo/features/tournament/data/usecases/invite_moderators_usec
 import 'package:cricklo/features/tournament/data/usecases/invite_teams_usecase.dart';
 import 'package:cricklo/features/tournament/domain/repo/tournament_repo.dart';
 import 'package:cricklo/features/tournament/presentation/blocs/cubits/CreateTournamentCubit/create_tournament_cubit.dart';
+import 'package:cricklo/features/tournament/presentation/blocs/cubits/FetchUserTeamsCubit/fetch_user_teams_cubit.dart';
 import 'package:cricklo/features/tournament/presentation/blocs/cubits/TournamentCubit/tournament_cubit.dart';
 import 'package:cricklo/services/api_service.dart';
 import 'package:cricklo/services/auth_helper.dart';
@@ -414,5 +415,8 @@ void _tournamentDependencies() {
       sl<InviteTeamsUsecase>(),
       sl<ApplyTournamentUsecase>(),
     ),
+  );
+  sl.registerFactory<FetchUserTeamsCubit>(
+    () => FetchUserTeamsCubit(sl<GetTeamsUsecase>()),
   );
 }

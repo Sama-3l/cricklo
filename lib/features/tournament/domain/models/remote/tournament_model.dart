@@ -5,11 +5,11 @@ import 'package:cricklo/features/matches/domain/models/remote/match_model.dart';
 import 'package:cricklo/features/teams/domain/models/remote/search_user_model.dart';
 import 'package:cricklo/features/tournament/domain/entities/tournament_entity.dart';
 import 'package:cricklo/features/tournament/domain/models/remote/group_model.dart';
-import 'package:cricklo/features/tournament/domain/models/remote/tournament_player_stats_model.dart';
 import 'package:cricklo/features/tournament/domain/models/remote/tournament_team_model.dart';
 
 class TournamentModel {
   final String id;
+  final String organizerId;
   final String name;
   final String banner;
   final DateTime inviteDeadline;
@@ -29,6 +29,7 @@ class TournamentModel {
 
   TournamentModel({
     required this.id,
+    required this.organizerId,
     required this.name,
     required this.banner,
     required this.inviteDeadline,
@@ -49,6 +50,7 @@ class TournamentModel {
 
   TournamentEntity toEntity() {
     return TournamentEntity(
+      organizerId: organizerId,
       spotsLeft: spotsLeft,
       ballType: ballType,
       id: id,
@@ -71,6 +73,7 @@ class TournamentModel {
 
   factory TournamentModel.fromEntity(TournamentEntity entity) {
     return TournamentModel(
+      organizerId: entity.organizerId,
       spotsLeft: entity.spotsLeft,
       id: entity.id,
       name: entity.name,
@@ -195,6 +198,7 @@ class TournamentModel {
       endDateDateTime.second,
     );
     return TournamentModel(
+      organizerId: map['organizerId'] as String? ?? "",
       id: map['tournamentId'] as String,
       name: map['name'] as String,
       banner: map['banner'] as String,

@@ -799,7 +799,7 @@ class _ApiService implements ApiService {
     Map<String, dynamic> body,
   ) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'tournamentId': tournamentId};
+    final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(body);
@@ -807,7 +807,7 @@ class _ApiService implements ApiService {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/{tournamentId}/invite/moderator',
+            '/tournament/${tournamentId}/invite/moderator',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -830,7 +830,7 @@ class _ApiService implements ApiService {
     Map<String, dynamic> body,
   ) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'tournamentId': tournamentId};
+    final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(body);
@@ -838,7 +838,7 @@ class _ApiService implements ApiService {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/{tournamentId}/invite/team',
+            '/tournament/${tournamentId}/invite/team',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -861,7 +861,7 @@ class _ApiService implements ApiService {
     Map<String, dynamic> body,
   ) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'tournamentId': tournamentId};
+    final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(body);
@@ -869,7 +869,7 @@ class _ApiService implements ApiService {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/{tournamentId}/apply/team',
+            '/tournament/${tournamentId}/apply/team',
             queryParameters: queryParameters,
             data: _data,
           )

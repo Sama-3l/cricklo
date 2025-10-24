@@ -31,17 +31,20 @@ class TournamentDetailsHeader extends StatelessWidget {
                     color: ColorsConstants.defaultBlack,
                   ),
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  "${state.tournamentEntity!.venues[0].city}, ${state.tournamentEntity!.venues[0].state}",
-                  style: TextStyles.poppinsMedium.copyWith(
-                    fontSize: 14,
-                    letterSpacing: -0.5,
-                    color: ColorsConstants.defaultBlack.withValues(alpha: 0.7),
+                if (state.tournamentEntity!.venues.isNotEmpty) ...[
+                  const SizedBox(height: 4),
+                  Text(
+                    "${state.tournamentEntity!.venues[0].city}, ${state.tournamentEntity!.venues[0].state}",
+                    style: TextStyles.poppinsMedium.copyWith(
+                      fontSize: 14,
+                      letterSpacing: -0.5,
+                      color: ColorsConstants.defaultBlack.withValues(
+                        alpha: 0.7,
+                      ),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 4),
-
+                ],
+                const SizedBox(height: 8),
                 InkWell(
                   onTap: () {
                     FlutterClipboard.copy(state.tournamentEntity!.id);
