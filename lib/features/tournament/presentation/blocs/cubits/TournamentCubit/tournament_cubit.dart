@@ -5,12 +5,14 @@ import 'package:cricklo/features/teams/domain/entities/search_user_entity.dart';
 import 'package:cricklo/features/tournament/data/entities/add_team_to_group_usecase_entity.dart';
 import 'package:cricklo/features/tournament/data/entities/apply_tournament_usecase_entity.dart';
 import 'package:cricklo/features/tournament/data/entities/create_group_usecase_entity.dart';
+import 'package:cricklo/features/tournament/data/entities/edit_group_usecase_entity.dart';
 import 'package:cricklo/features/tournament/data/entities/invite_moderators_usecase_entity.dart';
 import 'package:cricklo/features/tournament/data/entities/invite_teams_usecase_entity.dart';
 import 'package:cricklo/features/tournament/data/usecases/add_team_to_group_usecase.dart';
 import 'package:cricklo/features/tournament/data/usecases/apply_tournament_usecase.dart';
 import 'package:cricklo/features/tournament/data/usecases/create_group_usecase.dart';
 import 'package:cricklo/features/tournament/data/usecases/delete_group_usecase.dart';
+import 'package:cricklo/features/tournament/data/usecases/edit_group_usecase.dart';
 import 'package:cricklo/features/tournament/data/usecases/get_tournament_details_usecase.dart';
 import 'package:cricklo/features/tournament/data/usecases/invite_moderators_usecase.dart';
 import 'package:cricklo/features/tournament/data/usecases/invite_teams_usecase.dart';
@@ -19,6 +21,7 @@ import 'package:cricklo/features/tournament/domain/entities/tournament_entity.da
 import 'package:cricklo/features/tournament/domain/entities/tournament_team_entity.dart';
 import 'package:cricklo/features/tournament/presentation/widgets/user_teams_bottom_sheet.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 part 'tournament_state.dart';
 
@@ -30,6 +33,7 @@ class TournamentCubit extends Cubit<TournamentState> {
   final CreateGroupUsecase _createGroupUsecase;
   final AddTeamToGroupUsecase _addTeamToGroupUsecase;
   final DeleteGroupUsecase _deleteGroupUsecase;
+  final EditGroupUsecase _editGroupUsecase;
   int error = 0;
   TournamentCubit(
     this._inviteModeratorsUsecase,
@@ -39,6 +43,7 @@ class TournamentCubit extends Cubit<TournamentState> {
     this._createGroupUsecase,
     this._addTeamToGroupUsecase,
     this._deleteGroupUsecase,
+    this._editGroupUsecase,
   ) : super(
         TournamentUpdate(
           tournamentEntity: null,
@@ -145,6 +150,116 @@ class TournamentCubit extends Cubit<TournamentState> {
             WidgetDecider.showSnackBar(
               context,
               response.errorMessage ?? "Couldn't send invites",
+            );
+            emit(state.copyWith(applied: !state.applied));
+          } else {}
+        },
+      );
+    }
+  }
+
+  void editGroup(BuildContext context, int index) async {
+    final TextEditingController controller = TextEditingController(
+      text: state.tournamentEntity!.groups[index].name,
+    );
+
+    final newName = await showDialog<String>(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) {
+        return AlertDialog(
+          backgroundColor: ColorsConstants.defaultWhite,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: Text(
+            "Edit Group Name",
+            style: TextStyles.poppinsSemiBold.copyWith(
+              fontSize: 16,
+              color: ColorsConstants.accentOrange,
+              letterSpacing: -0.8,
+            ),
+          ),
+          content: TextField(
+            controller: controller,
+            autofocus: true,
+            maxLength: 12,
+            textCapitalization: TextCapitalization.sentences,
+            decoration: InputDecoration(
+              hintText: "Enter new name (max 5 chars)",
+              counterText: "",
+              border: OutlineInputBorder(
+                borderSide: BorderSide(color: ColorsConstants.accentOrange),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: ColorsConstants.accentOrange),
+              ),
+            ),
+            style: TextStyles.poppinsMedium.copyWith(
+              fontSize: 12,
+              color: ColorsConstants.defaultBlack,
+              letterSpacing: -0.5,
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                GoRouter.of(ctx).pop();
+              },
+              child: Text(
+                "Cancel",
+                style: TextStyles.poppinsSemiBold.copyWith(
+                  fontSize: 16,
+                  letterSpacing: -0.8,
+                  color: ColorsConstants.defaultBlack,
+                ),
+              ),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: ColorsConstants.accentOrange,
+                foregroundColor: ColorsConstants.defaultWhite,
+                disabledBackgroundColor: ColorsConstants.onSurfaceGrey,
+              ),
+              onPressed: () {
+                if (controller.text.trim().isEmpty) return;
+                Navigator.pop(context, controller.text.trim());
+              },
+              child: Text(
+                "Update",
+                style: TextStyles.poppinsSemiBold.copyWith(
+                  fontSize: 12,
+                  letterSpacing: -0.5,
+                  color: ColorsConstants.defaultWhite,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (newName != null && newName.isNotEmpty) {
+      final oldName = state.tournamentEntity!.groups[index].name;
+      state.tournamentEntity!.groups[index].name = newName;
+      emit(state.copyWith());
+      final response = await _editGroupUsecase(
+        EditGroupUsecaseEntity(
+          oldGroupName: oldName,
+          newGroupName: newName,
+          tournamentId: state.tournamentEntity!.id,
+        ),
+      );
+      response.fold(
+        (_) {
+          WidgetDecider.showSnackBar(context, "Couldn't edit group name");
+          emit(state.copyWith(applied: !state.applied));
+        },
+        (response) {
+          if (!response.success) {
+            WidgetDecider.showSnackBar(
+              context,
+              response.errorMessage ?? "Couldn't edit group name",
             );
             emit(state.copyWith(applied: !state.applied));
           } else {}

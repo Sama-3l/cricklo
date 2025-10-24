@@ -78,7 +78,7 @@ class PointsPage extends StatelessWidget {
                                 ),
                               ),
                               if (state.tournamentEntity!.organizerId ==
-                                  GlobalVariables.user!.profileId)
+                                  GlobalVariables.user!.profileId) ...[
                                 InkWell(
                                   onTap: () =>
                                       cubit.removeGroup(context, index),
@@ -99,6 +99,27 @@ class PointsPage extends StatelessWidget {
                                     ),
                                   ),
                                 ),
+                                const SizedBox(width: 16),
+                                InkWell(
+                                  onTap: () => cubit.editGroup(context, index),
+                                  borderRadius: BorderRadius.circular(24),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        width: 1,
+                                        color: ColorsConstants.defaultBlack,
+                                      ),
+                                      borderRadius: BorderRadius.circular(24),
+                                    ),
+                                    padding: EdgeInsets.all(4),
+                                    child: Icon(
+                                      Icons.edit,
+                                      color: ColorsConstants.defaultBlack,
+                                      size: 12,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ],
                           ),
                           PointsTable(

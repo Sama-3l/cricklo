@@ -253,4 +253,30 @@ class TournamentRepoImpl extends TournamentRepo {
       return Left(ServerFailure());
     }
   }
+
+  @override
+  Future<Either<Failure, InviteResponseResponseEntity>> editGroup(
+    String tournamentId,
+    Map<String, dynamic> body,
+  ) async {
+    try {
+      final response = await _datasourceRemote.editGroup(tournamentId, body);
+      return Right(response.toEntity());
+    } on DioException catch (e) {
+      final data = e.response?.data;
+
+      final code = data?['error']?['code'];
+      final message = data?['error']?['message'];
+
+      return Right(
+        InviteResponseResponseEntity(
+          success: false,
+          message: message,
+          errorCode: code,
+        ),
+      );
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
 }

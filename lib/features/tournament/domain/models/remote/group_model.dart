@@ -6,7 +6,7 @@ import 'package:cricklo/features/tournament/domain/models/remote/tournament_team
 class GroupModel {
   final List<TournamentTeamModel> teams;
   final List<MatchModel> matches;
-  final String name;
+  String name;
 
   GroupModel({required this.teams, required this.name, required this.matches});
 

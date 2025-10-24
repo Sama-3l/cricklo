@@ -45,4 +45,5 @@ class ApiEndpointConstants {
   static const tournamentAddToGroup = 'tournament/{tournamentId}/add-to-group';
   static const tournamentDeleteGroup =
       '/tournament/delete-group/{tournamentId}';
+  static const tournamentEditGroup = '/tournament/edit-group/{tournamentId}';
 }

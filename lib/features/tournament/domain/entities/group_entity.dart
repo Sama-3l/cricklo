@@ -5,7 +5,7 @@ import 'package:cricklo/features/tournament/domain/entities/tournament_team_enti
 class GroupEntity {
   final List<TournamentTeamEntity> teams;
   final List<MatchEntity> matches;
-  final String name;
+  String name;
 
   GroupEntity({required this.teams, required this.name, required this.matches});
 }
