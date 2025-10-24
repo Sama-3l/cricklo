@@ -39,6 +39,7 @@ import 'package:cricklo/features/notifications/data/repo/notification_repo_impl.
 import 'package:cricklo/features/notifications/data/usecases/get_notification_usecase.dart';
 import 'package:cricklo/features/notifications/data/usecases/match_response_invite_usecase.dart';
 import 'package:cricklo/features/notifications/data/usecases/team_response_invite_usecase.dart';
+import 'package:cricklo/features/notifications/data/usecases/tournament_response_invite_usecase.dart';
 import 'package:cricklo/features/notifications/domain/repo/notification_repo.dart';
 import 'package:cricklo/features/notifications/presentation/blocs/blocs/NotificationBloc/notification_bloc.dart';
 import 'package:cricklo/features/notifications/presentation/blocs/cubits/NotificationCubit/notification_cubit.dart';
@@ -67,6 +68,7 @@ import 'package:cricklo/features/teams/presentation/blocs/cubits/TeamPageCubit/t
 import 'package:cricklo/features/tournament/data/datasource/tournament_datasource_remote.dart';
 import 'package:cricklo/features/tournament/data/repo/tournament_repo_impl.dart';
 import 'package:cricklo/features/tournament/data/usecases/apply_tournament_usecase.dart';
+import 'package:cricklo/features/tournament/data/usecases/create_group_usecase.dart';
 import 'package:cricklo/features/tournament/data/usecases/create_tournament_usecase.dart';
 import 'package:cricklo/features/tournament/data/usecases/get_tournament_details_usecase.dart';
 import 'package:cricklo/features/tournament/data/usecases/invite_moderators_usecase.dart';
@@ -295,6 +297,9 @@ void _notificationDependencies() {
   sl.registerLazySingleton<MatchResponseInviteUsecase>(
     () => MatchResponseInviteUsecase(sl<NotificationRepository>()),
   );
+  sl.registerLazySingleton<TournamentResponseInviteUsecase>(
+    () => TournamentResponseInviteUsecase(sl<NotificationRepository>()),
+  );
   //cubits
   sl.registerFactory<NotificationBloc>(
     () => NotificationBloc(
@@ -307,6 +312,7 @@ void _notificationDependencies() {
       sl<FetchNotificationsUsecase>(),
       sl<TeamResponseInviteUsecase>(),
       sl<MatchResponseInviteUsecase>(),
+      sl<TournamentResponseInviteUsecase>(),
     ),
   );
 }
@@ -409,6 +415,9 @@ void _tournamentDependencies() {
   sl.registerLazySingleton<GetTournamentDetailsUsecase>(
     () => GetTournamentDetailsUsecase(sl<TournamentRepo>()),
   );
+  sl.registerLazySingleton<CreateGroupUsecase>(
+    () => CreateGroupUsecase(sl<TournamentRepo>()),
+  );
   //cubits
   sl.registerFactory<CreateTournamentCubit>(
     () => CreateTournamentCubit(sl<CreateTournamentUsecase>()),
@@ -419,6 +428,7 @@ void _tournamentDependencies() {
       sl<InviteTeamsUsecase>(),
       sl<ApplyTournamentUsecase>(),
       sl<GetTournamentDetailsUsecase>(),
+      sl<CreateGroupUsecase>(),
     ),
   );
   sl.registerFactory<FetchUserTeamsCubit>(

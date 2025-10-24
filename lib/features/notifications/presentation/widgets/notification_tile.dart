@@ -3,6 +3,7 @@ import 'package:cricklo/core/utils/constants/enums.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/notifications/domain/entities/match_notification_entity.dart';
 import 'package:cricklo/features/notifications/domain/entities/team_notification_entity.dart';
+import 'package:cricklo/features/notifications/domain/entities/tournament_notification_entity.dart';
 import 'package:cricklo/features/notifications/presentation/blocs/cubits/NotificationCubit/notification_cubit.dart';
 import 'package:cricklo/features/notifications/presentation/widgets/match_notification_tile.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ class NotificationTile extends StatelessWidget {
     super.key,
     this.teamNotificationEntity,
     this.matchNotificationEntity,
+    this.tournamentNotificationEntity,
     required this.title,
     required this.id,
     this.notificationType = NotificationType.team,
@@ -20,6 +22,7 @@ class NotificationTile extends StatelessWidget {
 
   final TeamNotificationEntity? teamNotificationEntity;
   final MatchNotificationEntity? matchNotificationEntity;
+  final TournamentNotificationEntity? tournamentNotificationEntity;
   final String title;
   final String id;
   final NotificationType notificationType;
@@ -73,7 +76,10 @@ class NotificationTile extends StatelessWidget {
             disabled: false,
             onPress: () => notificationType == NotificationType.team
                 ? cubit.teamInviteAction(teamNotificationEntity!, "accept")
-                : {},
+                : cubit.tournamentInviteAction(
+                    tournamentNotificationEntity!,
+                    "accept",
+                  ),
             padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             child: Text(
               "Accept",
@@ -88,7 +94,10 @@ class NotificationTile extends StatelessWidget {
           InkWell(
             onTap: () => notificationType == NotificationType.team
                 ? cubit.teamInviteAction(teamNotificationEntity!, "deny")
-                : {},
+                : cubit.tournamentInviteAction(
+                    tournamentNotificationEntity!,
+                    "deny",
+                  ),
             child: Padding(
               padding: const EdgeInsets.all(8),
               child: Icon(

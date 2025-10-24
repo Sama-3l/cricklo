@@ -160,4 +160,17 @@ abstract class ApiService {
   Future<GetTournamentDetailsModel> getTournamentDetails(
     @Path("tournamentId") String tournamentId,
   );
+
+  @POST(ApiEndpointConstants.tournamentCreateGroup)
+  Future<InviteResponseResponseModel> tournamentCreateGroup(
+    @Path("tournamentId") String tournamentId,
+    @Body() Map<String, dynamic> body,
+  );
+
+  @POST(ApiEndpointConstants.tournamentInviteResponse)
+  Future<InviteResponseResponseModel> tournamentInviteResponse(
+    @Path("tournamentId") String tournamentId,
+    @Path("inviteId") String inviteId,
+    @Body() Map<String, dynamic> body,
+  );
 }

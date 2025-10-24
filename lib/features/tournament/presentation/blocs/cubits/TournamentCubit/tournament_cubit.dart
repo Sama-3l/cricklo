@@ -4,9 +4,11 @@ import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/core/utils/constants/widget_decider.dart';
 import 'package:cricklo/features/teams/domain/entities/search_user_entity.dart';
 import 'package:cricklo/features/tournament/data/entities/apply_tournament_usecase_entity.dart';
+import 'package:cricklo/features/tournament/data/entities/create_group_usecase_entity.dart';
 import 'package:cricklo/features/tournament/data/entities/invite_moderators_usecase_entity.dart';
 import 'package:cricklo/features/tournament/data/entities/invite_teams_usecase_entity.dart';
 import 'package:cricklo/features/tournament/data/usecases/apply_tournament_usecase.dart';
+import 'package:cricklo/features/tournament/data/usecases/create_group_usecase.dart';
 import 'package:cricklo/features/tournament/data/usecases/get_tournament_details_usecase.dart';
 import 'package:cricklo/features/tournament/data/usecases/invite_moderators_usecase.dart';
 import 'package:cricklo/features/tournament/data/usecases/invite_teams_usecase.dart';
@@ -25,11 +27,13 @@ class TournamentCubit extends Cubit<TournamentState> {
   final InviteTeamsUsecase _inviteTeamsUsecase;
   final ApplyTournamentUsecase _applyTournamentUsecase;
   final GetTournamentDetailsUsecase _getTournamentDetailsUsecase;
+  final CreateGroupUsecase _createGroupUsecase;
   TournamentCubit(
     this._inviteModeratorsUsecase,
     this._inviteTeamsUsecase,
     this._applyTournamentUsecase,
     this._getTournamentDetailsUsecase,
+    this._createGroupUsecase,
   ) : super(
         TournamentUpdate(
           tournamentEntity: null,
@@ -144,15 +148,38 @@ class TournamentCubit extends Cubit<TournamentState> {
     }
   }
 
-  void addGroup() {
-    state.tournamentEntity!.groups.add(
-      GroupEntity(
-        teams: [],
-        name: "Group ${String.fromCharCode(65 + tournament.groups.length)}",
-        matches: [],
+  void addGroup(BuildContext context) async {
+    final group = GroupEntity(
+      teams: [],
+      name:
+          "Group ${String.fromCharCode(65 + state.tournamentEntity!.groups.length)}",
+      matches: [],
+    );
+    state.tournamentEntity!.groups.add(group);
+    emit(state.copyWith());
+    final response = await _createGroupUsecase(
+      CreateGroupUsecaseEntity(
+        groupName: group.name,
+        tournamentId: state.tournamentEntity!.id,
       ),
     );
-    emit(state.copyWith());
+    response.fold(
+      (_) {
+        WidgetDecider.showSnackBar(context, "Couldn't add group");
+        state.tournamentEntity!.groups.removeLast();
+        emit(state.copyWith());
+      },
+      (response) {
+        if (!response.success) {
+          WidgetDecider.showSnackBar(
+            context,
+            response.errorMessage ?? "Couldn't add group",
+          );
+          state.tournamentEntity!.groups.removeLast();
+          emit(state.copyWith());
+        } else {}
+      },
+    );
   }
 
   void removeGroup(int index) {

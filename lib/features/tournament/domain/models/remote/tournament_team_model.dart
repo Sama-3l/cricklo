@@ -73,21 +73,23 @@ class TournamentTeamModel {
 
   factory TournamentTeamModel.fromJson(Map<String, dynamic> map) {
     return TournamentTeamModel(
-      matches: map['matches'] as int,
-      won: map['won'] as int,
-      loss: map['loss'] as int,
-      points: map['points'] as int,
-      nrr: map['nrr'] as double,
+      matches: map['matches'] as int? ?? 0,
+      won: map['won'] as int? ?? 0,
+      loss: map['loss'] as int? ?? 0,
+      points: map['points'] as int? ?? 0,
+      nrr: map['nrr'] as double? ?? 0.0,
       eliminated: map['eliminated'] as bool? ?? false,
       inviteStatus: InviteStatus.values.firstWhere(
-        (e) => e.title == map['inviteStatus'],
+        (e) => e.title.toUpperCase() == map['status'],
       ),
-      id: '',
-      name: '',
-      teamLogo: '',
-      teamBanner: '',
+      id: map['teamId'] as String,
+      name: map['teamName'] as String,
+      teamLogo: map['teamLogo'] as String,
+      teamBanner: map['teamBanner'] as String,
       players: [],
-      location: LocationModel.fromJson(map["location"] as Map<String, dynamic>),
+      location: map["location"] == null
+          ? LocationModel(area: "", city: "", state: "", lat: 0, lng: 0)
+          : LocationModel.fromJson(map["location"] as Map<String, dynamic>),
     );
   }
 

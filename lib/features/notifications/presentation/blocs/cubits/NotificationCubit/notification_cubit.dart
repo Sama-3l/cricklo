@@ -6,8 +6,10 @@ import 'package:cricklo/features/mainapp/data/usecases/fetch_notifications_useca
 import 'package:cricklo/features/notifications/data/entities/team_response_invite_usecase_entity.dart';
 import 'package:cricklo/features/notifications/data/usecases/match_response_invite_usecase.dart';
 import 'package:cricklo/features/notifications/data/usecases/team_response_invite_usecase.dart';
+import 'package:cricklo/features/notifications/data/usecases/tournament_response_invite_usecase.dart';
 import 'package:cricklo/features/notifications/domain/entities/match_notification_entity.dart';
 import 'package:cricklo/features/notifications/domain/entities/team_notification_entity.dart';
+import 'package:cricklo/features/notifications/domain/entities/tournament_notification_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
@@ -17,15 +19,18 @@ class NotificationCubit extends Cubit<NotificationState> {
   final FetchNotificationsUsecase _fetchNotifications;
   final TeamResponseInviteUsecase _teamResponseInviteUsecase;
   final MatchResponseInviteUsecase _matchResponseInviteUsecase;
+  final TournamentResponseInviteUsecase _tournamentResponseInviteUsecase;
   NotificationCubit(
     this._fetchNotifications,
     this._teamResponseInviteUsecase,
     this._matchResponseInviteUsecase,
+    this._tournamentResponseInviteUsecase,
   ) : super(
         NotificationUpdate(
           loading: false,
           teamNotifications: [],
           matchNotifications: [],
+          tournamentInvites: [],
         ),
       );
 
@@ -35,6 +40,7 @@ class NotificationCubit extends Cubit<NotificationState> {
         loading: true,
         teamNotifications: [],
         matchNotifications: [],
+        tournamentInvites: [],
       ),
     );
     await getNotifications();
@@ -66,6 +72,7 @@ class NotificationCubit extends Cubit<NotificationState> {
             teamNotifications: [],
             matchNotifications: [],
             loading: false,
+            tournamentInvites: [],
           ),
         );
       },
@@ -76,6 +83,7 @@ class NotificationCubit extends Cubit<NotificationState> {
               matchNotifications: response.matchNotifications,
               teamNotifications: response.teamNotifications,
               loading: false,
+              tournamentInvites: response.tournamentNotifications,
             ),
           );
         }
@@ -93,6 +101,7 @@ class NotificationCubit extends Cubit<NotificationState> {
         teamNotifications: state.teamNotifications,
         matchNotifications: state.matchNotifications,
         loading: false,
+        tournamentInvites: state.tournamentInvites,
       ),
     );
     final response = await _teamResponseInviteUsecase(
@@ -121,10 +130,67 @@ class NotificationCubit extends Cubit<NotificationState> {
             ),
           ),
         );
+        state.teamNotifications.add(team);
         emit(
           NotificationUpdate(
-            teamNotifications: [],
-            matchNotifications: [],
+            teamNotifications: state.teamNotifications,
+            matchNotifications: state.matchNotifications,
+            tournamentInvites: state.tournamentInvites,
+            loading: false,
+          ),
+        );
+      },
+      (response) {
+        if (response.success) {}
+      },
+    );
+  }
+
+  Future<void> tournamentInviteAction(
+    TournamentNotificationEntity tournament,
+    String action,
+  ) async {
+    state.tournamentInvites.remove(tournament);
+    emit(
+      NotificationUpdate(
+        teamNotifications: state.teamNotifications,
+        matchNotifications: state.matchNotifications,
+        loading: false,
+        tournamentInvites: state.tournamentInvites,
+      ),
+    );
+    final response = await _tournamentResponseInviteUsecase(
+      ResponseInviteUsecaseEntity(
+        id: tournament.tournamentId,
+        inviteId: tournament.inviteId,
+        action: action,
+      ),
+    );
+    response.fold(
+      (_) {
+        ScaffoldMessenger.of(
+          GlobalVariables.navigatorKey!.currentContext!,
+        ).showSnackBar(
+          SnackBar(
+            // behavior: SnackBarBehavior.floating,
+            backgroundColor: ColorsConstants.defaultBlack,
+            padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+            content: Text(
+              "Couldn't perform action",
+              style: TextStyles.poppinsSemiBold.copyWith(
+                fontSize: 16,
+                letterSpacing: -0.8,
+                color: ColorsConstants.defaultWhite,
+              ),
+            ),
+          ),
+        );
+        state.tournamentInvites.add(tournament);
+        emit(
+          NotificationUpdate(
+            teamNotifications: state.teamNotifications,
+            matchNotifications: state.matchNotifications,
+            tournamentInvites: state.tournamentInvites,
             loading: false,
           ),
         );
@@ -144,6 +210,7 @@ class NotificationCubit extends Cubit<NotificationState> {
       NotificationUpdate(
         teamNotifications: state.teamNotifications,
         matchNotifications: state.matchNotifications,
+        tournamentInvites: state.tournamentInvites,
         loading: false,
       ),
     );
@@ -173,10 +240,12 @@ class NotificationCubit extends Cubit<NotificationState> {
             ),
           ),
         );
+        state.matchNotifications.add(match);
         emit(
           NotificationUpdate(
-            teamNotifications: [],
-            matchNotifications: [],
+            teamNotifications: state.teamNotifications,
+            matchNotifications: state.matchNotifications,
+            tournamentInvites: state.tournamentInvites,
             loading: false,
           ),
         );

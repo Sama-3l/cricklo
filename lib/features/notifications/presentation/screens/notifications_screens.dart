@@ -27,6 +27,10 @@ class _NotificationsScreensState extends State<NotificationsScreens> {
           final nonScorerInvites = state.matchNotifications.where(
             (e) => e.notificationType == NotificationType.match,
           );
+          final tournamentModeratorInvites = state.tournamentInvites.where(
+            (e) => e.notificationType == NotificationType.tournamentModerator,
+          );
+          print(tournamentModeratorInvites.length);
           return Scaffold(
             backgroundColor: ColorsConstants.defaultWhite,
             appBar: AppBar(
@@ -55,7 +59,8 @@ class _NotificationsScreensState extends State<NotificationsScreens> {
                   )
                 : state.teamNotifications.isEmpty &&
                       scorerInvites.isEmpty &&
-                      nonScorerInvites.isEmpty
+                      nonScorerInvites.isEmpty &&
+                      tournamentModeratorInvites.isEmpty
                 ? Center(
                     child: Text(
                       "No Notifications",
@@ -132,18 +137,37 @@ class _NotificationsScreensState extends State<NotificationsScreens> {
                             ),
                           ),
                         ],
-
-                        // Padding(
-                        //   padding: const EdgeInsets.only(top: 24.0),
-                        //   child: SectionHeader(
-                        //     title: "Tournament Invites",
-                        //     showIcon: false,
-                        //   ),
-                        // ),
-                        // NotificationTile(
-                        //   title: "Mumbai Masters",
-                        //   id: "mumbaimasters-001",
-                        // ),
+                        if (tournamentModeratorInvites.isNotEmpty) ...[
+                          Padding(
+                            padding: const EdgeInsets.only(top: 24.0),
+                            child: SectionHeader(
+                              title: "Tournament Invites",
+                              showIcon: false,
+                            ),
+                          ),
+                        ],
+                        if (tournamentModeratorInvites.isNotEmpty) ...[
+                          Padding(
+                            padding: const EdgeInsets.only(top: 12.0),
+                            child: Text(
+                              "Moderator Invites",
+                              style: TextStyles.poppinsSemiBold.copyWith(
+                                fontSize: 16,
+                                letterSpacing: -0.8,
+                                color: ColorsConstants.accentOrange,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 6),
+                          ...tournamentModeratorInvites.map(
+                            (e) => NotificationTile(
+                              title: e.tournamentName,
+                              id: e.tournamentId,
+                              tournamentNotificationEntity: e,
+                              notificationType: e.notificationType,
+                            ),
+                          ),
+                        ],
                       ],
                     ),
                   ),

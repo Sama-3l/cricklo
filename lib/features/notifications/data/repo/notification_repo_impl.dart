@@ -33,6 +33,7 @@ class NotificationRepositoryImpl implements NotificationRepository {
           count: 0,
           teamNotifications: [],
           matchNotifications: [],
+          tournamentNotifications: [],
           success: false,
           message: message,
           errorCode: code,
@@ -83,6 +84,38 @@ class NotificationRepositoryImpl implements NotificationRepository {
     try {
       final response = await remoteDataSource.respondToMatchInvite(
         matchId,
+        inviteId,
+        action,
+      );
+      return Right(response.toEntity());
+    } on DioException catch (e) {
+      final data = e.response?.data;
+
+      final code = data?['error']?['code'];
+      final message = data?['error']?['message'];
+
+      return Right(
+        InviteResponseResponseEntity(
+          success: false,
+          message: message,
+          errorCode: code,
+        ),
+      );
+    } catch (e) {
+      return Left(ServerFailure(message: "Unexpected error: ${e.toString()}"));
+    }
+  }
+
+  @override
+  Future<Either<Failure, InviteResponseResponseEntity>>
+  respondToTournamentInvite(
+    String tournamentId,
+    String inviteId,
+    String action,
+  ) async {
+    try {
+      final response = await remoteDataSource.respondToTournamentInvite(
+        tournamentId,
         inviteId,
         action,
       );

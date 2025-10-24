@@ -26,4 +26,8 @@ abstract class TournamentRepo {
   Future<Either<Failure, GetTournamentDetailsEntity>> getTournamentDetails(
     String tournamentId,
   );
+  Future<Either<Failure, InviteResponseResponseEntity>> tournamentCreateGroup(
+    String tournamentId,
+    Map<String, dynamic> body,
+  );
 }

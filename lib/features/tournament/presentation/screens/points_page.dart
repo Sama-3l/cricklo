@@ -27,7 +27,7 @@ class PointsPage extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(right: 16.0),
                   child: SecondaryButton(
-                    onTap: () => cubit.addGroup(),
+                    onTap: () => cubit.addGroup(context),
                     title: "Create Group",
                   ),
                 ),
@@ -70,8 +70,10 @@ class PointsPage extends StatelessWidget {
                             children: [
                               Expanded(
                                 child: SectionHeader(
-                                  title:
-                                      "Group ${String.fromCharCode(65 + index)}",
+                                  title: state
+                                      .tournamentEntity!
+                                      .groups[index]
+                                      .name,
                                   showIcon: false,
                                 ),
                               ),

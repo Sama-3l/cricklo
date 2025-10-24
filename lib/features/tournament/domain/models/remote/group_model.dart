@@ -28,17 +28,21 @@ class GroupModel {
 
   factory GroupModel.fromJson(Map<String, dynamic> map) {
     return GroupModel(
-      teams: List<TournamentTeamModel>.from(
-        (map['teams'] as List<dynamic>).map<TournamentTeamModel>(
-          (x) => TournamentTeamModel.fromJson(x),
-        ),
-      ),
-      matches: List<MatchModel>.from(
-        (map['matches'] as List<dynamic>).map<MatchModel>(
-          (x) => MatchModel.fromJson(x as Map<String, dynamic>),
-        ),
-      ),
-      name: map['name'] as String,
+      teams: map['teams'] != null
+          ? List<TournamentTeamModel>.from(
+              (map['teams'] as List<dynamic>).map<TournamentTeamModel>(
+                (x) => TournamentTeamModel.fromJson(x),
+              ),
+            )
+          : [],
+      matches: map['matches'] != null
+          ? List<MatchModel>.from(
+              (map['matches'] as List<dynamic>).map<MatchModel>(
+                (x) => MatchModel.fromJson(x as Map<String, dynamic>),
+              ),
+            )
+          : [],
+      name: map['groupName'] as String,
     );
   }
 

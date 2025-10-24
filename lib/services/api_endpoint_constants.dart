@@ -19,6 +19,8 @@ class ApiEndpointConstants {
   static const getTeamDetails = "/team/{teamId}";
   static const invitePlayers = "/team/{teamId}/invite";
   static const teamInviteResponse = "team/{teamId}/invites/{inviteId}/respond";
+  static const tournamentInviteResponse =
+      "tournament/{tournamentId}/invites/{inviteId}/respond";
 
   static const createMatch = '/match/create';
   static const getUserMatches = '/match/user';
@@ -39,4 +41,5 @@ class ApiEndpointConstants {
   static const tournamentInviteTeams = '/tournament/{tournamentId}/invite/team';
   static const tournamentApply = '/tournament/{tournamentId}/apply/team';
   static const tournamentDetails = '/tournament/{tournamentId}';
+  static const tournamentCreateGroup = 'tournament/{tournamentId}/create-group';
 }

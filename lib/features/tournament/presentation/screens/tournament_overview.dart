@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cricklo/core/utils/common/primary_button.dart';
+import 'package:cricklo/core/utils/constants/enums.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/home/presentation/widgets/section_header.dart';
 import 'package:cricklo/features/tournament/presentation/blocs/cubits/TournamentCubit/tournament_cubit.dart';
@@ -138,7 +139,7 @@ class TournamentOverview extends StatelessWidget {
             child: SectionHeader(title: "Teams", showIcon: false),
           ),
           SizedBox(
-            height: 120,
+            height: 132,
             child: state.loading
                 ? ListView.separated(
                     itemCount: 10,
@@ -173,7 +174,24 @@ class TournamentOverview extends StatelessWidget {
                         left: index == 0 ? 16.0 : 0,
                         right: index == 9 ? 16.0 : 0,
                       ),
-                      child: OverviewItem(title: 'Aviral All Stars'),
+                      child: OverviewItem(
+                        topTitle:
+                            state.tournamentEntity!.teams[index].inviteStatus ==
+                                    InviteStatus.invited ||
+                                state
+                                        .tournamentEntity!
+                                        .teams[index]
+                                        .inviteStatus ==
+                                    InviteStatus.pending
+                            ? state
+                                  .tournamentEntity!
+                                  .teams[index]
+                                  .inviteStatus
+                                  .title
+                            : null,
+                        title: state.tournamentEntity!.teams[index].name,
+                        logo: state.tournamentEntity!.teams[index].teamLogo,
+                      ),
                     ),
                   ),
           ),

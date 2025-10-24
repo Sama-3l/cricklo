@@ -35,13 +35,17 @@ class TournamentModerators extends StatelessWidget {
                     final selectedModerators = await showModalBottomSheet(
                       context: context,
                       isScrollControlled: true,
-                      builder: (context) => SearchPlayersBottomSheet(
-                        initiallySelected: state.tournamentEntity!.moderators,
-                      ),
+                      builder: (context) =>
+                          SearchPlayersBottomSheet(initiallySelected: []),
+                    );
+                    final alreadyInvited = state.tournamentEntity!.moderators
+                        .map((e) => e.playerId);
+                    (selectedModerators as List<SearchUserEntity>).removeWhere(
+                      (e) => alreadyInvited.contains(e.playerId),
                     );
                     cubit.addModerator(
                       context,
-                      (selectedModerators as List<SearchUserEntity>)
+                      (selectedModerators)
                           .map(
                             (e) =>
                                 e.copyWith(inviteStatus: InviteStatus.invited),

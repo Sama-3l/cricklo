@@ -40,7 +40,13 @@ enum MatchType {
   const MatchType(this.matchType);
 }
 
-enum NotificationType { team, match, tournament, scorer }
+enum NotificationType {
+  team,
+  match,
+  tournamentTeam,
+  tournamentModerator,
+  scorer,
+}
 
 enum TossChoice { batting, bowling }
 
@@ -93,6 +99,7 @@ enum BallType {
 enum InviteStatus {
   accepted("ACCEPTED"),
   invited("INVITED"),
+  pending("PENDING"),
   denied("DENIED");
 
   final String title;

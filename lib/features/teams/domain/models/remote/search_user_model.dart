@@ -90,7 +90,6 @@ class SearchUserModel {
           break;
       }
     }
-
     return SearchUserModel(
       id: data['id'] as String? ?? data['userId'] as String,
       playerId: data['playerId'] as String? ?? data['profileId'] as String,

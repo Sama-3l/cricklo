@@ -84,7 +84,7 @@ class TournamentPage extends StatelessWidget {
                           const Center(child: Text("No Match History")),
                           TournamentModerators(),
                           TeamsGrid(
-                            loading: false,
+                            loading: state.loading,
                             teams: state.tournamentEntity!.teams
                                 .map((e) => e.toTeamEntity())
                                 .toList(),

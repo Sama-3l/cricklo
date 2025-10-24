@@ -16,4 +16,10 @@ abstract class NotificationRepository {
     String inviteId,
     String action,
   );
+  Future<Either<Failure, InviteResponseResponseEntity>>
+  respondToTournamentInvite(
+    String tournamentId,
+    String inviteId,
+    String action,
+  );
 }

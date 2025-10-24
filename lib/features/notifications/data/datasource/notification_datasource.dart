@@ -18,6 +18,11 @@ abstract class NotificationRemoteDataSource {
     String inviteId,
     String action,
   );
+  Future<InviteResponseResponseModel> respondToTournamentInvite(
+    String tournamentId,
+    String inviteId,
+    String action,
+  );
 }
 
 class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
@@ -63,6 +68,17 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
     String action,
   ) {
     return _apiService.matchInviteResponse(matchId, inviteId, {
+      "action": action,
+    });
+  }
+
+  @override
+  Future<InviteResponseResponseModel> respondToTournamentInvite(
+    String tournamentId,
+    String inviteId,
+    String action,
+  ) {
+    return _apiService.tournamentInviteResponse(tournamentId, inviteId, {
       "action": action,
     });
   }

@@ -100,10 +100,7 @@ class TournamentRepoImpl extends TournamentRepo {
     Map<String, dynamic> body,
   ) async {
     try {
-      final response = await _datasourceRemote.inviteModerators(
-        tournamentId,
-        body,
-      );
+      final response = await _datasourceRemote.inviteTeams(tournamentId, body);
       return Right(response.toEntity());
     } on DioException catch (e) {
       final data = e.response?.data;
@@ -169,6 +166,32 @@ class TournamentRepoImpl extends TournamentRepo {
 
       return Right(
         GetTournamentDetailsEntity(
+          success: false,
+          message: message,
+          errorCode: code,
+        ),
+      );
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, InviteResponseResponseEntity>> tournamentCreateGroup(
+    String tournamentId,
+    Map<String, dynamic> body,
+  ) async {
+    try {
+      final response = await _datasourceRemote.createGroup(tournamentId, body);
+      return Right(response.toEntity());
+    } on DioException catch (e) {
+      final data = e.response?.data;
+
+      final code = data?['error']?['code'];
+      final message = data?['error']?['message'];
+
+      return Right(
+        InviteResponseResponseEntity(
           success: false,
           message: message,
           errorCode: code,

@@ -138,6 +138,18 @@ class TeamsGrid extends StatelessWidget {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
+                        if (team.inviteStatus != null) ...[
+                          Text(
+                            team.inviteStatus!.toUpperCase(),
+                            textAlign: TextAlign.center,
+                            style: TextStyles.poppinsRegular.copyWith(
+                              fontSize: 12,
+                              letterSpacing: 0.5,
+                              color: ColorsConstants.defaultBlack,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                        ],
                         CircleAvatar(
                           radius: 48,
                           backgroundColor: ColorsConstants.accentOrange

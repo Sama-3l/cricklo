@@ -32,15 +32,17 @@ class OverviewItem extends StatelessWidget {
         ],
         CircleAvatar(
           radius: 40,
-          backgroundColor: ColorsConstants.surfaceOrange,
+          backgroundColor: logo != null ? null : ColorsConstants.surfaceOrange,
           backgroundImage: logo != null
               ? CachedNetworkImageProvider(logo!)
               : null,
-          child: Icon(
-            Icons.people,
-            size: 24,
-            color: ColorsConstants.defaultBlack,
-          ),
+          child: logo != null
+              ? null
+              : Icon(
+                  Icons.people,
+                  size: 24,
+                  color: ColorsConstants.defaultBlack,
+                ),
         ),
         const SizedBox(height: 8),
         Text(

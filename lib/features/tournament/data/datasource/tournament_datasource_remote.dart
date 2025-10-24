@@ -23,6 +23,10 @@ abstract class TournamentDatasourceRemote {
     Map<String, dynamic> body,
   );
   Future<GetTournamentDetailsModel> getTournamentDetails(String tournamentId);
+  Future<InviteResponseResponseModel> createGroup(
+    String tournamentId,
+    Map<String, dynamic> body,
+  );
 }
 
 class TournamentDatasourceRemoteImpl extends TournamentDatasourceRemote {
@@ -60,5 +64,13 @@ class TournamentDatasourceRemoteImpl extends TournamentDatasourceRemote {
   @override
   Future<GetTournamentDetailsModel> getTournamentDetails(String tournamentId) {
     return _apiService.getTournamentDetails(tournamentId);
+  }
+
+  @override
+  Future<InviteResponseResponseModel> createGroup(
+    String tournamentId,
+    Map<String, dynamic> body,
+  ) {
+    return _apiService.tournamentCreateGroup(tournamentId, body);
   }
 }

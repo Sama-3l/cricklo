@@ -4,12 +4,14 @@ import 'package:cricklo/core/utils/constants/enums.dart';
 import 'package:cricklo/features/notifications/domain/entities/get_notifications_response_entity.dart';
 import 'package:cricklo/features/notifications/domain/models/remote/match_notification_model.dart';
 import 'package:cricklo/features/notifications/domain/models/remote/team_notification_model.dart';
+import 'package:cricklo/features/notifications/domain/models/remote/tournament_notification_model.dart';
 
 class GetNotificationsResponseModel {
   final bool success;
   final int count;
   final List<TeamNotificationModel> teamNotifications;
   final List<MatchNotificationModel> matchNotifications;
+  final List<TournamentNotificationModel> tournamentNotifications;
   final String? message;
   final int? status;
   final String? errorCode;
@@ -20,6 +22,7 @@ class GetNotificationsResponseModel {
     required this.count,
     required this.teamNotifications,
     required this.matchNotifications,
+    required this.tournamentNotifications,
     this.message,
     this.status,
     this.errorCode,
@@ -48,12 +51,16 @@ class GetNotificationsResponseModel {
       status: status,
       errorCode: errorCode,
       errorMessage: errorMessage,
+      tournamentNotifications: tournamentNotifications
+          .map((e) => e.toEntity())
+          .toList(),
     );
   }
 
   factory GetNotificationsResponseModel.fromJson(Map<String, dynamic> map) {
     List<TeamNotificationModel> teamNotifications = [];
     List<MatchNotificationModel> matchNotifications = [];
+    List<TournamentNotificationModel> tournamentNotifications = [];
     for (var notify in map['data'] as List<dynamic>) {
       if (notify["type"] == "TEAM_INVITE") {
         teamNotifications.add(TeamNotificationModel.fromJson(notify));
@@ -70,12 +77,23 @@ class GetNotificationsResponseModel {
           ),
         );
       }
+      if (notify["type"] == "TOURNAMENT_MODERATOR_INVITE") {
+        tournamentNotifications.add(
+          TournamentNotificationModel.fromJson(
+            notify,
+            notify["type"] == "TOURNAMENT_MODERATOR_INVITE"
+                ? NotificationType.tournamentModerator
+                : NotificationType.tournamentTeam,
+          ),
+        );
+      }
     }
     return GetNotificationsResponseModel(
       success: map['success'] as bool,
       count: map['count'] as int? ?? 0,
       teamNotifications: teamNotifications,
       matchNotifications: matchNotifications,
+      tournamentNotifications: tournamentNotifications,
       message: map['message'] != null ? map['message'] as String : null,
       status: map['status'] != null ? map['status'] as int : null,
       errorCode: map['errorCode'] != null ? map['errorCode'] as String : null,
