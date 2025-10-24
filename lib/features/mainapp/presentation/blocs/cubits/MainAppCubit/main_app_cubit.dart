@@ -210,6 +210,19 @@ class MainAppCubit extends Cubit<MainAppState> {
   }
 
   Future<void> getTournaments() async {
+    emit(
+      UpdateIndex(
+        matchLoading: state.matchLoading,
+        tournamentLoading: true,
+        tournaments: state.tournaments,
+        currentIndex: state.currentIndex,
+        showOptions: state.showOptions,
+        matches: state.matches,
+        user: state.user?.copyWith(unreadNotifications: 0),
+        loading: false,
+      ),
+    );
+    print(state.tournamentLoading);
     final response = await _getAllTournamentsUsecase(NoParams());
     response.fold(
       (_) {

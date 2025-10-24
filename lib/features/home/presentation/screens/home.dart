@@ -85,7 +85,8 @@ class _HomePageState extends State<HomePage>
         children: [
           RefreshIndicator(
             onRefresh: () async {
-              await cubit.getUserMatches();
+              cubit.getUserMatches();
+              await cubit.getTournaments();
             },
             color: ColorsConstants.accentOrange,
             child: ListView(

@@ -120,7 +120,7 @@ class TournamentTile extends StatelessWidget {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                "8",
+                                "${tournamentEntity.spotsLeft}",
                                 style: TextStyles.poppinsSemiBold.copyWith(
                                   color: ColorsConstants.defaultBlack,
                                   fontSize: 16,
@@ -129,7 +129,7 @@ class TournamentTile extends StatelessWidget {
                               ),
                               const SizedBox(width: 4),
                               Text(
-                                "/ 16 spots left",
+                                "/ ${tournamentEntity.maxTeams} spots left",
                                 style: TextStyles.poppinsMedium.copyWith(
                                   color: ColorsConstants.defaultBlack,
                                   fontSize: 12,

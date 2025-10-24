@@ -32,7 +32,7 @@ class TournamentsScreen extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             Expanded(
-              child: state.matchLoading
+              child: state.tournamentLoading
                   ? ListView.separated(
                       itemCount: 10,
                       separatorBuilder: (context, index) =>
