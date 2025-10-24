@@ -9,15 +9,9 @@ import 'package:go_router/go_router.dart';
 
 class MatchTile extends StatelessWidget {
   final MatchEntity matchEntity;
-  final bool live;
   final Function()? onTap;
 
-  const MatchTile({
-    super.key,
-    required this.matchEntity,
-    this.live = false,
-    this.onTap,
-  });
+  const MatchTile({super.key, required this.matchEntity, this.onTap});
 
   @override
   Widget build(BuildContext context) {

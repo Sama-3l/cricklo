@@ -36,4 +36,6 @@ class ApiEndpointConstants {
       '/tournament/{tournamentId}/invite/moderator';
   static const tournamentInviteTeams = '/tournament/{tournamentId}/invite/team';
   static const tournamentApply = '/tournament/{tournamentId}/apply/team';
+  static const locationAPIBaseUrl =
+      'https://maps.googleapis.com/maps/api/place/autocomplete/json';
 }

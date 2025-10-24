@@ -49,33 +49,16 @@ class TournamentTile extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Hello World where are you old friend",
-                              style: TextStyles.poppinsSemiBold.copyWith(
-                                fontSize: 20,
-                                letterSpacing: -1,
-                                color: ColorsConstants.defaultBlack,
-                                height: 1,
-                              ),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            const SizedBox(height: 16),
-                            Text(
-                              Methods.getDateRangeFormatted(
-                                tournamentEntity.startDate,
-                                tournamentEntity.endDate,
-                              ),
-                              style: TextStyles.poppinsSemiBold.copyWith(
-                                fontSize: 12,
-                                letterSpacing: -0.5,
-                                color: ColorsConstants.defaultBlack,
-                              ),
-                            ),
-                          ],
+                        child: Text(
+                          "Hello World where are you old friend",
+                          style: TextStyles.poppinsSemiBold.copyWith(
+                            fontSize: 20,
+                            letterSpacing: -1,
+                            color: ColorsConstants.defaultBlack,
+                            height: 1,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                       const SizedBox(width: 24),
@@ -101,6 +84,61 @@ class TournamentTile extends StatelessWidget {
                             ),
                           ),
                         ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        Methods.getDateRangeFormatted(
+                          tournamentEntity.startDate,
+                          tournamentEntity.endDate,
+                        ),
+                        style: TextStyles.poppinsSemiBold.copyWith(
+                          fontSize: 12,
+                          letterSpacing: -0.5,
+                          color: ColorsConstants.defaultBlack,
+                        ),
+                      ),
+                      const Spacer(),
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(24),
+                          border: Border.all(
+                            width: 1,
+                            color: ColorsConstants.defaultBlack,
+                          ),
+                        ),
+                        padding: EdgeInsets.symmetric(
+                          vertical: 4,
+                          horizontal: 8,
+                        ),
+                        child: Center(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                "8",
+                                style: TextStyles.poppinsSemiBold.copyWith(
+                                  color: ColorsConstants.defaultBlack,
+                                  fontSize: 16,
+                                  letterSpacing: -0.8,
+                                ),
+                              ),
+                              const SizedBox(width: 4),
+                              Text(
+                                "/ 16 spots left",
+                                style: TextStyles.poppinsMedium.copyWith(
+                                  color: ColorsConstants.defaultBlack,
+                                  fontSize: 12,
+                                  letterSpacing: -0.5,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ],
                   ),

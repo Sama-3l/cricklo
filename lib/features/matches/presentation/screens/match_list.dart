@@ -37,7 +37,7 @@ class _MatchListState extends State<MatchList> {
             itemBuilder: (context, index) {
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: MatchTile(live: index == 0, matchEntity: matches[index]),
+                child: MatchTile(matchEntity: matches[index]),
               );
             },
           ),

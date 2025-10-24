@@ -9,6 +9,7 @@ import 'package:cricklo/features/matches/presentation/screens/matches.dart';
 import 'package:cricklo/features/notifications/presentation/blocs/blocs/NotificationBloc/notification_bloc.dart';
 import 'package:cricklo/features/notifications/presentation/screens/notifications_button.dart';
 import 'package:cricklo/features/theme/presentation/ThemeCubit/theme_cubit.dart';
+import 'package:cricklo/features/tournament/presentation/screens/tournaments_screen.dart';
 import 'package:cricklo/injection_container.dart';
 import 'package:cricklo/routes/app_route_constants.dart';
 import 'package:flutter/material.dart';
@@ -102,7 +103,7 @@ class _ContentViewState extends State<ContentView> {
               children: [
                 HomePage(userEntity: state.user),
                 MatchesPage(),
-                const Center(child: Text('Tournaments')),
+                TournamentsScreen(),
                 AccountPage(userEntity: state.user, userMatches: state.matches),
               ],
             ),

@@ -31,6 +31,8 @@ class MainAppCubit extends Cubit<MainAppState> {
     this._getAllTournamentsUsecase,
   ) : super(
         UpdateIndex(
+          matchLoading: false,
+          tournamentLoading: false,
           currentIndex: 0,
           showOptions: false,
           matches: [],
@@ -41,6 +43,8 @@ class MainAppCubit extends Cubit<MainAppState> {
   logout(BuildContext context) async {
     emit(
       UpdateIndex(
+        matchLoading: false,
+        tournamentLoading: false,
         tournaments: state.tournaments,
         currentIndex: 0,
         showOptions: false,
@@ -54,6 +58,8 @@ class MainAppCubit extends Cubit<MainAppState> {
       (_) {
         emit(
           UpdateIndex(
+            matchLoading: false,
+            tournamentLoading: false,
             tournaments: state.tournaments,
             currentIndex: 0,
             showOptions: false,
@@ -74,6 +80,8 @@ class MainAppCubit extends Cubit<MainAppState> {
           }
           emit(
             UpdateIndex(
+              matchLoading: false,
+              tournamentLoading: false,
               tournaments: [],
               matches: [],
               currentIndex: 0,
@@ -85,6 +93,8 @@ class MainAppCubit extends Cubit<MainAppState> {
         } else {
           emit(
             UpdateIndex(
+              matchLoading: false,
+              tournamentLoading: false,
               tournaments: state.tournaments,
               matches: state.matches,
               currentIndex: 0,
@@ -101,6 +111,8 @@ class MainAppCubit extends Cubit<MainAppState> {
   readNotifications() {
     emit(
       UpdateIndex(
+        matchLoading: state.matchLoading,
+        tournamentLoading: state.tournamentLoading,
         tournaments: state.tournaments,
         currentIndex: state.currentIndex,
         showOptions: state.showOptions,
@@ -112,6 +124,19 @@ class MainAppCubit extends Cubit<MainAppState> {
   }
 
   Future<void> getUserMatches() async {
+    emit(
+      UpdateIndex(
+        matchLoading: true,
+        tournamentLoading: true,
+        tournaments: state.tournaments,
+        currentIndex: state.currentIndex,
+        showOptions: state.showOptions,
+        matches: state.matches,
+        user: state.user?.copyWith(unreadNotifications: 0),
+        loading: false,
+      ),
+    );
+    getTournaments();
     final response = await _getUserMatchesUsecase(NoParams());
     response.fold(
       (_) {
@@ -132,6 +157,18 @@ class MainAppCubit extends Cubit<MainAppState> {
             ),
           ),
         );
+        emit(
+          UpdateIndex(
+            matchLoading: false,
+            tournamentLoading: state.tournamentLoading,
+            tournaments: state.tournaments,
+            currentIndex: state.currentIndex,
+            showOptions: state.showOptions,
+            matches: state.matches,
+            user: state.user?.copyWith(unreadNotifications: 0),
+            loading: false,
+          ),
+        );
       },
       (response) {
         if (response.success) {
@@ -141,14 +178,29 @@ class MainAppCubit extends Cubit<MainAppState> {
                 e.teamB.inviteStatus == "DENIED" ||
                 e.scorer["inviteStatus"] == "DENIED",
           );
-          getTournaments();
+
           emit(
             UpdateIndex(
+              matchLoading: false,
+              tournamentLoading: state.tournamentLoading,
               tournaments: state.tournaments,
-              matches: response.matches,
               currentIndex: state.currentIndex,
               showOptions: state.showOptions,
-              user: state.user,
+              matches: response.matches,
+              user: state.user?.copyWith(unreadNotifications: 0),
+              loading: false,
+            ),
+          );
+        } else {
+          emit(
+            UpdateIndex(
+              matchLoading: false,
+              tournamentLoading: state.tournamentLoading,
+              tournaments: state.tournaments,
+              currentIndex: state.currentIndex,
+              showOptions: state.showOptions,
+              matches: state.matches,
+              user: state.user?.copyWith(unreadNotifications: 0),
               loading: false,
             ),
           );
@@ -178,16 +230,43 @@ class MainAppCubit extends Cubit<MainAppState> {
             ),
           ),
         );
+        emit(
+          UpdateIndex(
+            matchLoading: state.matchLoading,
+            tournamentLoading: false,
+            tournaments: state.tournaments,
+            currentIndex: state.currentIndex,
+            showOptions: state.showOptions,
+            matches: state.matches,
+            user: state.user?.copyWith(unreadNotifications: 0),
+            loading: false,
+          ),
+        );
       },
       (response) {
         if (response.success) {
           emit(
             UpdateIndex(
+              matchLoading: state.matchLoading,
+              tournamentLoading: false,
               tournaments: response.tournaments ?? [],
-              matches: state.matches,
               currentIndex: state.currentIndex,
               showOptions: state.showOptions,
-              user: state.user,
+              matches: state.matches,
+              user: state.user?.copyWith(unreadNotifications: 0),
+              loading: false,
+            ),
+          );
+        } else {
+          emit(
+            UpdateIndex(
+              matchLoading: state.matchLoading,
+              tournamentLoading: false,
+              tournaments: state.tournaments,
+              currentIndex: state.currentIndex,
+              showOptions: state.showOptions,
+              matches: state.matches,
+              user: state.user?.copyWith(unreadNotifications: 0),
               loading: false,
             ),
           );
@@ -200,12 +279,14 @@ class MainAppCubit extends Cubit<MainAppState> {
     state.matches.add(match);
     emit(
       UpdateIndex(
+        matchLoading: state.matchLoading,
+        tournamentLoading: state.tournamentLoading,
         tournaments: state.tournaments,
-        loading: state.loading,
-        user: state.user,
         currentIndex: state.currentIndex,
         showOptions: state.showOptions,
         matches: state.matches,
+        user: state.user?.copyWith(unreadNotifications: 0),
+        loading: state.loading,
       ),
     );
   }
@@ -219,8 +300,11 @@ class MainAppCubit extends Cubit<MainAppState> {
         showOptions: false,
         user: user,
         loading: false,
+        matchLoading: false,
+        tournamentLoading: false,
       ),
     );
+
     if (user == null) {
       final dio = sl<Dio>();
       final cookieManager =
@@ -243,6 +327,8 @@ class MainAppCubit extends Cubit<MainAppState> {
             showOptions: false,
             user: user,
             loading: true,
+            matchLoading: false,
+            tournamentLoading: false,
           ),
         );
         final response = await _currentUserUsecase(NoParams());
@@ -259,6 +345,8 @@ class MainAppCubit extends Cubit<MainAppState> {
                 showOptions: false,
                 user: user,
                 loading: false,
+                matchLoading: state.matchLoading,
+                tournamentLoading: state.tournamentLoading,
               ),
             );
           },
@@ -272,6 +360,8 @@ class MainAppCubit extends Cubit<MainAppState> {
                 showOptions: false,
                 user: response,
                 loading: false,
+                matchLoading: state.matchLoading,
+                tournamentLoading: state.tournamentLoading,
               ),
             );
             emit(
@@ -282,6 +372,8 @@ class MainAppCubit extends Cubit<MainAppState> {
                 showOptions: false,
                 user: response,
                 loading: false,
+                matchLoading: state.matchLoading,
+                tournamentLoading: state.tournamentLoading,
               ),
             );
           },
@@ -305,6 +397,8 @@ class MainAppCubit extends Cubit<MainAppState> {
           currentIndex: index,
           showOptions: false,
           user: state.user,
+          matchLoading: state.matchLoading,
+          tournamentLoading: state.tournamentLoading,
         ),
       );
     }
@@ -323,6 +417,8 @@ class MainAppCubit extends Cubit<MainAppState> {
         currentIndex: state.currentIndex,
         showOptions: !state.showOptions,
         user: state.user,
+        matchLoading: state.matchLoading,
+        tournamentLoading: state.tournamentLoading,
       ),
     );
   }

@@ -7,7 +7,7 @@ class SearchLocationUseCase {
 
   SearchLocationUseCase({required this.repository});
 
-  Future<List<LocationEntity>> call(String query) async {
+  Future<Map<String, dynamic>> call(String query) async {
     return await repository.searchLocations(query);
   }
 }

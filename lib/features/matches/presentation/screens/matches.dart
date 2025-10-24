@@ -1,5 +1,6 @@
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/home/presentation/widgets/section_header.dart';
+import 'package:cricklo/features/home/presentation/widgets/shimmer_match_tile.dart';
 import 'package:cricklo/features/mainapp/presentation/blocs/cubits/MainAppCubit/main_app_cubit.dart';
 import 'package:cricklo/features/matches/presentation/screens/match_list.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +39,11 @@ class _MatchesPageState extends State<MatchesPage> {
                   child: SectionHeader(title: "Your Matches"),
                 ),
                 const SizedBox(height: 12),
-                state.matches.where((e) => e.teamA.inviteStatus != null).isEmpty
+                state.matchLoading
+                    ? ShimmerMatchTile()
+                    : state.matches
+                          .where((e) => e.teamA.inviteStatus != null)
+                          .isEmpty
                     ? Container(
                         height: 200,
                         padding: const EdgeInsets.all(16),

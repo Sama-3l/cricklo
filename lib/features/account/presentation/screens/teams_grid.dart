@@ -4,6 +4,7 @@ import 'package:cricklo/features/matches/presentation/widgets/search_teams_botto
 import 'package:cricklo/features/teams/domain/entities/team_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:shimmer_animation/shimmer_animation.dart';
 
 class TeamsGrid extends StatelessWidget {
   final List<TeamEntity> teams;
@@ -61,13 +62,49 @@ class TeamsGrid extends StatelessWidget {
             )
           : null,
       body: loading
-          ? Center(
-              child: SizedBox(
-                height: 24,
-                width: 24,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2.5,
-                  color: ColorsConstants.accentOrange,
+          ? Padding(
+              padding: const EdgeInsets.only(top: 24.0),
+              child: Shimmer(
+                child: GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 16,
+                    crossAxisSpacing: 16,
+                    childAspectRatio: 1,
+                  ),
+                  itemCount: 10,
+                  itemBuilder: (context, index) {
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        // Circle Avatar placeholder
+                        Container(
+                          width: 96, // diameter = 2 * radius
+                          height: 96,
+                          decoration: BoxDecoration(
+                            color: ColorsConstants.textBlack.withValues(
+                              alpha: 0.2,
+                            ),
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        // Name / label placeholder
+                        Container(
+                          width: 64,
+                          height: 12,
+                          decoration: BoxDecoration(
+                            color: ColorsConstants.textBlack.withValues(
+                              alpha: 0.2,
+                            ),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
                 ),
               ),
             )

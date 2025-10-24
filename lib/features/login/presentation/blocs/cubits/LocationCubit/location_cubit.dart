@@ -19,7 +19,7 @@ class LocationCubit extends Cubit<LocationState> {
     emit(LocationLoading());
     try {
       final results = await useCase(query);
-      emit(LocationLoaded(locations: results));
+      emit(LocationLoaded(locations: []));
     } catch (e) {
       emit(LocationError(message: e.toString()));
     }

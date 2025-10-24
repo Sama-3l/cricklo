@@ -10,8 +10,8 @@ class LocationRepositoryImpl implements LocationRepository {
   LocationRepositoryImpl({required this.remoteDataSource});
 
   @override
-  Future<List<LocationEntity>> searchLocations(String query) async {
-    final models = await remoteDataSource.searchLocations(query);
-    return models.map((e) => e.toEntity()).toList();
+  Future<Map<String, dynamic>> searchLocations(String query) async {
+    final data = await remoteDataSource.searchLocations(query);
+    return data;
   }
 }

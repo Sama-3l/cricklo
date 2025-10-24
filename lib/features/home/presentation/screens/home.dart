@@ -3,9 +3,11 @@ import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/core/utils/constants/widget_decider.dart';
 import 'package:cricklo/features/home/presentation/widgets/home_profile_header.dart';
 import 'package:cricklo/features/home/presentation/widgets/section_header.dart';
+import 'package:cricklo/features/home/presentation/widgets/shimmer_match_tile.dart';
 import 'package:cricklo/features/login/domain/entities/user_entitiy.dart';
 import 'package:cricklo/features/mainapp/presentation/blocs/cubits/MainAppCubit/main_app_cubit.dart';
 import 'package:cricklo/features/matches/presentation/screens/match_list.dart';
+import 'package:cricklo/features/tournament/presentation/widgets/shimmer_tournament_tile.dart';
 import 'package:cricklo/features/tournament/presentation/widgets/tournaments_list.dart';
 import 'package:cricklo/routes/app_route_constants.dart';
 import 'package:flutter/material.dart';
@@ -76,6 +78,7 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     final cubit = context.read<MainAppCubit>();
     final state = cubit.state;
+    print(state.matchLoading);
     return Scaffold(
       backgroundColor: ColorsConstants.onSurfaceGrey,
       body: Stack(
@@ -93,7 +96,11 @@ class _HomePageState extends State<HomePage>
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: SectionHeader(title: "Matches"),
                 ),
-                state.matches.where((e) => e.teamA.inviteStatus != null).isEmpty
+                state.matchLoading
+                    ? ShimmerMatchTile()
+                    : state.matches
+                          .where((e) => e.teamA.inviteStatus != null)
+                          .isEmpty
                     ? Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 0.0),
                         child: Container(
@@ -137,7 +144,9 @@ class _HomePageState extends State<HomePage>
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: SectionHeader(title: "Live Tournaments"),
                 ),
-                state.tournaments.isEmpty
+                state.tournamentLoading
+                    ? ShimmerTournamentTile()
+                    : state.tournaments.isEmpty
                     ? Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 0.0),
                         child: Container(

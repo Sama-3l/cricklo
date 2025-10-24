@@ -5,6 +5,8 @@ sealed class MainAppState {
   final int currentIndex;
   final bool showOptions;
   final bool loading;
+  final bool matchLoading;
+  final bool tournamentLoading;
   final UserEntity? user;
   final List<MatchEntity> matches;
   final List<TournamentEntity> tournaments;
@@ -12,6 +14,8 @@ sealed class MainAppState {
   const MainAppState({
     required this.currentIndex,
     required this.showOptions,
+    required this.matchLoading,
+    required this.tournamentLoading,
     this.loading = false,
     this.user,
     required this.matches,
@@ -21,6 +25,8 @@ sealed class MainAppState {
 
 final class UpdateIndex extends MainAppState {
   const UpdateIndex({
+    required super.matchLoading,
+    required super.tournamentLoading,
     required super.currentIndex,
     required super.showOptions,
     required super.matches,
