@@ -2,6 +2,7 @@ import 'package:cricklo/core/errors/failure.dart';
 import 'package:cricklo/features/notifications/domain/entities/invite_response_response_entity.dart';
 import 'package:cricklo/features/tournament/domain/entities/create_tournament_response_entity.dart';
 import 'package:cricklo/features/tournament/domain/entities/get_all_tournaments_entity.dart';
+import 'package:cricklo/features/tournament/domain/entities/get_tournament_details_entity.dart';
 import 'package:cricklo/features/tournament/domain/entities/tournament_entity.dart';
 import 'package:dartz/dartz.dart';
 
@@ -21,5 +22,8 @@ abstract class TournamentRepo {
   Future<Either<Failure, InviteResponseResponseEntity>> tournamentApply(
     String tournamentId,
     Map<String, dynamic> body,
+  );
+  Future<Either<Failure, GetTournamentDetailsEntity>> getTournamentDetails(
+    String tournamentId,
   );
 }

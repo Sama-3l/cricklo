@@ -78,7 +78,6 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     final cubit = context.read<MainAppCubit>();
     final state = cubit.state;
-    print(state.matchLoading);
     return Scaffold(
       backgroundColor: ColorsConstants.onSurfaceGrey,
       body: Stack(

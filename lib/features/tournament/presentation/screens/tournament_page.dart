@@ -1,4 +1,5 @@
 import 'package:cricklo/core/utils/constants/enums.dart';
+import 'package:cricklo/core/utils/constants/global_variables.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/account/presentation/screens/teams_grid.dart';
 import 'package:cricklo/features/account/presentation/widgets/profile_tab_bar.dart';
@@ -32,7 +33,8 @@ class TournamentPage extends StatelessWidget {
       'Statistics',
     ];
     return BlocProvider(
-      create: (context) => sl<TournamentCubit>()..init(tournamentEntity),
+      create: (context) =>
+          sl<TournamentCubit>()..init(context, tournamentEntity),
       child: BlocBuilder<TournamentCubit, TournamentState>(
         builder: (context, state) {
           final cubit = context.read<TournamentCubit>();
@@ -91,7 +93,9 @@ class TournamentPage extends StatelessWidget {
                               extra: [team, <MatchEntity>[]],
                             ),
                             floatingButton:
-                                state.tournamentEntity!.spotsLeft > 0,
+                                state.tournamentEntity!.spotsLeft > 0 &&
+                                state.tournamentEntity!.organizerId ==
+                                    GlobalVariables.user!.profileId,
                             onInviteTeams: (teams) => cubit.inviteTeams(
                               context,
                               teams

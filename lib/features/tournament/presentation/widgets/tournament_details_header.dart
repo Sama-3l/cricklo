@@ -154,15 +154,6 @@ class TournamentDetailsHeader extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 8),
-              Padding(
-                padding: const EdgeInsets.only(right: 16.0),
-                child: Icon(
-                  Icons.share,
-                  color: ColorsConstants.defaultBlack,
-                  size: 24,
-                ),
-              ),
             ],
           ),
         ),

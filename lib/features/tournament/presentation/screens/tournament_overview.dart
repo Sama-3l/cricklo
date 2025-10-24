@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cricklo/core/utils/common/primary_button.dart';
-import 'package:cricklo/core/utils/common/secondary_button.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/home/presentation/widgets/section_header.dart';
 import 'package:cricklo/features/tournament/presentation/blocs/cubits/TournamentCubit/tournament_cubit.dart';
+import 'package:cricklo/features/tournament/presentation/widgets/shimmer_team_item.dart';
 import 'package:cricklo/features/tournament/presentation/widgets/team_item.dart';
 import 'package:cricklo/features/tournament/presentation/widgets/tournament_details_header.dart';
 import 'package:flutter/material.dart';
@@ -139,7 +139,21 @@ class TournamentOverview extends StatelessWidget {
           ),
           SizedBox(
             height: 120,
-            child: state.tournamentEntity!.teams.isEmpty
+            child: state.loading
+                ? ListView.separated(
+                    itemCount: 10,
+                    physics: NeverScrollableScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
+                    separatorBuilder: (context, index) => SizedBox(width: 40),
+                    itemBuilder: (context, index) => Padding(
+                      padding: EdgeInsets.only(
+                        left: index == 0 ? 16.0 : 0,
+                        right: index == 9 ? 16.0 : 0,
+                      ),
+                      child: ShimmerOverviewItem(title: ""),
+                    ),
+                  )
+                : state.tournamentEntity!.teams.isEmpty
                 ? Center(
                     child: Text(
                       "No Teams Yet",

@@ -46,7 +46,7 @@ class GetAllTournamentsModel {
       tournaments: map['payload'] != null
           ? List<TournamentModel>.from(
               (map['payload'] as List<dynamic>).map<TournamentModel?>(
-                (x) => TournamentModel.fromMap(x),
+                (x) => TournamentModel.fromJson(x),
               ),
             )
           : null,

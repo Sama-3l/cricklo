@@ -92,16 +92,16 @@ class SearchUserModel {
     }
 
     return SearchUserModel(
-      id: data['id'] as String,
-      playerId: data['playerId'] as String,
-      name: data['name'] as String,
+      id: data['id'] as String? ?? data['userId'] as String,
+      playerId: data['playerId'] as String? ?? data['profileId'] as String,
+      name: data['name'] as String? ?? data['name'] as String,
       playerType: playerType,
       batterType: batterType,
       bowlerType: bowlerType,
-      inviteStatus: data['inviteStatus'] == null
+      inviteStatus: data['status'] == null
           ? null
           : InviteStatus.values
-                .where((e) => e.title == data['inviteStatus'] as String)
+                .where((e) => e.title == data['status'] as String)
                 .first,
     );
   }
@@ -123,6 +123,7 @@ class SearchUserModel {
       playerType: playerType,
       batterType: batterType,
       bowlerType: bowlerType,
+      inviteStatus: inviteStatus,
     );
   }
 }

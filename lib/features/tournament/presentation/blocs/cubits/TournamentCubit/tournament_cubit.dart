@@ -7,6 +7,7 @@ import 'package:cricklo/features/tournament/data/entities/apply_tournament_useca
 import 'package:cricklo/features/tournament/data/entities/invite_moderators_usecase_entity.dart';
 import 'package:cricklo/features/tournament/data/entities/invite_teams_usecase_entity.dart';
 import 'package:cricklo/features/tournament/data/usecases/apply_tournament_usecase.dart';
+import 'package:cricklo/features/tournament/data/usecases/get_tournament_details_usecase.dart';
 import 'package:cricklo/features/tournament/data/usecases/invite_moderators_usecase.dart';
 import 'package:cricklo/features/tournament/data/usecases/invite_teams_usecase.dart';
 import 'package:cricklo/features/tournament/domain/entities/group_entity.dart';
@@ -23,10 +24,12 @@ class TournamentCubit extends Cubit<TournamentState> {
   final InviteModeratorsUsecase _inviteModeratorsUsecase;
   final InviteTeamsUsecase _inviteTeamsUsecase;
   final ApplyTournamentUsecase _applyTournamentUsecase;
+  final GetTournamentDetailsUsecase _getTournamentDetailsUsecase;
   TournamentCubit(
     this._inviteModeratorsUsecase,
     this._inviteTeamsUsecase,
     this._applyTournamentUsecase,
+    this._getTournamentDetailsUsecase,
   ) : super(
         TournamentUpdate(
           tournamentEntity: null,
@@ -36,8 +39,52 @@ class TournamentCubit extends Cubit<TournamentState> {
         ),
       );
 
-  init(TournamentEntity tournamentEntity) {
-    emit(state.copyWith(tournamentEntity: tournamentEntity));
+  init(BuildContext context, TournamentEntity tournamentEntity) async {
+    emit(state.copyWith(tournamentEntity: tournamentEntity, loading: true));
+    final response = await _getTournamentDetailsUsecase(
+      state.tournamentEntity!.id,
+    );
+    response.fold(
+      (_) {
+        WidgetDecider.showSnackBar(
+          context,
+          "Couldn't fetch tournament details",
+        );
+        emit(
+          state.copyWith(
+            loading: false,
+            tournamentEntity: state.tournamentEntity,
+          ),
+        );
+      },
+      (response) {
+        if (!response.success) {
+          WidgetDecider.showSnackBar(
+            context,
+            response.errorMessage ?? "Couldn't fetch tournament details",
+          );
+          emit(
+            state.copyWith(
+              loading: false,
+              tournamentEntity: state.tournamentEntity,
+            ),
+          );
+        } else {
+          emit(
+            state.copyWith(
+              loading: false,
+              tournamentEntity: state.tournamentEntity!.copyWith(
+                moderators: response.tournamentEntity!.moderators,
+                venues: response.tournamentEntity!.venues,
+                teams: response.tournamentEntity!.teams,
+                groups: response.tournamentEntity!.groups,
+                matches: response.tournamentEntity!.matches,
+              ),
+            ),
+          );
+        }
+      },
+    );
   }
 
   void changeMainTab(int index) {

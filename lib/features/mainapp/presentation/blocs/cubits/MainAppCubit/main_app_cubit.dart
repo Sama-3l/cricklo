@@ -222,7 +222,6 @@ class MainAppCubit extends Cubit<MainAppState> {
         loading: false,
       ),
     );
-    print(state.tournamentLoading);
     final response = await _getAllTournamentsUsecase(NoParams());
     response.fold(
       (_) {

@@ -1,4 +1,5 @@
 import 'package:cricklo/core/utils/common/secondary_button.dart';
+import 'package:cricklo/core/utils/constants/global_variables.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/home/presentation/widgets/section_header.dart';
 import 'package:cricklo/features/tournament/presentation/blocs/cubits/TournamentCubit/tournament_cubit.dart';
@@ -17,19 +18,21 @@ class PointsPage extends StatelessWidget {
       padding: const EdgeInsets.only(top: 24.0),
       child: Column(
         children: [
-          Row(
-            children: [
-              const Spacer(),
+          if (state.tournamentEntity!.organizerId ==
+              GlobalVariables.user!.profileId)
+            Row(
+              children: [
+                const Spacer(),
 
-              Padding(
-                padding: const EdgeInsets.only(right: 16.0),
-                child: SecondaryButton(
-                  onTap: () => cubit.addGroup(),
-                  title: "Create Group",
+                Padding(
+                  padding: const EdgeInsets.only(right: 16.0),
+                  child: SecondaryButton(
+                    onTap: () => cubit.addGroup(),
+                    title: "Create Group",
+                  ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            ),
           const SizedBox(height: 16),
           state.tournamentEntity == null ||
                   state.tournamentEntity!.groups.isEmpty

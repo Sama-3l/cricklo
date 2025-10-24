@@ -143,9 +143,9 @@ class TournamentModel {
     };
   }
 
-  factory TournamentModel.fromMap(Map<String, dynamic> map) {
+  factory TournamentModel.fromJson(Map<String, dynamic> map) {
     MatchType matchType = MatchType.t10;
-    final format = map["matchType"] as String?;
+    final format = map["format"] as String?;
     if (format != null) {
       switch (format) {
         case "T10":
@@ -198,9 +198,12 @@ class TournamentModel {
       endDateDateTime.second,
     );
     return TournamentModel(
-      organizerId: map['organizerId'] as String? ?? "",
+      organizerId:
+          map['organizerProfileId'] as String? ??
+          map['organizer']['profileId'] as String? ??
+          "",
       id: map['tournamentId'] as String,
-      name: map['name'] as String,
+      name: map['name'] as String? ?? map['tournamentName'] as String,
       banner: map['banner'] as String,
       inviteDeadline: inviteDeadline,
       startDate: startDate,
@@ -210,7 +213,7 @@ class TournamentModel {
           : TournamentType.values
                 .where((e) => e.title.toUpperCase() == map['tournamentType'])
                 .first,
-      spotsLeft: map['spotsLeft'] as int,
+      spotsLeft: map['spotsLeft'] as int? ?? 0,
       matchType: matchType,
       ballType: BallType.leather,
       overs: (map['format'] as String).toLowerCase() == "odi"
@@ -222,7 +225,7 @@ class TournamentModel {
           : (map['format'] as String).toLowerCase() == "t30"
           ? 30
           : 0,
-      maxTeams: map['maxTeams'] as int,
+      maxTeams: map['maxTeams'] as int? ?? 0,
       moderators: map['moderators'] == null
           ? []
           : List<SearchUserModel>.from(
