@@ -1,4 +1,5 @@
 import 'package:cricklo/core/utils/common/secondary_button.dart';
+import 'package:cricklo/core/utils/constants/global_variables.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/tournament/domain/entities/tournament_team_entity.dart';
 import 'package:cricklo/features/tournament/presentation/blocs/cubits/TournamentCubit/tournament_cubit.dart';
@@ -31,21 +32,32 @@ class PointsTable extends StatelessWidget {
                       color: ColorsConstants.defaultBlack,
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  SecondaryButton(
-                    title: "Add Team",
-                    onTap: () async {
-                      final selectedTeams = await showModalBottomSheet(
-                        context: context,
-                        isScrollControlled: true,
-                        builder: (context) => AddTeamToGroupBottomSheet(
-                          allTeams: state.tournamentEntity!.teams,
-                        ),
-                      );
-                      cubit.addTeamToGroup(selectedTeams, groupIndex);
-                    },
-                    color: ColorsConstants.defaultBlack,
-                  ),
+                  if (state.tournamentEntity!.organizerId ==
+                      GlobalVariables.user!.profileId) ...[
+                    const SizedBox(height: 8),
+                    SecondaryButton(
+                      title: "Add Team",
+                      onTap: () async {
+                        final selectedTeams = await showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          builder: (context) => AddTeamToGroupBottomSheet(
+                            allTeams: state.tournamentEntity!.teams,
+                          ),
+                        );
+                        if (selectedTeams != null &&
+                            (selectedTeams as List<TournamentTeamEntity>)
+                                .isNotEmpty) {
+                          cubit.addTeamToGroup(
+                            context,
+                            selectedTeams,
+                            groupIndex,
+                          );
+                        }
+                      },
+                      color: ColorsConstants.defaultBlack,
+                    ),
+                  ],
                 ],
               ),
             ),

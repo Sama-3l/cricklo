@@ -201,4 +201,56 @@ class TournamentRepoImpl extends TournamentRepo {
       return Left(ServerFailure());
     }
   }
+
+  @override
+  Future<Either<Failure, InviteResponseResponseEntity>> addToGroup(
+    String tournamentId,
+    Map<String, dynamic> body,
+  ) async {
+    try {
+      final response = await _datasourceRemote.addToGroup(tournamentId, body);
+      return Right(response.toEntity());
+    } on DioException catch (e) {
+      final data = e.response?.data;
+
+      final code = data?['error']?['code'];
+      final message = data?['error']?['message'];
+
+      return Right(
+        InviteResponseResponseEntity(
+          success: false,
+          message: message,
+          errorCode: code,
+        ),
+      );
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, InviteResponseResponseEntity>> deleteGroup(
+    String tournamentId,
+    Map<String, dynamic> body,
+  ) async {
+    try {
+      final response = await _datasourceRemote.deleteGroup(tournamentId, body);
+      return Right(response.toEntity());
+    } on DioException catch (e) {
+      final data = e.response?.data;
+
+      final code = data?['error']?['code'];
+      final message = data?['error']?['message'];
+
+      return Right(
+        InviteResponseResponseEntity(
+          success: false,
+          message: message,
+          errorCode: code,
+        ),
+      );
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
 }

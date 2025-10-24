@@ -76,7 +76,7 @@ class _AddTeamToGroupBottomSheetState extends State<AddTeamToGroupBottomSheet> {
                 body: state.searchResults.isEmpty
                     ? Center(
                         child: Text(
-                          "No Teams Yet",
+                          "No Accepted Teams Yet",
                           style: TextStyles.poppinsSemiBold.copyWith(
                             fontSize: 24,
                             letterSpacing: -1.2,

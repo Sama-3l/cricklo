@@ -30,4 +30,12 @@ abstract class TournamentRepo {
     String tournamentId,
     Map<String, dynamic> body,
   );
+  Future<Either<Failure, InviteResponseResponseEntity>> addToGroup(
+    String tournamentId,
+    Map<String, dynamic> body,
+  );
+  Future<Either<Failure, InviteResponseResponseEntity>> deleteGroup(
+    String tournamentId,
+    Map<String, dynamic> body,
+  );
 }

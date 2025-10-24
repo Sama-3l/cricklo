@@ -67,9 +67,11 @@ import 'package:cricklo/features/teams/presentation/blocs/cubits/SearchPlayersCu
 import 'package:cricklo/features/teams/presentation/blocs/cubits/TeamPageCubit/team_page_cubit.dart';
 import 'package:cricklo/features/tournament/data/datasource/tournament_datasource_remote.dart';
 import 'package:cricklo/features/tournament/data/repo/tournament_repo_impl.dart';
+import 'package:cricklo/features/tournament/data/usecases/add_team_to_group_usecase.dart';
 import 'package:cricklo/features/tournament/data/usecases/apply_tournament_usecase.dart';
 import 'package:cricklo/features/tournament/data/usecases/create_group_usecase.dart';
 import 'package:cricklo/features/tournament/data/usecases/create_tournament_usecase.dart';
+import 'package:cricklo/features/tournament/data/usecases/delete_group_usecase.dart';
 import 'package:cricklo/features/tournament/data/usecases/get_tournament_details_usecase.dart';
 import 'package:cricklo/features/tournament/data/usecases/invite_moderators_usecase.dart';
 import 'package:cricklo/features/tournament/data/usecases/invite_teams_usecase.dart';
@@ -418,6 +420,12 @@ void _tournamentDependencies() {
   sl.registerLazySingleton<CreateGroupUsecase>(
     () => CreateGroupUsecase(sl<TournamentRepo>()),
   );
+  sl.registerLazySingleton<AddTeamToGroupUsecase>(
+    () => AddTeamToGroupUsecase(sl<TournamentRepo>()),
+  );
+  sl.registerLazySingleton<DeleteGroupUsecase>(
+    () => DeleteGroupUsecase(sl<TournamentRepo>()),
+  );
   //cubits
   sl.registerFactory<CreateTournamentCubit>(
     () => CreateTournamentCubit(sl<CreateTournamentUsecase>()),
@@ -429,6 +437,8 @@ void _tournamentDependencies() {
       sl<ApplyTournamentUsecase>(),
       sl<GetTournamentDetailsUsecase>(),
       sl<CreateGroupUsecase>(),
+      sl<AddTeamToGroupUsecase>(),
+      sl<DeleteGroupUsecase>(),
     ),
   );
   sl.registerFactory<FetchUserTeamsCubit>(

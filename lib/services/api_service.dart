@@ -167,6 +167,18 @@ abstract class ApiService {
     @Body() Map<String, dynamic> body,
   );
 
+  @POST(ApiEndpointConstants.tournamentDeleteGroup)
+  Future<InviteResponseResponseModel> tournamentDeleteGroup(
+    @Path("tournamentId") String tournamentId,
+    @Body() Map<String, dynamic> body,
+  );
+
+  @POST(ApiEndpointConstants.tournamentAddToGroup)
+  Future<InviteResponseResponseModel> tournamentAddToGroup(
+    @Path("tournamentId") String tournamentId,
+    @Body() Map<String, dynamic> body,
+  );
+
   @POST(ApiEndpointConstants.tournamentInviteResponse)
   Future<InviteResponseResponseModel> tournamentInviteResponse(
     @Path("tournamentId") String tournamentId,

@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:cricklo/core/utils/constants/enums.dart';
 import 'package:cricklo/features/tournament/domain/entities/tournament_team_entity.dart';
 import 'package:meta/meta.dart';
 
@@ -9,7 +10,18 @@ class AddTeamToGroupCubit extends Cubit<AddTeamToGroupState> {
     : super(AddTeamToGroupUpdate(searchResults: [], loading: false));
 
   init(List<TournamentTeamEntity> teams) {
-    emit(AddTeamToGroupUpdate(searchResults: teams, loading: false));
+    emit(
+      AddTeamToGroupUpdate(
+        searchResults: teams
+            .where(
+              (e) =>
+                  e.inviteStatus != InviteStatus.pending &&
+                  e.inviteStatus != InviteStatus.invited,
+            )
+            .toList(),
+        loading: false,
+      ),
+    );
   }
 
   void searchTeams(String query, List<TournamentTeamEntity> allTeams) {

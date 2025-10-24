@@ -42,4 +42,7 @@ class ApiEndpointConstants {
   static const tournamentApply = '/tournament/{tournamentId}/apply/team';
   static const tournamentDetails = '/tournament/{tournamentId}';
   static const tournamentCreateGroup = 'tournament/{tournamentId}/create-group';
+  static const tournamentAddToGroup = 'tournament/{tournamentId}/add-to-group';
+  static const tournamentDeleteGroup =
+      '/tournament/delete-group/{tournamentId}';
 }

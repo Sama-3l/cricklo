@@ -77,25 +77,28 @@ class PointsPage extends StatelessWidget {
                                   showIcon: false,
                                 ),
                               ),
-                              InkWell(
-                                onTap: () => cubit.removeGroup(index),
-                                borderRadius: BorderRadius.circular(24),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      width: 1,
-                                      color: ColorsConstants.defaultBlack,
+                              if (state.tournamentEntity!.organizerId ==
+                                  GlobalVariables.user!.profileId)
+                                InkWell(
+                                  onTap: () =>
+                                      cubit.removeGroup(context, index),
+                                  borderRadius: BorderRadius.circular(24),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        width: 1,
+                                        color: ColorsConstants.defaultBlack,
+                                      ),
+                                      borderRadius: BorderRadius.circular(24),
                                     ),
-                                    borderRadius: BorderRadius.circular(24),
-                                  ),
-                                  padding: EdgeInsets.all(4),
-                                  child: Icon(
-                                    Icons.delete,
-                                    color: ColorsConstants.defaultBlack,
-                                    size: 12,
+                                    padding: EdgeInsets.all(4),
+                                    child: Icon(
+                                      Icons.delete,
+                                      color: ColorsConstants.defaultBlack,
+                                      size: 12,
+                                    ),
                                   ),
                                 ),
-                              ),
                             ],
                           ),
                           PointsTable(
