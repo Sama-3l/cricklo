@@ -130,7 +130,7 @@ class MatchModel {
         case "ODI":
           matchType = MatchType.odi;
           break;
-        case "Test":
+        case "TEST":
           matchType = MatchType.test;
           break;
         default:

@@ -30,7 +30,7 @@ class CreateMatchUsecaseEntity {
       'time':
           "${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}",
       'overs': overs,
-      'format': matchType,
+      'format': matchType.toUpperCase(),
       'teamAId': teamA,
 
       'teamBId': teamB,
