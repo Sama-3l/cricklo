@@ -32,45 +32,7 @@ class _CreateMatchState extends State<CreateMatch> {
   final FocusNode venueNode = FocusNode();
   final FocusNode areaNode = FocusNode();
   bool commonPlayersFound = false;
-
-  bool invalidMatchSetup() {
-    final sameTeam = teamA != null && teamB != null && teamA!.id == teamB!.id;
-
-    // ✅ Check for overlapping players
-    bool hasCommonPlayers = false;
-    if (teamA?.players != null && teamB?.players != null) {
-      final teamAIds = teamA!.players
-          .where((e) => e.teamRole != TeamRole.sub)
-          .map((p) => p.playerId)
-          .toSet();
-      final teamBIds = teamB!.players
-          .where((e) => e.teamRole != TeamRole.sub)
-          .map((p) => p.playerId)
-          .toSet();
-
-      hasCommonPlayers = teamAIds.intersection(teamBIds).isNotEmpty;
-    }
-    if (hasCommonPlayers) {
-      WidgetsFlutterBinding.ensureInitialized().addPostFrameCallback((_) {
-        setState(() {
-          commonPlayersFound = true;
-        });
-      });
-    }
-
-    return teamA == null ||
-        teamB == null ||
-        sameTeam ||
-        hasCommonPlayers ||
-        venueLocation.text.isEmpty ||
-        venueArea.text.isEmpty ||
-        scorer == null ||
-        _selectedDate == null ||
-        _selectedTime == null ||
-        _selectedFormat == null ||
-        venueArea.text.split(', ').length < 3;
-  }
-
+  bool sameTeam = false;
   DateTime? _selectedDate;
   TeamEntity? teamA;
   TeamEntity? teamB;
@@ -131,7 +93,18 @@ class _CreateMatchState extends State<CreateMatch> {
               color: ColorsConstants.defaultWhite,
               width: double.infinity,
               child: PrimaryButton(
-                disabled: invalidMatchSetup(),
+                disabled:
+                    teamA == null ||
+                    teamB == null ||
+                    sameTeam ||
+                    commonPlayersFound ||
+                    venueLocation.text.isEmpty ||
+                    venueArea.text.isEmpty ||
+                    scorer == null ||
+                    _selectedDate == null ||
+                    _selectedTime == null ||
+                    _selectedFormat == null ||
+                    venueArea.text.split(', ').length < 3,
                 child: state.loading
                     ? SizedBox(
                         height: 24,
@@ -241,6 +214,32 @@ class _CreateMatchState extends State<CreateMatch> {
                                     if (teamA != null) {
                                       setState(() {
                                         this.teamA = teamA.first;
+                                        sameTeam =
+                                            this.teamA != null &&
+                                            teamB != null &&
+                                            this.teamA!.id == teamB!.id;
+
+                                        if (this.teamA?.players != null &&
+                                            teamB?.players != null) {
+                                          final teamAIds = this.teamA!.players
+                                              .where(
+                                                (e) =>
+                                                    e.teamRole != TeamRole.sub,
+                                              )
+                                              .map((p) => p.playerId)
+                                              .toSet();
+                                          final teamBIds = teamB!.players
+                                              .where(
+                                                (e) =>
+                                                    e.teamRole != TeamRole.sub,
+                                              )
+                                              .map((p) => p.playerId)
+                                              .toSet();
+
+                                          commonPlayersFound = teamAIds
+                                              .intersection(teamBIds)
+                                              .isNotEmpty;
+                                        }
                                       });
                                     }
                                   },

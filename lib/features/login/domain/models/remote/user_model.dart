@@ -12,6 +12,8 @@ class UserModel {
   final String? phoneNumber;
   final String? countryCode;
   final LocationEntity location;
+  final int followers;
+  final int following;
   final PlayerType playerType;
   final BatterType? batterType;
   final BowlerType? bowlerType;
@@ -25,6 +27,8 @@ class UserModel {
     this.phoneNumber,
     this.countryCode = "+91",
     required this.location,
+    required this.followers,
+    required this.following,
     this.playerType = PlayerType.batter,
     this.batterType,
     this.bowlerType,
@@ -43,6 +47,8 @@ class UserModel {
       playerType: entity.playerType,
       batterType: entity.batterType,
       bowlerType: entity.bowlerType,
+      followers: entity.followers,
+      following: entity.following,
     );
   }
 
@@ -117,6 +123,8 @@ class UserModel {
       playerType: playerType,
       batterType: batterType,
       bowlerType: bowlerType,
+      followers: data['followersCount'] as int? ?? 0,
+      following: data['followingCount'] as int? ?? 0,
     );
   }
 
@@ -133,6 +141,8 @@ class UserModel {
       bowlerType: bowlerType,
       unreadNotifications: unreadNotifications,
       profilePic: profilePic,
+      followers: followers,
+      following: following,
     );
   }
 
@@ -164,6 +174,8 @@ class UserModel {
     PlayerType? playerType,
     BatterType? batterType,
     BowlerType? bowlerType,
+    int? followers,
+    int? following,
   }) {
     return UserModel(
       profileId: profileId ?? this.profileId,
@@ -174,6 +186,8 @@ class UserModel {
       phoneNumber: phoneNumber ?? this.phoneNumber,
       countryCode: countryCode ?? this.countryCode,
       location: location ?? this.location,
+      followers: followers ?? this.followers,
+      following: following ?? this.following,
       playerType: playerType ?? this.playerType,
       batterType: batterType ?? this.batterType,
       bowlerType: bowlerType ?? this.bowlerType,

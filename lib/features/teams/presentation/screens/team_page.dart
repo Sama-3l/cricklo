@@ -20,7 +20,7 @@ class TeamPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => sl<TeamPageCubit>()..init(team),
+      create: (context) => sl<TeamPageCubit>()..init(context, team),
       child: BlocBuilder<TeamPageCubit, TeamPageState>(
         builder: (context, state) {
           final cubit = context.read<TeamPageCubit>();

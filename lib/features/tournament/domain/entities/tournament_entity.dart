@@ -20,6 +20,7 @@ class TournamentEntity {
   final MatchType matchType;
   final BallType ballType;
   final int overs;
+  final int followers;
   final List<SearchUserEntity> moderators;
   final List<LocationEntity> venues;
   final List<TournamentTeamEntity> teams;
@@ -37,6 +38,7 @@ class TournamentEntity {
     required this.endDate,
     required this.matchType,
     required this.maxTeams,
+    required this.followers,
     required this.tournamentType,
     required this.ballType,
     required this.overs,
@@ -61,6 +63,7 @@ class TournamentEntity {
     int? maxTeams,
     int? spotsLeft,
     int? overs,
+    int? followers,
     List<SearchUserEntity>? moderators,
     List<LocationEntity>? venues,
     List<TournamentTeamEntity>? teams,
@@ -78,6 +81,7 @@ class TournamentEntity {
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
       spotsLeft: spotsLeft ?? this.spotsLeft,
+      followers: followers ?? this.followers,
       tournamentType: tournamentType ?? this.tournamentType,
       matchType: matchType ?? this.matchType,
       overs: overs ?? this.overs,

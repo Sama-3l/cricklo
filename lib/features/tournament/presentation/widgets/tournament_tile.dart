@@ -50,7 +50,7 @@ class TournamentTile extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          "Hello World where are you old friend",
+                          tournamentEntity.name,
                           style: TextStyles.poppinsSemiBold.copyWith(
                             fontSize: 20,
                             letterSpacing: -1,

@@ -8,6 +8,7 @@ class TeamModel {
   final String name;
   final String? inviteStatus;
   final String teamLogo;
+  final int followers;
   final String teamBanner;
   final List<PlayerModel> players;
   final LocationModel location;
@@ -17,6 +18,7 @@ class TeamModel {
     required this.id,
     required this.name,
     required this.teamLogo,
+    required this.followers,
     required this.inviteStatus,
     required this.teamBanner,
     this.players = const [],
@@ -28,6 +30,7 @@ class TeamModel {
     String? id,
     String? name,
     String? teamLogo,
+    int? followers,
     String? teamBanner,
     String? inviteStatus,
     List<PlayerModel>? players,
@@ -39,6 +42,7 @@ class TeamModel {
       id: id ?? this.id,
       name: name ?? this.name,
       teamLogo: teamLogo ?? this.teamLogo,
+      followers: followers ?? this.followers,
       teamBanner: teamBanner ?? this.teamBanner,
       players: players ?? this.players,
       location: location ?? this.location,
@@ -51,6 +55,7 @@ class TeamModel {
       'logo': teamLogo,
       'banner': teamBanner,
       'location': location.toJson(),
+      'followers': followers,
     };
   }
 
@@ -62,6 +67,7 @@ class TeamModel {
       name: team.name,
       teamLogo: team.teamLogo,
       teamBanner: team.teamBanner,
+      followers: team.followers,
       location: LocationModel.fromEntity(team.location),
     );
   }
@@ -89,6 +95,7 @@ class TeamModel {
               'city': map['city'],
               'state': map['state'],
             }),
+      followers: map['followersCount'] as int? ?? 0,
     );
   }
 
@@ -102,6 +109,7 @@ class TeamModel {
       teamBanner: teamBanner,
       players: players.map((e) => e.toEntity()).toList(),
       location: location.toEntity(),
+      followers: followers,
     );
   }
 }

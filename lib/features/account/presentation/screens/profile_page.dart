@@ -1,5 +1,5 @@
 import 'package:cricklo/core/utils/constants/theme.dart';
-import 'package:cricklo/features/account/presentation/blocs/cubits/cubit/profile_page_cubit.dart';
+import 'package:cricklo/features/account/presentation/blocs/cubits/ProfilePageCubit/profile_page_cubit.dart';
 import 'package:cricklo/features/account/presentation/screens/player_overview.dart';
 import 'package:cricklo/features/account/presentation/screens/statistics.dart';
 import 'package:cricklo/features/account/presentation/screens/teams_grid.dart';
@@ -90,7 +90,10 @@ class ProfilePage extends StatelessWidget {
                       index: state.selectedMainTab,
                       children: [
                         // Player Overview
-                        PlayerOverview(userEntity: state.userEntity!),
+                        PlayerOverview(
+                          userEntity: state.userEntity!,
+                          onFollow: () => cubit.followButton(context),
+                        ),
 
                         StatisticsPage(
                           selectedStatisticsTab: state.selectedStatisticsTab,

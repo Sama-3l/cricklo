@@ -70,6 +70,7 @@ class TournamentTeamEntity {
   TeamEntity toTeamEntity() {
     return TeamEntity(
       uuid: id,
+      followers: 0,
       id: id,
       name: name,
       inviteStatus: inviteStatus.title,

@@ -13,6 +13,7 @@ class TeamEntity {
   final File? bannerFile;
   final String teamLogo;
   final String teamBanner;
+  int followers;
   final List<PlayerEntity> players;
   final LocationEntity location;
 
@@ -24,7 +25,7 @@ class TeamEntity {
     this.logoFile,
     this.bannerFile,
     required this.teamLogo,
-
+    required this.followers,
     required this.teamBanner,
     required this.players,
     required this.location,
@@ -37,6 +38,7 @@ class TeamEntity {
     String? name,
     File? logoFile,
     File? bannerFile,
+    int? followers,
     String? teamLogo,
     String? teamBanner,
     List<PlayerEntity>? players,
@@ -46,6 +48,7 @@ class TeamEntity {
       uuid: uuid ?? this.uuid,
       id: id ?? this.id,
       inviteStatus: inviteStatus ?? this.inviteStatus,
+      followers: followers ?? this.followers,
       name: name ?? this.name,
       logoFile: logoFile ?? this.logoFile,
       bannerFile: bannerFile ?? this.bannerFile,

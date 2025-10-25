@@ -2,6 +2,7 @@ part of 'profile_page_cubit.dart';
 
 @immutable
 sealed class ProfilePageState {
+  final bool follow;
   final bool loading;
   final int selectedMainTab;
   final int selectedStatisticsTab;
@@ -10,6 +11,7 @@ sealed class ProfilePageState {
   final List<TeamEntity> teams;
 
   const ProfilePageState({
+    this.follow = false,
     this.loading = false,
     this.selectedMainTab = 0,
     this.selectedStatisticsTab = 0,
@@ -20,6 +22,7 @@ sealed class ProfilePageState {
 
   ProfilePageUpdate copyWith({
     bool? loading,
+    bool? follow,
     int? selectedMainTab,
     int? selectedStatisticsTab,
     UserEntity? userEntity,
@@ -28,6 +31,7 @@ sealed class ProfilePageState {
   }) {
     return ProfilePageUpdate(
       loading: loading ?? this.loading,
+      follow: follow ?? this.follow,
       teams: teams ?? this.teams,
       selectedMainTab: selectedMainTab ?? this.selectedMainTab,
       selectedStatisticsTab:
@@ -42,6 +46,7 @@ final class ProfilePageUpdate extends ProfilePageState {
   const ProfilePageUpdate({
     required super.teams,
     super.loading,
+    super.follow,
     super.selectedMainTab,
     super.selectedStatisticsTab,
     super.userEntity,

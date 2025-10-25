@@ -24,4 +24,6 @@ class Routes {
   static const addTournamentVenues = "/add-tournament-venue";
   static const addTournamentModerators = "/add-tournament-moderators";
   static const tournamentPage = "/tournament-page";
+
+  static const followersPage = "/followers-page";
 }

@@ -6,9 +6,11 @@ import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/teams/domain/entities/search_user_entity.dart';
 import 'package:cricklo/features/teams/presentation/widgets/search_players_bottom_sheet.dart';
 import 'package:cricklo/features/tournament/presentation/blocs/cubits/TournamentCubit/tournament_cubit.dart';
+import 'package:cricklo/routes/app_route_constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
 class TournamentModerators extends StatelessWidget {
@@ -157,74 +159,80 @@ class TournamentModerators extends StatelessWidget {
                 itemCount: state.tournamentEntity!.moderators.length,
                 itemBuilder: (context, index) => Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: Row(
-                    children: [
-                      CircleAvatar(
-                        radius: 24,
-                        backgroundColor: ColorsConstants.accentOrange
-                            .withValues(alpha: 0.2),
-                        backgroundImage:
-                            state
-                                    .tournamentEntity!
-                                    .moderators[index]
-                                    .profilePic !=
-                                null
-                            ? CachedNetworkImageProvider(
+                  child: InkWell(
+                    onTap: () => GoRouter.of(context).push(
+                      Routes.profilePage,
+                      extra: state.tournamentEntity!.moderators[index].playerId,
+                    ),
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                          radius: 24,
+                          backgroundColor: ColorsConstants.accentOrange
+                              .withValues(alpha: 0.2),
+                          backgroundImage:
+                              state
+                                      .tournamentEntity!
+                                      .moderators[index]
+                                      .profilePic !=
+                                  null
+                              ? CachedNetworkImageProvider(
+                                  state
+                                      .tournamentEntity!
+                                      .moderators[index]
+                                      .profilePic!,
+                                )
+                              : null,
+                          child: Icon(
+                            CupertinoIcons.person_fill,
+                            size: 16,
+                            color: ColorsConstants.defaultBlack,
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                state.tournamentEntity!.moderators[index].name,
+                                style: TextStyles.poppinsMedium.copyWith(
+                                  fontSize: 16,
+                                  color: ColorsConstants.defaultBlack,
+                                  letterSpacing: -0.8,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
                                 state
                                     .tournamentEntity!
                                     .moderators[index]
-                                    .profilePic!,
-                              )
-                            : null,
-                        child: Icon(
-                          CupertinoIcons.person_fill,
-                          size: 16,
-                          color: ColorsConstants.defaultBlack,
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              state.tournamentEntity!.moderators[index].name,
-                              style: TextStyles.poppinsMedium.copyWith(
-                                fontSize: 16,
-                                color: ColorsConstants.defaultBlack,
-                                letterSpacing: -0.8,
+                                    .playerId,
+                                style: TextStyles.poppinsRegular.copyWith(
+                                  fontSize: 10,
+                                  color: ColorsConstants.defaultBlack,
+                                  letterSpacing: -0.4,
+                                ),
                               ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              state
-                                  .tournamentEntity!
-                                  .moderators[index]
-                                  .playerId,
-                              style: TextStyles.poppinsRegular.copyWith(
-                                fontSize: 10,
-                                color: ColorsConstants.defaultBlack,
-                                letterSpacing: -0.4,
-                              ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
 
-                      Text(
-                        state
-                            .tournamentEntity!
-                            .moderators[index]
-                            .inviteStatus!
-                            .title,
-                        style: TextStyles.poppinsMedium.copyWith(
-                          fontSize: 12,
-                          color: ColorsConstants.defaultBlack,
-                          letterSpacing: -0.5,
+                        Text(
+                          state
+                              .tournamentEntity!
+                              .moderators[index]
+                              .inviteStatus!
+                              .title,
+                          style: TextStyles.poppinsMedium.copyWith(
+                            fontSize: 12,
+                            color: ColorsConstants.defaultBlack,
+                            letterSpacing: -0.5,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),

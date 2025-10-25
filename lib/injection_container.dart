@@ -3,7 +3,14 @@ import 'package:cricklo/core/utils/constants/global_variables.dart';
 import 'package:cricklo/features/account/data/usecases/get_profile_usecase.dart';
 import 'package:cricklo/features/account/data/usecases/get_teams_usecase.dart';
 import 'package:cricklo/features/account/presentation/blocs/cubits/AccountPageCubit/account_page_cubit.dart';
-import 'package:cricklo/features/account/presentation/blocs/cubits/cubit/profile_page_cubit.dart';
+import 'package:cricklo/features/account/presentation/blocs/cubits/ProfilePageCubit/profile_page_cubit.dart';
+import 'package:cricklo/features/follow/data/datasource/follow_datasource_remote.dart';
+import 'package:cricklo/features/follow/data/repo/follow_repo_impl.dart';
+import 'package:cricklo/features/follow/data/usecases/follow_usecase.dart';
+import 'package:cricklo/features/follow/data/usecases/get_followers_usecase.dart';
+import 'package:cricklo/features/follow/data/usecases/unfollow_usecase.dart';
+import 'package:cricklo/features/follow/domain/repo/follow_repo.dart';
+import 'package:cricklo/features/follow/presentation/blocs/cubits/cubit/followers_page_cubit.dart';
 import 'package:cricklo/features/login/data/datasource/login_remote_datasource.dart';
 import 'package:cricklo/features/login/data/repo/auth_repo_impl.dart';
 import 'package:cricklo/features/login/data/usecases/login_usecase.dart';
@@ -154,6 +161,7 @@ Future<void> initializeDependencies() async {
   _matchDependencies();
   _scorerMatchDependencies();
   _tournamentDependencies();
+  _followDependencies();
 }
 
 void _authDependencies() {
@@ -223,7 +231,12 @@ void _mainAppDependencies() {
     ),
   );
   sl.registerFactory<ProfilePageCubit>(
-    () => ProfilePageCubit(sl<GetTeamsUsecase>(), sl<GetProfileUsecase>()),
+    () => ProfilePageCubit(
+      sl<GetTeamsUsecase>(),
+      sl<GetProfileUsecase>(),
+      sl<FollowUsecase>(),
+      sl<UnFollowUsecase>(),
+    ),
   );
 }
 
@@ -270,7 +283,11 @@ void _teamDependencies() {
     () => SearchTeamCubit(sl<SearchTeamsUseCase>()),
   );
   sl.registerFactory<TeamPageCubit>(
-    () => TeamPageCubit(sl<GetTeamDetailsUsecase>()),
+    () => TeamPageCubit(
+      sl<GetTeamDetailsUsecase>(),
+      sl<FollowUsecase>(),
+      sl<UnFollowUsecase>(),
+    ),
   );
 }
 
@@ -448,5 +465,29 @@ void _tournamentDependencies() {
   );
   sl.registerFactory<FetchUserTeamsCubit>(
     () => FetchUserTeamsCubit(sl<GetTeamsUsecase>()),
+  );
+}
+
+void _followDependencies() {
+  sl.registerLazySingleton<FollowDatasourceRemote>(
+    () => FollowDatasourceRemoteImpl(sl<ApiService>()),
+  );
+  // repo
+  sl.registerLazySingleton<FollowRepo>(
+    () => FollowRepoImpl(sl<FollowDatasourceRemote>()),
+  );
+  //use-cases
+  sl.registerLazySingleton<FollowUsecase>(
+    () => FollowUsecase(sl<FollowRepo>()),
+  );
+  sl.registerLazySingleton<UnFollowUsecase>(
+    () => UnFollowUsecase(sl<FollowRepo>()),
+  );
+  sl.registerLazySingleton<GetFollowersUsecase>(
+    () => GetFollowersUsecase(sl<FollowRepo>()),
+  );
+  //cubit
+  sl.registerFactory<FollowerPageCubit>(
+    () => FollowerPageCubit(sl<GetFollowersUsecase>()),
   );
 }

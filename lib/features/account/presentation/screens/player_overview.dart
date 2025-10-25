@@ -1,4 +1,5 @@
 import 'package:cricklo/core/utils/common/primary_button.dart';
+import 'package:cricklo/core/utils/constants/global_variables.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/account/presentation/widgets/profile_header_information.dart';
 import 'package:cricklo/features/account/presentation/widgets/recent_form_stats.dart';
@@ -9,9 +10,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class PlayerOverview extends StatefulWidget {
-  const PlayerOverview({super.key, required this.userEntity});
+  const PlayerOverview({super.key, required this.userEntity, this.onFollow});
 
   final UserEntity userEntity;
+  final Function()? onFollow;
 
   @override
   State<PlayerOverview> createState() => _PlayerOverviewState();
@@ -33,24 +35,29 @@ class _PlayerOverviewState extends State<PlayerOverview> {
                   const SizedBox(height: 16),
                   Row(
                     children: [
-                      Expanded(
-                        child: PrimaryButton(
-                          padding: EdgeInsets.symmetric(vertical: 12),
-                          disabled: false,
-                          onPress: () {},
-                          noShadow: true,
-                          radius: 16,
-                          child: Text(
-                            "Follow",
-                            style: TextStyles.poppinsSemiBold.copyWith(
-                              fontSize: 10,
-                              letterSpacing: -0.5,
-                              color: ColorsConstants.defaultWhite,
+                      if (widget.userEntity.profileId !=
+                          GlobalVariables.user!.profileId) ...[
+                        Expanded(
+                          child: PrimaryButton(
+                            padding: EdgeInsets.symmetric(vertical: 12),
+                            disabled: false,
+                            onPress: () => widget.onFollow == null
+                                ? {}
+                                : widget.onFollow!(),
+                            noShadow: true,
+                            radius: 16,
+                            child: Text(
+                              "Follow",
+                              style: TextStyles.poppinsSemiBold.copyWith(
+                                fontSize: 10,
+                                letterSpacing: -0.5,
+                                color: ColorsConstants.defaultWhite,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 4),
+                        const SizedBox(width: 4),
+                      ],
                       Expanded(
                         child: PrimaryButton(
                           padding: EdgeInsets.symmetric(vertical: 12),

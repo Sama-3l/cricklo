@@ -105,3 +105,13 @@ enum InviteStatus {
   final String title;
   const InviteStatus(this.title);
 }
+
+enum EntityType {
+  player("Player"),
+  team("Team"),
+  match("Match"),
+  tournament("Tournament");
+
+  final String title;
+  const EntityType(this.title);
+}

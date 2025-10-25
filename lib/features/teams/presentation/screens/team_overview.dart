@@ -28,6 +28,7 @@ class _TeamOverviewState extends State<TeamOverview> {
   int selectedTab = 0;
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<TeamPageCubit>();
     final state = context.read<TeamPageCubit>().state;
     return Padding(
       padding: const EdgeInsets.only(top: 24),
@@ -54,7 +55,10 @@ class _TeamOverviewState extends State<TeamOverview> {
                 padding: const EdgeInsets.symmetric(
                   horizontal: 16.0,
                 ).copyWith(top: 16),
-                child: ProfileHeaderInformation(team: widget.team),
+                child: ProfileHeaderInformation(
+                  team: state.team,
+                  loading: state.loading,
+                ),
               ),
               const SizedBox(height: 16),
               Padding(
@@ -65,17 +69,40 @@ class _TeamOverviewState extends State<TeamOverview> {
                       child: PrimaryButton(
                         padding: EdgeInsets.symmetric(vertical: 12),
                         disabled: false,
-                        onPress: () {},
+                        onPress: () => cubit.followButton(context),
                         noShadow: true,
                         radius: 16,
-                        child: Text(
-                          "Follow Team",
-                          style: TextStyles.poppinsSemiBold.copyWith(
-                            fontSize: 10,
-                            letterSpacing: -0.5,
-                            color: ColorsConstants.defaultWhite,
-                          ),
-                        ),
+                        color: state.follow
+                            ? ColorsConstants.defaultBlack
+                            : ColorsConstants.accentOrange,
+                        child: state.follow
+                            ? Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    "Followed",
+                                    style: TextStyles.poppinsSemiBold.copyWith(
+                                      fontSize: 10,
+                                      letterSpacing: -0.5,
+                                      color: ColorsConstants.defaultWhite,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Icon(
+                                    Icons.check_circle_outline_rounded,
+                                    color: ColorsConstants.defaultWhite,
+                                    size: 12,
+                                  ),
+                                ],
+                              )
+                            : Text(
+                                "Follow Team",
+                                style: TextStyles.poppinsSemiBold.copyWith(
+                                  fontSize: 10,
+                                  letterSpacing: -0.5,
+                                  color: ColorsConstants.defaultWhite,
+                                ),
+                              ),
                       ),
                     ),
                     const SizedBox(width: 4),

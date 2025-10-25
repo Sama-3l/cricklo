@@ -8,6 +8,8 @@ import 'package:cricklo/features/teams/domain/entities/team_entity.dart';
 import 'package:cricklo/features/tournament/domain/entities/tournament_entity.dart';
 
 final dummyCurrUser = UserEntity(
+  followers: 0,
+  following: 0,
   profileId: "P009",
   phoneNumber: "6386291080",
   name: "Raghvedra Mishra",
@@ -129,6 +131,7 @@ final PlayerEntity player8 = PlayerEntity(
 );
 
 final TeamEntity dummyTeam = TeamEntity(
+  followers: 0,
   uuid: "t002",
   inviteStatus: null,
   id: "t001",
@@ -146,6 +149,7 @@ final TeamEntity dummyTeam = TeamEntity(
 );
 
 final TeamEntity dummyTeam2 = TeamEntity(
+  followers: 0,
   uuid: "t002",
   inviteStatus: null,
   id: "t002",
@@ -425,6 +429,7 @@ final MatchEntity dummyMatchDone = MatchEntity(
 );
 
 final tournament = TournamentEntity(
+  followers: 0,
   organizerId: "",
   id: "TOUR_001",
   name: "Punjab League",

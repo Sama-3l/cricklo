@@ -19,6 +19,7 @@ class TournamentModel {
   final MatchType matchType;
   final BallType ballType;
   final int overs;
+  final int followers;
   final int maxTeams;
   final int spotsLeft;
   final List<SearchUserModel> moderators;
@@ -35,6 +36,7 @@ class TournamentModel {
     required this.inviteDeadline,
     required this.startDate,
     required this.endDate,
+    required this.followers,
     required this.ballType,
     required this.matchType,
     required this.maxTeams,
@@ -56,6 +58,7 @@ class TournamentModel {
       id: id,
       name: name,
       banner: banner,
+      followers: followers,
       inviteDeadline: inviteDeadline,
       startDate: startDate,
       endDate: endDate,
@@ -78,6 +81,7 @@ class TournamentModel {
       id: entity.id,
       name: entity.name,
       banner: entity.banner,
+      followers: entity.followers,
       inviteDeadline: entity.inviteDeadline,
       startDate: entity.startDate,
       ballType: entity.ballType,
@@ -122,6 +126,7 @@ class TournamentModel {
         'teams': teams.map((x) => x.toJson()).toList(),
         'matches': matches.map((x) => x.toJson()).toList(),
         'groups': groups.map((x) => x.toJson()).toList(),
+        'followers': followers,
       };
     }
     return <String, dynamic>{
@@ -198,6 +203,7 @@ class TournamentModel {
       endDateDateTime.second,
     );
     return TournamentModel(
+      followers: map['followersCount'] as int? ?? 0,
       organizerId:
           map['organizerProfileId'] as String? ??
           map['organizer']['profileId'] as String? ??

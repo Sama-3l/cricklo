@@ -1,5 +1,7 @@
 import 'package:cricklo/features/account/domain/models/remote/get_profile_response_model.dart';
 import 'package:cricklo/features/account/domain/models/remote/get_teams_response_model.dart';
+import 'package:cricklo/features/follow/domain/models/remote/follow_response_model.dart';
+import 'package:cricklo/features/follow/domain/models/remote/get_followers_model.dart';
 import 'package:cricklo/features/login/domain/models/remote/login_response_model.dart';
 import 'package:cricklo/features/login/domain/models/remote/set_pin_response_model.dart';
 import 'package:cricklo/features/login/domain/models/remote/user_model.dart';
@@ -189,6 +191,24 @@ abstract class ApiService {
   Future<InviteResponseResponseModel> tournamentInviteResponse(
     @Path("tournamentId") String tournamentId,
     @Path("inviteId") String inviteId,
+    @Body() Map<String, dynamic> body,
+  );
+
+  @POST(ApiEndpointConstants.follow)
+  Future<FollowResponseModel> follow(
+    @Path("entityId") String entityId,
+    @Body() Map<String, dynamic> body,
+  );
+
+  @POST(ApiEndpointConstants.unfollow)
+  Future<FollowResponseModel> unfollow(
+    @Path("entityId") String entityId,
+    @Body() Map<String, dynamic> body,
+  );
+
+  @POST(ApiEndpointConstants.followers)
+  Future<GetFollowersModel> followers(
+    @Path("entityId") String entityId,
     @Body() Map<String, dynamic> body,
   );
 }

@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cricklo/core/utils/constants/enums.dart';
 import 'package:cricklo/core/utils/constants/methods.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/account/presentation/widgets/profile_social_stats.dart';
@@ -9,10 +10,16 @@ import 'package:flutter/material.dart';
 import 'package:clipboard/clipboard.dart';
 
 class ProfileHeaderInformation extends StatelessWidget {
-  const ProfileHeaderInformation({super.key, this.user, this.team});
+  const ProfileHeaderInformation({
+    super.key,
+    this.user,
+    this.team,
+    this.loading = false,
+  });
 
   final UserEntity? user;
   final TeamEntity? team;
+  final bool loading;
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +73,25 @@ class ProfileHeaderInformation extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 4),
-                  ProfileSocialStats(stats: [0, 0, 0]),
+                  if (team != null)
+                    ProfileSocialStats(
+                      stats: [0, 0, team!.followers],
+                      heading: ["Matches", "Won", "Followers"],
+                      entityId: team!.id,
+                      entityType: EntityType.team,
+                      loading: loading,
+                    ),
+                  if (user != null)
+                    ProfileSocialStats(
+                      stats: [
+                        0,
+                        user != null ? user!.followers : 0,
+                        user != null ? user!.following : 0,
+                      ],
+                      entityId: user!.profileId,
+                      entityType: EntityType.player,
+                      loading: loading,
+                    ),
                 ],
               ),
             ),

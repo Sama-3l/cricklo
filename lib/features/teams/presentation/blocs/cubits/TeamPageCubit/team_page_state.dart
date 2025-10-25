@@ -8,6 +8,7 @@ sealed class TeamPageState {
   final int selectedPlayersTab;
   final int selectedStatsTab;
   final int selectedStatsTabTableType;
+  final bool follow;
 
   const TeamPageState({
     this.loading = false,
@@ -16,6 +17,7 @@ sealed class TeamPageState {
     required this.selectedPlayersTab,
     required this.selectedStatsTab,
     required this.selectedStatsTabTableType,
+    required this.follow,
   });
 }
 
@@ -27,5 +29,6 @@ final class TeamPageUpdate extends TeamPageState {
     required super.selectedStatsTabTableType,
     super.loading,
     required super.team,
+    required super.follow,
   });
 }

@@ -134,7 +134,7 @@ class TournamentDetailsHeader extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        "20",
+                        state.tournamentEntity!.followers.toString(),
                         style: TextStyles.poppinsSemiBold.copyWith(
                           color: ColorsConstants.defaultBlack,
                           fontSize: 16,

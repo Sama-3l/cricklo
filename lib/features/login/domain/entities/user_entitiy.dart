@@ -14,6 +14,8 @@ class UserEntity {
   final String phoneNumber;
   final String countryCode;
   final LocationEntity location;
+  int followers;
+  final int following;
   final PlayerType playerType;
   final BatterType? batterType;
   final BowlerType? bowlerType;
@@ -31,6 +33,8 @@ class UserEntity {
     required this.name,
     required this.email,
     required this.location,
+    required this.followers,
+    required this.following,
   });
 
   UserEntity copyWith({
@@ -46,6 +50,8 @@ class UserEntity {
     PlayerType? playerType,
     BatterType? batterType,
     BowlerType? bowlerType,
+    int? followers,
+    int? following,
   }) {
     return UserEntity(
       profileId: profileId ?? this.profileId,
@@ -60,6 +66,8 @@ class UserEntity {
       playerType: playerType ?? this.playerType,
       batterType: batterType ?? this.batterType,
       bowlerType: bowlerType ?? this.bowlerType,
+      followers: followers ?? this.followers,
+      following: following ?? this.following,
     );
   }
 }
