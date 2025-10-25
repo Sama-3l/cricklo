@@ -6,6 +6,7 @@ class SearchUserEntity {
   final String id;
   final String playerId;
   final String name;
+  final String? profilePic;
   final PlayerType playerType;
   final BatterType? batterType;
   final BowlerType? bowlerType;
@@ -15,6 +16,7 @@ class SearchUserEntity {
     required this.id,
     required this.playerId,
     required this.name,
+    this.profilePic,
     required this.playerType,
     this.batterType,
     this.bowlerType,
@@ -39,6 +41,7 @@ class SearchUserEntity {
     String? id,
     String? playerId,
     String? name,
+    String? profilePic,
     PlayerType? playerType,
     BatterType? batterType,
     BowlerType? bowlerType,
@@ -48,6 +51,7 @@ class SearchUserEntity {
       id: id ?? this.id,
       playerId: playerId ?? this.playerId,
       name: name ?? this.name,
+      profilePic: profilePic ?? this.profilePic,
       playerType: playerType ?? this.playerType,
       batterType: batterType ?? this.batterType,
       bowlerType: bowlerType ?? this.bowlerType,

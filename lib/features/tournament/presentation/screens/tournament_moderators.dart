@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cricklo/core/utils/common/primary_button.dart';
 import 'package:cricklo/core/utils/constants/enums.dart';
 import 'package:cricklo/core/utils/constants/global_variables.dart';
@@ -162,6 +163,19 @@ class TournamentModerators extends StatelessWidget {
                         radius: 24,
                         backgroundColor: ColorsConstants.accentOrange
                             .withValues(alpha: 0.2),
+                        backgroundImage:
+                            state
+                                    .tournamentEntity!
+                                    .moderators[index]
+                                    .profilePic !=
+                                null
+                            ? CachedNetworkImageProvider(
+                                state
+                                    .tournamentEntity!
+                                    .moderators[index]
+                                    .profilePic!,
+                              )
+                            : null,
                         child: Icon(
                           CupertinoIcons.person_fill,
                           size: 16,

@@ -6,6 +6,7 @@ class SearchUserModel {
   final String id;
   final String playerId;
   final String name;
+  final String? profilePic;
   final PlayerType playerType;
   final BatterType? batterType;
   final BowlerType? bowlerType;
@@ -15,6 +16,7 @@ class SearchUserModel {
     required this.id,
     required this.playerId,
     required this.name,
+    this.profilePic,
     required this.playerType,
     this.batterType,
     this.bowlerType,
@@ -94,6 +96,7 @@ class SearchUserModel {
       id: data['id'] as String? ?? data['userId'] as String,
       playerId: data['playerId'] as String? ?? data['profileId'] as String,
       name: data['name'] as String? ?? data['name'] as String,
+      profilePic: data['profilePicture'] as String?,
       playerType: playerType,
       batterType: batterType,
       bowlerType: bowlerType,
@@ -111,6 +114,8 @@ class SearchUserModel {
       playerId: entity.playerId,
       name: entity.name,
       playerType: entity.playerType,
+      inviteStatus: entity.inviteStatus,
+      profilePic: entity.profilePic,
     );
   }
 
@@ -123,6 +128,7 @@ class SearchUserModel {
       batterType: batterType,
       bowlerType: bowlerType,
       inviteStatus: inviteStatus,
+      profilePic: profilePic,
     );
   }
 }
