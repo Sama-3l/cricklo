@@ -131,6 +131,7 @@ final PlayerEntity player8 = PlayerEntity(
 );
 
 final TeamEntity dummyTeam = TeamEntity(
+  userFollows: false,
   followers: 0,
   uuid: "t002",
   inviteStatus: null,
@@ -149,6 +150,7 @@ final TeamEntity dummyTeam = TeamEntity(
 );
 
 final TeamEntity dummyTeam2 = TeamEntity(
+  userFollows: false,
   followers: 0,
   uuid: "t002",
   inviteStatus: null,
@@ -429,6 +431,7 @@ final MatchEntity dummyMatchDone = MatchEntity(
 );
 
 final tournament = TournamentEntity(
+  userFollow: false,
   followers: 0,
   organizerId: "",
   id: "TOUR_001",

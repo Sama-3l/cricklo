@@ -19,6 +19,7 @@ class TournamentModel {
   final MatchType matchType;
   final BallType ballType;
   final int overs;
+  final bool userFollow;
   final int followers;
   final int maxTeams;
   final int spotsLeft;
@@ -42,6 +43,7 @@ class TournamentModel {
     required this.maxTeams,
     required this.tournamentType,
     required this.overs,
+    required this.userFollow,
     required this.spotsLeft,
     required this.moderators,
     required this.venues,
@@ -59,6 +61,7 @@ class TournamentModel {
       name: name,
       banner: banner,
       followers: followers,
+      userFollow: userFollow,
       inviteDeadline: inviteDeadline,
       startDate: startDate,
       endDate: endDate,
@@ -81,6 +84,7 @@ class TournamentModel {
       id: entity.id,
       name: entity.name,
       banner: entity.banner,
+      userFollow: entity.userFollow,
       followers: entity.followers,
       inviteDeadline: entity.inviteDeadline,
       startDate: entity.startDate,
@@ -121,6 +125,7 @@ class TournamentModel {
         'overs': overs,
         'maxTeams': maxTeams,
         'spotsLeft': spotsLeft,
+        'userFollow': userFollow,
         'moderators': moderators.map((x) => x.toJson()).toList(),
         'venues': venues.map((x) => x.toJson()).toList(),
         'teams': teams.map((x) => x.toJson()).toList(),
@@ -209,6 +214,7 @@ class TournamentModel {
           map['organizer']['profileId'] as String? ??
           "",
       id: map['tournamentId'] as String,
+      userFollow: map["follows"] as bool,
       name: map['name'] as String? ?? map['tournamentName'] as String,
       banner: map['banner'] as String,
       inviteDeadline: inviteDeadline,

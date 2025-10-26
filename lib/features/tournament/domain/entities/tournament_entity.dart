@@ -20,6 +20,7 @@ class TournamentEntity {
   final MatchType matchType;
   final BallType ballType;
   final int overs;
+  final bool userFollow;
   final int followers;
   final List<SearchUserEntity> moderators;
   final List<LocationEntity> venues;
@@ -36,6 +37,7 @@ class TournamentEntity {
     required this.inviteDeadline,
     required this.startDate,
     required this.endDate,
+    required this.userFollow,
     required this.matchType,
     required this.maxTeams,
     required this.followers,
@@ -63,6 +65,7 @@ class TournamentEntity {
     int? maxTeams,
     int? spotsLeft,
     int? overs,
+    bool? userFollow,
     int? followers,
     List<SearchUserEntity>? moderators,
     List<LocationEntity>? venues,
@@ -85,6 +88,7 @@ class TournamentEntity {
       tournamentType: tournamentType ?? this.tournamentType,
       matchType: matchType ?? this.matchType,
       overs: overs ?? this.overs,
+      userFollow: userFollow ?? this.userFollow,
       moderators: moderators ?? this.moderators,
       venues: venues ?? this.venues,
       teams: teams ?? this.teams,

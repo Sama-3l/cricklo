@@ -86,7 +86,7 @@ class TeamPageCubit extends Cubit<TeamPageState> {
                 selectedStatsTab: state.selectedStatsTab,
                 selectedStatsTabTableType: state.selectedStatsTabTableType,
                 team: team,
-                follow: state.follow,
+                follow: state.team!.userFollows,
               ),
             );
           } else {
@@ -98,7 +98,7 @@ class TeamPageCubit extends Cubit<TeamPageState> {
                 selectedStatsTab: state.selectedStatsTab,
                 selectedStatsTabTableType: state.selectedStatsTabTableType,
                 team: team,
-                follow: state.follow,
+                follow: state.team!.userFollows,
               ),
             );
           }

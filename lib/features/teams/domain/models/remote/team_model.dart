@@ -9,6 +9,7 @@ class TeamModel {
   final String? inviteStatus;
   final String teamLogo;
   final int followers;
+  bool userFollows;
   final String teamBanner;
   final List<PlayerModel> players;
   final LocationModel location;
@@ -19,6 +20,7 @@ class TeamModel {
     required this.name,
     required this.teamLogo,
     required this.followers,
+    required this.userFollows,
     required this.inviteStatus,
     required this.teamBanner,
     this.players = const [],
@@ -32,6 +34,7 @@ class TeamModel {
     String? teamLogo,
     int? followers,
     String? teamBanner,
+    bool? userFollows,
     String? inviteStatus,
     List<PlayerModel>? players,
     LocationModel? location,
@@ -42,6 +45,7 @@ class TeamModel {
       id: id ?? this.id,
       name: name ?? this.name,
       teamLogo: teamLogo ?? this.teamLogo,
+      userFollows: userFollows ?? this.userFollows,
       followers: followers ?? this.followers,
       teamBanner: teamBanner ?? this.teamBanner,
       players: players ?? this.players,
@@ -61,6 +65,7 @@ class TeamModel {
 
   factory TeamModel.fromEntity(TeamEntity team) {
     return TeamModel(
+      userFollows: team.userFollows,
       inviteStatus: team.inviteStatus,
       uuid: team.uuid,
       id: team.id,
@@ -77,6 +82,7 @@ class TeamModel {
       inviteStatus: map['inviteStatus'] as String?,
       uuid: map['id'] as String?,
       id: map['teamId'] as String,
+      userFollows: map['follows'] as bool? ?? false,
       name: map['name'] ?? map['teamName'] as String,
       teamLogo: map['logo'] ?? map['teamLogo'] as String,
       teamBanner: map['banner'] ?? map['teamBanner'] as String,
@@ -102,6 +108,7 @@ class TeamModel {
   TeamEntity toEntity() {
     return TeamEntity(
       inviteStatus: inviteStatus,
+      userFollows: userFollows,
       uuid: uuid,
       id: id,
       name: name,

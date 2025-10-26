@@ -7,6 +7,7 @@ class StatsTableFilterTabBar extends StatelessWidget {
   final Function(int) selectTab;
   final List<String> options;
   final bool whiteBackground;
+  final int widthMinus;
 
   const StatsTableFilterTabBar({
     super.key,
@@ -14,6 +15,7 @@ class StatsTableFilterTabBar extends StatelessWidget {
     required this.selectTab,
     required this.options,
     this.whiteBackground = false,
+    this.widthMinus = 0,
   });
 
   @override
@@ -40,7 +42,7 @@ class StatsTableFilterTabBar extends StatelessWidget {
             curve: Curves.easeInOut,
             child: Container(
               width: selectedTab == 0 || selectedTab == options.length - 1
-                  ? segmentWidth
+                  ? segmentWidth - widthMinus
                   : segmentWidth - 8,
               height: 36,
               decoration: BoxDecoration(

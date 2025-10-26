@@ -65,47 +65,50 @@ class _TeamOverviewState extends State<TeamOverview> {
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Row(
                   children: [
-                    Expanded(
-                      child: PrimaryButton(
-                        padding: EdgeInsets.symmetric(vertical: 12),
-                        disabled: false,
-                        onPress: () => cubit.followButton(context),
-                        noShadow: true,
-                        radius: 16,
-                        color: state.follow
-                            ? ColorsConstants.defaultBlack
-                            : ColorsConstants.accentOrange,
-                        child: state.follow
-                            ? Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    "Followed",
-                                    style: TextStyles.poppinsSemiBold.copyWith(
-                                      fontSize: 10,
-                                      letterSpacing: -0.5,
-                                      color: ColorsConstants.defaultWhite,
+                    if (!state.loading) ...[
+                      Expanded(
+                        child: PrimaryButton(
+                          padding: EdgeInsets.symmetric(vertical: 12),
+                          disabled: false,
+                          onPress: () => cubit.followButton(context),
+                          noShadow: true,
+                          radius: 16,
+                          color: state.follow
+                              ? ColorsConstants.defaultBlack
+                              : ColorsConstants.accentOrange,
+                          child: state.follow
+                              ? Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      "Followed",
+                                      style: TextStyles.poppinsSemiBold
+                                          .copyWith(
+                                            fontSize: 10,
+                                            letterSpacing: -0.5,
+                                            color: ColorsConstants.defaultWhite,
+                                          ),
                                     ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Icon(
-                                    Icons.check_circle_outline_rounded,
+                                    const SizedBox(width: 8),
+                                    Icon(
+                                      Icons.check_circle_outline_rounded,
+                                      color: ColorsConstants.defaultWhite,
+                                      size: 12,
+                                    ),
+                                  ],
+                                )
+                              : Text(
+                                  "Follow Team",
+                                  style: TextStyles.poppinsSemiBold.copyWith(
+                                    fontSize: 10,
+                                    letterSpacing: -0.5,
                                     color: ColorsConstants.defaultWhite,
-                                    size: 12,
                                   ),
-                                ],
-                              )
-                            : Text(
-                                "Follow Team",
-                                style: TextStyles.poppinsSemiBold.copyWith(
-                                  fontSize: 10,
-                                  letterSpacing: -0.5,
-                                  color: ColorsConstants.defaultWhite,
                                 ),
-                              ),
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 4),
+                      const SizedBox(width: 4),
+                    ],
                     Expanded(
                       child: PrimaryButton(
                         padding: EdgeInsets.symmetric(vertical: 12),
@@ -152,6 +155,7 @@ class _TeamOverviewState extends State<TeamOverview> {
                     selectedTab = index;
                   }),
                   selectedTab: selectedTab,
+                  widthMinus: 16,
                 ),
                 const SizedBox(height: 12),
                 RecentMatchesWinloss(win: 0.5, loss: 0.5),

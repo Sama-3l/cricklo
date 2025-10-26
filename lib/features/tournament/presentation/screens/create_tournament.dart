@@ -112,6 +112,7 @@ class _CreateTournamentState extends State<CreateTournament> {
                   final banner = await Methods.imageToBase64(state.banner!);
                   final tournament = TournamentEntity(
                     followers: 0,
+                    userFollow: false,
                     organizerId: GlobalVariables.user!.profileId,
                     tournamentType: TournamentType.knockout,
                     id: "",

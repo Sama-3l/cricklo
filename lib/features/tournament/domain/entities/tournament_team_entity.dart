@@ -77,6 +77,7 @@ class TournamentTeamEntity {
       teamLogo: teamLogo,
       teamBanner: teamBanner,
       players: [],
+      userFollows: false,
       location: location,
     );
   }
