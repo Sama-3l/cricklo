@@ -47,6 +47,47 @@ class TournamentOverview extends StatelessWidget {
                     Expanded(
                       child: PrimaryButton(
                         padding: EdgeInsets.symmetric(vertical: 12),
+                        disabled: false,
+                        onPress: () => cubit.followButton(context),
+                        noShadow: true,
+                        radius: 16,
+                        color: state.tournamentEntity!.userFollow
+                            ? ColorsConstants.defaultBlack
+                            : ColorsConstants.urlBlue,
+                        child: state.tournamentEntity!.userFollow
+                            ? Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    "Followed",
+                                    style: TextStyles.poppinsSemiBold.copyWith(
+                                      fontSize: 10,
+                                      letterSpacing: -0.5,
+                                      color: ColorsConstants.defaultWhite,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Icon(
+                                    Icons.check_circle_outline_rounded,
+                                    color: ColorsConstants.defaultWhite,
+                                    size: 12,
+                                  ),
+                                ],
+                              )
+                            : Text(
+                                "Follow Tournament",
+                                style: TextStyles.poppinsSemiBold.copyWith(
+                                  fontSize: 10,
+                                  letterSpacing: -0.5,
+                                  color: ColorsConstants.defaultWhite,
+                                ),
+                              ),
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    Expanded(
+                      child: PrimaryButton(
+                        padding: EdgeInsets.symmetric(vertical: 12),
                         color: ColorsConstants.scorerCenter,
                         disabled: false,
                         onPress: () {},
@@ -58,25 +99,6 @@ class TournamentOverview extends StatelessWidget {
                             fontSize: 10,
                             letterSpacing: -0.5,
                             color: ColorsConstants.defaultBlack,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 4),
-                    Expanded(
-                      child: PrimaryButton(
-                        padding: EdgeInsets.symmetric(vertical: 12),
-                        color: ColorsConstants.urlBlue,
-                        disabled: false,
-                        onPress: () {},
-                        noShadow: true,
-                        radius: 16,
-                        child: Text(
-                          "Follow Tournament",
-                          style: TextStyles.poppinsSemiBold.copyWith(
-                            fontSize: 10,
-                            letterSpacing: -0.5,
-                            color: ColorsConstants.defaultWhite,
                           ),
                         ),
                       ),

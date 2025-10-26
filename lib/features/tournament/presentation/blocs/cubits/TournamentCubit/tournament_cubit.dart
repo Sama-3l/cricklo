@@ -1,6 +1,10 @@
 import 'package:bloc/bloc.dart';
+import 'package:cricklo/core/utils/constants/enums.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/core/utils/constants/widget_decider.dart';
+import 'package:cricklo/features/follow/data/entities/follow_usecase_entity.dart';
+import 'package:cricklo/features/follow/data/usecases/follow_usecase.dart';
+import 'package:cricklo/features/follow/data/usecases/unfollow_usecase.dart';
 import 'package:cricklo/features/teams/domain/entities/search_user_entity.dart';
 import 'package:cricklo/features/tournament/data/entities/add_team_to_group_usecase_entity.dart';
 import 'package:cricklo/features/tournament/data/entities/apply_tournament_usecase_entity.dart';
@@ -34,6 +38,8 @@ class TournamentCubit extends Cubit<TournamentState> {
   final AddTeamToGroupUsecase _addTeamToGroupUsecase;
   final DeleteGroupUsecase _deleteGroupUsecase;
   final EditGroupUsecase _editGroupUsecase;
+  final FollowUsecase _followUsecase;
+  final UnFollowUsecase _unFollowUsecase;
   int error = 0;
   TournamentCubit(
     this._inviteModeratorsUsecase,
@@ -44,6 +50,8 @@ class TournamentCubit extends Cubit<TournamentState> {
     this._addTeamToGroupUsecase,
     this._deleteGroupUsecase,
     this._editGroupUsecase,
+    this._followUsecase,
+    this._unFollowUsecase,
   ) : super(
         TournamentUpdate(
           tournamentEntity: null,
@@ -99,6 +107,100 @@ class TournamentCubit extends Cubit<TournamentState> {
         }
       },
     );
+  }
+
+  void followButton(BuildContext context) async {
+    if (state.tournamentEntity!.userFollow) {
+      state.tournamentEntity!.followers--;
+    } else {
+      state.tournamentEntity!.followers++;
+    }
+    state.tournamentEntity!.userFollow = !state.tournamentEntity!.userFollow;
+    emit(state.copyWith());
+    if (state.tournamentEntity!.userFollow) {
+      final response = await _followUsecase(
+        FollowUsecaseEntity(
+          entityType: EntityType.tournament,
+          entityId: state.tournamentEntity!.id,
+        ),
+      );
+      response.fold(
+        (_) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              // behavior: SnackBarBehavior.floating,
+              backgroundColor: ColorsConstants.defaultBlack,
+              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+              content: Text(
+                "Something went wrong",
+                style: TextStyles.poppinsSemiBold.copyWith(
+                  fontSize: 16,
+                  letterSpacing: -0.8,
+                  color: ColorsConstants.defaultWhite,
+                ),
+              ),
+            ),
+          );
+          state.tournamentEntity!.followers--;
+          state.tournamentEntity!.userFollow =
+              !state.tournamentEntity!.userFollow;
+          emit(state.copyWith());
+        },
+        (response) {
+          if (!response.success) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                // behavior: SnackBarBehavior.floating,
+                backgroundColor: ColorsConstants.defaultBlack,
+                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                content: Text(
+                  "Something went wrong",
+                  style: TextStyles.poppinsSemiBold.copyWith(
+                    fontSize: 16,
+                    letterSpacing: -0.8,
+                    color: ColorsConstants.defaultWhite,
+                  ),
+                ),
+              ),
+            );
+            state.tournamentEntity!.followers--;
+            state.tournamentEntity!.userFollow =
+                !state.tournamentEntity!.userFollow;
+            emit(state.copyWith());
+          }
+        },
+      );
+    } else {
+      final response = await _unFollowUsecase(
+        FollowUsecaseEntity(
+          entityType: EntityType.tournament,
+          entityId: state.tournamentEntity!.id,
+        ),
+      );
+      response.fold((_) {}, (response) {
+        if (!response.success) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              // behavior: SnackBarBehavior.floating,
+              backgroundColor: ColorsConstants.defaultBlack,
+              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+              content: Text(
+                "Something went wrong",
+                style: TextStyles.poppinsSemiBold.copyWith(
+                  fontSize: 16,
+                  letterSpacing: -0.8,
+                  color: ColorsConstants.defaultWhite,
+                ),
+              ),
+            ),
+          );
+          state.tournamentEntity!.followers++;
+          state.tournamentEntity!.userFollow =
+              !state.tournamentEntity!.userFollow;
+          emit(state.copyWith());
+        }
+      });
+    }
   }
 
   void changeMainTab(int index) {

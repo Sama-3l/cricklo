@@ -461,6 +461,8 @@ void _tournamentDependencies() {
       sl<AddTeamToGroupUsecase>(),
       sl<DeleteGroupUsecase>(),
       sl<EditGroupUsecase>(),
+      sl<FollowUsecase>(),
+      sl<UnFollowUsecase>(),
     ),
   );
   sl.registerFactory<FetchUserTeamsCubit>(

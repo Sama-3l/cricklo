@@ -20,8 +20,8 @@ class TournamentEntity {
   final MatchType matchType;
   final BallType ballType;
   final int overs;
-  final bool userFollow;
-  final int followers;
+  bool userFollow;
+  int followers;
   final List<SearchUserEntity> moderators;
   final List<LocationEntity> venues;
   final List<TournamentTeamEntity> teams;
