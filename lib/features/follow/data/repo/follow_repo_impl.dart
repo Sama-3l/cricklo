@@ -39,7 +39,7 @@ class FollowRepoImpl extends FollowRepo {
     Map<String, dynamic> body,
   ) async {
     try {
-      final response = await _datasourceRemote.follow(entityId, body);
+      final response = await _datasourceRemote.unfollow(entityId, body);
       return Right(response.toEntity());
     } on DioException catch (e) {
       final data = e.response?.data;

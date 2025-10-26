@@ -69,7 +69,10 @@ class AccountPage extends StatelessWidget {
                     index: state.selectedMainTab,
                     children: [
                       // Player Overview
-                      PlayerOverview(userEntity: state.userEntity!),
+                      PlayerOverview(
+                        userEntity: state.userEntity!,
+                        follow: false,
+                      ),
 
                       StatisticsPage(
                         selectedStatisticsTab: state.selectedStatisticsTab,

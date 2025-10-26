@@ -9,6 +9,7 @@ class UserModel {
   final String? profilePic;
   final int unreadNotifications;
   final String email;
+  final bool userFollow;
   final String? phoneNumber;
   final String? countryCode;
   final LocationEntity location;
@@ -23,6 +24,7 @@ class UserModel {
     required this.unreadNotifications,
     required this.name,
     required this.email,
+    required this.userFollow,
     required this.profilePic,
     this.phoneNumber,
     this.countryCode = "+91",
@@ -41,6 +43,7 @@ class UserModel {
       unreadNotifications: entity.unreadNotifications,
       name: entity.name,
       email: entity.email,
+      userFollow: entity.userFollow,
       phoneNumber: entity.phoneNumber,
       countryCode: entity.countryCode,
       location: entity.location,
@@ -123,6 +126,7 @@ class UserModel {
       playerType: playerType,
       batterType: batterType,
       bowlerType: bowlerType,
+      userFollow: data['follows'] as bool? ?? false,
       followers: data['followersCount'] as int? ?? 0,
       following: data['followingCount'] as int? ?? 0,
     );
@@ -143,6 +147,7 @@ class UserModel {
       profilePic: profilePic,
       followers: followers,
       following: following,
+      userFollow: userFollow,
     );
   }
 
@@ -159,6 +164,7 @@ class UserModel {
       "bowlerType": bowlerType,
       "unreadNotifications": unreadNotifications,
       "profilePic": profilePic,
+      "userFollow": userFollow,
     };
   }
 
@@ -175,6 +181,7 @@ class UserModel {
     BatterType? batterType,
     BowlerType? bowlerType,
     int? followers,
+    bool? userFollow,
     int? following,
   }) {
     return UserModel(
@@ -191,6 +198,7 @@ class UserModel {
       playerType: playerType ?? this.playerType,
       batterType: batterType ?? this.batterType,
       bowlerType: bowlerType ?? this.bowlerType,
+      userFollow: userFollow ?? this.userFollow,
     );
   }
 }

@@ -30,6 +30,33 @@ class _TeamOverviewState extends State<TeamOverview> {
   Widget build(BuildContext context) {
     final cubit = context.read<TeamPageCubit>();
     final state = context.read<TeamPageCubit>().state;
+    final wins = state.team!.teamStatsEntity == null
+        ? 0
+        : selectedTab == 0
+        ? state.team!.teamStatsEntity!.wins
+        : selectedTab == 1
+        ? state.team!.teamStatsEntity!.batFirstWon
+        : selectedTab == 2
+        ? state.team!.teamStatsEntity!.wins -
+              state.team!.teamStatsEntity!.batFirstWon
+        : 0;
+    final matches = state.team!.teamStatsEntity == null
+        ? 0
+        : selectedTab == 0
+        ? state.team!.teamStatsEntity!.matches
+        : selectedTab == 1
+        ? state.team!.teamStatsEntity!.batFirst
+        : selectedTab == 2
+        ? state.team!.teamStatsEntity!.matches -
+              state.team!.teamStatsEntity!.batFirst
+        : 0;
+    final lost = state.team!.teamStatsEntity == null
+        ? 0
+        : selectedTab == 0
+        ? state.team!.teamStatsEntity!.losses
+        : selectedTab == 1 || selectedTab == 2
+        ? matches - wins
+        : 0;
     return Padding(
       padding: const EdgeInsets.only(top: 24),
       child: ListView(
@@ -65,23 +92,42 @@ class _TeamOverviewState extends State<TeamOverview> {
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Row(
                   children: [
-                    if (!state.loading) ...[
-                      Expanded(
-                        child: PrimaryButton(
-                          padding: EdgeInsets.symmetric(vertical: 12),
-                          disabled: false,
-                          onPress: () => cubit.followButton(context),
-                          noShadow: true,
-                          radius: 16,
-                          color: state.follow
-                              ? ColorsConstants.defaultBlack
-                              : ColorsConstants.accentOrange,
-                          child: state.follow
-                              ? Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      "Followed",
+                    state.loading
+                        ? Container()
+                        : Expanded(
+                            child: PrimaryButton(
+                              padding: EdgeInsets.symmetric(vertical: 12),
+                              disabled: false,
+                              onPress: () => cubit.followButton(context),
+                              noShadow: true,
+                              radius: 16,
+                              color: state.follow
+                                  ? ColorsConstants.defaultBlack
+                                  : ColorsConstants.accentOrange,
+                              child: state.follow
+                                  ? Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(
+                                          "Followed",
+                                          style: TextStyles.poppinsSemiBold
+                                              .copyWith(
+                                                fontSize: 10,
+                                                letterSpacing: -0.5,
+                                                color: ColorsConstants
+                                                    .defaultWhite,
+                                              ),
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Icon(
+                                          Icons.check_circle_outline_rounded,
+                                          color: ColorsConstants.defaultWhite,
+                                          size: 12,
+                                        ),
+                                      ],
+                                    )
+                                  : Text(
+                                      "Follow Team",
                                       style: TextStyles.poppinsSemiBold
                                           .copyWith(
                                             fontSize: 10,
@@ -89,26 +135,10 @@ class _TeamOverviewState extends State<TeamOverview> {
                                             color: ColorsConstants.defaultWhite,
                                           ),
                                     ),
-                                    const SizedBox(width: 8),
-                                    Icon(
-                                      Icons.check_circle_outline_rounded,
-                                      color: ColorsConstants.defaultWhite,
-                                      size: 12,
-                                    ),
-                                  ],
-                                )
-                              : Text(
-                                  "Follow Team",
-                                  style: TextStyles.poppinsSemiBold.copyWith(
-                                    fontSize: 10,
-                                    letterSpacing: -0.5,
-                                    color: ColorsConstants.defaultWhite,
-                                  ),
-                                ),
-                        ),
-                      ),
-                      const SizedBox(width: 4),
-                    ],
+                            ),
+                          ),
+                    state.loading ? Container() : const SizedBox(width: 4),
+
                     Expanded(
                       child: PrimaryButton(
                         padding: EdgeInsets.symmetric(vertical: 12),
@@ -158,8 +188,14 @@ class _TeamOverviewState extends State<TeamOverview> {
                   widthMinus: 16,
                 ),
                 const SizedBox(height: 12),
-                RecentMatchesWinloss(win: 0.5, loss: 0.5),
 
+                // RecentMatchesWinloss(win: 0.5, loss: 0.5),
+                state.team!.teamStatsEntity == null
+                    ? RecentMatchesWinloss(win: 0.5, loss: 0.5)
+                    : RecentMatchesWinloss(
+                        win: matches == 0 ? 0.5 : wins / matches,
+                        loss: matches == 0 ? 0.5 : lost / matches,
+                      ),
                 const SizedBox(height: 12),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -168,7 +204,9 @@ class _TeamOverviewState extends State<TeamOverview> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "0",
+                          state.team!.teamStatsEntity == null
+                              ? "0"
+                              : matches.toString(),
                           style: TextStyles.poppinsBold.copyWith(
                             fontSize: 16,
                             letterSpacing: -0.8,
@@ -189,7 +227,9 @@ class _TeamOverviewState extends State<TeamOverview> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          "0",
+                          state.team!.teamStatsEntity == null
+                              ? "0"
+                              : wins.toString(),
                           style: TextStyles.poppinsBold.copyWith(
                             fontSize: 16,
                             letterSpacing: -0.8,
@@ -210,7 +250,9 @@ class _TeamOverviewState extends State<TeamOverview> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          "0",
+                          state.team!.teamStatsEntity == null
+                              ? "0"
+                              : lost.toString(),
                           style: TextStyles.poppinsBold.copyWith(
                             fontSize: 16,
                             letterSpacing: -0.8,
@@ -240,19 +282,19 @@ class _TeamOverviewState extends State<TeamOverview> {
                       color: ColorsConstants.accentOrange,
                     ),
                   ),
-                  child: FractionallySizedBox(
-                    widthFactor: 0.5,
+                  child: AnimatedFractionallySizedBox(
+                    duration: const Duration(milliseconds: 600),
+                    curve: Curves.easeInOut,
                     alignment: Alignment.centerLeft,
+                    widthFactor:
+                        state.team!.teamStatsEntity == null || matches == 0
+                        ? 0.5
+                        : (wins / matches),
                     child: Container(
                       height: 45,
                       decoration: BoxDecoration(
                         color: ColorsConstants.accentOrange,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(5),
-                          bottomLeft: Radius.circular(5),
-                          topRight: Radius.circular(5),
-                          bottomRight: Radius.circular(5),
-                        ),
+                        borderRadius: BorderRadius.circular(5),
                       ),
                     ),
                   ),

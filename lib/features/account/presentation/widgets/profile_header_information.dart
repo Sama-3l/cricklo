@@ -75,7 +75,13 @@ class ProfileHeaderInformation extends StatelessWidget {
                   const SizedBox(height: 4),
                   if (team != null)
                     ProfileSocialStats(
-                      stats: [0, 0, team!.followers],
+                      stats: [
+                        team!.teamStatsEntity == null
+                            ? 0
+                            : team!.teamStatsEntity!.matches,
+                        0,
+                        team!.followers,
+                      ],
                       heading: ["Matches", "Won", "Followers"],
                       entityId: team!.id,
                       entityType: EntityType.team,

@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:cricklo/features/login/domain/entities/location_entity.dart';
 import 'package:cricklo/features/teams/domain/entities/player_entity.dart';
+import 'package:cricklo/features/teams/domain/entities/team_stats_entity.dart';
 
 class TeamEntity {
   final String? uuid;
@@ -17,6 +18,7 @@ class TeamEntity {
   bool userFollows;
   final List<PlayerEntity> players;
   final LocationEntity location;
+  final TeamStatsEntity? teamStatsEntity;
 
   TeamEntity({
     required this.uuid,
@@ -31,6 +33,7 @@ class TeamEntity {
     required this.teamBanner,
     required this.players,
     required this.location,
+    this.teamStatsEntity,
   });
 
   TeamEntity copyWith({
@@ -46,6 +49,7 @@ class TeamEntity {
     String? teamBanner,
     List<PlayerEntity>? players,
     LocationEntity? location,
+    TeamStatsEntity? teamStatsEntity,
   }) {
     return TeamEntity(
       uuid: uuid ?? this.uuid,
@@ -60,6 +64,7 @@ class TeamEntity {
       teamBanner: teamBanner ?? this.teamBanner,
       players: players ?? this.players,
       location: location ?? this.location,
+      teamStatsEntity: teamStatsEntity ?? this.teamStatsEntity,
     );
   }
 }

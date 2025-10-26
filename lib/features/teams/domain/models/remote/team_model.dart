@@ -1,6 +1,7 @@
 import 'package:cricklo/features/login/domain/models/remote/location_model.dart';
 import 'package:cricklo/features/teams/domain/entities/team_entity.dart';
 import 'package:cricklo/features/teams/domain/models/remote/player_model.dart';
+import 'package:cricklo/features/teams/domain/models/remote/team_stats_model.dart';
 
 class TeamModel {
   final String? uuid;
@@ -13,6 +14,7 @@ class TeamModel {
   final String teamBanner;
   final List<PlayerModel> players;
   final LocationModel location;
+  final TeamStatsModel? teamStatsModel;
 
   TeamModel({
     required this.uuid,
@@ -25,6 +27,7 @@ class TeamModel {
     required this.teamBanner,
     this.players = const [],
     required this.location,
+    this.teamStatsModel,
   });
 
   TeamModel copyWith({
@@ -38,6 +41,7 @@ class TeamModel {
     String? inviteStatus,
     List<PlayerModel>? players,
     LocationModel? location,
+    TeamStatsModel? teamStatsModel,
   }) {
     return TeamModel(
       inviteStatus: inviteStatus ?? this.inviteStatus,
@@ -50,6 +54,7 @@ class TeamModel {
       teamBanner: teamBanner ?? this.teamBanner,
       players: players ?? this.players,
       location: location ?? this.location,
+      teamStatsModel: teamStatsModel ?? this.teamStatsModel,
     );
   }
 
@@ -74,6 +79,9 @@ class TeamModel {
       teamBanner: team.teamBanner,
       followers: team.followers,
       location: LocationModel.fromEntity(team.location),
+      teamStatsModel: team.teamStatsEntity != null
+          ? TeamStatsModel.fromEntity(team.teamStatsEntity!)
+          : null,
     );
   }
 
@@ -102,6 +110,9 @@ class TeamModel {
               'state': map['state'],
             }),
       followers: map['followersCount'] as int? ?? 0,
+      teamStatsModel: map['teamStats'] == null
+          ? null
+          : TeamStatsModel.fromJson(map['teamStats'] as Map<String, dynamic>),
     );
   }
 
@@ -117,6 +128,7 @@ class TeamModel {
       players: players.map((e) => e.toEntity()).toList(),
       location: location.toEntity(),
       followers: followers,
+      teamStatsEntity: teamStatsModel?.toEntity(),
     );
   }
 }

@@ -74,8 +74,8 @@ class TeamPageCubit extends Cubit<TeamPageState> {
       },
       (response) {
         if (response.success) {
-          final team = response.team;
-          if (team!.players
+          final teamEntity = response.team;
+          if (teamEntity!.players
               .where((e) => e.teamRole != TeamRole.invited)
               .isEmpty) {
             emit(
@@ -85,8 +85,8 @@ class TeamPageCubit extends Cubit<TeamPageState> {
                 selectedPlayersTab: 3,
                 selectedStatsTab: state.selectedStatsTab,
                 selectedStatsTabTableType: state.selectedStatsTabTableType,
-                team: team,
-                follow: state.team!.userFollows,
+                team: teamEntity,
+                follow: teamEntity.userFollows,
               ),
             );
           } else {
@@ -97,11 +97,23 @@ class TeamPageCubit extends Cubit<TeamPageState> {
                 selectedPlayersTab: 0,
                 selectedStatsTab: state.selectedStatsTab,
                 selectedStatsTabTableType: state.selectedStatsTabTableType,
-                team: team,
-                follow: state.team!.userFollows,
+                team: teamEntity,
+                follow: teamEntity.userFollows,
               ),
             );
           }
+        } else {
+          emit(
+            TeamPageUpdate(
+              loading: false,
+              selectedMainTab: state.selectedMainTab,
+              selectedPlayersTab: 0,
+              selectedStatsTab: state.selectedStatsTab,
+              selectedStatsTabTableType: state.selectedStatsTabTableType,
+              team: team,
+              follow: false,
+            ),
+          );
         }
       },
     );

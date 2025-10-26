@@ -93,6 +93,7 @@ class ProfilePage extends StatelessWidget {
                         PlayerOverview(
                           userEntity: state.userEntity!,
                           onFollow: () => cubit.followButton(context),
+                          follow: state.follow,
                         ),
 
                         StatisticsPage(

@@ -8,6 +8,7 @@ import 'package:cricklo/features/teams/domain/entities/team_entity.dart';
 import 'package:cricklo/features/tournament/domain/entities/tournament_entity.dart';
 
 final dummyCurrUser = UserEntity(
+  userFollow: false,
   followers: 0,
   following: 0,
   profileId: "P009",

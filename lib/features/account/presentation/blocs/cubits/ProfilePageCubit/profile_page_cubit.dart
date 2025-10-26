@@ -35,7 +35,13 @@ class ProfilePageCubit extends Cubit<ProfilePageState> {
       },
       (response) {
         if (response.success) {
-          emit(state.copyWith(userEntity: response.userEntity, loading: false));
+          emit(
+            state.copyWith(
+              userEntity: response.userEntity,
+              loading: false,
+              follow: response.userEntity!.userFollow,
+            ),
+          );
           getTeams();
         } else {
           emit(state.copyWith(loading: false));
@@ -120,7 +126,7 @@ class ProfilePageCubit extends Cubit<ProfilePageState> {
     } else {
       final response = await _unFollowUsecase(
         FollowUsecaseEntity(
-          entityType: EntityType.team,
+          entityType: EntityType.player,
           entityId: state.userEntity!.profileId,
         ),
       );

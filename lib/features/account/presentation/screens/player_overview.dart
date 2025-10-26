@@ -10,10 +10,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class PlayerOverview extends StatefulWidget {
-  const PlayerOverview({super.key, required this.userEntity, this.onFollow});
+  const PlayerOverview({
+    super.key,
+    required this.userEntity,
+    this.onFollow,
+    required this.follow,
+  });
 
   final UserEntity userEntity;
   final Function()? onFollow;
+  final bool follow;
 
   @override
   State<PlayerOverview> createState() => _PlayerOverviewState();
@@ -46,14 +52,39 @@ class _PlayerOverviewState extends State<PlayerOverview> {
                                 : widget.onFollow!(),
                             noShadow: true,
                             radius: 16,
-                            child: Text(
-                              "Follow",
-                              style: TextStyles.poppinsSemiBold.copyWith(
-                                fontSize: 10,
-                                letterSpacing: -0.5,
-                                color: ColorsConstants.defaultWhite,
-                              ),
-                            ),
+                            color: widget.follow
+                                ? ColorsConstants.defaultBlack
+                                : ColorsConstants.accentOrange,
+                            child: widget.follow
+                                ? Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        "Followed",
+                                        style: TextStyles.poppinsSemiBold
+                                            .copyWith(
+                                              fontSize: 10,
+                                              letterSpacing: -0.5,
+                                              color:
+                                                  ColorsConstants.defaultWhite,
+                                            ),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Icon(
+                                        Icons.check_circle_outline_rounded,
+                                        color: ColorsConstants.defaultWhite,
+                                        size: 12,
+                                      ),
+                                    ],
+                                  )
+                                : Text(
+                                    "Follow",
+                                    style: TextStyles.poppinsSemiBold.copyWith(
+                                      fontSize: 10,
+                                      letterSpacing: -0.5,
+                                      color: ColorsConstants.defaultWhite,
+                                    ),
+                                  ),
                           ),
                         ),
                         const SizedBox(width: 4),

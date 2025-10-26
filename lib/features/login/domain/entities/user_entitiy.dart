@@ -16,6 +16,7 @@ class UserEntity {
   final LocationEntity location;
   int followers;
   final int following;
+  bool userFollow;
   final PlayerType playerType;
   final BatterType? batterType;
   final BowlerType? bowlerType;
@@ -30,6 +31,7 @@ class UserEntity {
     required this.profilePic,
     required this.phoneNumber,
     this.countryCode = "+91",
+    required this.userFollow,
     required this.name,
     required this.email,
     required this.location,
@@ -51,12 +53,14 @@ class UserEntity {
     BatterType? batterType,
     BowlerType? bowlerType,
     int? followers,
+    bool? userFollow,
     int? following,
   }) {
     return UserEntity(
       profileId: profileId ?? this.profileId,
       name: name ?? this.name,
       email: email ?? this.email,
+      userFollow: userFollow ?? this.userFollow,
       unreadNotifications: unreadNotifications ?? this.unreadNotifications,
       profilePic: profilePic ?? this.profilePic,
       profilePicFile: profilePicFile ?? this.profilePicFile,

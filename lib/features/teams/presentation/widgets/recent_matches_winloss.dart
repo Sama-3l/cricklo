@@ -41,7 +41,7 @@ class RecentMatchesWinloss extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "${(win * 100).round()}%",
+              "${(loss * 100).round()}%",
               style: TextStyles.poppinsBold.copyWith(
                 fontSize: 16,
                 letterSpacing: -0.8,

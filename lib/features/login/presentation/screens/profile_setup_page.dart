@@ -188,6 +188,7 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
                 GoRouter.of(context).pushNamed(
                   Routes.onboardingScreenOne,
                   extra: UserEntity(
+                    userFollow: false,
                     followers: 0,
                     following: 0,
                     profilePicFile: logo,
