@@ -78,6 +78,7 @@ import 'package:cricklo/features/tournament/data/datasource/tournament_datasourc
 import 'package:cricklo/features/tournament/data/repo/tournament_repo_impl.dart';
 import 'package:cricklo/features/tournament/data/usecases/add_team_to_group_usecase.dart';
 import 'package:cricklo/features/tournament/data/usecases/apply_tournament_usecase.dart';
+import 'package:cricklo/features/tournament/data/usecases/create_group_table_usecase.dart';
 import 'package:cricklo/features/tournament/data/usecases/create_group_usecase.dart';
 import 'package:cricklo/features/tournament/data/usecases/create_tournament_usecase.dart';
 import 'package:cricklo/features/tournament/data/usecases/delete_group_usecase.dart';
@@ -449,6 +450,9 @@ void _tournamentDependencies() {
   sl.registerLazySingleton<EditGroupUsecase>(
     () => EditGroupUsecase(sl<TournamentRepo>()),
   );
+  sl.registerLazySingleton<CreateGroupTableUsecase>(
+    () => CreateGroupTableUsecase(sl<TournamentRepo>()),
+  );
   //cubits
   sl.registerFactory<CreateTournamentCubit>(
     () => CreateTournamentCubit(sl<CreateTournamentUsecase>()),
@@ -465,6 +469,7 @@ void _tournamentDependencies() {
       sl<EditGroupUsecase>(),
       sl<FollowUsecase>(),
       sl<UnFollowUsecase>(),
+      sl<CreateGroupTableUsecase>(),
     ),
   );
   sl.registerFactory<FetchUserTeamsCubit>(

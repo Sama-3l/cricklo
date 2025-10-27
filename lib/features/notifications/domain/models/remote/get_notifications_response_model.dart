@@ -77,7 +77,8 @@ class GetNotificationsResponseModel {
           ),
         );
       }
-      if (notify["type"] == "TOURNAMENT_MODERATOR_INVITE") {
+      if (notify["type"] == "TOURNAMENT_MODERATOR_INVITE" ||
+          notify["type"] == "INVITE_TEAMS_TO_TOURNAMENT") {
         tournamentNotifications.add(
           TournamentNotificationModel.fromJson(
             notify,

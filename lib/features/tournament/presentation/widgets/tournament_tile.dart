@@ -36,7 +36,7 @@ class TournamentTile extends StatelessWidget {
                 ),
                 child: CachedNetworkImage(
                   imageUrl: tournamentEntity.banner,
-                  fit: BoxFit.fitWidth,
+                  fit: BoxFit.fill,
                 ),
               ),
             ),

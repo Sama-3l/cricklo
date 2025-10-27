@@ -104,7 +104,7 @@ class MatchInfoPage extends StatelessWidget {
       "Format": match!.matchType.matchType,
       "Ball Type": "Tennis Ball",
       "Playing": "${match!.teamA.name} vs ${match!.teamB.name}",
-      "Venue": match!.location.area,
+      "Venue": match!.location?.area ?? "",
       "Date & Time": "${match!.dateAndTime.toLocal()}".split(
         '.',
       )[0], // readable local time

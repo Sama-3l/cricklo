@@ -46,6 +46,9 @@ class ApiEndpointConstants {
   static const tournamentDeleteGroup =
       '/tournament/delete-group/{tournamentId}';
   static const tournamentEditGroup = '/tournament/edit-group/{tournamentId}';
+  static const tournamentCreateMatches =
+      '/tournament/create-matches/{tournamentId}';
+  static const tournamentUpdateMatchDetails = '/update-match/{tournamentId}';
 
   static const follow = '/socials/follow/{entityId}';
   static const unfollow = '/socials/unfollow/{entityId}';

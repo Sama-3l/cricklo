@@ -26,7 +26,8 @@ class TournamentModel {
   final List<SearchUserModel> moderators;
   final List<LocationModel> venues;
   final List<TournamentTeamModel> teams;
-  final List<MatchModel> matches;
+  final List<MatchModel> groupMatches;
+  final List<MatchModel> playoffMatches;
   final List<GroupModel> groups;
 
   TournamentModel({
@@ -48,7 +49,8 @@ class TournamentModel {
     required this.moderators,
     required this.venues,
     required this.teams,
-    required this.matches,
+    required this.groupMatches,
+    required this.playoffMatches,
     required this.groups,
   });
 
@@ -72,7 +74,8 @@ class TournamentModel {
       venues: venues.map((e) => e.toEntity()).toList(),
       maxTeams: maxTeams,
       teams: teams.map((e) => e.toEntity()).toList(),
-      matches: matches.map((e) => e.toEntity()).toList(),
+      groupMatches: groupMatches.map((e) => e.toEntity()).toList(),
+      playoffMatches: playoffMatches.map((e) => e.toEntity()).toList(),
       groups: groups.map((e) => e.toEntity()).toList(),
     );
   }
@@ -105,7 +108,12 @@ class TournamentModel {
       teams: entity.teams
           .map((e) => TournamentTeamModel.fromEntity(e))
           .toList(),
-      matches: entity.matches.map((e) => MatchModel.fromEntity(e)).toList(),
+      groupMatches: entity.groupMatches
+          .map((e) => MatchModel.fromEntity(e))
+          .toList(),
+      playoffMatches: entity.playoffMatches
+          .map((e) => MatchModel.fromEntity(e))
+          .toList(),
       groups: entity.groups.map((e) => GroupModel.fromEntity(e)).toList(),
     );
   }
@@ -129,7 +137,8 @@ class TournamentModel {
         'moderators': moderators.map((x) => x.toJson()).toList(),
         'venues': venues.map((x) => x.toJson()).toList(),
         'teams': teams.map((x) => x.toJson()).toList(),
-        'matches': matches.map((x) => x.toJson()).toList(),
+        'groupMatches': groupMatches.map((x) => x.toJson()).toList(),
+        'playoffMatches': playoffMatches.map((x) => x.toJson()).toList(),
         'groups': groups.map((x) => x.toJson()).toList(),
         'followers': followers,
       };
@@ -207,6 +216,30 @@ class TournamentModel {
       endDateDateTime.minute,
       endDateDateTime.second,
     );
+    final groups = map['groups'] == null
+        ? <GroupModel>[]
+        : List<GroupModel>.from(
+            (map['groups'] as List<dynamic>).map<GroupModel>(
+              (x) => GroupModel.fromJson(x),
+            ),
+          );
+    final Map<String, List<MatchModel>> parsedGroups = {};
+    if (map['matchesByGroup'] != null) {
+      for (final group in map['matchesByGroup']) {
+        final String groupName = group['groupName'] ?? 'Unknown Group';
+        final List<MatchModel> matches =
+            (group['matches'] as List?)
+                ?.map((e) => MatchModel.fromJson(e))
+                .toList() ??
+            [];
+        parsedGroups[groupName] = matches;
+      }
+    }
+    final groupMatches = <MatchModel>[];
+    for (var group in groups) {
+      group.matches.addAll(parsedGroups[group.name] ?? []);
+      groupMatches.addAll(group.matches);
+    }
     return TournamentModel(
       followers: map['followersCount'] as int? ?? 0,
       organizerId:
@@ -259,20 +292,15 @@ class TournamentModel {
                 (x) => TournamentTeamModel.fromJson(x),
               ),
             ),
-      matches: map['matches'] == null
+      groupMatches: groupMatches,
+      playoffMatches: map['ungroupedMatches'] == null
           ? []
           : List<MatchModel>.from(
-              (map['matches'] as List<dynamic>).map<MatchModel>(
+              (map['ungroupedMatches'] as List<dynamic>).map<MatchModel>(
                 (x) => MatchModel.fromJson(x),
               ),
             ),
-      groups: map['groups'] == null
-          ? []
-          : List<GroupModel>.from(
-              (map['groups'] as List<dynamic>).map<GroupModel>(
-                (x) => GroupModel.fromJson(x),
-              ),
-            ),
+      groups: groups,
     );
   }
 }

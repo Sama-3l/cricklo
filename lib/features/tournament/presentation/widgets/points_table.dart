@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cricklo/core/utils/common/secondary_button.dart';
 import 'package:cricklo/core/utils/constants/global_variables.dart';
+import 'package:cricklo/core/utils/constants/methods.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/tournament/domain/entities/tournament_team_entity.dart';
 import 'package:cricklo/features/tournament/presentation/blocs/cubits/TournamentCubit/tournament_cubit.dart';
@@ -126,8 +128,11 @@ class PointsTable extends StatelessWidget {
                       child: Row(
                         children: [
                           CircleAvatar(
-                            radius: 12,
+                            radius: 24,
                             backgroundColor: ColorsConstants.surfaceOrange,
+                            backgroundImage: CachedNetworkImageProvider(
+                              e.teamLogo,
+                            ),
                             child: Icon(
                               Icons.people,
                               size: 12,
@@ -135,12 +140,14 @@ class PointsTable extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(width: 8),
-                          Text(
-                            'Aaryan Ji',
-                            style: TextStyles.poppinsMedium.copyWith(
-                              fontSize: 16,
-                              letterSpacing: -0.8,
-                              color: ColorsConstants.defaultBlack,
+                          Expanded(
+                            child: Text(
+                              Methods.battingTeamAbbr(e.name),
+                              style: TextStyles.poppinsMedium.copyWith(
+                                fontSize: 16,
+                                letterSpacing: -0.8,
+                                color: ColorsConstants.defaultBlack,
+                              ),
                             ),
                           ),
                         ],

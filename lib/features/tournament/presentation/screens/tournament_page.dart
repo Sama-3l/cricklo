@@ -9,6 +9,7 @@ import 'package:cricklo/features/tournament/domain/entities/tournament_team_enti
 import 'package:cricklo/features/tournament/presentation/blocs/cubits/TournamentCubit/tournament_cubit.dart';
 import 'package:cricklo/features/tournament/presentation/screens/points_page.dart';
 import 'package:cricklo/features/tournament/presentation/screens/stats_page.dart';
+import 'package:cricklo/features/tournament/presentation/screens/tournament_matches_page.dart';
 import 'package:cricklo/features/tournament/presentation/screens/tournament_moderators.dart';
 import 'package:cricklo/features/tournament/presentation/screens/tournament_overview.dart';
 import 'package:cricklo/injection_container.dart';
@@ -67,7 +68,10 @@ class TournamentPage extends StatelessWidget {
               centerTitle: true,
             ),
             body: SafeArea(
-              child: Padding(
+              child: Container(
+                color: state.selectedMainTab == 1
+                    ? ColorsConstants.onSurfaceGrey
+                    : ColorsConstants.defaultWhite,
                 padding: const EdgeInsets.only(top: 24.0),
                 child: Column(
                   children: [
@@ -81,9 +85,10 @@ class TournamentPage extends StatelessWidget {
                         index: state.selectedMainTab,
                         children: [
                           TournamentOverview(),
-                          const Center(child: Text("No Match History")),
+                          TournamentMatchesPage(),
                           TournamentModerators(),
                           TeamsGrid(
+                            neverScrollable: false,
                             loading: state.loading,
                             teams: state.tournamentEntity!.teams
                                 .map((e) => e.toTeamEntity())

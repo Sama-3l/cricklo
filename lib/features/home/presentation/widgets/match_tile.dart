@@ -80,7 +80,9 @@ class MatchTile extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    "${matchEntity.location.location!}, ${matchEntity.location.area}, ${matchEntity.location.city}, ${matchEntity.location.state}",
+                    matchEntity.location == null
+                        ? "Yet to be scheduled"
+                        : "${matchEntity.location!.location!}, ${matchEntity.location!.area}, ${matchEntity.location!.city}, ${matchEntity.location!.state}",
                     style: TextStyles.poppinsSemiBold.copyWith(
                       fontSize: 10,
                       letterSpacing: -0.2,

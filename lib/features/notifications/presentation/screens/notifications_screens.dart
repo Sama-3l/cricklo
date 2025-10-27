@@ -30,7 +30,10 @@ class _NotificationsScreensState extends State<NotificationsScreens> {
           final tournamentModeratorInvites = state.tournamentInvites.where(
             (e) => e.notificationType == NotificationType.tournamentModerator,
           );
-          print(tournamentModeratorInvites.length);
+          final tournamentTeamInvites = state.tournamentInvites.where(
+            (e) => e.notificationType == NotificationType.tournamentTeam,
+          );
+          print(tournamentTeamInvites);
           return Scaffold(
             backgroundColor: ColorsConstants.defaultWhite,
             appBar: AppBar(
@@ -60,7 +63,8 @@ class _NotificationsScreensState extends State<NotificationsScreens> {
                 : state.teamNotifications.isEmpty &&
                       scorerInvites.isEmpty &&
                       nonScorerInvites.isEmpty &&
-                      tournamentModeratorInvites.isEmpty
+                      tournamentModeratorInvites.isEmpty &&
+                      tournamentTeamInvites.isEmpty
                 ? Center(
                     child: Text(
                       "No Notifications",
@@ -137,7 +141,8 @@ class _NotificationsScreensState extends State<NotificationsScreens> {
                             ),
                           ),
                         ],
-                        if (tournamentModeratorInvites.isNotEmpty) ...[
+                        if (tournamentModeratorInvites.isNotEmpty ||
+                            tournamentTeamInvites.isNotEmpty) ...[
                           Padding(
                             padding: const EdgeInsets.only(top: 24.0),
                             child: SectionHeader(
@@ -160,6 +165,28 @@ class _NotificationsScreensState extends State<NotificationsScreens> {
                           ),
                           const SizedBox(height: 6),
                           ...tournamentModeratorInvites.map(
+                            (e) => NotificationTile(
+                              title: e.tournamentName,
+                              id: e.tournamentId,
+                              tournamentNotificationEntity: e,
+                              notificationType: e.notificationType,
+                            ),
+                          ),
+                        ],
+                        if (tournamentTeamInvites.isNotEmpty) ...[
+                          Padding(
+                            padding: const EdgeInsets.only(top: 12.0),
+                            child: Text(
+                              "Team Invites",
+                              style: TextStyles.poppinsSemiBold.copyWith(
+                                fontSize: 16,
+                                letterSpacing: -0.8,
+                                color: ColorsConstants.accentOrange,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 6),
+                          ...tournamentTeamInvites.map(
                             (e) => NotificationTile(
                               title: e.tournamentName,
                               id: e.tournamentId,

@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 // domain/entities/location_entity.dart
 class LocationEntity {
+  final String? id;
   final String? location;
   final String area;
   final String city;
@@ -9,6 +10,7 @@ class LocationEntity {
   final double? lng;
 
   LocationEntity({
+    this.id,
     this.location,
     required this.area,
     required this.city,
@@ -20,12 +22,14 @@ class LocationEntity {
   LocationEntity copyWith({
     String? location,
     String? area,
+    String? id,
     String? city,
     String? state,
     double? lat,
     double? lng,
   }) {
     return LocationEntity(
+      id: id ?? this.id,
       location: location ?? this.location,
       area: area ?? this.area,
       city: city ?? this.city,

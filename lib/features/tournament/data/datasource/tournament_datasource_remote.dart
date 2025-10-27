@@ -1,4 +1,5 @@
 import 'package:cricklo/features/notifications/domain/models/remote/invite_response_response_model.dart';
+import 'package:cricklo/features/tournament/domain/models/remote/create_group_table_response_model.dart';
 import 'package:cricklo/features/tournament/domain/models/remote/create_tournament_response_model.dart';
 import 'package:cricklo/features/tournament/domain/models/remote/get_all_tournaments_model.dart';
 import 'package:cricklo/features/tournament/domain/models/remote/get_tournament_details_model.dart';
@@ -39,6 +40,7 @@ abstract class TournamentDatasourceRemote {
     String tournamentId,
     Map<String, dynamic> body,
   );
+  Future<CreateGroupTableResponseModel> createGroupMatches(String tournamentId);
 }
 
 class TournamentDatasourceRemoteImpl extends TournamentDatasourceRemote {
@@ -108,5 +110,12 @@ class TournamentDatasourceRemoteImpl extends TournamentDatasourceRemote {
     Map<String, dynamic> body,
   ) {
     return _apiService.tournamentEditGroup(tournamentId, body);
+  }
+
+  @override
+  Future<CreateGroupTableResponseModel> createGroupMatches(
+    String tournamentId,
+  ) {
+    return _apiService.createTournamentMatches(tournamentId, {});
   }
 }

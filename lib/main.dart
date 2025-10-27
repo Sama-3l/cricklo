@@ -4,7 +4,6 @@ import 'package:cricklo/features/login/presentation/blocs/cubits/SetPinCubit/set
 import 'package:cricklo/features/login/presentation/blocs/cubits/OnboardingPageCubit/onboarding_page_cubit.dart';
 import 'package:cricklo/features/notifications/presentation/blocs/blocs/NotificationBloc/notification_bloc.dart';
 import 'package:cricklo/features/theme/presentation/ThemeCubit/theme_cubit.dart';
-import 'package:cricklo/features/tournament/presentation/blocs/cubits/CreateTournamentCubit/create_tournament_cubit.dart';
 import 'package:cricklo/injection_container.dart';
 import 'package:cricklo/routes/app_router.dart';
 import 'package:flutter/foundation.dart';
@@ -56,7 +55,6 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (context) => sl<OtpPageCubit>()),
         BlocProvider(create: (context) => sl<SetPinCubit>()),
-        BlocProvider(create: (_) => sl<CreateTournamentCubit>()),
         BlocProvider(create: (_) => sl<OnboardingPageCubit>()),
         BlocProvider(create: (context) => sl<NotificationBloc>()),
         BlocProvider(create: (context) => ThemeCubit()),

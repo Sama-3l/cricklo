@@ -115,3 +115,16 @@ enum EntityType {
   final String title;
   const EntityType(this.title);
 }
+
+enum MatchCategory {
+  open("OPEN"),
+  group("GROUP"),
+  qualifier1("QUALIFIER1"),
+  qualifier2("QUALIFIER2"),
+  eliminator("ELIMINATOR"),
+  semiFinal("SEMI_FINAL"),
+  finalMatch("FINAL");
+
+  final String title;
+  const MatchCategory(this.title);
+}

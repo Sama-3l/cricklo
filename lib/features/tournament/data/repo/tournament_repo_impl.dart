@@ -1,6 +1,7 @@
 import 'package:cricklo/core/errors/failure.dart';
 import 'package:cricklo/features/notifications/domain/entities/invite_response_response_entity.dart';
 import 'package:cricklo/features/tournament/data/datasource/tournament_datasource_remote.dart';
+import 'package:cricklo/features/tournament/domain/entities/create_group_table_response_entity.dart';
 import 'package:cricklo/features/tournament/domain/entities/create_tournament_response_entity.dart';
 import 'package:cricklo/features/tournament/domain/entities/get_all_tournaments_entity.dart';
 import 'package:cricklo/features/tournament/domain/entities/get_tournament_details_entity.dart';
@@ -273,6 +274,33 @@ class TournamentRepoImpl extends TournamentRepo {
           success: false,
           message: message,
           errorCode: code,
+        ),
+      );
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, CreateGroupTableResponseEntity>> createMatches(
+    String tournamentId,
+  ) async {
+    try {
+      final response = await _datasourceRemote.createGroupMatches(tournamentId);
+      return Right(response.toEntity());
+    } on DioException catch (e) {
+      final data = e.response?.data;
+
+      final code = data?['error']?['code'];
+      final message = data?['error']?['message'];
+
+      return Right(
+        CreateGroupTableResponseEntity(
+          success: false,
+          message: message,
+          errorCode: code,
+          groupMatches: {},
+          playoffs: [],
         ),
       );
     } catch (e) {

@@ -674,7 +674,7 @@ class WidgetDecider {
         const SizedBox(width: 8),
         Expanded(
           child: Text(
-            team.name,
+            team.name.isEmpty ? "TBD" : team.name,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: TextStyles.poppinsMedium.copyWith(

@@ -255,7 +255,7 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
             location: matchEntity.teamB.location,
             battingOrder: {},
           ),
-          location: matchEntity.location,
+          location: matchEntity.location!,
           scorer: MatchScorerEntity(
             playerId: matchEntity.scorer["profileId"],
             name: matchEntity.scorer["name"],
@@ -415,7 +415,7 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
             location: matchEntity.teamB.location,
             battingOrder: {},
           ),
-          location: matchEntity.location,
+          location: matchEntity.location!,
           scorer: MatchScorerEntity(
             playerId: matchEntity.scorer["profileId"],
             name: matchEntity.scorer["name"],

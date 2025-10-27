@@ -114,6 +114,8 @@ class UserModel {
         case 'RIGHT_ARM_FAST':
           bowlerType = BowlerType.rightArmPace;
           break;
+        default:
+          bowlerType = BowlerType.leftArmSpin;
       }
     }
     return UserModel(

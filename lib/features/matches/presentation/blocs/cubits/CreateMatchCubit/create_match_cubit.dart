@@ -46,6 +46,7 @@ class CreateMatchCubit extends Cubit<CreateMatchState> {
     response.fold((_) {}, (response) {
       if (response.success) {
         final MatchEntity matchEntity = MatchEntity(
+          matchCategory: MatchCategory.open,
           matchID: response.matchId,
           dateAndTime: Methods.combineDateAndTime(date, time),
           overs: overs,

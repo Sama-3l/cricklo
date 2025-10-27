@@ -18,6 +18,7 @@ import 'package:cricklo/features/teams/domain/models/remote/get_team_details_res
 import 'package:cricklo/features/teams/domain/models/remote/invite_player_response_model.dart';
 import 'package:cricklo/features/teams/domain/models/remote/search_players_response_model.dart';
 import 'package:cricklo/features/teams/domain/models/remote/search_team_response_model.dart';
+import 'package:cricklo/features/tournament/domain/models/remote/create_group_table_response_model.dart';
 import 'package:cricklo/features/tournament/domain/models/remote/create_tournament_response_model.dart';
 import 'package:cricklo/features/tournament/domain/models/remote/get_all_tournaments_model.dart';
 import 'package:cricklo/features/tournament/domain/models/remote/get_tournament_details_model.dart';
@@ -216,5 +217,11 @@ abstract class ApiService {
   @GET(ApiEndpointConstants.following)
   Future<GetFollowingResponseModel> following(
     @Path("profileId") String profileId,
+  );
+
+  @POST(ApiEndpointConstants.tournamentCreateMatches)
+  Future<CreateGroupTableResponseModel> createTournamentMatches(
+    @Path("tournamentId") String tournamentId,
+    @Body() Map<String, dynamic> body,
   );
 }

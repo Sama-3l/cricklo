@@ -25,7 +25,8 @@ class TournamentEntity {
   final List<SearchUserEntity> moderators;
   final List<LocationEntity> venues;
   final List<TournamentTeamEntity> teams;
-  final List<MatchEntity> matches;
+  final List<MatchEntity> groupMatches;
+  final List<MatchEntity> playoffMatches;
   final List<GroupEntity> groups;
 
   TournamentEntity({
@@ -47,7 +48,8 @@ class TournamentEntity {
     required this.moderators,
     required this.venues,
     required this.teams,
-    required this.matches,
+    required this.groupMatches,
+    required this.playoffMatches,
     required this.groups,
   });
 
@@ -70,7 +72,8 @@ class TournamentEntity {
     List<SearchUserEntity>? moderators,
     List<LocationEntity>? venues,
     List<TournamentTeamEntity>? teams,
-    List<MatchEntity>? matches,
+    List<MatchEntity>? groupMatches,
+    List<MatchEntity>? playoffMatches,
     List<GroupEntity>? groups,
   }) {
     return TournamentEntity(
@@ -92,7 +95,8 @@ class TournamentEntity {
       moderators: moderators ?? this.moderators,
       venues: venues ?? this.venues,
       teams: teams ?? this.teams,
-      matches: matches ?? this.matches,
+      groupMatches: groupMatches ?? this.groupMatches,
+      playoffMatches: playoffMatches ?? this.playoffMatches,
       groups: groups ?? this.groups,
     );
   }

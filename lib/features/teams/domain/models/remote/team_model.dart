@@ -93,7 +93,7 @@ class TeamModel {
       userFollows: map['follows'] as bool? ?? false,
       name: map['name'] ?? map['teamName'] as String,
       teamLogo: map['logo'] ?? map['teamLogo'] as String,
-      teamBanner: map['banner'] ?? map['teamBanner'] as String,
+      teamBanner: map['banner'] ?? map['teamBanner'] as String? ?? "",
       players: map['teamPlayers'] != null
           ? (map['teamPlayers'] as List<dynamic>)
                 .map<PlayerModel>((e) => PlayerModel.fromJson(e))
@@ -105,6 +105,8 @@ class TeamModel {
           : [],
       location: map.containsKey('location')
           ? LocationModel.fromJson(map['location'] as Map<String, dynamic>)
+          : map['city'] == null
+          ? LocationModel(area: "", city: "", state: "", lat: 0, lng: 0)
           : LocationModel.fromJson({
               'city': map['city'],
               'state': map['state'],

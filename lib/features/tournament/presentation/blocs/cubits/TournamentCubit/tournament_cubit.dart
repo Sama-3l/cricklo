@@ -14,6 +14,7 @@ import 'package:cricklo/features/tournament/data/entities/invite_moderators_usec
 import 'package:cricklo/features/tournament/data/entities/invite_teams_usecase_entity.dart';
 import 'package:cricklo/features/tournament/data/usecases/add_team_to_group_usecase.dart';
 import 'package:cricklo/features/tournament/data/usecases/apply_tournament_usecase.dart';
+import 'package:cricklo/features/tournament/data/usecases/create_group_table_usecase.dart';
 import 'package:cricklo/features/tournament/data/usecases/create_group_usecase.dart';
 import 'package:cricklo/features/tournament/data/usecases/delete_group_usecase.dart';
 import 'package:cricklo/features/tournament/data/usecases/edit_group_usecase.dart';
@@ -40,6 +41,7 @@ class TournamentCubit extends Cubit<TournamentState> {
   final EditGroupUsecase _editGroupUsecase;
   final FollowUsecase _followUsecase;
   final UnFollowUsecase _unFollowUsecase;
+  final CreateGroupTableUsecase _createGroupTableUsecase;
   int error = 0;
   TournamentCubit(
     this._inviteModeratorsUsecase,
@@ -52,6 +54,7 @@ class TournamentCubit extends Cubit<TournamentState> {
     this._editGroupUsecase,
     this._followUsecase,
     this._unFollowUsecase,
+    this._createGroupTableUsecase,
   ) : super(
         TournamentUpdate(
           tournamentEntity: null,
@@ -63,6 +66,7 @@ class TournamentCubit extends Cubit<TournamentState> {
 
   init(BuildContext context, TournamentEntity tournamentEntity) async {
     emit(state.copyWith(tournamentEntity: tournamentEntity, loading: true));
+    // print(CreateGroupTableResponseModel.fromJson(test).toEntity().playoffs);
     final response = await _getTournamentDetailsUsecase(
       state.tournamentEntity!.id,
     );
@@ -100,7 +104,8 @@ class TournamentCubit extends Cubit<TournamentState> {
                 venues: response.tournamentEntity!.venues,
                 teams: response.tournamentEntity!.teams,
                 groups: response.tournamentEntity!.groups,
-                matches: response.tournamentEntity!.matches,
+                groupMatches: response.tournamentEntity!.groupMatches,
+                playoffMatches: response.tournamentEntity!.playoffMatches,
               ),
             ),
           );
@@ -525,5 +530,147 @@ class TournamentCubit extends Cubit<TournamentState> {
         }
       },
     );
+  }
+
+  void createLeaguePointsTable(BuildContext context) async {
+    final response = await showDialog(
+      context: context,
+      barrierDismissible: false, // prevent accidental close
+      builder: (ctx) {
+        return StatefulBuilder(
+          builder: (ctx, setState) {
+            return AlertDialog(
+              backgroundColor: ColorsConstants.defaultWhite,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              title: Text(
+                "Create Points Table",
+                style: TextStyles.poppinsSemiBold.copyWith(
+                  fontSize: 16,
+                  letterSpacing: -0.8,
+                  color: ColorsConstants.defaultBlack,
+                ),
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        "Number of Participating Teams:",
+                        style: TextStyles.poppinsMedium.copyWith(
+                          fontSize: 12,
+                          letterSpacing: -0.5,
+                          color: ColorsConstants.defaultBlack,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Text(
+                        "${state.tournamentEntity!.teams.where((e) => e.inviteStatus == InviteStatus.accepted).length}",
+                        style: TextStyles.poppinsBold.copyWith(
+                          fontSize: 16,
+                          letterSpacing: -0.8,
+                          color: ColorsConstants.defaultBlack,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Text(
+                    "You cannot add more teams after points table is created",
+                    style: TextStyles.poppinsMedium.copyWith(
+                      fontSize: 12,
+                      letterSpacing: -0.5,
+                      color: ColorsConstants.defaultBlack,
+                    ),
+                  ),
+                ],
+              ),
+              actionsAlignment: MainAxisAlignment.start,
+              actions: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: ColorsConstants.accentOrange,
+                        foregroundColor: ColorsConstants.defaultWhite,
+                      ),
+                      onPressed: () {
+                        GoRouter.of(ctx).pop(true);
+                      },
+                      child: Text(
+                        "Lock Teams & Create Matches",
+                        style: TextStyles.poppinsSemiBold.copyWith(
+                          fontSize: 12,
+                          letterSpacing: -0.5,
+                          color: ColorsConstants.defaultWhite,
+                        ),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        GoRouter.of(ctx).pop(false);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadiusGeometry.circular(24),
+                          side: BorderSide(color: ColorsConstants.accentOrange),
+                        ),
+                      ),
+                      child: Text(
+                        "Cancel",
+                        style: TextStyles.poppinsSemiBold.copyWith(
+                          fontSize: 12,
+                          letterSpacing: -0.5,
+                          color: ColorsConstants.defaultBlack,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+    if ((response as bool? ?? false)) {
+      state.tournamentEntity!.groups.add(
+        GroupEntity(
+          teams: state.tournamentEntity!.teams
+              .where((e) => e.inviteStatus == InviteStatus.accepted)
+              .toList(),
+          name: "League Group",
+          matches: [],
+        ),
+      );
+      emit(state.copyWith());
+      final response = await _createGroupTableUsecase(
+        state.tournamentEntity!.id,
+      );
+      response.fold(
+        (_) {
+          state.tournamentEntity!.groups.clear();
+          emit(state.copyWith());
+          WidgetDecider.showSnackBar(context, "Couldn't send invites");
+        },
+        (response) {
+          if (!response.success) {
+            WidgetDecider.showSnackBar(context, "Couldn't send invites");
+          } else {
+            state.tournamentEntity!.groups.last.matches.addAll(
+              response.groupMatches["League Group"]!,
+            );
+            state.tournamentEntity!.groupMatches.addAll(
+              response.groupMatches["League Group"]!,
+            );
+            state.tournamentEntity!.playoffMatches.addAll(response.playoffs);
+            emit(state.copyWith());
+          }
+        },
+      );
+    }
   }
 }

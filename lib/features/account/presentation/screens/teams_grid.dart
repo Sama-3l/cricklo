@@ -11,6 +11,7 @@ class TeamsGrid extends StatelessWidget {
   final bool loading;
   final void Function(TeamEntity) onTap;
   final bool floatingButton;
+  final bool neverScrollable;
   final Function(List<TeamEntity> teams)? onInviteTeams;
 
   const TeamsGrid({
@@ -19,6 +20,7 @@ class TeamsGrid extends StatelessWidget {
     required this.loading,
     required this.onTap,
     this.floatingButton = false,
+    this.neverScrollable = false,
     this.onInviteTeams,
   });
 
@@ -123,7 +125,9 @@ class TeamsGrid extends StatelessWidget {
               padding: const EdgeInsets.only(top: 24.0),
               child: GridView.builder(
                 shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
+                physics: neverScrollable
+                    ? const NeverScrollableScrollPhysics()
+                    : BouncingScrollPhysics(),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   mainAxisSpacing: 0,

@@ -9,10 +9,11 @@ class MatchEntity {
   final DateTime dateAndTime;
   final int overs;
   final MatchType matchType;
+  final MatchCategory matchCategory;
   final TeamEntity teamA;
   bool abandoned;
   final TeamEntity teamB;
-  final LocationEntity location;
+  final LocationEntity? location;
   final Map<String, dynamic> scorer;
   String? tossWinner; // TeamID
   TossChoice? tossChoice;
@@ -26,6 +27,7 @@ class MatchEntity {
     required this.matchID,
     required this.dateAndTime,
     required this.overs,
+    required this.matchCategory,
     this.abandoned = false,
     required this.matchType,
     required this.teamA,
@@ -44,6 +46,7 @@ class MatchEntity {
   MatchEntity copyWith({
     String? id,
     String? matchID,
+    MatchCategory? matchCategory,
     DateTime? dateAndTime,
     DateTime? endDateTime,
     int? overs,
@@ -57,6 +60,7 @@ class MatchEntity {
   }) {
     return MatchEntity(
       matchID: matchID ?? this.matchID,
+      matchCategory: matchCategory ?? this.matchCategory,
       dateAndTime: dateAndTime ?? this.dateAndTime,
       endDateTime: endDateTime ?? this.endDateTime,
       overs: overs ?? this.overs,

@@ -32,9 +32,9 @@ class _ScorerMatchInitialScreenState extends State<ScorerMatchInitialScreen> {
   void initState() {
     super.initState();
     setState(() {
-      venueLocation.text = widget.matchEntity.location.location ?? "";
+      venueLocation.text = widget.matchEntity.location?.location ?? "";
       venueArea.text =
-          "${widget.matchEntity.location.area}, ${widget.matchEntity.location.city}, ${widget.matchEntity.location.state}";
+          "${widget.matchEntity.location?.area ?? ""}, ${widget.matchEntity.location?.city ?? ""}, ${widget.matchEntity.location?.state ?? ""}";
       _selectedDate = widget.matchEntity.dateAndTime;
       _selectedTime = TimeOfDay.fromDateTime(widget.matchEntity.dateAndTime);
       _selectedFormat = widget.matchEntity.matchType.matchType;
