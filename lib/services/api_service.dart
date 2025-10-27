@@ -2,6 +2,7 @@ import 'package:cricklo/features/account/domain/models/remote/get_profile_respon
 import 'package:cricklo/features/account/domain/models/remote/get_teams_response_model.dart';
 import 'package:cricklo/features/follow/domain/models/remote/follow_response_model.dart';
 import 'package:cricklo/features/follow/domain/models/remote/get_followers_model.dart';
+import 'package:cricklo/features/follow/domain/models/remote/get_following_response_model.dart';
 import 'package:cricklo/features/login/domain/models/remote/login_response_model.dart';
 import 'package:cricklo/features/login/domain/models/remote/set_pin_response_model.dart';
 import 'package:cricklo/features/login/domain/models/remote/user_model.dart';
@@ -210,5 +211,10 @@ abstract class ApiService {
   Future<GetFollowersModel> followers(
     @Path("entityId") String entityId,
     @Body() Map<String, dynamic> body,
+  );
+
+  @GET(ApiEndpointConstants.following)
+  Future<GetFollowingResponseModel> following(
+    @Path("profileId") String profileId,
   );
 }

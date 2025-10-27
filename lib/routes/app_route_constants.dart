@@ -26,4 +26,5 @@ class Routes {
   static const tournamentPage = "/tournament-page";
 
   static const followersPage = "/followers-page";
+  static const followingPage = "/following-page";
 }

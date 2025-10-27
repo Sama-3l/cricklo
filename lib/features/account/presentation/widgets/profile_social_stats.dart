@@ -59,6 +59,10 @@ class ProfileSocialStats extends StatelessWidget {
                     GoRouter.of(
                       context,
                     ).push(Routes.followersPage, extra: [entityId, entityType]);
+                  } else if (entityType == EntityType.player) {
+                    GoRouter.of(
+                      context,
+                    ).push(Routes.followingPage, extra: entityId);
                   }
                 },
               ),

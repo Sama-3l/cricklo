@@ -2,6 +2,7 @@ import 'package:cricklo/core/errors/failure.dart';
 import 'package:cricklo/features/follow/data/datasource/follow_datasource_remote.dart';
 import 'package:cricklo/features/follow/domain/entities/follow_response_entity.dart';
 import 'package:cricklo/features/follow/domain/entities/get_followers_entity.dart';
+import 'package:cricklo/features/follow/domain/entities/get_following_response_entity.dart';
 import 'package:cricklo/features/follow/domain/repo/follow_repo.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
@@ -73,6 +74,35 @@ class FollowRepoImpl extends FollowRepo {
         GetFollowersEntity(
           success: false,
           followers: [],
+          message: message,
+          errorCode: code,
+        ),
+      );
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, GetFollowingResponseEntity>> following(
+    String profileId,
+  ) async {
+    try {
+      final response = await _datasourceRemote.following(profileId);
+      return Right(response.toEntity());
+    } on DioException catch (e) {
+      final data = e.response?.data;
+
+      final code = data?['error']?['code'];
+      final message = data?['error']?['message'];
+
+      return Right(
+        GetFollowingResponseEntity(
+          success: false,
+          players: [],
+          teams: [],
+          matches: [],
+          tournaments: [],
           message: message,
           errorCode: code,
         ),

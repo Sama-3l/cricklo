@@ -1,5 +1,5 @@
 import 'package:cricklo/core/utils/constants/enums.dart';
-import 'package:cricklo/features/follow/presentation/blocs/cubits/cubit/followers_page_cubit.dart';
+import 'package:cricklo/features/follow/presentation/blocs/cubits/FollowersPageCubit/followers_page_cubit.dart';
 import 'package:cricklo/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

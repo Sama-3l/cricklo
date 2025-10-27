@@ -8,9 +8,11 @@ import 'package:cricklo/features/follow/data/datasource/follow_datasource_remote
 import 'package:cricklo/features/follow/data/repo/follow_repo_impl.dart';
 import 'package:cricklo/features/follow/data/usecases/follow_usecase.dart';
 import 'package:cricklo/features/follow/data/usecases/get_followers_usecase.dart';
+import 'package:cricklo/features/follow/data/usecases/get_following_usecase.dart';
 import 'package:cricklo/features/follow/data/usecases/unfollow_usecase.dart';
 import 'package:cricklo/features/follow/domain/repo/follow_repo.dart';
-import 'package:cricklo/features/follow/presentation/blocs/cubits/cubit/followers_page_cubit.dart';
+import 'package:cricklo/features/follow/presentation/blocs/cubits/FollowersPageCubit/followers_page_cubit.dart';
+import 'package:cricklo/features/follow/presentation/blocs/cubits/FollowingPageCubit/following_page_cubit.dart';
 import 'package:cricklo/features/login/data/datasource/login_remote_datasource.dart';
 import 'package:cricklo/features/login/data/repo/auth_repo_impl.dart';
 import 'package:cricklo/features/login/data/usecases/login_usecase.dart';
@@ -488,8 +490,14 @@ void _followDependencies() {
   sl.registerLazySingleton<GetFollowersUsecase>(
     () => GetFollowersUsecase(sl<FollowRepo>()),
   );
+  sl.registerLazySingleton<GetFollowingUsecase>(
+    () => GetFollowingUsecase(sl<FollowRepo>()),
+  );
   //cubit
   sl.registerFactory<FollowerPageCubit>(
     () => FollowerPageCubit(sl<GetFollowersUsecase>()),
+  );
+  sl.registerFactory<FollowingPageCubit>(
+    () => FollowingPageCubit(sl<GetFollowingUsecase>()),
   );
 }

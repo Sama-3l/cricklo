@@ -1,5 +1,6 @@
 import 'package:cricklo/features/follow/domain/models/remote/follow_response_model.dart';
 import 'package:cricklo/features/follow/domain/models/remote/get_followers_model.dart';
+import 'package:cricklo/features/follow/domain/models/remote/get_following_response_model.dart';
 import 'package:cricklo/services/api_service.dart';
 
 abstract class FollowDatasourceRemote {
@@ -15,6 +16,7 @@ abstract class FollowDatasourceRemote {
     String entityId,
     Map<String, dynamic> body,
   );
+  Future<GetFollowingResponseModel> following(String profileId);
 }
 
 class FollowDatasourceRemoteImpl extends FollowDatasourceRemote {
@@ -44,5 +46,10 @@ class FollowDatasourceRemoteImpl extends FollowDatasourceRemote {
     Map<String, dynamic> body,
   ) {
     return _apiService.followers(entityId, body);
+  }
+
+  @override
+  Future<GetFollowingResponseModel> following(String profileId) {
+    return _apiService.following(profileId);
   }
 }

@@ -3,6 +3,7 @@ import 'package:cricklo/core/utils/constants/enums.dart';
 import 'package:cricklo/core/utils/constants/global_variables.dart';
 import 'package:cricklo/features/account/presentation/screens/profile_page.dart';
 import 'package:cricklo/features/follow/presentation/screens/followers_page.dart';
+import 'package:cricklo/features/follow/presentation/screens/following_page.dart';
 import 'package:cricklo/features/login/domain/entities/user_entitiy.dart';
 import 'package:cricklo/features/login/presentation/screens/login_page.dart';
 import 'package:cricklo/features/login/presentation/screens/otp_page.dart';
@@ -251,6 +252,15 @@ class AppRouter {
           final entityType = extra[1] as EntityType;
           return MaterialPage(
             child: FollowersPage(entityId: entityId, entityType: entityType),
+          );
+        },
+      ),
+      GoRoute(
+        name: Routes.followingPage,
+        path: Routes.followingPage,
+        pageBuilder: (context, state) {
+          return MaterialPage(
+            child: FollowingPage(profileId: state.extra as String),
           );
         },
       ),
