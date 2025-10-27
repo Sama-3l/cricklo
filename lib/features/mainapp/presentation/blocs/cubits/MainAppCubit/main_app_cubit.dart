@@ -132,7 +132,7 @@ class MainAppCubit extends Cubit<MainAppState> {
         currentIndex: state.currentIndex,
         showOptions: state.showOptions,
         matches: state.matches,
-        user: state.user?.copyWith(unreadNotifications: 0),
+        user: state.user,
         loading: false,
       ),
     );
@@ -165,7 +165,7 @@ class MainAppCubit extends Cubit<MainAppState> {
             currentIndex: state.currentIndex,
             showOptions: state.showOptions,
             matches: state.matches,
-            user: state.user?.copyWith(unreadNotifications: 0),
+            user: state.user,
             loading: false,
           ),
         );
@@ -187,7 +187,7 @@ class MainAppCubit extends Cubit<MainAppState> {
               currentIndex: state.currentIndex,
               showOptions: state.showOptions,
               matches: response.matches,
-              user: state.user?.copyWith(unreadNotifications: 0),
+              user: state.user,
               loading: false,
             ),
           );
@@ -200,7 +200,7 @@ class MainAppCubit extends Cubit<MainAppState> {
               currentIndex: state.currentIndex,
               showOptions: state.showOptions,
               matches: state.matches,
-              user: state.user?.copyWith(unreadNotifications: 0),
+              user: state.user,
               loading: false,
             ),
           );
@@ -218,7 +218,7 @@ class MainAppCubit extends Cubit<MainAppState> {
         currentIndex: state.currentIndex,
         showOptions: state.showOptions,
         matches: state.matches,
-        user: state.user?.copyWith(unreadNotifications: 0),
+        user: state.user,
         loading: false,
       ),
     );
@@ -250,7 +250,7 @@ class MainAppCubit extends Cubit<MainAppState> {
             currentIndex: state.currentIndex,
             showOptions: state.showOptions,
             matches: state.matches,
-            user: state.user?.copyWith(unreadNotifications: 0),
+            user: state.user,
             loading: false,
           ),
         );
@@ -265,7 +265,7 @@ class MainAppCubit extends Cubit<MainAppState> {
               currentIndex: state.currentIndex,
               showOptions: state.showOptions,
               matches: state.matches,
-              user: state.user?.copyWith(unreadNotifications: 0),
+              user: state.user,
               loading: false,
             ),
           );
@@ -278,7 +278,7 @@ class MainAppCubit extends Cubit<MainAppState> {
               currentIndex: state.currentIndex,
               showOptions: state.showOptions,
               matches: state.matches,
-              user: state.user?.copyWith(unreadNotifications: 0),
+              user: state.user,
               loading: false,
             ),
           );
@@ -297,7 +297,7 @@ class MainAppCubit extends Cubit<MainAppState> {
         currentIndex: state.currentIndex,
         showOptions: state.showOptions,
         matches: state.matches,
-        user: state.user?.copyWith(unreadNotifications: 0),
+        user: state.user,
         loading: state.loading,
       ),
     );

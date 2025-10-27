@@ -3,7 +3,9 @@ import 'package:cricklo/core/utils/constants/enums.dart';
 import 'package:cricklo/core/utils/constants/global_variables.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/home/presentation/widgets/section_header.dart';
+import 'package:cricklo/features/tournament/domain/entities/tournament_team_entity.dart';
 import 'package:cricklo/features/tournament/presentation/blocs/cubits/TournamentCubit/tournament_cubit.dart';
+import 'package:cricklo/features/tournament/presentation/widgets/add_team_to_group_bottom_sheet.dart';
 import 'package:cricklo/features/tournament/presentation/widgets/points_table.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,7 +23,8 @@ class PointsPage extends StatelessWidget {
             child: Column(
               children: [
                 if (state.tournamentEntity!.organizerId ==
-                    GlobalVariables.user!.profileId)
+                        GlobalVariables.user!.profileId &&
+                    state.tournamentEntity!.groupMatches.isEmpty)
                   Row(
                     children: [
                       const Spacer(),
@@ -82,7 +85,11 @@ class PointsPage extends StatelessWidget {
                                       ),
                                     ),
                                     if (state.tournamentEntity!.organizerId ==
-                                        GlobalVariables.user!.profileId) ...[
+                                            GlobalVariables.user!.profileId &&
+                                        state
+                                            .tournamentEntity!
+                                            .groupMatches
+                                            .isEmpty) ...[
                                       InkWell(
                                         onTap: () =>
                                             cubit.removeGroup(context, index),
@@ -125,6 +132,72 @@ class PointsPage extends StatelessWidget {
                                           padding: EdgeInsets.all(4),
                                           child: Icon(
                                             Icons.edit,
+                                            color: ColorsConstants.defaultBlack,
+                                            size: 12,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 16),
+                                      InkWell(
+                                        onTap: () async {
+                                          final alreadyAddedTeams =
+                                              <TournamentTeamEntity>[];
+                                          for (var teams
+                                              in state.tournamentEntity!.groups
+                                                  .map((e) => e.teams)) {
+                                            alreadyAddedTeams.addAll(teams);
+                                          }
+                                          final alreadyAddedTeamIds =
+                                              alreadyAddedTeams.map(
+                                                (e) => e.id,
+                                              );
+                                          final selectedTeams =
+                                              await showModalBottomSheet(
+                                                context: context,
+                                                isScrollControlled: true,
+                                                builder: (context) =>
+                                                    AddTeamToGroupBottomSheet(
+                                                      allTeams: state
+                                                          .tournamentEntity!
+                                                          .teams
+                                                          .where(
+                                                            (e) =>
+                                                                !alreadyAddedTeamIds
+                                                                    .contains(
+                                                                      e.id,
+                                                                    ),
+                                                          )
+                                                          .toList(),
+                                                    ),
+                                              );
+                                          if (selectedTeams != null &&
+                                              (selectedTeams
+                                                      as List<
+                                                        TournamentTeamEntity
+                                                      >)
+                                                  .isNotEmpty) {
+                                            cubit.addTeamToGroup(
+                                              context,
+                                              selectedTeams,
+                                              index,
+                                            );
+                                          }
+                                        },
+                                        borderRadius: BorderRadius.circular(24),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              width: 1,
+                                              color:
+                                                  ColorsConstants.defaultBlack,
+                                            ),
+                                            borderRadius: BorderRadius.circular(
+                                              24,
+                                            ),
+                                          ),
+                                          padding: EdgeInsets.all(4),
+                                          child: Icon(
+                                            Icons.add,
                                             color: ColorsConstants.defaultBlack,
                                             size: 12,
                                           ),

@@ -40,21 +40,36 @@ class PointsTable extends StatelessWidget {
                     SecondaryButton(
                       title: "Add Team",
                       onTap: () async {
-                        final selectedTeams = await showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          builder: (context) => AddTeamToGroupBottomSheet(
-                            allTeams: state.tournamentEntity!.teams,
-                          ),
-                        );
-                        if (selectedTeams != null &&
-                            (selectedTeams as List<TournamentTeamEntity>)
-                                .isNotEmpty) {
-                          cubit.addTeamToGroup(
-                            context,
-                            selectedTeams,
-                            groupIndex,
+                        if (state.tournamentEntity!.groupMatches.isEmpty) {
+                          final alreadyAddedTeams = <TournamentTeamEntity>[];
+                          for (var teams in state.tournamentEntity!.groups.map(
+                            (e) => e.teams,
+                          )) {
+                            alreadyAddedTeams.addAll(teams);
+                          }
+                          final alreadyAddedTeamIds = alreadyAddedTeams.map(
+                            (e) => e.id,
                           );
+                          final selectedTeams = await showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            builder: (context) => AddTeamToGroupBottomSheet(
+                              allTeams: state.tournamentEntity!.teams
+                                  .where(
+                                    (e) => !alreadyAddedTeamIds.contains(e.id),
+                                  )
+                                  .toList(),
+                            ),
+                          );
+                          if (selectedTeams != null &&
+                              (selectedTeams as List<TournamentTeamEntity>)
+                                  .isNotEmpty) {
+                            cubit.addTeamToGroup(
+                              context,
+                              selectedTeams,
+                              groupIndex,
+                            );
+                          }
                         }
                       },
                       color: ColorsConstants.defaultBlack,
@@ -123,34 +138,38 @@ class PointsTable extends StatelessWidget {
                 (e) => TableRow(
                   // decoration: const BoxDecoration(color: Colors.grey),
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 12.0),
-                      child: Row(
-                        children: [
-                          CircleAvatar(
-                            radius: 24,
-                            backgroundColor: ColorsConstants.surfaceOrange,
-                            backgroundImage: CachedNetworkImageProvider(
-                              e.teamLogo,
-                            ),
-                            child: Icon(
-                              Icons.people,
-                              size: 12,
-                              color: ColorsConstants.defaultBlack,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Text(
-                              Methods.battingTeamAbbr(e.name),
-                              style: TextStyles.poppinsMedium.copyWith(
-                                fontSize: 16,
-                                letterSpacing: -0.8,
+                    InkWell(
+                      onTap: () =>
+                          cubit.removeTeamFromGroup(context, groupIndex, e),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 12.0),
+                        child: Row(
+                          children: [
+                            CircleAvatar(
+                              radius: 24,
+                              backgroundColor: ColorsConstants.surfaceOrange,
+                              backgroundImage: CachedNetworkImageProvider(
+                                e.teamLogo,
+                              ),
+                              child: Icon(
+                                Icons.people,
+                                size: 12,
                                 color: ColorsConstants.defaultBlack,
                               ),
                             ),
-                          ),
-                        ],
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                Methods.battingTeamAbbr(e.name),
+                                style: TextStyles.poppinsMedium.copyWith(
+                                  fontSize: 16,
+                                  letterSpacing: -0.8,
+                                  color: ColorsConstants.defaultBlack,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     ...headings.map(

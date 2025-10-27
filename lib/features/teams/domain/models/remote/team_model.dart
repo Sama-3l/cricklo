@@ -104,7 +104,11 @@ class TeamModel {
                 .toList()
           : [],
       location: map.containsKey('location')
-          ? LocationModel.fromJson(map['location'] as Map<String, dynamic>)
+          ? map['location'] == null
+                ? LocationModel(area: "", city: "", state: "", lat: 0, lng: 0)
+                : LocationModel.fromJson(
+                    map['location'] as Map<String, dynamic>,
+                  )
           : map['city'] == null
           ? LocationModel(area: "", city: "", state: "", lat: 0, lng: 0)
           : LocationModel.fromJson({

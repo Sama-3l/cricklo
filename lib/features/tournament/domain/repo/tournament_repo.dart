@@ -46,4 +46,8 @@ abstract class TournamentRepo {
   Future<Either<Failure, CreateGroupTableResponseEntity>> createMatches(
     String tournamentId,
   );
+  Future<Either<Failure, InviteResponseResponseEntity>> removeFromGroup(
+    String tournamentId,
+    Map<String, dynamic> body,
+  );
 }

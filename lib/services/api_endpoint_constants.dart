@@ -41,14 +41,17 @@ class ApiEndpointConstants {
   static const tournamentInviteTeams = '/tournament/{tournamentId}/invite/team';
   static const tournamentApply = '/tournament/{tournamentId}/apply/team';
   static const tournamentDetails = '/tournament/{tournamentId}';
-  static const tournamentCreateGroup = 'tournament/{tournamentId}/create-group';
-  static const tournamentAddToGroup = 'tournament/{tournamentId}/add-to-group';
+  static const tournamentCreateGroup =
+      '/tournament/{tournamentId}/create-group';
+  static const tournamentAddToGroup = '/tournament/{tournamentId}/add-to-group';
   static const tournamentDeleteGroup =
       '/tournament/delete-group/{tournamentId}';
   static const tournamentEditGroup = '/tournament/edit-group/{tournamentId}';
   static const tournamentCreateMatches =
       '/tournament/create-matches/{tournamentId}';
   static const tournamentUpdateMatchDetails = '/update-match/{tournamentId}';
+  static const tournamentRemoveTeamFromGroup =
+      '/tournament/{tournamentId}/remove-from-group';
 
   static const follow = '/socials/follow/{entityId}';
   static const unfollow = '/socials/unfollow/{entityId}';

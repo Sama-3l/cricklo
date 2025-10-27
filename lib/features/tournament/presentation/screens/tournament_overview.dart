@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cricklo/core/utils/common/primary_button.dart';
-import 'package:cricklo/core/utils/constants/enums.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/home/presentation/widgets/section_header.dart';
 import 'package:cricklo/features/tournament/presentation/blocs/cubits/TournamentCubit/tournament_cubit.dart';
@@ -105,48 +104,51 @@ class TournamentOverview extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 8),
-                SizedBox(
-                  width: double.infinity,
-                  child: PrimaryButton(
-                    padding: EdgeInsets.symmetric(vertical: 12),
-                    disabled: false,
-                    onPress: () => cubit.applyTournament(context),
-                    noShadow: true,
-                    radius: 16,
-                    color: state.applied
-                        ? ColorsConstants.defaultBlack
-                        : ColorsConstants.accentOrange,
-                    child: state.applied
-                        ? Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                "Applied",
-                                style: TextStyles.poppinsSemiBold.copyWith(
-                                  fontSize: 10,
-                                  letterSpacing: -0.5,
-                                  color: ColorsConstants.defaultWhite,
+                if (!state.loading &&
+                    state.tournamentEntity!.groupMatches.isEmpty) ...[
+                  const SizedBox(height: 8),
+                  SizedBox(
+                    width: double.infinity,
+                    child: PrimaryButton(
+                      padding: EdgeInsets.symmetric(vertical: 12),
+                      disabled: false,
+                      onPress: () => cubit.applyTournament(context),
+                      noShadow: true,
+                      radius: 16,
+                      color: state.applied
+                          ? ColorsConstants.defaultBlack
+                          : ColorsConstants.accentOrange,
+                      child: state.applied
+                          ? Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  "Applied",
+                                  style: TextStyles.poppinsSemiBold.copyWith(
+                                    fontSize: 10,
+                                    letterSpacing: -0.5,
+                                    color: ColorsConstants.defaultWhite,
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(width: 8),
-                              Icon(
-                                Icons.check_circle_outline_rounded,
+                                const SizedBox(width: 8),
+                                Icon(
+                                  Icons.check_circle_outline_rounded,
+                                  color: ColorsConstants.defaultWhite,
+                                  size: 12,
+                                ),
+                              ],
+                            )
+                          : Text(
+                              "Apply",
+                              style: TextStyles.poppinsSemiBold.copyWith(
+                                fontSize: 10,
+                                letterSpacing: -0.5,
                                 color: ColorsConstants.defaultWhite,
-                                size: 12,
                               ),
-                            ],
-                          )
-                        : Text(
-                            "Apply",
-                            style: TextStyles.poppinsSemiBold.copyWith(
-                              fontSize: 10,
-                              letterSpacing: -0.5,
-                              color: ColorsConstants.defaultWhite,
                             ),
-                          ),
+                    ),
                   ),
-                ),
+                ],
               ],
             ),
           ),
@@ -197,20 +199,11 @@ class TournamentOverview extends StatelessWidget {
                         right: index == 9 ? 16.0 : 0,
                       ),
                       child: OverviewItem(
-                        topTitle:
-                            state.tournamentEntity!.teams[index].inviteStatus ==
-                                    InviteStatus.invited ||
-                                state
-                                        .tournamentEntity!
-                                        .teams[index]
-                                        .inviteStatus ==
-                                    InviteStatus.pending
-                            ? state
-                                  .tournamentEntity!
-                                  .teams[index]
-                                  .inviteStatus
-                                  .title
-                            : null,
+                        topTitle: state
+                            .tournamentEntity!
+                            .teams[index]
+                            .inviteStatus
+                            .title,
                         title: state.tournamentEntity!.teams[index].name,
                         logo: state.tournamentEntity!.teams[index].teamLogo,
                       ),

@@ -1,8 +1,11 @@
 import 'package:clipboard/clipboard.dart';
+import 'package:cricklo/core/utils/constants/enums.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/tournament/presentation/blocs/cubits/TournamentCubit/tournament_cubit.dart';
+import 'package:cricklo/routes/app_route_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class TournamentDetailsHeader extends StatelessWidget {
   const TournamentDetailsHeader({super.key});
@@ -119,38 +122,45 @@ class TournamentDetailsHeader extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(24),
-                  border: Border.all(
-                    width: 1,
-                    color: ColorsConstants.defaultBlack,
-                  ),
+              InkWell(
+                borderRadius: BorderRadius.circular(24),
+                onTap: () => GoRouter.of(context).push(
+                  Routes.followersPage,
+                  extra: [state.tournamentEntity!.id, EntityType.tournament],
                 ),
-                padding: EdgeInsets.all(8),
-                margin: EdgeInsets.only(top: 16, right: 16),
-                child: Center(
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        state.tournamentEntity!.followers.toString(),
-                        style: TextStyles.poppinsSemiBold.copyWith(
-                          color: ColorsConstants.defaultBlack,
-                          fontSize: 16,
-                          letterSpacing: -0.8,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(24),
+                    border: Border.all(
+                      width: 1,
+                      color: ColorsConstants.defaultBlack,
+                    ),
+                  ),
+                  padding: EdgeInsets.all(8),
+                  margin: EdgeInsets.only(top: 16, right: 16),
+                  child: Center(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          state.tournamentEntity!.followers.toString(),
+                          style: TextStyles.poppinsSemiBold.copyWith(
+                            color: ColorsConstants.defaultBlack,
+                            fontSize: 16,
+                            letterSpacing: -0.8,
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 4),
-                      Text(
-                        "followers",
-                        style: TextStyles.poppinsSemiBold.copyWith(
-                          color: ColorsConstants.defaultBlack,
-                          fontSize: 12,
-                          letterSpacing: -0.5,
+                        const SizedBox(width: 4),
+                        Text(
+                          "followers",
+                          style: TextStyles.poppinsSemiBold.copyWith(
+                            color: ColorsConstants.defaultBlack,
+                            fontSize: 12,
+                            letterSpacing: -0.5,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),

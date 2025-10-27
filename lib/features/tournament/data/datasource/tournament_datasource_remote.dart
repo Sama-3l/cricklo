@@ -32,6 +32,10 @@ abstract class TournamentDatasourceRemote {
     String tournamentId,
     Map<String, dynamic> body,
   );
+  Future<InviteResponseResponseModel> removeFromGroup(
+    String tournamentId,
+    Map<String, dynamic> body,
+  );
   Future<InviteResponseResponseModel> deleteGroup(
     String tournamentId,
     Map<String, dynamic> body,
@@ -117,5 +121,13 @@ class TournamentDatasourceRemoteImpl extends TournamentDatasourceRemote {
     String tournamentId,
   ) {
     return _apiService.createTournamentMatches(tournamentId, {});
+  }
+
+  @override
+  Future<InviteResponseResponseModel> removeFromGroup(
+    String tournamentId,
+    Map<String, dynamic> body,
+  ) {
+    return _apiService.tournamentRemoveTeamFromGroup(tournamentId, body);
   }
 }

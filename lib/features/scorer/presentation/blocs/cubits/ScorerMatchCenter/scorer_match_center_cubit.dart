@@ -275,7 +275,6 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
             oversData: [],
           ),
         );
-
         if (response.match!.tossChoice == null) {
           final response = await _startMatchUsecase(
             ScorerRequestUsecaseEntity(

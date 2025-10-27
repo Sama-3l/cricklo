@@ -1,3 +1,5 @@
+import 'package:cricklo/core/utils/common/secondary_button.dart';
+import 'package:cricklo/core/utils/constants/enums.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/home/presentation/widgets/match_tile.dart';
 import 'package:cricklo/features/home/presentation/widgets/shimmer_match_tile.dart';
@@ -28,6 +30,7 @@ class TournamentMatchesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<TournamentCubit>();
     final state = context.read<TournamentCubit>().state;
     final tournament = state.tournamentEntity;
 
@@ -65,14 +68,21 @@ class TournamentMatchesPage extends StatelessWidget {
               children: [
                 Expanded(
                   child: Center(
-                    child: Text(
-                      "No Moderators Yet",
-                      style: TextStyles.poppinsSemiBold.copyWith(
-                        fontSize: 24,
-                        letterSpacing: -1.2,
-                        color: ColorsConstants.accentOrange,
-                      ),
-                    ),
+                    child:
+                        state.tournamentEntity!.tournamentType ==
+                            TournamentType.knockout
+                        ? SecondaryButton(
+                            onTap: () => cubit.createKnockoutMatches(context),
+                            title: "Create Group Matches",
+                          )
+                        : Text(
+                            "No Moderators Yet",
+                            style: TextStyles.poppinsSemiBold.copyWith(
+                              fontSize: 24,
+                              letterSpacing: -1.2,
+                              color: ColorsConstants.accentOrange,
+                            ),
+                          ),
                   ),
                 ),
               ],

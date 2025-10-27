@@ -21,6 +21,7 @@ import 'package:cricklo/features/tournament/data/usecases/edit_group_usecase.dar
 import 'package:cricklo/features/tournament/data/usecases/get_tournament_details_usecase.dart';
 import 'package:cricklo/features/tournament/data/usecases/invite_moderators_usecase.dart';
 import 'package:cricklo/features/tournament/data/usecases/invite_teams_usecase.dart';
+import 'package:cricklo/features/tournament/data/usecases/remove_team_from_group_usecase.dart';
 import 'package:cricklo/features/tournament/domain/entities/group_entity.dart';
 import 'package:cricklo/features/tournament/domain/entities/tournament_entity.dart';
 import 'package:cricklo/features/tournament/domain/entities/tournament_team_entity.dart';
@@ -42,6 +43,7 @@ class TournamentCubit extends Cubit<TournamentState> {
   final FollowUsecase _followUsecase;
   final UnFollowUsecase _unFollowUsecase;
   final CreateGroupTableUsecase _createGroupTableUsecase;
+  final RemoveTeamFromGroupUsecase _removeTeamFromGroupUsecase;
   int error = 0;
   TournamentCubit(
     this._inviteModeratorsUsecase,
@@ -55,6 +57,7 @@ class TournamentCubit extends Cubit<TournamentState> {
     this._followUsecase,
     this._unFollowUsecase,
     this._createGroupTableUsecase,
+    this._removeTeamFromGroupUsecase,
   ) : super(
         TournamentUpdate(
           tournamentEntity: null,
@@ -66,7 +69,6 @@ class TournamentCubit extends Cubit<TournamentState> {
 
   init(BuildContext context, TournamentEntity tournamentEntity) async {
     emit(state.copyWith(tournamentEntity: tournamentEntity, loading: true));
-    // print(CreateGroupTableResponseModel.fromJson(test).toEntity().playoffs);
     final response = await _getTournamentDetailsUsecase(
       state.tournamentEntity!.id,
     );
@@ -106,6 +108,7 @@ class TournamentCubit extends Cubit<TournamentState> {
                 groups: response.tournamentEntity!.groups,
                 groupMatches: response.tournamentEntity!.groupMatches,
                 playoffMatches: response.tournamentEntity!.playoffMatches,
+                followers: response.tournamentEntity!.followers,
               ),
             ),
           );
@@ -530,6 +533,258 @@ class TournamentCubit extends Cubit<TournamentState> {
         }
       },
     );
+  }
+
+  void removeTeamFromGroup(
+    BuildContext context,
+    int index,
+    TournamentTeamEntity team,
+  ) async {
+    final response = await showDialog(
+      context: context,
+      barrierDismissible: false, // prevent accidental close
+      builder: (ctx) {
+        return StatefulBuilder(
+          builder: (ctx, setState) {
+            return AlertDialog(
+              backgroundColor: ColorsConstants.defaultWhite,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              title: Text(
+                "Remove Team",
+                style: TextStyles.poppinsSemiBold.copyWith(
+                  fontSize: 16,
+                  letterSpacing: -0.8,
+                  color: ColorsConstants.defaultBlack,
+                ),
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Remove Team From Group?",
+                    style: TextStyles.poppinsMedium.copyWith(
+                      fontSize: 12,
+                      letterSpacing: -0.5,
+                      color: ColorsConstants.defaultBlack,
+                    ),
+                  ),
+                ],
+              ),
+              actionsAlignment: MainAxisAlignment.start,
+              actions: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: ColorsConstants.accentOrange,
+                        foregroundColor: ColorsConstants.defaultWhite,
+                      ),
+                      onPressed: () {
+                        GoRouter.of(ctx).pop(true);
+                      },
+                      child: Text(
+                        "Yes",
+                        style: TextStyles.poppinsSemiBold.copyWith(
+                          fontSize: 12,
+                          letterSpacing: -0.5,
+                          color: ColorsConstants.defaultWhite,
+                        ),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        GoRouter.of(ctx).pop(false);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadiusGeometry.circular(24),
+                          side: BorderSide(color: ColorsConstants.accentOrange),
+                        ),
+                      ),
+                      child: Text(
+                        "Cancel",
+                        style: TextStyles.poppinsSemiBold.copyWith(
+                          fontSize: 12,
+                          letterSpacing: -0.5,
+                          color: ColorsConstants.defaultBlack,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+    if (response as bool? ?? false) {
+      state.tournamentEntity!.groups[index].teams.remove(team);
+      emit(state.copyWith());
+      final response = await _removeTeamFromGroupUsecase(
+        AddTeamToGroupUsecaseEntity(
+          groupName: state.tournamentEntity!.groups[index].name,
+          teamId: team.id,
+          tournamentId: state.tournamentEntity!.id,
+        ),
+      );
+      response.fold(
+        (_) {
+          WidgetDecider.showSnackBar(
+            context,
+            "Couldn't remove team from group",
+          );
+          state.tournamentEntity!.groups[index].teams.removeLast();
+          emit(state.copyWith());
+        },
+        (response) {
+          if (!response.success) {
+            WidgetDecider.showSnackBar(
+              context,
+              response.errorMessage ?? "Couldn't remove team from group",
+            );
+            state.tournamentEntity!.groups[index].teams.removeLast();
+            emit(state.copyWith());
+          } else {}
+        },
+      );
+    }
+  }
+
+  void createKnockoutMatches(BuildContext context) async {
+    final response = await showDialog(
+      context: context,
+      barrierDismissible: false, // prevent accidental close
+      builder: (ctx) {
+        return StatefulBuilder(
+          builder: (ctx, setState) {
+            return AlertDialog(
+              backgroundColor: ColorsConstants.defaultWhite,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              title: Text(
+                "Create Matches",
+                style: TextStyles.poppinsSemiBold.copyWith(
+                  fontSize: 16,
+                  letterSpacing: -0.8,
+                  color: ColorsConstants.defaultBlack,
+                ),
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        "Number of Groups:",
+                        style: TextStyles.poppinsMedium.copyWith(
+                          fontSize: 12,
+                          letterSpacing: -0.5,
+                          color: ColorsConstants.defaultBlack,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Text(
+                        "${state.tournamentEntity!.groups.length}",
+                        style: TextStyles.poppinsBold.copyWith(
+                          fontSize: 16,
+                          letterSpacing: -0.8,
+                          color: ColorsConstants.defaultBlack,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Text(
+                    "You cannot edit groups after this.",
+                    style: TextStyles.poppinsMedium.copyWith(
+                      fontSize: 12,
+                      letterSpacing: -0.5,
+                      color: ColorsConstants.defaultBlack,
+                    ),
+                  ),
+                ],
+              ),
+              actionsAlignment: MainAxisAlignment.start,
+              actions: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: ColorsConstants.accentOrange,
+                        foregroundColor: ColorsConstants.defaultWhite,
+                      ),
+                      onPressed: () {
+                        GoRouter.of(ctx).pop(true);
+                      },
+                      child: Text(
+                        "Lock Groups & Create Matches",
+                        style: TextStyles.poppinsSemiBold.copyWith(
+                          fontSize: 12,
+                          letterSpacing: -0.5,
+                          color: ColorsConstants.defaultWhite,
+                        ),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        GoRouter.of(ctx).pop(false);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadiusGeometry.circular(24),
+                          side: BorderSide(color: ColorsConstants.accentOrange),
+                        ),
+                      ),
+                      child: Text(
+                        "Cancel",
+                        style: TextStyles.poppinsSemiBold.copyWith(
+                          fontSize: 12,
+                          letterSpacing: -0.5,
+                          color: ColorsConstants.defaultBlack,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+    if ((response as bool? ?? false)) {
+      final response = await _createGroupTableUsecase(
+        state.tournamentEntity!.id,
+      );
+      response.fold(
+        (_) {
+          state.tournamentEntity!.groups.clear();
+          emit(state.copyWith());
+          WidgetDecider.showSnackBar(context, "Couldn't create groups");
+        },
+        (response) {
+          if (!response.success) {
+            WidgetDecider.showSnackBar(context, "Couldn't create groups");
+          } else {
+            for (var group in state.tournamentEntity!.groups) {
+              group.matches.addAll(response.groupMatches[group.name]!);
+              state.tournamentEntity!.groupMatches.addAll(
+                response.groupMatches[group.name]!,
+              );
+            }
+            state.tournamentEntity!.playoffMatches.addAll(response.playoffs);
+            emit(state.copyWith());
+          }
+        },
+      );
+    }
   }
 
   void createLeaguePointsTable(BuildContext context) async {
