@@ -240,8 +240,21 @@ class PointsPage extends StatelessWidget {
             padding: const EdgeInsets.only(top: 24.0),
             child: Column(
               children: [
-                state.tournamentEntity == null ||
-                        state.tournamentEntity!.groups.isEmpty
+                state.loading
+                    ? Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Column(
+                          children: [
+                            SectionHeader(
+                              title: "League Group",
+                              showIcon: false,
+                            ),
+                            ShimmerTable(headings: ["M", "W", "L", "P", "NRR"]),
+                          ],
+                        ),
+                      )
+                    : state.tournamentEntity == null ||
+                          state.tournamentEntity!.groups.isEmpty
                     ? state.tournamentEntity!.organizerId ==
                               GlobalVariables.user!.profileId
                           ? Expanded(

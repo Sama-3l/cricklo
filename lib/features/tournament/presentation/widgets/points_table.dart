@@ -6,7 +6,6 @@ import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/tournament/domain/entities/tournament_team_entity.dart';
 import 'package:cricklo/features/tournament/presentation/blocs/cubits/TournamentCubit/tournament_cubit.dart';
 import 'package:cricklo/features/tournament/presentation/widgets/add_team_to_group_bottom_sheet.dart';
-import 'package:cricklo/features/tournament/presentation/widgets/shimmer_points_table.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -173,10 +172,20 @@ class PointsTable extends StatelessWidget {
                         ),
                       ),
                     ),
-                    ...headings.map(
+                    ...[
+                      e.matches,
+                      e.won,
+                      e.loss,
+                      e.points,
+                      e.nrr > 0
+                          ? "+${e.nrr.toStringAsFixed(2)}"
+                          : e.nrr == 0
+                          ? "0"
+                          : e.nrr.toStringAsFixed(2),
+                    ].map(
                       (e) => Center(
                         child: Text(
-                          '0',
+                          e.toString(),
                           style: TextStyles.poppinsSemiBold.copyWith(
                             fontSize: 16,
                             letterSpacing: -0.8,
