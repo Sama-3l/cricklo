@@ -3,6 +3,7 @@ import 'package:cricklo/features/scorer/domain/models/remote/get_match_state_mod
 import 'package:cricklo/features/scorer/domain/models/remote/scorer_response_model.dart';
 import 'package:cricklo/services/api_service.dart';
 import 'package:cricklo/services/socket_service.dart';
+import 'package:flutter/material.dart';
 
 abstract class ScorerDatasourceRemote {
   Future<ScorerResponseModel> startScoring(Map<String, dynamic> body);
@@ -11,7 +12,10 @@ abstract class ScorerDatasourceRemote {
   Future<ScorerResponseModel> scorerInningsChange(Map<String, dynamic> body);
   Future<ScorerResponseModel> scorerComplete(Map<String, dynamic> request);
   Future<GetMatchStateResponseModel> getMatchState(String matchId);
-  Stream<BroadcastWrapperEntity> listenToMatchStream(String matchId);
+  Stream<BroadcastWrapperEntity> listenToMatchStream(
+    String matchId,
+    BuildContext context,
+  );
 }
 
 class ScorerDatasourceRemoteImpl extends ScorerDatasourceRemote {
@@ -51,8 +55,11 @@ class ScorerDatasourceRemoteImpl extends ScorerDatasourceRemote {
   }
 
   @override
-  Stream<BroadcastWrapperEntity> listenToMatchStream(String matchId) {
-    _socketService.connectToMatchRoom(matchId);
+  Stream<BroadcastWrapperEntity> listenToMatchStream(
+    String matchId,
+    BuildContext context,
+  ) {
+    _socketService.connectToMatchRoom(matchId, context);
     return _socketService.listenToMatchStream().map(
       (model) => model.toEntity(),
     );

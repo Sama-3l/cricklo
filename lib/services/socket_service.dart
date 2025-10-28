@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/mainapp/domain/repo/socket_auth_repo.dart';
 import 'package:cricklo/features/scorer/domain/models/remote/broadcast_wrapper_model.dart';
+import 'package:flutter/material.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:get_it/get_it.dart';
 
@@ -64,7 +66,7 @@ class SocketService {
   }
 
   /// Connect to match room
-  void connectToMatchRoom(String matchId) {
+  void connectToMatchRoom(String matchId, BuildContext context) {
     matchSocket = IO.io(
       'https://cricklo.onrender.com/match',
       IO.OptionBuilder()
@@ -78,15 +80,57 @@ class SocketService {
     );
 
     matchSocket!.onConnect((_) {
-      print('Connected to match room: $matchId');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: ColorsConstants.defaultBlack,
+          padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+          content: Text(
+            'Connected to match room',
+            style: TextStyles.poppinsSemiBold.copyWith(
+              fontSize: 16,
+              letterSpacing: -0.8,
+              color: ColorsConstants.defaultWhite,
+            ),
+          ),
+        ),
+      );
     });
 
     matchSocket!.onDisconnect((_) {
-      print('Disconnected from match room');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: ColorsConstants.defaultBlack,
+          padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+          content: Text(
+            'Disconnected from match room',
+            style: TextStyles.poppinsSemiBold.copyWith(
+              fontSize: 16,
+              letterSpacing: -0.8,
+              color: ColorsConstants.defaultWhite,
+            ),
+          ),
+        ),
+      );
     });
 
     matchSocket!.onError((data) {
-      print('matchSocket error: $data');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: ColorsConstants.defaultBlack,
+          padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+          content: Text(
+            'Match Room connection error',
+            style: TextStyles.poppinsSemiBold.copyWith(
+              fontSize: 16,
+              letterSpacing: -0.8,
+              color: ColorsConstants.defaultWhite,
+            ),
+          ),
+        ),
+      );
     });
     matchSocket!.connect();
   }

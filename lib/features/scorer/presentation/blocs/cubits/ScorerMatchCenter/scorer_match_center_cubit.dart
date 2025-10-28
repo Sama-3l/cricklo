@@ -7,6 +7,7 @@ import 'package:cricklo/core/utils/constants/methods.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/core/utils/constants/widget_decider.dart';
 import 'package:cricklo/features/matches/domain/entities/match_entity.dart';
+import 'package:cricklo/features/scorer/data/entities/listen_to_match_stream_usecase_entity.dart';
 import 'package:cricklo/features/scorer/data/entities/scorer_request_usecase_entity.dart';
 import 'package:cricklo/features/scorer/data/usecases/get_match_state_usecase.dart';
 import 'package:cricklo/features/scorer/data/usecases/listen_to_match_usecase.dart';
@@ -65,92 +66,98 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
   void connectToMatchSocket(BuildContext context, String matchId) {
     _subscription?.cancel();
 
-    _subscription = _listenToMatchStreamUsecase(matchId).listen((either) {
-      either.fold(
-        (failure) {
-          print("Socket error: ${failure.message}");
-        },
-        (broadcast) {
-          // Only call addBall if payload exists
-          if (broadcast.payload != null && broadcast.type == "MATCH_UPDATE") {
-            final battingTeam = state.matchCenterEntity!.battingTeam!.players;
-            final bowlingTeam = state.matchCenterEntity!.bowlingTeam!.players;
-            if (broadcast.payload!["ballData"] != null) {
-              final ball = BallModel.fromJson(
-                broadcast.payload!["ballData"],
-                battingTeam: battingTeam
-                    .map((e) => MatchPlayerModel.fromEntity(e))
-                    .toList(),
-                bowlingTeam: bowlingTeam
-                    .map((e) => MatchPlayerModel.fromEntity(e))
-                    .toList(),
-              ).toEntity();
+    _subscription =
+        _listenToMatchStreamUsecase(
+          ListenToMatchStreamUsecaseEntity(matchId: matchId, context: context),
+        ).listen((either) {
+          either.fold(
+            (failure) {
+              print("Socket error: ${failure.message}");
+            },
+            (broadcast) {
+              // Only call addBall if payload exists
+              if (broadcast.payload != null &&
+                  broadcast.type == "MATCH_UPDATE") {
+                final battingTeam =
+                    state.matchCenterEntity!.battingTeam!.players;
+                final bowlingTeam =
+                    state.matchCenterEntity!.bowlingTeam!.players;
+                if (broadcast.payload!["ballData"] != null) {
+                  final ball = BallModel.fromJson(
+                    broadcast.payload!["ballData"],
+                    battingTeam: battingTeam
+                        .map((e) => MatchPlayerModel.fromEntity(e))
+                        .toList(),
+                    bowlingTeam: bowlingTeam
+                        .map((e) => MatchPlayerModel.fromEntity(e))
+                        .toList(),
+                  ).toEntity();
 
-              ball.batsman = ball.batsmanId == null
-                  ? null
-                  : battingTeam
-                        .where((e) => e.playerId == ball.batsmanId)
-                        .firstOrNull;
-              ball.secondBatsman = ball.secondBatsmanId == null
-                  ? null
-                  : battingTeam
-                        .where((e) => e.playerId == ball.secondBatsmanId)
-                        .firstOrNull;
+                  ball.batsman = ball.batsmanId == null
+                      ? null
+                      : battingTeam
+                            .where((e) => e.playerId == ball.batsmanId)
+                            .firstOrNull;
+                  ball.secondBatsman = ball.secondBatsmanId == null
+                      ? null
+                      : battingTeam
+                            .where((e) => e.playerId == ball.secondBatsmanId)
+                            .firstOrNull;
 
-              ball.bowler = ball.bowler == null
-                  ? null
-                  : bowlingTeam
-                        .where((e) => e.playerId == ball.bowlerId)
-                        .firstOrNull;
+                  ball.bowler = ball.bowler == null
+                      ? null
+                      : bowlingTeam
+                            .where((e) => e.playerId == ball.bowlerId)
+                            .firstOrNull;
 
-              ball.fielder = ball.fielder == null
-                  ? null
-                  : bowlingTeam
-                        .where((e) => e.playerId == ball.fielderId)
-                        .firstOrNull;
-              if (ball.batsman != null && ball.secondBatsman != null) {
-                addBatsman([
-                  ball.batsman!,
-                  ball.secondBatsman!,
-                ], newBatsman: false);
+                  ball.fielder = ball.fielder == null
+                      ? null
+                      : bowlingTeam
+                            .where((e) => e.playerId == ball.fielderId)
+                            .firstOrNull;
+                  if (ball.batsman != null && ball.secondBatsman != null) {
+                    addBatsman([
+                      ball.batsman!,
+                      ball.secondBatsman!,
+                    ], newBatsman: false);
+                  }
+                  if (ball.bowler != null) {
+                    editBowler(ball.bowler);
+                  }
+                  if (broadcast.undo) {
+                    undoLastBall(context);
+                  } else {
+                    addBall(
+                      context,
+                      ball.runs,
+                      ball.isExtra,
+                      extraType: ball.extraType,
+                      wicketType: ball.wicketType,
+                      sector: ball.sector,
+                      secondBatsman: ball.secondBatsman,
+                      batsmanInvolved: ball.batsman,
+                      bowlerInvolved: ball.bowler,
+                      bowlingTeamPlayerInvolved: ball.fielder,
+                    );
+                  }
+                } else if (broadcast.payload!["matchEntity"] != null) {
+                  final matchCenterEntity = MatchCenterModel.fromJson(
+                    broadcast.payload!["matchEntity"],
+                  ).toEntity();
+                  state.copyWith(matchCenterEntity: matchCenterEntity);
+                }
+              } else if (broadcast.payload != null &&
+                  broadcast.type == "INNINGS_CHANGE") {
+                // final innings = (broadcast.pa)
+                final matchCenterEntity = MatchCenterModel.fromJson(
+                  broadcast.payload!["matchEntity"],
+                ).toEntity();
+
+                emit(state.copyWith(matchCenterEntity: matchCenterEntity));
               }
-              if (ball.bowler != null) {
-                editBowler(ball.bowler);
-              }
-              if (broadcast.undo) {
-                undoLastBall(context);
-              } else {
-                addBall(
-                  context,
-                  ball.runs,
-                  ball.isExtra,
-                  extraType: ball.extraType,
-                  wicketType: ball.wicketType,
-                  sector: ball.sector,
-                  secondBatsman: ball.secondBatsman,
-                  batsmanInvolved: ball.batsman,
-                  bowlerInvolved: ball.bowler,
-                  bowlingTeamPlayerInvolved: ball.fielder,
-                );
-              }
-            } else if (broadcast.payload!["matchEntity"] != null) {
-              final matchCenterEntity = MatchCenterModel.fromJson(
-                broadcast.payload!["matchEntity"],
-              ).toEntity();
-              state.copyWith(matchCenterEntity: matchCenterEntity);
-            }
-          } else if (broadcast.payload != null &&
-              broadcast.type == "INNINGS_CHANGE") {
-            // final innings = (broadcast.pa)
-            final matchCenterEntity = MatchCenterModel.fromJson(
-              broadcast.payload!["matchEntity"],
-            ).toEntity();
-
-            emit(state.copyWith(matchCenterEntity: matchCenterEntity));
-          }
-        },
-      );
-    });
+            },
+          );
+        });
   }
 
   @override
@@ -471,7 +478,9 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
       }
     });
     if (spectator) {
+      emit(state.copyWith(loading: true));
       connectToMatchSocket(context, matchEntity.matchID);
+      emit(state.copyWith(loading: false));
     }
   }
 

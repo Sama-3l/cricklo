@@ -172,7 +172,9 @@ class AppRouter {
         name: Routes.scorerMatchComplete,
         path: Routes.scorerMatchComplete,
         pageBuilder: (context, state) {
-          final extras = state.extra as List<dynamic>;
+          final extras =
+              state.extra as List<dynamic>? ??
+              ["Team A", "Team A", "Team A won by 20 runs"];
           final logo = extras[0] as String;
           final name = extras[1] as String;
           final resultMessage = extras[2] as String;

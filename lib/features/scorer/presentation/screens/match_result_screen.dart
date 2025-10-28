@@ -43,6 +43,7 @@ class _MatchResultScreenState extends State<MatchResultScreen> {
             // Team Logo
             error
                 ? CircleAvatar(
+                    radius: 60,
                     backgroundColor: ColorsConstants.surfaceOrange,
                     child: Icon(
                       Icons.people,

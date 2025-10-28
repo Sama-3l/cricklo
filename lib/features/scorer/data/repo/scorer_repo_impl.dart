@@ -7,6 +7,7 @@ import 'package:cricklo/features/scorer/domain/entities/scorer_response_entity.d
 import 'package:cricklo/features/scorer/domain/repo/scorer_repo.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 
 class ScorerRepoImpl extends ScorerRepo {
   final ScorerDatasourceRemote remoteDataSource;
@@ -139,10 +140,11 @@ class ScorerRepoImpl extends ScorerRepo {
   @override
   Stream<Either<Failure, BroadcastWrapperEntity>> listenToMatchStream(
     String matchId,
+    BuildContext context,
   ) async* {
     try {
       yield* remoteDataSource
-          .listenToMatchStream(matchId)
+          .listenToMatchStream(matchId, context)
           .map((entity) => Right(entity));
     } catch (e) {
       yield Left(ServerFailure(message: "Unexpected error: ${e.toString()}"));

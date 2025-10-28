@@ -4,6 +4,7 @@ import 'package:cricklo/features/scorer/domain/entities/broadcast_wrapper_entity
 import 'package:cricklo/features/scorer/domain/entities/get_match_state_entity.dart';
 import 'package:cricklo/features/scorer/domain/entities/scorer_response_entity.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter/material.dart';
 
 abstract class ScorerRepo {
   Future<Either<Failure, ScorerResponseEntity>> startScoring(
@@ -27,5 +28,6 @@ abstract class ScorerRepo {
   );
   Stream<Either<Failure, BroadcastWrapperEntity>> listenToMatchStream(
     String matchId,
+    BuildContext context,
   );
 }

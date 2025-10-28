@@ -108,7 +108,9 @@ class MatchInfoPage extends StatelessWidget {
       "Date & Time": "${match!.dateAndTime.toLocal()}".split(
         '.',
       )[0], // readable local time
-      "Toss Won By": match!.tossWinner ?? "TBD",
+      "Toss Won By": match!.teamA.id == match!.tossWinner
+          ? match!.teamA.name
+          : match!.teamB.name,
       "Decided To": match!.tossChoice?.name ?? "TBD",
       "Scorer": match!.scorer["name"],
     };
