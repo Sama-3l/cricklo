@@ -7,19 +7,26 @@ class PartnershipModel {
   final MatchPlayerModel? player2;
   int runs;
   int balls;
+  int inningsNumber;
   PartnershipModel({
     this.player1,
     this.player2,
     required this.runs,
     required this.balls,
+    required this.inningsNumber,
   });
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
       'player1': player1?.playerId,
       'player2': player2?.playerId,
+      'player1Score': player1!.stats.last.runs,
+      'player2Score': player2!.stats.last.runs,
+      'player1Balls': player1!.stats.last.balls,
+      'player2Balls': player2!.stats.last.balls,
       'runs': runs,
       'balls': balls,
+      'inningsNumber': inningsNumber,
     };
   }
 
@@ -29,6 +36,7 @@ class PartnershipModel {
       balls: balls,
       player1: player1?.toEntity(),
       player2: player2?.toEntity(),
+      inningsNumber: inningsNumber,
     );
   }
 
@@ -42,6 +50,7 @@ class PartnershipModel {
       player2: entity.player1 == null
           ? null
           : MatchPlayerModel.fromEntity(entity.player2!),
+      inningsNumber: entity.inningsNumber,
     );
   }
 
@@ -58,6 +67,7 @@ class PartnershipModel {
     return PartnershipModel(
       player1: player1,
       player2: player2,
+      inningsNumber: map['inningsNumber'] as int,
       runs: map['runs'] as int,
       balls: map['balls'] as int,
     );

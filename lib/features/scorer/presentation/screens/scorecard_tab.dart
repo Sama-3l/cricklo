@@ -191,7 +191,7 @@ class _ScorecardScreenState extends State<ScorecardScreen> {
                         selectedInningsIndex,
                       ),
                       const SizedBox(height: 20),
-                      _buildPartnerships(selectedTeam),
+                      _buildPartnerships(selectedTeam, match),
                     ],
                   ),
                 ),
@@ -351,8 +351,18 @@ class _ScorecardScreenState extends State<ScorecardScreen> {
     );
   }
 
-  Widget _buildPartnerships(MatchTeamEntity battingTeam) {
-    final partnerships = battingTeam.partnerships.reversed;
+  Widget _buildPartnerships(
+    MatchTeamEntity battingTeam,
+    MatchCenterEntity match,
+  ) {
+    final inningsIndex = match.innings
+        .where((e) => e.battingTeam.id == battingTeam.id)
+        .map((e) => e.number)
+        .toList();
+    final partnerships = battingTeam.partnerships
+        .where((e) => e.inningsNumber == inningsIndex[selectedInningsIndex])
+        .toList()
+        .reversed;
     if (partnerships.isEmpty) return const SizedBox();
 
     return Column(

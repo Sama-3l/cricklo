@@ -116,10 +116,20 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
                             .where((e) => e.playerId == ball.fielderId)
                             .firstOrNull;
                   if (ball.batsman != null && ball.secondBatsman != null) {
-                    addBatsman([
-                      ball.batsman!,
-                      ball.secondBatsman!,
-                    ], newBatsman: false);
+                    addBatsman(
+                      [ball.batsman!, ball.secondBatsman!],
+                      newBatsman:
+                          state
+                                  .matchCenterEntity!
+                                  .battingTeam!
+                                  .currBatsmen[0] ==
+                              null ||
+                          state
+                                  .matchCenterEntity!
+                                  .battingTeam!
+                                  .currBatsmen[1] ==
+                              null,
+                    );
                   }
                   if (ball.bowler != null) {
                     editBowler(ball.bowler);
@@ -168,6 +178,7 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
 
   init(BuildContext context, MatchEntity matchEntity, bool spectator) async {
     emit(state.copyWith(loading: true));
+
     final response = await _getMatchStateUsecase(matchEntity.matchID);
     response.fold((_) {}, (response) async {
       if (response.success) {
@@ -518,6 +529,7 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
             player2: batsman[1],
             runs: 0,
             balls: 0,
+            inningsNumber: state.matchCenterEntity!.innings.last.number,
           ),
         );
       } else if (currentBatting[0] == null) {
@@ -531,6 +543,7 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
             player2: batsman[0],
             runs: 0,
             balls: 0,
+            inningsNumber: state.matchCenterEntity!.innings.last.number,
           ),
         );
       } else {
@@ -544,6 +557,7 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
             player2: batsman[0],
             runs: 0,
             balls: 0,
+            inningsNumber: state.matchCenterEntity!.innings.last.number,
           ),
         );
       }
@@ -965,7 +979,10 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
       bowler: bowlerInvolved,
       fielder: bowlingTeamPlayerInvolved?.copyWith(),
     );
-
+    // print(secondBatsman);
+    // print(batsmanInvolved);
+    // print(bowlerInvolved);
+    // print(bowlingTeamPlayerInvolved?.copyWith());
     final bowler = state.matchCenterEntity!.bowlingTeam!.bowler;
     if (state.matchCenterEntity!.innings.last.oversData.isEmpty) {
       state.matchCenterEntity!.innings.last.oversData.add(

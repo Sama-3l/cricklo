@@ -6,11 +6,13 @@ class PartnershipEntity {
   final MatchPlayerEntity? player2;
   int runs;
   int balls;
+  int inningsNumber;
   PartnershipEntity({
     this.player1,
     this.player2,
     required this.runs,
     required this.balls,
+    required this.inningsNumber,
   });
 
   PartnershipEntity copyWith({
@@ -18,12 +20,14 @@ class PartnershipEntity {
     MatchPlayerEntity? player2,
     int? runs,
     int? balls,
+    int? inningsNumber,
   }) {
     return PartnershipEntity(
       player1: player1 ?? this.player1,
       player2: player2 ?? this.player2,
       runs: runs ?? this.runs,
       balls: balls ?? this.balls,
+      inningsNumber: inningsNumber ?? this.inningsNumber,
     );
   }
 }
