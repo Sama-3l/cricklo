@@ -1,12 +1,15 @@
 import 'package:cricklo/core/utils/common/secondary_button.dart';
 import 'package:cricklo/core/utils/constants/enums.dart';
+import 'package:cricklo/core/utils/constants/global_variables.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/home/presentation/widgets/match_tile.dart';
 import 'package:cricklo/features/home/presentation/widgets/shimmer_match_tile.dart';
 import 'package:cricklo/features/matches/domain/entities/match_entity.dart';
 import 'package:cricklo/features/tournament/presentation/blocs/cubits/TournamentCubit/tournament_cubit.dart';
+import 'package:cricklo/routes/app_route_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class TournamentMatchesPage extends StatelessWidget {
@@ -23,7 +26,7 @@ class TournamentMatchesPage extends StatelessWidget {
         .toString()
         .trim()
         .isNotEmpty;
-    final isFutureMatch = match.dateAndTime.isAfter(now);
+    final isFutureMatch = true; //match.dateAndTime.isAfter(now);
 
     return hasValidLocation && hasValidScorer && isFutureMatch;
   }
@@ -102,7 +105,33 @@ class TournamentMatchesPage extends StatelessWidget {
                 ...unscheduledGroupMatches.map(
                   (m) => Padding(
                     padding: const EdgeInsets.symmetric(vertical: 4.0),
-                    child: MatchTile(matchEntity: m),
+                    child: MatchTile(
+                      matchEntity: m,
+                      onTap: () {
+                        if (state.tournamentEntity!.moderators
+                                .map((e) => e.playerId)
+                                .contains(GlobalVariables.user!.profileId) ||
+                            state.tournamentEntity!.organizerId ==
+                                GlobalVariables.user!.profileId) {
+                          GoRouter.of(context).push(
+                            Routes.moderatorMatchCenter,
+                            extra: [
+                              m,
+                              state.tournamentEntity!,
+                              (context, matchId, scorer, venueId, date, time) =>
+                                  cubit.updateMatchUsecase(
+                                    context,
+                                    matchId,
+                                    scorer,
+                                    venueId,
+                                    date,
+                                    time,
+                                  ),
+                            ],
+                          );
+                        }
+                      },
+                    ),
                   ),
                 ),
 

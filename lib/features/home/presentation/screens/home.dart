@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:cricklo/core/utils/constants/enums.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/core/utils/constants/widget_decider.dart';
 import 'package:cricklo/features/home/presentation/widgets/home_profile_header.dart';
@@ -99,7 +100,11 @@ class _HomePageState extends State<HomePage>
                 state.matchLoading
                     ? ShimmerMatchTile()
                     : state.matches
-                          .where((e) => e.teamA.inviteStatus != null)
+                          .where(
+                            (e) =>
+                                e.teamA.inviteStatus != null ||
+                                e.matchCategory != MatchCategory.open,
+                          )
                           .isEmpty
                     ? Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 0.0),

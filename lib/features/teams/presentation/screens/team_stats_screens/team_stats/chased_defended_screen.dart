@@ -18,7 +18,10 @@ class ChasedDefendedScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(16),
               // color: ColorsConstants.defaultBlack.withValues(alpha: 0.07),
             ),
-            child: MatchTile(matchEntity: dummyMatchScheduled),
+            child: MatchTile(
+              matchEntity: dummyMatchScheduled,
+              whiteTile: false,
+            ),
           ),
           Container(
             // height: 200,
@@ -28,7 +31,10 @@ class ChasedDefendedScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(16),
               // color: ColorsConstants.defaultBlack.withValues(alpha: 0.07),
             ),
-            child: MatchTile(matchEntity: dummyMatchScheduled),
+            child: MatchTile(
+              matchEntity: dummyMatchScheduled,
+              whiteTile: false,
+            ),
           ),
           Container(
             // height: 200,
@@ -37,7 +43,10 @@ class ChasedDefendedScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(16),
               // color: ColorsConstants.defaultBlack.withValues(alpha: 0.07),
             ),
-            child: MatchTile(matchEntity: dummyMatchScheduled),
+            child: MatchTile(
+              matchEntity: dummyMatchScheduled,
+              whiteTile: false,
+            ),
           ),
         ],
       ),

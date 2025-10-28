@@ -230,4 +230,10 @@ abstract class ApiService {
     @Path("tournamentId") String tournamentId,
     @Body() Map<String, dynamic> body,
   );
+
+  @POST(ApiEndpointConstants.tournamentModeratorUpdateMatch)
+  Future<InviteResponseResponseModel> tournamentModeratorUpdateMatch(
+    @Path("tournamentId") String tournamentId,
+    @Body() Map<String, dynamic> body,
+  );
 }

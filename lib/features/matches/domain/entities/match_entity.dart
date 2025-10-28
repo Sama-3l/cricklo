@@ -6,15 +6,15 @@ import 'package:cricklo/features/teams/domain/entities/team_entity.dart';
 
 class MatchEntity {
   final String matchID;
-  final DateTime dateAndTime;
+  DateTime dateAndTime;
   final int overs;
   final MatchType matchType;
   final MatchCategory matchCategory;
   final TeamEntity teamA;
   bool abandoned;
   final TeamEntity teamB;
-  final LocationEntity? location;
-  final Map<String, dynamic> scorer;
+  LocationEntity? location;
+  Map<String, dynamic> scorer;
   String? tossWinner; // TeamID
   TossChoice? tossChoice;
   String? winner;

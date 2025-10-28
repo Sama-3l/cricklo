@@ -44,7 +44,7 @@ class ShimmerOverviewItem extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(height: 4),
+          const SizedBox(height: 8),
 
           // Title shimmer
           Container(
@@ -56,10 +56,9 @@ class ShimmerOverviewItem extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(height: 4),
-
           // Subtitle shimmer
           if (subtitle != null) ...[
+            const SizedBox(height: 8),
             Container(
               width: 50,
               height: 10,

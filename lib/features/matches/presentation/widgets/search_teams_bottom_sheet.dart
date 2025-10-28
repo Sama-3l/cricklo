@@ -99,6 +99,7 @@ class _SearchTeamsBottomSheetState extends State<SearchTeamsBottomSheet> {
                             ),
                           ),
                           InputField(
+                            autofocus: true,
                             controller: searchController,
                             onChanged: (value) => cubit.onQueryChanged(value),
                             prefixIcon: Align(

@@ -24,7 +24,7 @@ class MatchTileHeader extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Dummy Match",
+                    "${matchEntity.matchCategory.title} Match",
                     style: TextStyles.poppinsMedium.copyWith(
                       fontSize: 12,
                       color: ColorsConstants.defaultBlack.withValues(
@@ -110,7 +110,7 @@ class MatchTileHeader extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Dummy Match",
+                "${matchEntity.matchCategory.title} Match",
                 style: TextStyles.poppinsMedium.copyWith(
                   fontSize: 12,
                   color: ColorsConstants.defaultBlack.withValues(alpha: 0.5),

@@ -45,6 +45,10 @@ abstract class TournamentDatasourceRemote {
     Map<String, dynamic> body,
   );
   Future<CreateGroupTableResponseModel> createGroupMatches(String tournamentId);
+  Future<InviteResponseResponseModel> moderatorUpdateMatch(
+    String tournamentId,
+    Map<String, dynamic> body,
+  );
 }
 
 class TournamentDatasourceRemoteImpl extends TournamentDatasourceRemote {
@@ -129,5 +133,13 @@ class TournamentDatasourceRemoteImpl extends TournamentDatasourceRemote {
     Map<String, dynamic> body,
   ) {
     return _apiService.tournamentRemoveTeamFromGroup(tournamentId, body);
+  }
+
+  @override
+  Future<InviteResponseResponseModel> moderatorUpdateMatch(
+    String tournamentId,
+    Map<String, dynamic> body,
+  ) {
+    return _apiService.tournamentModeratorUpdateMatch(tournamentId, body);
   }
 }

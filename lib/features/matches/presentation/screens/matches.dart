@@ -1,3 +1,4 @@
+import 'package:cricklo/core/utils/constants/enums.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/home/presentation/widgets/section_header.dart';
 import 'package:cricklo/features/home/presentation/widgets/shimmer_match_tile.dart';
@@ -42,7 +43,11 @@ class _MatchesPageState extends State<MatchesPage> {
                 state.matchLoading
                     ? ShimmerMatchTile()
                     : state.matches
-                          .where((e) => e.teamA.inviteStatus != null)
+                          .where(
+                            (e) =>
+                                e.teamA.inviteStatus != null ||
+                                e.matchCategory != MatchCategory.open,
+                          )
                           .isEmpty
                     ? Container(
                         height: 200,

@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:cricklo/core/utils/constants/enums.dart';
+import 'package:cricklo/core/utils/constants/methods.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/core/utils/constants/widget_decider.dart';
 import 'package:cricklo/features/follow/data/entities/follow_usecase_entity.dart';
@@ -12,6 +13,7 @@ import 'package:cricklo/features/tournament/data/entities/create_group_usecase_e
 import 'package:cricklo/features/tournament/data/entities/edit_group_usecase_entity.dart';
 import 'package:cricklo/features/tournament/data/entities/invite_moderators_usecase_entity.dart';
 import 'package:cricklo/features/tournament/data/entities/invite_teams_usecase_entity.dart';
+import 'package:cricklo/features/tournament/data/entities/moderator_update_match_usecase_entity.dart';
 import 'package:cricklo/features/tournament/data/usecases/add_team_to_group_usecase.dart';
 import 'package:cricklo/features/tournament/data/usecases/apply_tournament_usecase.dart';
 import 'package:cricklo/features/tournament/data/usecases/create_group_table_usecase.dart';
@@ -21,6 +23,7 @@ import 'package:cricklo/features/tournament/data/usecases/edit_group_usecase.dar
 import 'package:cricklo/features/tournament/data/usecases/get_tournament_details_usecase.dart';
 import 'package:cricklo/features/tournament/data/usecases/invite_moderators_usecase.dart';
 import 'package:cricklo/features/tournament/data/usecases/invite_teams_usecase.dart';
+import 'package:cricklo/features/tournament/data/usecases/moderator_update_match.dart';
 import 'package:cricklo/features/tournament/data/usecases/remove_team_from_group_usecase.dart';
 import 'package:cricklo/features/tournament/domain/entities/group_entity.dart';
 import 'package:cricklo/features/tournament/domain/entities/tournament_entity.dart';
@@ -44,6 +47,7 @@ class TournamentCubit extends Cubit<TournamentState> {
   final UnFollowUsecase _unFollowUsecase;
   final CreateGroupTableUsecase _createGroupTableUsecase;
   final RemoveTeamFromGroupUsecase _removeTeamFromGroupUsecase;
+  final ModeratorUpdateMatchUsecase _updateMatchUsecase;
   int error = 0;
   TournamentCubit(
     this._inviteModeratorsUsecase,
@@ -58,6 +62,7 @@ class TournamentCubit extends Cubit<TournamentState> {
     this._unFollowUsecase,
     this._createGroupTableUsecase,
     this._removeTeamFromGroupUsecase,
+    this._updateMatchUsecase,
   ) : super(
         TournamentUpdate(
           tournamentEntity: null,
@@ -268,6 +273,62 @@ class TournamentCubit extends Cubit<TournamentState> {
     }
   }
 
+  Future<bool> updateMatchUsecase(
+    BuildContext context,
+    String matchId,
+    Map<String, dynamic> scorer,
+    String venueId,
+    DateTime date,
+    TimeOfDay time,
+  ) async {
+    final match = state.tournamentEntity!.groupMatches
+        .where((e) => e.matchID == matchId)
+        .first;
+    match.location = state.tournamentEntity!.venues
+        .where((e) => e.id == venueId)
+        .first;
+    match.scorer = scorer;
+    final previousDateTime = match.dateAndTime;
+    match.dateAndTime = Methods.combineDateAndTime(date, time);
+    emit(state.copyWith());
+    final response = await _updateMatchUsecase(
+      ModeratorUpdateMatchUsecaseEntity(
+        tournamentId: state.tournamentEntity!.id,
+        matchId: matchId,
+        venueId: venueId,
+        scorerId: scorer["profileId"],
+        date: date,
+        time: time,
+      ),
+    );
+    final res = response.fold(
+      (_) {
+        WidgetDecider.showSnackBar(context, "Couldn't update match");
+        match.location = null;
+        match.scorer = {};
+        match.dateAndTime = previousDateTime;
+        emit(state.copyWith());
+        return false;
+      },
+      (response) {
+        if (!response.success) {
+          WidgetDecider.showSnackBar(
+            context,
+            response.errorMessage ?? "Couldn't update match",
+          );
+          match.location = null;
+          match.scorer = {};
+          match.dateAndTime = previousDateTime;
+          emit(state.copyWith());
+          return false;
+        } else {
+          return true;
+        }
+      },
+    );
+    return res;
+  }
+
   void editGroup(BuildContext context, int index) async {
     final TextEditingController controller = TextEditingController(
       text: state.tournamentEntity!.groups[index].name,
@@ -363,7 +424,6 @@ class TournamentCubit extends Cubit<TournamentState> {
       response.fold(
         (_) {
           WidgetDecider.showSnackBar(context, "Couldn't edit group name");
-          emit(state.copyWith(applied: !state.applied));
         },
         (response) {
           if (!response.success) {
@@ -371,7 +431,6 @@ class TournamentCubit extends Cubit<TournamentState> {
               context,
               response.errorMessage ?? "Couldn't edit group name",
             );
-            emit(state.copyWith(applied: !state.applied));
           } else {}
         },
       );

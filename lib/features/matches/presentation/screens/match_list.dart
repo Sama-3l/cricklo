@@ -1,3 +1,4 @@
+import 'package:cricklo/core/utils/constants/enums.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/home/presentation/widgets/match_tile.dart';
 import 'package:cricklo/features/mainapp/presentation/blocs/cubits/MainAppCubit/main_app_cubit.dart';
@@ -22,7 +23,13 @@ class _MatchListState extends State<MatchList> {
     context.watch<ThemeCubit>().state; // 👈 add this line
 
     final matches =
-        state.matches.where((e) => e.teamA.inviteStatus != null).toList()
+        state.matches
+            .where(
+              (e) =>
+                  e.teamA.inviteStatus != null ||
+                  e.matchCategory != MatchCategory.open,
+            )
+            .toList()
           ..sort((a, b) => a.dateAndTime.compareTo(b.dateAndTime));
 
     return Column(

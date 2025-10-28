@@ -80,9 +80,12 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
                             cubit.endMatch(context);
                             GoRouter.of(context).pushReplacement(
                               Routes.scorerMatchComplete,
-                              extra: Methods.calculateResultMessage(
-                                state.matchCenterEntity!.innings,
-                              ),
+                              extra: [
+                                ...Methods.calculateResultMessage(
+                                  state.matchCenterEntity!.innings,
+                                ),
+                                state.matchCenterEntity,
+                              ],
                             );
                           },
                           color: ColorsConstants.defaultWhite,

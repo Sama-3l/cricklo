@@ -7,6 +7,7 @@ import 'package:cricklo/features/tournament/domain/entities/tournament_team_enti
 import 'package:cricklo/features/tournament/presentation/blocs/cubits/TournamentCubit/tournament_cubit.dart';
 import 'package:cricklo/features/tournament/presentation/widgets/add_team_to_group_bottom_sheet.dart';
 import 'package:cricklo/features/tournament/presentation/widgets/points_table.dart';
+import 'package:cricklo/features/tournament/presentation/widgets/shimmer_points_table.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -24,7 +25,8 @@ class PointsPage extends StatelessWidget {
               children: [
                 if (state.tournamentEntity!.organizerId ==
                         GlobalVariables.user!.profileId &&
-                    state.tournamentEntity!.groupMatches.isEmpty)
+                    state.tournamentEntity!.groupMatches.isEmpty &&
+                    !state.loading)
                   Row(
                     children: [
                       const Spacer(),
@@ -39,8 +41,21 @@ class PointsPage extends StatelessWidget {
                     ],
                   ),
                 const SizedBox(height: 16),
-                state.tournamentEntity == null ||
-                        state.tournamentEntity!.groups.isEmpty
+                state.loading
+                    ? Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Column(
+                          children: [
+                            SectionHeader(
+                              title: "Group Table",
+                              showIcon: false,
+                            ),
+                            ShimmerTable(headings: ["M", "W", "L", "P", "NRR"]),
+                          ],
+                        ),
+                      )
+                    : state.tournamentEntity == null ||
+                          state.tournamentEntity!.groups.isEmpty
                     ? Expanded(
                         child: Center(
                           child: Text(

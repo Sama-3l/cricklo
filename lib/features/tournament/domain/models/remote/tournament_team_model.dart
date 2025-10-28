@@ -80,7 +80,7 @@ class TournamentTeamModel {
       nrr: map['nrr'] as double? ?? 0.0,
       eliminated: map['eliminated'] as bool? ?? false,
       inviteStatus: InviteStatus.values.firstWhere(
-        (e) => e.title.toUpperCase() == map['status'],
+        (e) => e.title.toUpperCase() == map['inviteStatus'],
       ),
       id: map['teamId'] as String,
       name: map['teamName'] as String,

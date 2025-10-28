@@ -158,47 +158,43 @@ class MatchModel {
     }
 
     final teamA = map['teamAEntity'] == null
-        ? map['teamA'] == null
-              ? TeamModel(
-                  uuid: "",
-                  id: "",
-                  name: "",
-                  teamLogo: "",
-                  followers: 0,
-                  userFollows: false,
-                  inviteStatus: "",
-                  teamBanner: "",
-                  location: LocationModel(
-                    area: "",
-                    city: "",
-                    state: "",
-                    lat: 0,
-                    lng: 0,
-                  ),
-                )
-              : TeamModel.fromJson(map['teamA'] as Map<String, dynamic>)
+        ? TeamModel(
+            uuid: "",
+            id: "",
+            name: "",
+            teamLogo: "",
+            followers: 0,
+            userFollows: false,
+            inviteStatus: "",
+            teamBanner: "",
+            location: LocationModel(
+              area: "",
+              city: "",
+              state: "",
+              lat: 0,
+              lng: 0,
+            ),
+          )
         : TeamModel.fromJson(map['teamAEntity'] as Map<String, dynamic>);
 
     final teamB = map['teamBEntity'] == null
-        ? map['teamB'] == null
-              ? TeamModel(
-                  uuid: "",
-                  id: "",
-                  name: "",
-                  teamLogo: "",
-                  followers: 0,
-                  userFollows: false,
-                  inviteStatus: "",
-                  teamBanner: "",
-                  location: LocationModel(
-                    area: "",
-                    city: "",
-                    state: "",
-                    lat: 0,
-                    lng: 0,
-                  ),
-                )
-              : TeamModel.fromJson(map['teamB'] as Map<String, dynamic>)
+        ? TeamModel(
+            uuid: "",
+            id: "",
+            name: "",
+            teamLogo: "",
+            followers: 0,
+            userFollows: false,
+            inviteStatus: "",
+            teamBanner: "",
+            location: LocationModel(
+              area: "",
+              city: "",
+              state: "",
+              lat: 0,
+              lng: 0,
+            ),
+          )
         : TeamModel.fromJson(map['teamBEntity'] as Map<String, dynamic>);
     final utcTime = map['dateAndTime'] == null
         ? DateTime.now()
@@ -211,6 +207,7 @@ class MatchModel {
       utcTime.minute,
       utcTime.second,
     );
+
     // print("here");
     // print(map);
     // print(map['matchId'] as String);
@@ -260,12 +257,61 @@ class MatchModel {
     //       ? DateTime.fromMillisecondsSinceEpoch(map['endDateTime'] as int)
     //       : null,
     // );
+    // print(
+    //   MatchModel(
+    //     matchCategory: map['matchCategory'] != null
+    //         ? MatchCategory.values
+    //               .where((e) => e.title == map['matchCategory'])
+    //               .first
+    //         : MatchCategory.open,
+    //     matchID: map['matchId'] as String,
+    //     dateAndTime: dateAndTime,
+    //     overs: map['overs'] as int,
+    //     draw: map['draw'] as bool? ?? false,
+    //     matchType: matchType,
+    //     teamA: teamA,
+    //     abandoned: map['abandoned'] as bool? ?? false,
+    //     teamB: teamB,
+    //     location: map['location'] == null
+    //         ? null
+    //         : LocationModel.fromJson(map['location'] as Map<String, dynamic>),
+    //     scorer: map['scorerEntity'] == null
+    //         ? {"profileId": "", "name": ""}
+    //         : map['scorerEntity'] as Map<String, dynamic>,
+    //     tossWinner: map['tossWinner'] != null
+    //         ? map['tossWinner'] as String
+    //         : null,
+    //     tossChoice: tossChoice,
+    //     winner: map['winner'] != null ? map['winner'] as String : null,
+    //     teamAScore: map['teamAScore'] != null
+    //         ? map['teamAScore'] is int
+    //               ? null
+    //               : OverallScoreModel.fromJson(
+    //                   map['teamAScore'] as Map<String, dynamic>,
+    //                   teamA,
+    //                   teamB,
+    //                 )
+    //         : null,
+    //     teamBScore: map['teamBScore'] != null
+    //         ? map['teamBScore'] is int
+    //               ? null
+    //               : OverallScoreModel.fromJson(
+    //                   map['teamBScore'] as Map<String, dynamic>,
+    //                   teamA,
+    //                   teamB,
+    //                 )
+    //         : null,
+    //     endDateTime: map['endDateTime'] != null
+    //         ? DateTime.fromMillisecondsSinceEpoch(map['endDateTime'] as int)
+    //         : null,
+    //   ),
+    // );
     return MatchModel(
       matchCategory: map['matchCategory'] != null
           ? MatchCategory.values
                 .where((e) => e.title == map['matchCategory'])
                 .first
-          : MatchCategory.group,
+          : MatchCategory.open,
       matchID: map['matchId'] as String,
       dateAndTime: dateAndTime,
       overs: map['overs'] as int,

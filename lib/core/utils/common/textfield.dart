@@ -2,7 +2,7 @@ import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class InputField extends StatefulWidget {
+class InputField extends StatelessWidget {
   final String? title;
   final String hintText;
   final bool readOnly;
@@ -23,6 +23,7 @@ class InputField extends StatefulWidget {
   final Color? fontColor;
   final bool scrollPadding;
   final String? errorText;
+  final bool autofocus;
   final bool showBuilder;
   final Function(String)? onSubmitted;
 
@@ -35,6 +36,7 @@ class InputField extends StatefulWidget {
     this.errorText,
     this.hintText = "Samael",
     this.focusNode,
+    this.autofocus = false,
     this.suffixIcon,
     this.maxLength,
     this.textCapitalization = TextCapitalization.sentences,
@@ -53,32 +55,25 @@ class InputField extends StatefulWidget {
   });
 
   @override
-  State<InputField> createState() => _InputFieldState();
-}
-
-class _InputFieldState extends State<InputField> with TickerProviderStateMixin {
-  @override
   Widget build(BuildContext context) {
     // final Color defaultWhite = ColorsConstants.defaultWhite;
     final Color onSurfaceGrey = ColorsConstants.onSurfaceGrey;
     final Color accentOrange = ColorsConstants.accentOrange;
 
     return Padding(
-      padding: widget.padding.copyWith(
-        bottom: widget.scrollPadding
-            ? MediaQuery.of(context).viewInsets.bottom
-            : 0,
+      padding: padding.copyWith(
+        bottom: scrollPadding ? MediaQuery.of(context).viewInsets.bottom : 0,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (widget.title != null) ...[
+          if (title != null) ...[
             Text(
-              widget.title!,
+              title!,
               style: TextStyles.poppinsSemiBold.copyWith(
                 fontSize: 12,
                 letterSpacing: -0.5,
-                color: widget.fontColor,
+                color: fontColor,
               ),
             ),
             const SizedBox(height: 8),
@@ -87,16 +82,17 @@ class _InputFieldState extends State<InputField> with TickerProviderStateMixin {
             children: [
               Expanded(
                 child: TextField(
-                  readOnly: widget.readOnly,
-                  onTap: widget.onTap,
-                  onChanged: widget.onChanged,
-                  onSubmitted: widget.onSubmitted,
-                  focusNode: widget.focusNode,
-                  textCapitalization: widget.textCapitalization,
-                  keyboardType: widget.textInputType,
-                  controller: widget.controller,
-                  inputFormatters: widget.formatters,
-                  maxLength: widget.maxLength,
+                  autofocus: autofocus,
+                  readOnly: readOnly,
+                  onTap: onTap,
+                  onChanged: onChanged,
+                  onSubmitted: onSubmitted,
+                  focusNode: focusNode,
+                  textCapitalization: textCapitalization,
+                  keyboardType: textInputType,
+                  controller: controller,
+                  inputFormatters: formatters,
+                  maxLength: maxLength,
                   cursorColor: accentOrange,
 
                   buildCounter:
@@ -107,7 +103,7 @@ class _InputFieldState extends State<InputField> with TickerProviderStateMixin {
                         required int? maxLength,
                       }) {
                         // Hide completely
-                        if (maxLength == null || !widget.showBuilder) {
+                        if (maxLength == null || !showBuilder) {
                           return null;
                         }
 
@@ -124,21 +120,21 @@ class _InputFieldState extends State<InputField> with TickerProviderStateMixin {
                         );
                       },
                   style: TextStyles.poppinsRegular.copyWith(
-                    fontSize: widget.fontSize,
-                    color: widget.fontColor ?? ColorsConstants.defaultBlack,
+                    fontSize: fontSize,
+                    color: fontColor ?? ColorsConstants.defaultBlack,
                     letterSpacing: -0.5,
                   ),
                   decoration: InputDecoration(
                     isDense: true,
-                    hintText: widget.hintText,
-                    suffixIcon: widget.suffixIcon,
-                    prefixIcon: widget.prefixIcon,
+                    hintText: hintText,
+                    suffixIcon: suffixIcon,
+                    prefixIcon: prefixIcon,
                     suffixIconConstraints: BoxConstraints(maxWidth: 32),
                     prefixIconConstraints: BoxConstraints(maxWidth: 32),
 
                     hintStyle: TextStyles.poppinsRegular.copyWith(
-                      fontSize: widget.fontSize,
-                      color: (widget.fontColor ?? ColorsConstants.textBlack)
+                      fontSize: fontSize,
+                      color: (fontColor ?? ColorsConstants.textBlack)
                           .withValues(alpha: 0.5),
                       letterSpacing: -0.5,
                     ),
@@ -152,7 +148,7 @@ class _InputFieldState extends State<InputField> with TickerProviderStateMixin {
                       borderRadius: BorderRadius.circular(8),
                       borderSide: BorderSide.none,
                     ),
-                    errorText: widget.errorText,
+                    errorText: errorText,
                     errorStyle: TextStyles.poppinsSemiBold.copyWith(
                       fontSize: 8,
                       color: ColorsConstants.warningRed,

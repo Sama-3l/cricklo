@@ -240,6 +240,13 @@ class TournamentModel {
       group.matches.addAll(parsedGroups[group.name] ?? []);
       groupMatches.addAll(group.matches);
     }
+    final venues = map['venues'] == null
+        ? <LocationModel>[]
+        : List<LocationModel>.from(
+            (map['venues'] as List<dynamic>).map<LocationModel>(
+              (x) => LocationModel.fromJson(x),
+            ),
+          );
     return TournamentModel(
       followers: map['followersCount'] as int? ?? 0,
       organizerId:
@@ -278,13 +285,7 @@ class TournamentModel {
                 (x) => SearchUserModel.fromJson(x),
               ),
             ),
-      venues: map['venues'] == null
-          ? []
-          : List<LocationModel>.from(
-              (map['venues'] as List<dynamic>).map<LocationModel>(
-                (x) => LocationModel.fromJson(x),
-              ),
-            ),
+      venues: venues,
       teams: map['teams'] == null
           ? []
           : List<TournamentTeamModel>.from(

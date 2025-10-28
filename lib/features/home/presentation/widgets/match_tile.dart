@@ -10,8 +10,14 @@ import 'package:go_router/go_router.dart';
 class MatchTile extends StatelessWidget {
   final MatchEntity matchEntity;
   final Function()? onTap;
+  final bool whiteTile;
 
-  const MatchTile({super.key, required this.matchEntity, this.onTap});
+  const MatchTile({
+    super.key,
+    required this.matchEntity,
+    this.onTap,
+    this.whiteTile = true,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +61,9 @@ class MatchTile extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           // color: ColorsConstants.defaultBlack.withValues(alpha: 0.07),
-          color: ColorsConstants.defaultWhite,
+          color: whiteTile
+              ? ColorsConstants.defaultWhite
+              : ColorsConstants.onSurfaceGrey,
         ),
         child: Padding(
           padding: const EdgeInsets.all(12.0),

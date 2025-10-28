@@ -15,6 +15,7 @@ import 'package:cricklo/features/mainapp/presentation/screens/main_app.dart';
 import 'package:cricklo/features/matches/domain/entities/match_entity.dart';
 import 'package:cricklo/features/matches/presentation/screens/create_match.dart';
 import 'package:cricklo/features/notifications/presentation/screens/notifications_screens.dart';
+import 'package:cricklo/features/scorer/domain/entities/match_center_entity.dart';
 import 'package:cricklo/features/scorer/presentation/screens/match_result_screen.dart';
 import 'package:cricklo/features/scorer/presentation/screens/scorer_match_center.dart';
 import 'package:cricklo/features/scorer/presentation/screens/scorer_match_initial_screen.dart';
@@ -26,6 +27,7 @@ import 'package:cricklo/features/tournament/domain/entities/tournament_entity.da
 import 'package:cricklo/features/tournament/presentation/screens/add_moderators.dart';
 import 'package:cricklo/features/tournament/presentation/screens/add_venues.dart';
 import 'package:cricklo/features/tournament/presentation/screens/create_tournament.dart';
+import 'package:cricklo/features/tournament/presentation/screens/moderator_match_center.dart';
 import 'package:cricklo/features/tournament/presentation/screens/tournament_page.dart';
 import 'package:cricklo/routes/app_route_constants.dart';
 import 'package:flutter/material.dart';
@@ -178,11 +180,13 @@ class AppRouter {
           final logo = extras[0] as String;
           final name = extras[1] as String;
           final resultMessage = extras[2] as String;
+          final tournament = extras[3] as MatchCenterEntity;
           return MaterialPage(
             child: MatchResultScreen(
               teamLogo: logo,
               teamName: name,
               resultMessage: resultMessage,
+              matchCenterEntity: tournament,
             ),
           );
         },
@@ -263,6 +267,32 @@ class AppRouter {
         pageBuilder: (context, state) {
           return MaterialPage(
             child: FollowingPage(profileId: state.extra as String),
+          );
+        },
+      ),
+      GoRoute(
+        name: Routes.moderatorMatchCenter,
+        path: Routes.moderatorMatchCenter,
+        pageBuilder: (context, state) {
+          final extras = state.extra as List<dynamic>;
+          final match = extras[0] as MatchEntity? ?? dummyMatchScheduled;
+          final tournament = extras[1] as TournamentEntity;
+          final onSubmit =
+              extras[2]
+                  as Function(
+                    BuildContext context,
+                    String matchId,
+                    Map<String, dynamic> scorer,
+                    String venueId,
+                    DateTime date,
+                    TimeOfDay time,
+                  );
+          return MaterialPage(
+            child: ModeratorMatchCenter(
+              matchEntity: match,
+              tournamentEntity: tournament,
+              onSubmit: onSubmit,
+            ),
           );
         },
       ),

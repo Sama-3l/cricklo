@@ -175,7 +175,7 @@ class TournamentOverview extends StatelessWidget {
                         left: index == 0 ? 16.0 : 0,
                         right: index == 9 ? 16.0 : 0,
                       ),
-                      child: ShimmerOverviewItem(title: ""),
+                      child: ShimmerOverviewItem(topTitle: "", title: ""),
                     ),
                   )
                 : state.tournamentEntity!.teams.isEmpty

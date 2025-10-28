@@ -50,4 +50,8 @@ abstract class TournamentRepo {
     String tournamentId,
     Map<String, dynamic> body,
   );
+  Future<Either<Failure, InviteResponseResponseEntity>> moderatorUpdateMatch(
+    String tournamentId,
+    Map<String, dynamic> body,
+  );
 }

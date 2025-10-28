@@ -101,6 +101,7 @@ class _SearchPlayersBottomSheetState extends State<SearchPlayersBottomSheet> {
                             ),
                           ),
                           InputField(
+                            autofocus: true,
                             controller: searchController,
                             onChanged: (value) => cubit.onQueryChanged(value),
                             prefixIcon: Align(
