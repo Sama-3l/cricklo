@@ -183,6 +183,7 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
     response.fold((_) {}, (response) async {
       if (response.success) {
         final matchCenterEntity = MatchCenterEntity(
+          draw: matchEntity.draw,
           matchID: matchEntity.matchID,
           dateAndTime: matchEntity.dateAndTime,
           overs: matchEntity.overs,
@@ -342,6 +343,7 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
         }
       } else {
         final matchCenterEntity = MatchCenterEntity(
+          draw: matchEntity.draw,
           matchID: matchEntity.matchID,
           dateAndTime: matchEntity.dateAndTime,
           overs: matchEntity.overs,
@@ -1438,8 +1440,10 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
             if (firstInnings.runs + thirdInnings.runs >
                 secondInnings.runs + fourthInnings.runs) {
               matchCenter.winner = match.winner = firstInnings.battingTeam.id;
-            } else if (firstInnings.runs == secondInnings.runs) {
+            } else if (firstInnings.runs + thirdInnings.runs ==
+                secondInnings.runs + fourthInnings.runs) {
               matchCenter.winner = match.winner = null;
+              matchCenter.draw = match.draw = true;
             }
           } else {
             // Match still in progress
@@ -1463,14 +1467,15 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
     // Check winning conditions
     if (secondInnings.runs > firstInnings.runs) {
       // Chasing team won
-      matchCenter.winner = secondInnings.battingTeam.id;
+      matchCenter.winner = match.winner = secondInnings.battingTeam.id;
     } else if (secondInnings.wickets == totalPlayers - 1 ||
         secondInnings.overs == matchCenter.overs.toString()) {
       // Chasing team all out or overs finished
       if (firstInnings.runs > secondInnings.runs) {
-        matchCenter.winner = firstInnings.battingTeam.id;
+        matchCenter.winner = match.winner = firstInnings.battingTeam.id;
       } else if (firstInnings.runs == secondInnings.runs) {
-        matchCenter.winner = null;
+        matchCenter.winner = match.winner = null;
+        matchCenter.draw = match.draw = true;
       }
     } else {
       // Match still in progress
@@ -1745,7 +1750,10 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
         );
       } else {
         // Match complete after 2 innings
-        match.winner = Methods.getWinner(match);
+        match.winner = state.matchEntity!.winner = Methods.getWinner(match);
+        if (match.winner == null) {
+          match.draw = state.matchEntity!.draw = true;
+        }
       }
       if (!addBall && !state.spectator) {
         _scorerInningsChangeUsecase(
@@ -1779,7 +1787,10 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
               state.matchCenterEntity!.innings[2].runs -
               state.matchCenterEntity!.innings[1].runs;
           if (target < 0) {
-            match.winner = Methods.getWinner(match);
+            match.winner = state.matchEntity!.winner = Methods.getWinner(match);
+            if (match.winner == null) {
+              match.draw = state.matchEntity!.draw = true;
+            }
           } else {
             final nextBattingTeam = match.bowlingTeam!;
 
@@ -1906,7 +1917,10 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
         }
       } else {
         // After 4 innings, match ends — decide winner or draw
-        match.winner = Methods.getWinner(match);
+        match.winner = state.matchEntity!.winner = Methods.getWinner(match);
+        if (match.winner == null) {
+          match.draw = state.matchEntity!.draw = true;
+        }
       }
       if (!addBall && !state.spectator) {
         _scorerInningsChangeUsecase(

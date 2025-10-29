@@ -28,7 +28,7 @@ class MatchTile extends StatelessWidget {
         } else {
           if (GlobalVariables.user!.profileId ==
               matchEntity.scorer["profileId"]) {
-            if (matchEntity.winner != null) {
+            if (matchEntity.winner != null || matchEntity.draw) {
               GoRouter.of(
                 context,
               ).pushNamed(Routes.scorerMatchCenter, extra: [matchEntity, true]);

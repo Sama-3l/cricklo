@@ -66,7 +66,7 @@ class MatchTileHeader extends StatelessWidget {
                           0 &&
                       matchEntity.tossWinner != null &&
                       matchEntity.winner == null)
-                  ? matchEntity.winner == null
+                  ? matchEntity.winner == null || !matchEntity.draw
                         ? SecondaryButton(
                             title: "Start Match",
                             onTap: () {
@@ -128,7 +128,7 @@ class MatchTileHeader extends StatelessWidget {
                               letterSpacing: 0.5,
                             ),
                           )
-                        : matchEntity.winner == null
+                        : matchEntity.winner == null || !matchEntity.draw
                         ? Container(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 16,

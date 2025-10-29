@@ -90,8 +90,7 @@ class _ScorerMatchInitialScreenState extends State<ScorerMatchInitialScreen> {
                 disabled: widget.matchEntity.teamA.inviteStatus == null
                     ? false
                     : widget.matchEntity.teamA.inviteStatus! == "PENDING" ||
-                          widget.matchEntity.teamB.inviteStatus! == "PENDING" ||
-                          widget.matchEntity.winner != null,
+                          widget.matchEntity.teamB.inviteStatus! == "PENDING",
                 child: Text(
                   (widget.matchEntity.tossChoice == null &&
                           widget.matchEntity.tossWinner == null)

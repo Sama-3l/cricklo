@@ -15,6 +15,7 @@ class MatchCenterEntity {
   final TossChoice? tossChoice;
   String? winner;
   bool abandoned;
+  bool draw;
   final DateTime? endDateTime;
   final MatchTeamEntity teamA;
   final MatchTeamEntity teamB;
@@ -30,6 +31,7 @@ class MatchCenterEntity {
     required this.teamB,
     required this.location,
     required this.scorer,
+    required this.draw,
     this.tossWinner,
     this.tossChoice,
     this.winner,

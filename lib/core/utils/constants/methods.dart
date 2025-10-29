@@ -240,7 +240,7 @@ class Methods {
     final teamBScore = match.teamBScore;
 
     // Match completed
-    if (match.winner != null) return MatchStage.completed;
+    if (match.draw || match.winner != null) return MatchStage.completed;
 
     // Both innings done but result pending (rare edge)
     if (teamAScore != null && teamBScore != null) {
@@ -403,7 +403,8 @@ class Methods {
       (b) => b?.playerId == player.playerId,
     );
     final inningsIndex = match.innings.length <= 2 ? 0 : 1;
-    final matchOverOrAbandoned = match.winner != null || match.abandoned;
+    final matchOverOrAbandoned =
+        match.winner != null || match.abandoned || match.draw;
 
     // Player is not out but match ended
     if (matchOverOrAbandoned && player.stats[inningsIndex].out == false) {
@@ -590,15 +591,21 @@ class Methods {
     return 0.0;
   }
 
-  static List<dynamic> calculateResultMessage(List<InningsEntity> innings) {
+  static List<dynamic> calculateResultMessage(
+    MatchCenterEntity match,
+    List<InningsEntity> innings,
+  ) {
     if (innings.length < 2) return ["Match not completed"];
+
+    if (match.draw) return ["Match Tied"];
 
     final first = innings[0];
     final second = innings[1];
 
     if (second.runs > first.runs) {
       // Team B chased successfully
-      final wicketsRemaining = 10 - second.wickets;
+      final wicketsRemaining =
+          second.battingTeam.players.length - second.wickets;
       return [
         second.battingTeam.teamLogo,
         second.battingTeam.name,

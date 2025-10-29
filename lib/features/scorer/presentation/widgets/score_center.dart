@@ -35,7 +35,8 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
           final inningsIndex = state.matchCenterEntity!.innings.length <= 2
               ? 0
               : 1;
-          if (state.matchCenterEntity!.winner != null) {
+          if (state.matchCenterEntity!.winner != null ||
+              state.matchCenterEntity!.draw) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -82,6 +83,7 @@ class _ScoreKeepingCenterState extends State<ScoreKeepingCenter> {
                               Routes.scorerMatchComplete,
                               extra: [
                                 ...Methods.calculateResultMessage(
+                                  state.matchCenterEntity!,
                                   state.matchCenterEntity!.innings,
                                 ),
                                 state.matchCenterEntity,

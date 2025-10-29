@@ -16,6 +16,7 @@ class MatchCenterModel {
   final TossChoice? tossChoice;
   String? winner;
   bool abandoned;
+  bool draw;
   final DateTime? endDateTime;
   final MatchTeamModel teamA;
   final MatchTeamModel teamB;
@@ -31,6 +32,7 @@ class MatchCenterModel {
     required this.teamB,
     required this.location,
     required this.scorer,
+    required this.draw,
     this.tossWinner,
     this.tossChoice,
     this.winner,
@@ -54,6 +56,7 @@ class MatchCenterModel {
       'teamA': teamA.toJson(),
       'teamB': teamB.toJson(),
       'scorer': scorer.toJson(),
+      'draw': draw,
       'innings': innings.map((x) => x.toJson()).toList(),
     };
   }
@@ -62,6 +65,7 @@ class MatchCenterModel {
     final teamAEntity = teamA.toEntity();
     final teamBEntity = teamB.toEntity();
     return MatchCenterEntity(
+      draw: draw,
       matchID: matchID,
       dateAndTime: dateAndTime,
       overs: overs,
@@ -83,6 +87,7 @@ class MatchCenterModel {
 
   factory MatchCenterModel.fromEntity(MatchCenterEntity entity) {
     return MatchCenterModel(
+      draw: entity.draw,
       matchID: entity.matchID,
       dateAndTime: entity.dateAndTime,
       overs: entity.overs,
@@ -172,6 +177,7 @@ class MatchCenterModel {
       tossChoice: map['tossChoice'] != null
           ? TossChoice.values.where((e) => e.name == map['tossChoice']).first
           : null,
+      draw: map['draw'] as bool? ?? false,
       winner: map['winner'] as String?,
       abandoned: map['abandoned'] as bool,
       endDateTime: endDateAndTime,
