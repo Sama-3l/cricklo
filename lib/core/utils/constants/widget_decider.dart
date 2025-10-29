@@ -661,7 +661,7 @@ class WidgetDecider {
 
     final baseColor = ColorsConstants.defaultBlack;
     final textColor = isCompleted
-        ? matchEntity.draw
+        ? isWinner || matchEntity.draw
               ? baseColor.withValues(alpha: textOpacity)
               : (isWinner ? baseColor : baseColor.withValues(alpha: 0.3))
         : baseColor.withValues(alpha: textOpacity);

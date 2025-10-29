@@ -41,9 +41,13 @@ class OverallScoreModel {
     final team = teamId == teamA.id ? teamA : teamB;
     return OverallScoreModel(
       team: team,
-      score: map['score'] as int,
-      overs: map['overs'] as String,
-      wickets: map['wickets'] as int,
+      score: map['runsScored'] as int,
+      overs:
+          (map['oversBatted'] is int
+                  ? map['oversBatted'] as int
+                  : map['oversBatted'] as double)
+              .toString(),
+      wickets: map['wicketsLost'] as int,
     );
   }
 

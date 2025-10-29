@@ -23,13 +23,16 @@ class PointsTable extends StatelessWidget {
     teams.sort((a, b) {
       // 1️⃣ Compare points (descending)
       final pointsCompare = b.points.compareTo(a.points);
-
       if (pointsCompare != 0) return pointsCompare;
 
-      // 2️⃣ If points are equal, compare NRR (descending)
+      // 2️⃣ If points are equal, compare matches played (ascending)
+      // — the team with fewer matches should rank higher
+      final matchesCompare = b.matches.compareTo(a.matches);
+      if (matchesCompare != 0) return matchesCompare;
+
+      // 3️⃣ If still equal, compare NRR (descending)
       final double nrrA = double.tryParse(a.nrr) ?? 0.0;
       final double nrrB = double.tryParse(b.nrr) ?? 0.0;
-
       return nrrB.compareTo(nrrA);
     });
 
@@ -186,15 +189,7 @@ class PointsTable extends StatelessWidget {
                       ),
                     ),
                     // NRR IS SHOWING OPPOSITE FIX
-                    ...[
-                      e.matches,
-                      e.won,
-                      e.loss,
-                      e.points,
-                      double.tryParse(e.nrr)! > 0
-                          ? "-${e.nrr}"
-                          : e.nrr.replaceAll('-', '+'),
-                    ].map(
+                    ...[e.matches, e.won, e.loss, e.points, e.nrr].map(
                       (e) => Center(
                         child: Text(
                           e.toString(),

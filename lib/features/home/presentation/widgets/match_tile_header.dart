@@ -66,16 +66,28 @@ class MatchTileHeader extends StatelessWidget {
                           0 &&
                       matchEntity.tossWinner != null &&
                       matchEntity.winner == null)
-                  ? matchEntity.winner == null || !matchEntity.draw
-                        ? SecondaryButton(
-                            title: "Start Match",
-                            onTap: () {
-                              GoRouter.of(context).pushNamed(
-                                Routes.scorerInitialPage,
-                                extra: matchEntity,
-                              );
-                            },
-                          )
+                  ? matchEntity.winner == null
+                        ? matchEntity.draw
+                              ? Text(
+                                  Methods.formatDateTime(
+                                    matchEntity.dateAndTime,
+                                  ),
+                                  textAlign: TextAlign.end,
+                                  style: TextStyles.poppinsSemiBold.copyWith(
+                                    color: ColorsConstants.defaultBlack,
+                                    fontSize: 12,
+                                    letterSpacing: 0.5,
+                                  ),
+                                )
+                              : SecondaryButton(
+                                  title: "Start Match",
+                                  onTap: () {
+                                    GoRouter.of(context).pushNamed(
+                                      Routes.scorerInitialPage,
+                                      extra: matchEntity,
+                                    );
+                                  },
+                                )
                         : Text(
                             Methods.formatDateTime(matchEntity.dateAndTime),
                             textAlign: TextAlign.end,
