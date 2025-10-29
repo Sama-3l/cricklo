@@ -8,9 +8,14 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class MatchTileHeader extends StatelessWidget {
-  const MatchTileHeader({super.key, required this.matchEntity});
+  const MatchTileHeader({
+    super.key,
+    required this.matchEntity,
+    required this.dateSet,
+  });
 
   final MatchEntity matchEntity;
+  final bool dateSet;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +44,9 @@ class MatchTileHeader extends StatelessWidget {
                           0
                       ? matchEntity.tossWinner == null
                             ? Text(
-                                "${Methods.formatDateTime(matchEntity.dateAndTime, addLineBreak: false)} (Delayed)",
+                                dateSet
+                                    ? "${Methods.formatDateTime(matchEntity.dateAndTime, addLineBreak: false)} (Delayed)"
+                                    : "Not Scheduled",
                                 textAlign: TextAlign.end,
                                 style: TextStyles.poppinsSemiBold.copyWith(
                                   color: ColorsConstants.defaultBlack,
@@ -49,10 +56,12 @@ class MatchTileHeader extends StatelessWidget {
                               )
                             : Container()
                       : Text(
-                          Methods.formatDateTime(
-                            matchEntity.dateAndTime,
-                            addLineBreak: false,
-                          ),
+                          dateSet
+                              ? Methods.formatDateTime(
+                                  matchEntity.dateAndTime,
+                                  addLineBreak: false,
+                                )
+                              : "Not Scheduled",
                           textAlign: TextAlign.end,
                           style: TextStyles.poppinsSemiBold.copyWith(
                             color: ColorsConstants.defaultBlack,
@@ -69,9 +78,11 @@ class MatchTileHeader extends StatelessWidget {
                   ? matchEntity.winner == null
                         ? matchEntity.draw
                               ? Text(
-                                  Methods.formatDateTime(
-                                    matchEntity.dateAndTime,
-                                  ),
+                                  dateSet
+                                      ? Methods.formatDateTime(
+                                          matchEntity.dateAndTime,
+                                        )
+                                      : "Not Scheduled",
                                   textAlign: TextAlign.end,
                                   style: TextStyles.poppinsSemiBold.copyWith(
                                     color: ColorsConstants.defaultBlack,
@@ -89,7 +100,11 @@ class MatchTileHeader extends StatelessWidget {
                                   },
                                 )
                         : Text(
-                            Methods.formatDateTime(matchEntity.dateAndTime),
+                            dateSet
+                                ? Methods.formatDateTime(
+                                    matchEntity.dateAndTime,
+                                  )
+                                : "Not Scheduled",
                             textAlign: TextAlign.end,
                             style: TextStyles.poppinsSemiBold.copyWith(
                               color: ColorsConstants.defaultBlack,
@@ -132,7 +147,9 @@ class MatchTileHeader extends StatelessWidget {
               DateTime.now().difference(matchEntity.dateAndTime).inSeconds >= 0
                   ? matchEntity.tossWinner == null
                         ? Text(
-                            "(Delayed)\n${Methods.formatDateTime(matchEntity.dateAndTime, addLineBreak: false)}",
+                            dateSet
+                                ? "(Delayed)\n${Methods.formatDateTime(matchEntity.dateAndTime, addLineBreak: false)}"
+                                : "Not Scheduled",
                             textAlign: TextAlign.end,
                             style: TextStyles.poppinsSemiBold.copyWith(
                               color: ColorsConstants.defaultBlack,
@@ -160,7 +177,11 @@ class MatchTileHeader extends StatelessWidget {
                             ),
                           )
                         : Text(
-                            Methods.formatDateTime(matchEntity.dateAndTime),
+                            dateSet
+                                ? Methods.formatDateTime(
+                                    matchEntity.dateAndTime,
+                                  )
+                                : "Not Scheduled",
                             textAlign: TextAlign.end,
                             style: TextStyles.poppinsSemiBold.copyWith(
                               color: ColorsConstants.defaultBlack,
@@ -169,7 +190,9 @@ class MatchTileHeader extends StatelessWidget {
                             ),
                           )
                   : Text(
-                      Methods.formatDateTime(matchEntity.dateAndTime),
+                      dateSet
+                          ? Methods.formatDateTime(matchEntity.dateAndTime)
+                          : "Not Scheduled",
                       textAlign: TextAlign.end,
                       style: TextStyles.poppinsSemiBold.copyWith(
                         color: ColorsConstants.defaultBlack,

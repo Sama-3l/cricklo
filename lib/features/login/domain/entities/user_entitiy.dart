@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:cricklo/core/utils/constants/enums.dart';
 import 'package:cricklo/features/login/domain/entities/location_entity.dart';
+import 'package:cricklo/features/matches/domain/entities/match_entity.dart';
+import 'package:cricklo/features/tournament/domain/entities/tournament_entity.dart';
 
 class UserEntity {
   final String profileId;
@@ -20,6 +22,8 @@ class UserEntity {
   final PlayerType playerType;
   final BatterType? batterType;
   final BowlerType? bowlerType;
+  final List<MatchEntity> userMatches;
+  final List<TournamentEntity> tournaments;
 
   UserEntity({
     required this.profileId,
@@ -37,6 +41,8 @@ class UserEntity {
     required this.location,
     required this.followers,
     required this.following,
+    required this.userMatches,
+    required this.tournaments,
   });
 
   UserEntity copyWith({
@@ -55,6 +61,8 @@ class UserEntity {
     int? followers,
     bool? userFollow,
     int? following,
+    List<MatchEntity>? userMatches,
+    List<TournamentEntity>? tournaments,
   }) {
     return UserEntity(
       profileId: profileId ?? this.profileId,
@@ -72,6 +80,8 @@ class UserEntity {
       bowlerType: bowlerType ?? this.bowlerType,
       followers: followers ?? this.followers,
       following: following ?? this.following,
+      userMatches: userMatches ?? this.userMatches,
+      tournaments: tournaments ?? this.tournaments,
     );
   }
 }

@@ -88,62 +88,117 @@ class TournamentMatchesPage extends StatelessWidget {
                 ),
               ],
             )
-          : ListView(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              children: [
-                // --- Scheduled Matches ---
-                if (scheduledMatches.isNotEmpty)
-                  ..._buildScheduledMatchesByDate(context, scheduledMatches),
+          : RefreshIndicator(
+              color: ColorsConstants.accentOrange,
+              onRefresh: () async {
+                await cubit.init(context, state.tournamentEntity!);
+              },
+              child: ListView(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
+                children: [
+                  // --- Scheduled Matches ---
+                  if (scheduledMatches.isNotEmpty)
+                    ..._buildScheduledMatchesByDate(context, scheduledMatches),
 
-                // --- Group Matches Divider ---
-                if (unscheduledGroupMatches.isNotEmpty)
-                  _buildDivider("GROUP MATCHES"),
+                  // --- Group Matches Divider ---
+                  if (unscheduledGroupMatches.isNotEmpty)
+                    _buildDivider("GROUP MATCHES"),
 
-                // --- Unscheduled Group Matches ---
-                ...unscheduledGroupMatches.map(
-                  (m) => Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4.0),
-                    child: MatchTile(
-                      matchEntity: m,
-                      onTap: () {
-                        if (state.tournamentEntity!.moderators
-                                .map((e) => e.playerId)
-                                .contains(GlobalVariables.user!.profileId) ||
-                            state.tournamentEntity!.organizerId ==
-                                GlobalVariables.user!.profileId) {
-                          GoRouter.of(context).push(
-                            Routes.moderatorMatchCenter,
-                            extra: [
-                              m,
-                              state.tournamentEntity!,
-                              (context, matchId, scorer, venueId, date, time) =>
-                                  cubit.updateMatchUsecase(
-                                    context,
-                                    matchId,
-                                    scorer,
-                                    venueId,
-                                    date,
-                                    time,
-                                  ),
-                            ],
-                          );
-                        }
-                      },
+                  // --- Unscheduled Group Matches ---
+                  ...unscheduledGroupMatches.map(
+                    (m) => Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4.0),
+                      child: MatchTile(
+                        dateSet: false,
+                        matchEntity: m,
+                        onTap: () {
+                          if (state.tournamentEntity!.moderators
+                                  .map((e) => e.playerId)
+                                  .contains(GlobalVariables.user!.profileId) ||
+                              state.tournamentEntity!.organizerId ==
+                                  GlobalVariables.user!.profileId) {
+                            GoRouter.of(context).push(
+                              Routes.moderatorMatchCenter,
+                              extra: [
+                                m,
+                                state.tournamentEntity!,
+                                (
+                                  context,
+                                  matchId,
+                                  scorer,
+                                  venueId,
+                                  date,
+                                  time,
+                                ) => cubit.updateMatchUsecase(
+                                  context,
+                                  matchId,
+                                  scorer,
+                                  venueId,
+                                  date,
+                                  time,
+                                ),
+                              ],
+                            );
+                          }
+                        },
+                      ),
                     ),
                   ),
-                ),
 
-                // --- Playoff Matches Divider ---
-                if (playoffMatches.isNotEmpty) _buildDivider("PLAYOFFS"),
+                  // --- Playoff Matches Divider ---
+                  if (playoffMatches.isNotEmpty) _buildDivider("PLAYOFFS"),
 
-                // --- Playoff Matches ---
-                ...playoffMatches.map(
-                  (m) => Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4.0),
-                    child: MatchTile(matchEntity: m),
+                  // --- Playoff Matches ---
+                  ...playoffMatches.map(
+                    (m) => Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4.0),
+                      child:
+                          m.scorer['profileId'] != null &&
+                              (m.scorer['profileId'] as String).isNotEmpty
+                          ? MatchTile(matchEntity: m)
+                          : MatchTile(
+                              matchEntity: m,
+                              dateSet: false,
+                              onTap: () {
+                                if (state.tournamentEntity!.moderators
+                                        .map((e) => e.playerId)
+                                        .contains(
+                                          GlobalVariables.user!.profileId,
+                                        ) ||
+                                    state.tournamentEntity!.organizerId ==
+                                        GlobalVariables.user!.profileId) {
+                                  GoRouter.of(context).push(
+                                    Routes.moderatorMatchCenter,
+                                    extra: [
+                                      m,
+                                      state.tournamentEntity!,
+                                      (
+                                        context,
+                                        matchId,
+                                        scorer,
+                                        venueId,
+                                        date,
+                                        time,
+                                      ) => cubit.updateMatchUsecase(
+                                        context,
+                                        matchId,
+                                        scorer,
+                                        venueId,
+                                        date,
+                                        time,
+                                      ),
+                                    ],
+                                  );
+                                }
+                              },
+                            ),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
     );
   }

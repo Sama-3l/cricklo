@@ -281,9 +281,13 @@ class TournamentCubit extends Cubit<TournamentState> {
     DateTime date,
     TimeOfDay time,
   ) async {
-    final match = state.tournamentEntity!.groupMatches
-        .where((e) => e.matchID == matchId)
-        .first;
+    final match =
+        state.tournamentEntity!.groupMatches
+            .where((e) => e.matchID == matchId)
+            .firstOrNull ??
+        state.tournamentEntity!.playoffMatches
+            .where((e) => e.matchID == matchId)
+            .first;
     match.location = state.tournamentEntity!.venues
         .where((e) => e.id == venueId)
         .first;

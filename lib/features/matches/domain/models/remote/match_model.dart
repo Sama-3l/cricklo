@@ -208,7 +208,6 @@ class MatchModel {
       utcTime.second,
     );
 
-    // print("here");
     // print(map);
     // print(map['matchId'] as String);
     // print(dateAndTime);

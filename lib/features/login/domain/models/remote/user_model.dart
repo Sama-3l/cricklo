@@ -2,6 +2,8 @@
 import 'package:cricklo/core/utils/constants/enums.dart';
 import 'package:cricklo/features/login/domain/entities/location_entity.dart';
 import 'package:cricklo/features/login/domain/entities/user_entitiy.dart';
+import 'package:cricklo/features/matches/domain/models/remote/match_model.dart';
+import 'package:cricklo/features/tournament/domain/models/remote/tournament_model.dart';
 
 class UserModel {
   final String profileId;
@@ -18,6 +20,8 @@ class UserModel {
   final PlayerType playerType;
   final BatterType? batterType;
   final BowlerType? bowlerType;
+  final List<MatchModel> userMatches;
+  final List<TournamentModel> tournaments;
 
   UserModel({
     required this.profileId,
@@ -34,6 +38,8 @@ class UserModel {
     this.playerType = PlayerType.batter,
     this.batterType,
     this.bowlerType,
+    required this.userMatches,
+    required this.tournaments,
   });
 
   factory UserModel.fromEntity(UserEntity entity) {
@@ -52,6 +58,12 @@ class UserModel {
       bowlerType: entity.bowlerType,
       followers: entity.followers,
       following: entity.following,
+      userMatches: entity.userMatches
+          .map((e) => MatchModel.fromEntity(e))
+          .toList(),
+      tournaments: entity.tournaments
+          .map((e) => TournamentModel.fromEntity(e))
+          .toList(),
     );
   }
 
@@ -118,6 +130,11 @@ class UserModel {
           bowlerType = BowlerType.leftArmSpin;
       }
     }
+    print(
+      (data['tournaments'] as List<dynamic>)
+          .map((e) => TournamentModel.fromJson(e))
+          .toList(),
+    );
     return UserModel(
       unreadNotifications: data["unreadNotifications"] as int? ?? 0,
       profilePic: data['Profile_Photo'],
@@ -131,6 +148,12 @@ class UserModel {
       userFollow: data['follows'] as bool? ?? false,
       followers: data['followersCount'] as int? ?? 0,
       following: data['followingCount'] as int? ?? 0,
+      userMatches: (data['matches'] as List<dynamic>)
+          .map((e) => MatchModel.fromJson(e))
+          .toList(),
+      tournaments: (data['tournaments'] as List<dynamic>)
+          .map((e) => TournamentModel.fromJson(e))
+          .toList(),
     );
   }
 
@@ -150,6 +173,8 @@ class UserModel {
       followers: followers,
       following: following,
       userFollow: userFollow,
+      userMatches: userMatches.map((e) => e.toEntity()).toList(),
+      tournaments: tournaments.map((e) => e.toEntity()).toList(),
     );
   }
 
@@ -185,6 +210,8 @@ class UserModel {
     int? followers,
     bool? userFollow,
     int? following,
+    List<MatchModel>? userMatches,
+    List<TournamentModel>? tournaments,
   }) {
     return UserModel(
       profileId: profileId ?? this.profileId,
@@ -201,6 +228,8 @@ class UserModel {
       batterType: batterType ?? this.batterType,
       bowlerType: bowlerType ?? this.bowlerType,
       userFollow: userFollow ?? this.userFollow,
+      userMatches: userMatches ?? this.userMatches,
+      tournaments: tournaments ?? this.tournaments,
     );
   }
 }

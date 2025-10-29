@@ -3,6 +3,8 @@ import 'package:cricklo/features/account/presentation/blocs/cubits/AccountPageCu
 import 'package:cricklo/features/account/presentation/screens/player_overview.dart';
 import 'package:cricklo/features/account/presentation/screens/statistics.dart';
 import 'package:cricklo/features/account/presentation/screens/teams_grid.dart';
+import 'package:cricklo/features/account/presentation/screens/user_matches.dart';
+import 'package:cricklo/features/account/presentation/screens/user_tournament.dart';
 import 'package:cricklo/features/account/presentation/widgets/profile_tab_bar.dart';
 import 'package:cricklo/features/login/domain/entities/user_entitiy.dart';
 import 'package:cricklo/features/matches/domain/entities/match_entity.dart';
@@ -53,47 +55,54 @@ class AccountPage extends StatelessWidget {
             );
           }
 
-          return Padding(
-            padding: const EdgeInsets.only(top: 24.0),
-            child: Column(
-              children: [
-                ProfileTabBar(
-                  onTap: (index) => cubit.changeMainTab(index),
-                  mainTabs: mainTabs,
-                  selectedMainTab: state.selectedMainTab,
-                ),
-
-                // CONTENT
-                Expanded(
-                  child: IndexedStack(
-                    index: state.selectedMainTab,
-                    children: [
-                      // Player Overview
-                      PlayerOverview(
-                        userEntity: state.userEntity!,
-                        follow: false,
-                      ),
-
-                      StatisticsPage(
-                        selectedStatisticsTab: state.selectedStatisticsTab,
-                        changeStatisticsTab: (index) =>
-                            cubit.changeStatisticsTab(index),
-                      ),
-
-                      TeamsGrid(
-                        loading: state.teamsLoading,
-                        teams: state.teams,
-                        onTap: (team) => GoRouter.of(context).pushNamed(
-                          Routes.teamPage,
-                          extra: [team, userMatches],
-                        ),
-                      ),
-                      const Center(child: Text("Matches Page")),
-                      const Center(child: Text("Tournaments Page")),
-                    ],
+          return Container(
+            color: state.selectedMainTab == 3 || state.selectedMainTab == 4
+                ? ColorsConstants.onSurfaceGrey
+                : ColorsConstants.defaultWhite,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 24.0),
+              child: Column(
+                children: [
+                  ProfileTabBar(
+                    onTap: (index) => cubit.changeMainTab(index),
+                    mainTabs: mainTabs,
+                    selectedMainTab: state.selectedMainTab,
                   ),
-                ),
-              ],
+
+                  // CONTENT
+                  Expanded(
+                    child: IndexedStack(
+                      index: state.selectedMainTab,
+                      children: [
+                        // Player Overview
+                        PlayerOverview(
+                          userEntity: state.userEntity!,
+                          follow: false,
+                        ),
+
+                        StatisticsPage(
+                          selectedStatisticsTab: state.selectedStatisticsTab,
+                          changeStatisticsTab: (index) =>
+                              cubit.changeStatisticsTab(index),
+                        ),
+
+                        TeamsGrid(
+                          loading: state.teamsLoading,
+                          teams: state.teams,
+                          onTap: (team) => GoRouter.of(context).pushNamed(
+                            Routes.teamPage,
+                            extra: [team, userMatches],
+                          ),
+                        ),
+                        UserMatches(userEntity: userEntity!),
+                        UserTournamentScreen(
+                          tournaments: userEntity!.tournaments,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           );
         },

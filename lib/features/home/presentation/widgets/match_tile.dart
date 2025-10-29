@@ -11,12 +11,14 @@ class MatchTile extends StatelessWidget {
   final MatchEntity matchEntity;
   final Function()? onTap;
   final bool whiteTile;
+  final bool dateSet;
 
   const MatchTile({
     super.key,
     required this.matchEntity,
     this.onTap,
     this.whiteTile = true,
+    this.dateSet = true,
   });
 
   @override
@@ -70,7 +72,7 @@ class MatchTile extends StatelessWidget {
           child: Column(
             children: [
               // Top row: Team images + VS + LIVE
-              MatchTileHeader(matchEntity: matchEntity),
+              MatchTileHeader(matchEntity: matchEntity, dateSet: dateSet),
               const SizedBox(height: 16),
 
               Column(

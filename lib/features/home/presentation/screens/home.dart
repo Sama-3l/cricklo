@@ -79,6 +79,19 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     final cubit = context.read<MainAppCubit>();
     final state = cubit.state;
+    final allMatches =
+        state.matches
+            .where(
+              (e) =>
+                  e.teamA.inviteStatus != null ||
+                  e.matchCategory != MatchCategory.open,
+            )
+            .toList()
+          ..sort((a, b) => b.dateAndTime.compareTo(a.dateAndTime));
+
+    final matches = allMatches.length > 5
+        ? allMatches.sublist(0, 5)
+        : allMatches;
     return Scaffold(
       backgroundColor: ColorsConstants.onSurfaceGrey,
       body: Stack(
@@ -99,13 +112,7 @@ class _HomePageState extends State<HomePage>
                 ),
                 state.matchLoading
                     ? ShimmerMatchTile()
-                    : state.matches
-                          .where(
-                            (e) =>
-                                e.teamA.inviteStatus != null ||
-                                e.matchCategory != MatchCategory.open,
-                          )
-                          .isEmpty
+                    : matches.isEmpty
                     ? Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 0.0),
                         child: Container(
@@ -133,9 +140,9 @@ class _HomePageState extends State<HomePage>
                           ),
                         ),
                       )
-                    : const Padding(
+                    : Padding(
                         padding: EdgeInsets.only(top: 12.0),
-                        child: MatchList(),
+                        child: MatchList(matches: matches),
                       ),
                 if (widget.userEntity != null) ...[
                   const SizedBox(height: 24),
