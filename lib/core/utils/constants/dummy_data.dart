@@ -151,6 +151,12 @@ final TeamEntity dummyTeam = TeamEntity(
     lat: 0,
     lng: 0,
   ),
+  battingStats: [],
+  bowlingStats: [],
+  fieldingStats: [],
+  matches: [],
+  tournaments: [],
+  partnershipStats: [],
 );
 
 final TeamEntity dummyTeam2 = TeamEntity(
@@ -170,6 +176,12 @@ final TeamEntity dummyTeam2 = TeamEntity(
     lat: 0,
     lng: 0,
   ),
+  battingStats: [],
+  bowlingStats: [],
+  fieldingStats: [],
+  matches: [],
+  tournaments: [],
+  partnershipStats: [],
 );
 
 final List<PlayerEntity> dummyPlayers = [

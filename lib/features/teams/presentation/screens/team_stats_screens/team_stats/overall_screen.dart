@@ -1,11 +1,15 @@
 import 'package:cricklo/core/utils/constants/theme.dart';
+import 'package:cricklo/features/teams/presentation/blocs/cubits/TeamPageCubit/team_page_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class OverallScreen extends StatelessWidget {
   const OverallScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final state = context.read<TeamPageCubit>().state;
+    final teamStats = state.team!.teamStatsEntity;
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -99,7 +103,7 @@ class OverallScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      '0',
+                      teamStats == null ? "0" : teamStats.matches.toString(),
                       style: TextStyles.poppinsMedium.copyWith(
                         fontSize: 12,
                         letterSpacing: -0.5,
@@ -111,7 +115,7 @@ class OverallScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      '0',
+                      teamStats == null ? "0" : teamStats.wins.toString(),
                       style: TextStyles.poppinsMedium.copyWith(
                         fontSize: 12,
                         letterSpacing: -0.5,
@@ -123,7 +127,10 @@ class OverallScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      '0',
+                      teamStats == null
+                          ? "0"
+                          : ((teamStats.wins / teamStats.matches) * 100)
+                                .toStringAsFixed(2),
                       style: TextStyles.poppinsMedium.copyWith(
                         fontSize: 12,
                         letterSpacing: -0.5,
@@ -193,7 +200,7 @@ class OverallScreen extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        'Tie',
+                        'Draw',
                         style: TextStyles.poppinsSemiBold.copyWith(
                           fontSize: 16,
                           letterSpacing: -0.8,
@@ -205,7 +212,7 @@ class OverallScreen extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        'Draw',
+                        'Abandoned',
                         style: TextStyles.poppinsSemiBold.copyWith(
                           fontSize: 16,
                           letterSpacing: -0.8,
@@ -234,7 +241,7 @@ class OverallScreen extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        '0',
+                        teamStats == null ? "0" : teamStats.losses.toString(),
                         style: TextStyles.poppinsMedium.copyWith(
                           fontSize: 12,
                           letterSpacing: -0.5,
@@ -246,7 +253,7 @@ class OverallScreen extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        '0',
+                        teamStats == null ? "0" : teamStats.draws.toString(),
                         style: TextStyles.poppinsMedium.copyWith(
                           fontSize: 12,
                           letterSpacing: -0.5,
@@ -258,7 +265,9 @@ class OverallScreen extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        '0',
+                        teamStats == null
+                            ? "0"
+                            : teamStats.abandoned.toString(),
                         style: TextStyles.poppinsMedium.copyWith(
                           fontSize: 12,
                           letterSpacing: -0.5,
@@ -270,7 +279,7 @@ class OverallScreen extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        '0',
+                        teamStats == null ? "0" : teamStats.nrr.toString(),
                         style: TextStyles.poppinsMedium.copyWith(
                           fontSize: 12,
                           letterSpacing: -0.5,
@@ -564,7 +573,7 @@ class OverallScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      '0',
+                      teamStats == null ? "0" : teamStats.tossWins.toString(),
                       style: TextStyles.poppinsMedium.copyWith(
                         fontSize: 12,
                         letterSpacing: -0.5,
@@ -579,7 +588,7 @@ class OverallScreen extends StatelessWidget {
                       vertical: 8,
                     ),
                     child: Text(
-                      '0',
+                      teamStats == null ? "0" : teamStats.batFirst.toString(),
                       style: TextStyles.poppinsMedium.copyWith(
                         fontSize: 12,
                         letterSpacing: -0.5,
@@ -594,7 +603,7 @@ class OverallScreen extends StatelessWidget {
                       vertical: 8,
                     ),
                     child: Text(
-                      '0',
+                      teamStats == null ? "0" : teamStats.bowlFirst.toString(),
                       style: TextStyles.poppinsMedium.copyWith(
                         fontSize: 12,
                         letterSpacing: -0.5,

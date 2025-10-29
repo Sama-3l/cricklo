@@ -1,10 +1,17 @@
 import 'package:cricklo/core/utils/constants/theme.dart';
+import 'package:cricklo/features/teams/domain/entities/leaderboard_row_data_entity.dart';
 import 'package:flutter/material.dart';
 
 class LeaderboardTable extends StatelessWidget {
-  const LeaderboardTable({super.key, required this.headings, this.team});
+  const LeaderboardTable({
+    super.key,
+    required this.headings,
+    required this.data,
+    this.team,
+  });
 
   final List<String> headings;
+  final List<LeaderboardRowData> data;
   final String? team;
 
   @override
@@ -14,12 +21,11 @@ class LeaderboardTable extends StatelessWidget {
       child: Table(
         defaultVerticalAlignment: TableCellVerticalAlignment.middle,
         columnWidths: const {
-          0: FlexColumnWidth(), // first column takes remaining width
+          0: FlexColumnWidth(),
           1: IntrinsicColumnWidth(),
           2: IntrinsicColumnWidth(),
           3: IntrinsicColumnWidth(),
         },
-
         border: TableBorder(
           horizontalInside: BorderSide(
             color: ColorsConstants.defaultBlack.withValues(alpha: 0.5),
@@ -32,9 +38,8 @@ class LeaderboardTable extends StatelessWidget {
           verticalInside: BorderSide.none,
         ),
         children: [
-          // Header row
+          // 🟧 Header row
           TableRow(
-            // decoration: const BoxDecoration(color: Colors.grey),
             children: [
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 12.0),
@@ -63,249 +68,68 @@ class LeaderboardTable extends StatelessWidget {
               ),
             ],
           ),
-          TableRow(
-            // decoration: const BoxDecoration(color: Colors.grey),
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12.0),
-                child: Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 12,
-                      backgroundColor: ColorsConstants.accentOrange,
-                      child: Text(
-                        '1',
-                        style: TextStyles.poppinsSemiBold.copyWith(
-                          fontSize: 10,
-                          letterSpacing: -0.2,
-                          color: ColorsConstants.defaultWhite,
+
+          // 🟩 Dynamic player rows
+          ...data.map(
+            (row) => TableRow(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12.0),
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 12,
+                        backgroundColor: ColorsConstants.accentOrange,
+                        child: Text(
+                          '${row.rank}',
+                          style: TextStyles.poppinsSemiBold.copyWith(
+                            fontSize: 10,
+                            letterSpacing: -0.2,
+                            color: ColorsConstants.defaultWhite,
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(width: 8),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Aaryan Ji',
-                          style: TextStyles.poppinsMedium.copyWith(
-                            fontSize: 16,
-                            letterSpacing: -0.8,
-                            color: ColorsConstants.defaultBlack,
-                          ),
-                        ),
-                        if (team != null)
+                      const SizedBox(width: 8),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
                           Text(
-                            'Aviral All Stars',
+                            row.playerName,
                             style: TextStyles.poppinsMedium.copyWith(
-                              fontSize: 12,
-                              letterSpacing: -0.5,
-                              color: ColorsConstants.defaultBlack.withValues(
-                                alpha: 0.5,
-                              ),
+                              fontSize: 16,
+                              letterSpacing: -0.8,
+                              color: ColorsConstants.defaultBlack,
                             ),
                           ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              ...headings.map(
-                (e) => Center(
-                  child: Text(
-                    '0',
-                    style: TextStyles.poppinsSemiBold.copyWith(
-                      fontSize: 16,
-                      letterSpacing: -0.8,
-                    ),
-                    textAlign: TextAlign.left,
+                          if (team != null || row.teamName != null)
+                            Text(
+                              row.teamName ?? team!,
+                              style: TextStyles.poppinsMedium.copyWith(
+                                fontSize: 12,
+                                letterSpacing: -0.5,
+                                color: ColorsConstants.defaultBlack.withValues(
+                                  alpha: 0.5,
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
-              ),
-            ],
-          ),
-          TableRow(
-            // decoration: const BoxDecoration(color: Colors.grey),
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12.0),
-                child: Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 12,
-                      backgroundColor: ColorsConstants.accentOrange,
-                      child: Text(
-                        '2',
-                        style: TextStyles.poppinsSemiBold.copyWith(
-                          fontSize: 10,
-                          letterSpacing: -0.2,
-                          color: ColorsConstants.defaultWhite,
-                        ),
+                ...row.stats.map(
+                  (stat) => Center(
+                    child: Text(
+                      stat,
+                      style: TextStyles.poppinsSemiBold.copyWith(
+                        fontSize: 16,
+                        letterSpacing: -0.8,
                       ),
                     ),
-                    const SizedBox(width: 8),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Aaryan Ji',
-                          style: TextStyles.poppinsMedium.copyWith(
-                            fontSize: 16,
-                            letterSpacing: -0.8,
-                            color: ColorsConstants.defaultBlack,
-                          ),
-                        ),
-                        if (team != null)
-                          Text(
-                            'Aviral All Stars',
-                            style: TextStyles.poppinsMedium.copyWith(
-                              fontSize: 12,
-                              letterSpacing: -0.5,
-                              color: ColorsConstants.defaultBlack.withValues(
-                                alpha: 0.5,
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              ...headings.map(
-                (e) => Center(
-                  child: Text(
-                    '0',
-                    style: TextStyles.poppinsSemiBold.copyWith(
-                      fontSize: 16,
-                      letterSpacing: -0.8,
-                    ),
-                    textAlign: TextAlign.left,
                   ),
                 ),
-              ),
-            ],
-          ),
-          TableRow(
-            // decoration: const BoxDecoration(color: Colors.grey),
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12.0),
-                child: Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 12,
-                      backgroundColor: ColorsConstants.accentOrange,
-                      child: Text(
-                        '3',
-                        style: TextStyles.poppinsSemiBold.copyWith(
-                          fontSize: 10,
-                          letterSpacing: -0.2,
-                          color: ColorsConstants.defaultWhite,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Aaryan Ji',
-                          style: TextStyles.poppinsMedium.copyWith(
-                            fontSize: 16,
-                            letterSpacing: -0.8,
-                            color: ColorsConstants.defaultBlack,
-                          ),
-                        ),
-                        if (team != null)
-                          Text(
-                            'Aviral All Stars',
-                            style: TextStyles.poppinsMedium.copyWith(
-                              fontSize: 12,
-                              letterSpacing: -0.5,
-                              color: ColorsConstants.defaultBlack.withValues(
-                                alpha: 0.5,
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              ...headings.map(
-                (e) => Center(
-                  child: Text(
-                    '0',
-                    style: TextStyles.poppinsSemiBold.copyWith(
-                      fontSize: 16,
-                      letterSpacing: -0.8,
-                    ),
-                    textAlign: TextAlign.left,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          TableRow(
-            // decoration: const BoxDecoration(color: Colors.grey),
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12.0),
-                child: Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 12,
-                      backgroundColor: ColorsConstants.accentOrange,
-                      child: Text(
-                        '4',
-                        style: TextStyles.poppinsSemiBold.copyWith(
-                          fontSize: 10,
-                          letterSpacing: -0.2,
-                          color: ColorsConstants.defaultWhite,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Aaryan Ji',
-                          style: TextStyles.poppinsMedium.copyWith(
-                            fontSize: 16,
-                            letterSpacing: -0.8,
-                            color: ColorsConstants.defaultBlack,
-                          ),
-                        ),
-                        if (team != null)
-                          Text(
-                            'Aviral All Stars',
-                            style: TextStyles.poppinsMedium.copyWith(
-                              fontSize: 12,
-                              letterSpacing: -0.5,
-                              color: ColorsConstants.defaultBlack.withValues(
-                                alpha: 0.5,
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              ...headings.map(
-                (e) => Center(
-                  child: Text(
-                    '0',
-                    style: TextStyles.poppinsSemiBold.copyWith(
-                      fontSize: 16,
-                      letterSpacing: -0.8,
-                    ),
-                    textAlign: TextAlign.left,
-                  ),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),

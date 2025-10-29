@@ -33,29 +33,29 @@ class _TeamOverviewState extends State<TeamOverview> {
     final wins = state.team!.teamStatsEntity == null
         ? 0
         : selectedTab == 0
-        ? state.team!.teamStatsEntity!.wins
+        ? state.team!.teamStatsEntity!.wins.abs()
         : selectedTab == 1
-        ? state.team!.teamStatsEntity!.batFirstWon
+        ? state.team!.teamStatsEntity!.batFirstWins.abs()
         : selectedTab == 2
-        ? state.team!.teamStatsEntity!.wins -
-              state.team!.teamStatsEntity!.batFirstWon
+        ? state.team!.teamStatsEntity!.bowlFirstWins.abs()
         : 0;
     final matches = state.team!.teamStatsEntity == null
         ? 0
         : selectedTab == 0
-        ? state.team!.teamStatsEntity!.matches
+        ? state.team!.teamStatsEntity!.matches.abs()
         : selectedTab == 1
-        ? state.team!.teamStatsEntity!.batFirst
+        ? state.team!.teamStatsEntity!.batFirst.abs()
         : selectedTab == 2
-        ? state.team!.teamStatsEntity!.matches -
-              state.team!.teamStatsEntity!.batFirst
+        ? state.team!.teamStatsEntity!.bowlFirst.abs()
         : 0;
     final lost = state.team!.teamStatsEntity == null
         ? 0
         : selectedTab == 0
-        ? state.team!.teamStatsEntity!.losses
-        : selectedTab == 1 || selectedTab == 2
-        ? matches - wins
+        ? state.team!.teamStatsEntity!.losses.abs()
+        : selectedTab == 1
+        ? state.team!.teamStatsEntity!.batFirstLoss.abs()
+        : selectedTab == 2
+        ? state.team!.teamStatsEntity!.bowlFirstLoss.abs()
         : 0;
     return Padding(
       padding: const EdgeInsets.only(top: 24),

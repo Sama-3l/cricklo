@@ -3,8 +3,8 @@ import 'package:cricklo/features/account/presentation/blocs/cubits/AccountPageCu
 import 'package:cricklo/features/account/presentation/screens/player_overview.dart';
 import 'package:cricklo/features/account/presentation/screens/statistics.dart';
 import 'package:cricklo/features/account/presentation/screens/teams_grid.dart';
-import 'package:cricklo/features/account/presentation/screens/user_matches.dart';
-import 'package:cricklo/features/account/presentation/screens/user_tournament.dart';
+import 'package:cricklo/features/matches/presentation/screens/entity_matches_page.dart';
+import 'package:cricklo/features/tournament/presentation/screens/entity_tournaments_page.dart';
 import 'package:cricklo/features/account/presentation/widgets/profile_tab_bar.dart';
 import 'package:cricklo/features/login/domain/entities/user_entitiy.dart';
 import 'package:cricklo/features/matches/domain/entities/match_entity.dart';
@@ -95,8 +95,8 @@ class AccountPage extends StatelessWidget {
                             extra: [team, userMatches],
                           ),
                         ),
-                        UserMatches(userEntity: userEntity!),
-                        UserTournamentScreen(
+                        EntityMatchesPage(matches: userEntity!.userMatches),
+                        EntityTournamentsPage(
                           tournaments: userEntity!.tournaments,
                         ),
                       ],

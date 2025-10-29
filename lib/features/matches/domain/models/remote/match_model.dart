@@ -156,7 +156,6 @@ class MatchModel {
       default:
         tossChoice = null;
     }
-
     final teamA = map['teamAEntity'] == null
         ? TeamModel(
             uuid: "",
@@ -174,6 +173,12 @@ class MatchModel {
               lat: 0,
               lng: 0,
             ),
+            battingStats: [],
+            bowlingStats: [],
+            fieldingStats: [],
+            matches: [],
+            tournaments: [],
+            partnershipStats: [],
           )
         : TeamModel.fromJson(map['teamAEntity'] as Map<String, dynamic>);
 
@@ -194,8 +199,15 @@ class MatchModel {
               lat: 0,
               lng: 0,
             ),
+            battingStats: [],
+            bowlingStats: [],
+            fieldingStats: [],
+            matches: [],
+            tournaments: [],
+            partnershipStats: [],
           )
         : TeamModel.fromJson(map['teamBEntity'] as Map<String, dynamic>);
+
     final utcTime = map['dateAndTime'] == null
         ? DateTime.now()
         : DateTime.parse(map['dateAndTime'] as String);
@@ -207,8 +219,6 @@ class MatchModel {
       utcTime.minute,
       utcTime.second,
     );
-
-    // print(map);
     // print(map['matchId'] as String);
     // print(dateAndTime);
     // print(map['overs'] as int);

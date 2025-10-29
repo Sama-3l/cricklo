@@ -11,6 +11,7 @@ class TournamentFieldStatsScreen extends StatelessWidget {
       child: LeaderboardTable(
         team: "Aviral All Stars",
         headings: ["Catch", "RunOu", "Stump"],
+        data: [],
       ),
     );
   }

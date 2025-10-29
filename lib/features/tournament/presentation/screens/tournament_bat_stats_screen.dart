@@ -45,42 +45,52 @@ class TournamentBatStatsScreen extends StatelessWidget {
                   LeaderboardTable(
                     team: "Aviral All Stars",
                     headings: ["Runs", "Inn", "Avg"],
+                    data: [],
                   ),
                   LeaderboardTable(
                     team: "Aviral All Stars",
                     headings: ["Runs", "Ball", "SR"],
+                    data: [],
                   ),
                   LeaderboardTable(
                     team: "Aviral All Stars",
                     headings: ["Avg", "Inn", "Runs"],
+                    data: [],
                   ),
                   LeaderboardTable(
                     team: "Aviral All Stars",
                     headings: ["SR", "Inn", "Runs"],
+                    data: [],
                   ),
                   LeaderboardTable(
                     team: "Aviral All Stars",
                     headings: ["4s", "Inn", "Avg"],
+                    data: [],
                   ),
                   LeaderboardTable(
                     team: "Aviral All Stars",
                     headings: ["6s", "Inn", "Avg"],
+                    data: [],
                   ),
                   LeaderboardTable(
                     team: "Aviral All Stars",
                     headings: ["30s", "Inn", "Avg"],
+                    data: [],
                   ),
                   LeaderboardTable(
                     team: "Aviral All Stars",
                     headings: ["50s", "Inn", "Avg"],
+                    data: [],
                   ),
                   LeaderboardTable(
                     team: "Aviral All Stars",
                     headings: ["100s", "Inn", "Avg"],
+                    data: [],
                   ),
                   LeaderboardTable(
                     team: "Aviral All Stars",
                     headings: ["Balls", "Inn", "Runs"],
+                    data: [],
                   ),
                 ],
               ),

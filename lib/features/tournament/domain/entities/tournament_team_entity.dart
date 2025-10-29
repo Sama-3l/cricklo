@@ -79,6 +79,12 @@ class TournamentTeamEntity {
       players: [],
       userFollows: false,
       location: location,
+      battingStats: [],
+      bowlingStats: [],
+      fieldingStats: [],
+      matches: [],
+      tournaments: [],
+      partnershipStats: [],
     );
   }
 }

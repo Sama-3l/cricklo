@@ -1,11 +1,13 @@
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/account/presentation/widgets/profile_tab_bar.dart';
 import 'package:cricklo/features/matches/domain/entities/match_entity.dart';
+import 'package:cricklo/features/matches/presentation/screens/entity_matches_page.dart';
 import 'package:cricklo/features/teams/domain/entities/team_entity.dart';
 import 'package:cricklo/features/teams/presentation/blocs/cubits/TeamPageCubit/team_page_cubit.dart';
 import 'package:cricklo/features/teams/presentation/screens/team_players_screens/players_page.dart';
 import 'package:cricklo/features/teams/presentation/screens/team_overview.dart';
 import 'package:cricklo/features/teams/presentation/screens/team_stats_screens/team_profile_statistics.dart';
+import 'package:cricklo/features/tournament/presentation/screens/entity_tournaments_page.dart';
 import 'package:cricklo/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,7 +34,10 @@ class TeamPage extends StatelessWidget {
             'Tournaments',
           ];
           return Scaffold(
-            backgroundColor: ColorsConstants.defaultWhite,
+            backgroundColor:
+                state.selectedMainTab == 3 || state.selectedMainTab == 4
+                ? ColorsConstants.onSurfaceGrey
+                : ColorsConstants.defaultWhite,
             appBar: AppBar(
               backgroundColor: ColorsConstants.accentOrange,
               leading: Builder(
@@ -81,8 +86,18 @@ class TeamPage extends StatelessWidget {
                             selectedTab: state.selectedPlayersTab,
                           ),
                           TeamProfileStatistics(),
-                          const Center(child: Text("No Match History")),
-                          const Center(child: Text("No Tournaments Yet")),
+                          EntityMatchesPage(
+                            matches: state.team == null
+                                ? []
+                                : state.team!.matches,
+                            title: "Team Matches",
+                          ),
+                          EntityTournamentsPage(
+                            tournaments: state.team == null
+                                ? []
+                                : state.team!.tournaments,
+                            title: "Team Tournaments",
+                          ),
                         ],
                       ),
                     ),

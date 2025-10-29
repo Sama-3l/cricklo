@@ -261,7 +261,7 @@ class TournamentModel {
           map['organizer']['profileId'] as String? ??
           "",
       id: map['tournamentId'] as String,
-      userFollow: map["follows"] as bool,
+      userFollow: map["follows"] as bool? ?? false,
       name: map['name'] as String? ?? map['tournamentName'] as String,
       banner: map['banner'] as String,
       inviteDeadline: inviteDeadline,

@@ -1,7 +1,11 @@
 import 'package:cricklo/features/login/domain/models/remote/location_model.dart';
+import 'package:cricklo/features/matches/domain/models/remote/match_model.dart';
 import 'package:cricklo/features/teams/domain/entities/team_entity.dart';
+import 'package:cricklo/features/teams/domain/models/remote/partnership_stats_model.dart';
 import 'package:cricklo/features/teams/domain/models/remote/player_model.dart';
+import 'package:cricklo/features/teams/domain/models/remote/player_stats_models.dart';
 import 'package:cricklo/features/teams/domain/models/remote/team_stats_model.dart';
+import 'package:cricklo/features/tournament/domain/models/remote/tournament_model.dart';
 
 class TeamModel {
   final String? uuid;
@@ -15,6 +19,12 @@ class TeamModel {
   final List<PlayerModel> players;
   final LocationModel location;
   final TeamStatsModel? teamStatsModel;
+  final List<TeamBattingStatsModel> battingStats;
+  final List<TeamBowlingStatsModel> bowlingStats;
+  final List<TeamFieldingStatsModel> fieldingStats;
+  final List<MatchModel> matches;
+  final List<TournamentModel> tournaments;
+  final List<PartnershipStatsModel> partnershipStats;
 
   TeamModel({
     required this.uuid,
@@ -28,6 +38,12 @@ class TeamModel {
     this.players = const [],
     required this.location,
     this.teamStatsModel,
+    required this.battingStats,
+    required this.bowlingStats,
+    required this.fieldingStats,
+    required this.matches,
+    required this.tournaments,
+    required this.partnershipStats,
   });
 
   TeamModel copyWith({
@@ -42,6 +58,12 @@ class TeamModel {
     List<PlayerModel>? players,
     LocationModel? location,
     TeamStatsModel? teamStatsModel,
+    List<TeamBattingStatsModel>? battingStats,
+    List<TeamBowlingStatsModel>? bowlingStats,
+    List<TeamFieldingStatsModel>? fieldingStats,
+    List<MatchModel>? matches,
+    List<TournamentModel>? tournaments,
+    List<PartnershipStatsModel>? partnershipStats,
   }) {
     return TeamModel(
       inviteStatus: inviteStatus ?? this.inviteStatus,
@@ -55,6 +77,12 @@ class TeamModel {
       players: players ?? this.players,
       location: location ?? this.location,
       teamStatsModel: teamStatsModel ?? this.teamStatsModel,
+      battingStats: battingStats ?? this.battingStats,
+      bowlingStats: bowlingStats ?? this.bowlingStats,
+      fieldingStats: fieldingStats ?? this.fieldingStats,
+      matches: matches ?? this.matches,
+      tournaments: tournaments ?? this.tournaments,
+      partnershipStats: partnershipStats ?? this.partnershipStats,
     );
   }
 
@@ -82,10 +110,35 @@ class TeamModel {
       teamStatsModel: team.teamStatsEntity != null
           ? TeamStatsModel.fromEntity(team.teamStatsEntity!)
           : null,
+      battingStats: team.battingStats
+          .map((e) => TeamBattingStatsModel.fromEntity(e))
+          .toList(),
+      bowlingStats: team.bowlingStats
+          .map((e) => TeamBowlingStatsModel.fromEntity(e))
+          .toList(),
+      fieldingStats: team.fieldingStats
+          .map((e) => TeamFieldingStatsModel.fromEntity(e))
+          .toList(),
+      matches: team.matches.map((e) => MatchModel.fromEntity(e)).toList(),
+      tournaments: team.tournaments
+          .map((e) => TournamentModel.fromEntity(e))
+          .toList(),
+      partnershipStats: team.partnershipStats
+          .map((e) => PartnershipStatsModel.fromEntity(e))
+          .toList(),
     );
   }
 
   factory TeamModel.fromJson(Map<String, dynamic> map) {
+    final players = map['teamPlayers'] != null
+        ? (map['teamPlayers'] as List<dynamic>)
+              .map<PlayerModel>((e) => PlayerModel.fromJson(e))
+              .toList()
+        : map['players'] != null
+        ? (map['players'] as List<dynamic>)
+              .map<PlayerModel>((e) => PlayerModel.fromJson(e))
+              .toList()
+        : <PlayerModel>[];
     return TeamModel(
       inviteStatus: map['inviteStatus'] as String?,
       uuid: map['id'] as String?,
@@ -94,15 +147,7 @@ class TeamModel {
       name: map['name'] ?? map['teamName'] as String,
       teamLogo: map['logo'] ?? map['teamLogo'] as String,
       teamBanner: map['banner'] ?? map['teamBanner'] as String? ?? "",
-      players: map['teamPlayers'] != null
-          ? (map['teamPlayers'] as List<dynamic>)
-                .map<PlayerModel>((e) => PlayerModel.fromJson(e))
-                .toList()
-          : map['players'] != null
-          ? (map['players'] as List<dynamic>)
-                .map<PlayerModel>((e) => PlayerModel.fromJson(e))
-                .toList()
-          : [],
+      players: players,
       location: map.containsKey('location')
           ? map['location'] == null
                 ? LocationModel(area: "", city: "", state: "", lat: 0, lng: 0)
@@ -119,6 +164,36 @@ class TeamModel {
       teamStatsModel: map['teamStats'] == null
           ? null
           : TeamStatsModel.fromJson(map['teamStats'] as Map<String, dynamic>),
+      battingStats: map["playerStats"] == null
+          ? []
+          : (map["playerStats"]["batting"] as List<dynamic>)
+                .map((e) => TeamBattingStatsModel.fromJson(e, players))
+                .toList(),
+      bowlingStats: map["playerStats"] == null
+          ? []
+          : (map["playerStats"]["bowling"] as List<dynamic>)
+                .map((e) => TeamBowlingStatsModel.fromJson(e, players))
+                .toList(),
+      fieldingStats: map["playerStats"] == null
+          ? []
+          : (map["playerStats"]["fielding"] as List<dynamic>)
+                .map((e) => TeamFieldingStatsModel.fromJson(e, players))
+                .toList(),
+      matches: map["matches"] == null
+          ? []
+          : (map["matches"] as List<dynamic>)
+                .map((e) => MatchModel.fromJson(e))
+                .toList(),
+      tournaments: map["tournaments"] == null
+          ? []
+          : (map["tournaments"] as List<dynamic>)
+                .map((e) => TournamentModel.fromJson(e))
+                .toList(),
+      partnershipStats: map["partnerships"] == null
+          ? []
+          : (map["partnerships"] as List<dynamic>)
+                .map((e) => PartnershipStatsModel.fromJson(e))
+                .toList(),
     );
   }
 
@@ -135,6 +210,12 @@ class TeamModel {
       location: location.toEntity(),
       followers: followers,
       teamStatsEntity: teamStatsModel?.toEntity(),
+      battingStats: battingStats.map((e) => e.toEntity()).toList(),
+      bowlingStats: bowlingStats.map((e) => e.toEntity()).toList(),
+      fieldingStats: fieldingStats.map((e) => e.toEntity()).toList(),
+      matches: matches.map((e) => e.toEntity()).toList(),
+      tournaments: tournaments.map((e) => e.toEntity()).toList(),
+      partnershipStats: partnershipStats.map((e) => e.toEntity()).toList(),
     );
   }
 }
