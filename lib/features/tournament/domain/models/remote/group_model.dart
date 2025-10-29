@@ -26,15 +26,21 @@ class GroupModel {
     );
   }
 
-  factory GroupModel.fromJson(Map<String, dynamic> map) {
+  factory GroupModel.fromJson(
+    Map<String, dynamic> map,
+    List<TournamentTeamModel> teams,
+  ) {
+    final allTeamIds = teams.map((e) => e.id);
+    List<TournamentTeamModel> groupTeams = [];
+    if (map['teams'] != null) {
+      for (var team in map['teams'] as List<dynamic>) {
+        if (allTeamIds.contains(team["teamId"])) {
+          groupTeams.add(teams.where((e) => e.id == team["teamId"]).first);
+        }
+      }
+    }
     return GroupModel(
-      teams: map['teams'] != null
-          ? List<TournamentTeamModel>.from(
-              (map['teams'] as List<dynamic>).map<TournamentTeamModel>(
-                (x) => TournamentTeamModel.fromJson(x),
-              ),
-            )
-          : [],
+      teams: groupTeams,
       matches: map['matches'] != null
           ? List<MatchModel>.from(
               (map['matches'] as List<dynamic>).map<MatchModel>(

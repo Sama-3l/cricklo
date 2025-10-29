@@ -15,7 +15,7 @@ class TournamentTeamModel {
   final int won;
   final int loss;
   final int points;
-  final double nrr;
+  final String nrr;
   final bool eliminated;
   final InviteStatus inviteStatus;
   TournamentTeamModel({
@@ -73,11 +73,11 @@ class TournamentTeamModel {
 
   factory TournamentTeamModel.fromJson(Map<String, dynamic> map) {
     return TournamentTeamModel(
-      matches: map['matches'] as int? ?? 0,
-      won: map['won'] as int? ?? 0,
-      loss: map['loss'] as int? ?? 0,
+      matches: map['matchesPlayed'] as int? ?? 0,
+      won: map['wins'] as int? ?? 0,
+      loss: map['losses'] as int? ?? 0,
       points: map['points'] as int? ?? 0,
-      nrr: map['nrr'] as double? ?? 0.0,
+      nrr: map['nrr'] as String,
       eliminated: map['eliminated'] as bool? ?? false,
       inviteStatus: InviteStatus.values.firstWhere(
         (e) => e.title.toUpperCase() == map['inviteStatus'],

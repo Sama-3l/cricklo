@@ -1747,7 +1747,25 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
         // Match complete after 2 innings
         match.winner = Methods.getWinner(match);
       }
-
+      if (!addBall && !state.spectator) {
+        _scorerInningsChangeUsecase(
+          ScorerRequestUsecaseEntity(
+            undo: false,
+            matchCenterEntity: state.matchCenterEntity!,
+          ),
+        ).then((response) {
+          response.fold(
+            (_) {
+              WidgetDecider.showSnackBar(context, "Couldn't update server");
+            },
+            (response) {
+              if (!response.success) {
+                WidgetDecider.showSnackBar(context, "Couldn't update server");
+              }
+            },
+          );
+        });
+      }
       emit(state.copyWith(matchCenterEntity: match));
       return;
     }

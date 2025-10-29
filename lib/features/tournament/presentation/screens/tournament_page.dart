@@ -110,7 +110,7 @@ class TournamentPage extends StatelessWidget {
                                       won: 0,
                                       loss: 0,
                                       points: 0,
-                                      nrr: 0.0,
+                                      nrr: "0",
                                       inviteStatus: InviteStatus.invited,
                                       id: e.id,
                                       name: e.name,

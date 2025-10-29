@@ -216,11 +216,18 @@ class TournamentModel {
       endDateDateTime.minute,
       endDateDateTime.second,
     );
+    final teams = map['teams'] == null
+        ? <TournamentTeamModel>[]
+        : List<TournamentTeamModel>.from(
+            (map['teams'] as List<dynamic>).map<TournamentTeamModel>(
+              (x) => TournamentTeamModel.fromJson(x),
+            ),
+          );
     final groups = map['groups'] == null
         ? <GroupModel>[]
         : List<GroupModel>.from(
             (map['groups'] as List<dynamic>).map<GroupModel>(
-              (x) => GroupModel.fromJson(x),
+              (x) => GroupModel.fromJson(x, teams),
             ),
           );
     final Map<String, List<MatchModel>> parsedGroups = {};
@@ -286,13 +293,7 @@ class TournamentModel {
               ),
             ),
       venues: venues,
-      teams: map['teams'] == null
-          ? []
-          : List<TournamentTeamModel>.from(
-              (map['teams'] as List<dynamic>).map<TournamentTeamModel>(
-                (x) => TournamentTeamModel.fromJson(x),
-              ),
-            ),
+      teams: teams,
       groupMatches: groupMatches,
       playoffMatches: map['ungroupedMatches'] == null
           ? []

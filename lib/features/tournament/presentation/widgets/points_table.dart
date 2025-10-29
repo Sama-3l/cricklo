@@ -20,6 +20,19 @@ class PointsTable extends StatelessWidget {
     final cubit = context.read<TournamentCubit>();
     final state = context.read<TournamentCubit>().state;
     List<String> headings = ["M", "W", "L", "P", "NRR"];
+    teams.sort((a, b) {
+      // 1️⃣ Compare points (descending)
+      final pointsCompare = b.points.compareTo(a.points);
+
+      if (pointsCompare != 0) return pointsCompare;
+
+      // 2️⃣ If points are equal, compare NRR (descending)
+      final double nrrA = double.tryParse(a.nrr) ?? 0.0;
+      final double nrrB = double.tryParse(b.nrr) ?? 0.0;
+
+      return nrrB.compareTo(nrrA);
+    });
+
     return teams.isEmpty
         ? Center(
             child: Padding(
@@ -172,16 +185,15 @@ class PointsTable extends StatelessWidget {
                         ),
                       ),
                     ),
+                    // NRR IS SHOWING OPPOSITE FIX
                     ...[
                       e.matches,
                       e.won,
                       e.loss,
                       e.points,
-                      e.nrr > 0
-                          ? "+${e.nrr.toStringAsFixed(2)}"
-                          : e.nrr == 0
-                          ? "0"
-                          : e.nrr.toStringAsFixed(2),
+                      double.tryParse(e.nrr)! > 0
+                          ? "-${e.nrr}"
+                          : e.nrr.replaceAll('-', '+'),
                     ].map(
                       (e) => Center(
                         child: Text(

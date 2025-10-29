@@ -18,7 +18,6 @@ class TournamentMatchesPage extends StatelessWidget {
   const TournamentMatchesPage({super.key, this.loading = false});
 
   bool _isScheduled(MatchEntity match) {
-    final now = DateTime.now();
     final hasValidLocation = match.location == null
         ? false
         : match.location!.city.isNotEmpty; // ensure city exists
@@ -26,9 +25,8 @@ class TournamentMatchesPage extends StatelessWidget {
         .toString()
         .trim()
         .isNotEmpty;
-    final isFutureMatch = true; //match.dateAndTime.isAfter(now);
 
-    return hasValidLocation && hasValidScorer && isFutureMatch;
+    return hasValidLocation && hasValidScorer;
   }
 
   @override
@@ -182,7 +180,12 @@ class TournamentMatchesPage extends StatelessWidget {
             ),
           ),
         ),
-        ...groupedByDate[date]!.map((m) => MatchTile(matchEntity: m)),
+        ...groupedByDate[date]!.map(
+          (m) => Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4.0),
+            child: MatchTile(matchEntity: m),
+          ),
+        ),
       ],
     ];
   }

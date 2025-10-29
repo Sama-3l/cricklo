@@ -15,7 +15,7 @@ class TournamentTeamEntity {
   final int won;
   final int loss;
   final int points;
-  final double nrr;
+  final String nrr;
   final bool eliminated;
   final InviteStatus inviteStatus;
 
@@ -46,7 +46,7 @@ class TournamentTeamEntity {
     int? won,
     int? loss,
     int? points,
-    double? nrr,
+    String? nrr,
     bool? eliminated,
     InviteStatus? inviteStatus,
   }) {
