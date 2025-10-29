@@ -1,8 +1,12 @@
 import 'package:cricklo/core/utils/constants/theme.dart';
+import 'package:cricklo/features/account/domain/entities/matchwise_stats_entity.dart';
+import 'package:cricklo/features/login/domain/entities/user_entitiy.dart';
 import 'package:flutter/material.dart';
 
 class YearlyReview extends StatefulWidget {
-  const YearlyReview({super.key});
+  const YearlyReview({super.key, required this.userEntity});
+
+  final UserEntity userEntity;
 
   @override
   State<YearlyReview> createState() => _YearlyReviewState();
@@ -13,14 +17,85 @@ class _YearlyReviewState extends State<YearlyReview> {
 
   @override
   Widget build(BuildContext context) {
+    final now = DateTime.now();
+    final currentYear = now.year;
+    final lastYear = currentYear - 1;
+
+    final List<MatchWiseStatsEntity> matches = widget.userEntity.matchwiseStats;
+
+    // Helper to filter matches by year
+    List<MatchWiseStatsEntity> getMatchesByYear(int year) =>
+        matches.where((m) => m.date.year == year).toList();
+
+    final thisYearMatches = getMatchesByYear(currentYear);
+    final lastYearMatches = getMatchesByYear(lastYear);
+
+    // --- Batting helpers ---
+    int sumRuns(List<MatchWiseStatsEntity> matches) =>
+        matches.fold(0, (sum, m) => sum + (m.runs ?? 0));
+
+    double average(List<MatchWiseStatsEntity> matches) {
+      final innings = matches.where((m) => (m.runs ?? 0) > 0).length;
+      if (innings == 0) return 0;
+      return sumRuns(matches) / innings;
+    }
+
+    int highScore(List<MatchWiseStatsEntity> matches) =>
+        matches.fold(0, (max, m) => (m.runs ?? 0) > max ? (m.runs ?? 0) : max);
+
+    // --- Bowling helpers ---
+    double sumOvers(List<MatchWiseStatsEntity> matches) {
+      int totalBalls = 0;
+
+      for (final m in matches) {
+        final overs = m.overs ?? 0.0;
+        final wholeOvers = overs.floor();
+        final balls = ((overs - wholeOvers) * 10)
+            .round(); // e.g. 3.5 => 3 + 5 balls
+        totalBalls += (wholeOvers * 6 + balls);
+      }
+
+      final completeOvers = totalBalls ~/ 6;
+      final remainingBalls = totalBalls % 6;
+
+      // return in cricket format, e.g. 4.2 (4 overs, 2 balls)
+      return double.parse('$completeOvers.${remainingBalls}');
+    }
+
+    int sumWickets(List<MatchWiseStatsEntity> matches) =>
+        matches.fold(0, (sum, m) => sum + (m.wickets ?? 0));
+
+    double economy(List<MatchWiseStatsEntity> matches) {
+      final totalOvers = sumOvers(matches);
+      if (totalOvers == 0) return 0;
+      final totalRuns = matches.fold(0, (sum, m) => sum + (m.bowlingRuns ?? 0));
+      return totalRuns / totalOvers;
+    }
+
     final battingStats = {
-      'This year so far': ['0', '0', '0'],
-      'Last year': ['0', '0', '0'],
+      'This year so far': [
+        sumRuns(thisYearMatches).toString(),
+        average(thisYearMatches).toStringAsFixed(1),
+        highScore(thisYearMatches).toString(),
+      ],
+      'Last year': [
+        sumRuns(lastYearMatches).toString(),
+        average(lastYearMatches).toStringAsFixed(1),
+        highScore(lastYearMatches).toString(),
+      ],
     };
 
     final bowlingStats = {
-      'This year so far': ['0', '0', '0'],
-      'Last year': ['0', '0', '0'],
+      'This year so far': [
+        sumOvers(thisYearMatches).toStringAsFixed(1),
+        sumWickets(thisYearMatches).toString(),
+        economy(thisYearMatches).toStringAsFixed(1),
+      ],
+      'Last year': [
+        sumOvers(lastYearMatches).toStringAsFixed(1),
+        sumWickets(lastYearMatches).toString(),
+        economy(lastYearMatches).toStringAsFixed(1),
+      ],
     };
 
     return Container(

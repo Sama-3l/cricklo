@@ -1,7 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:cricklo/core/utils/constants/enums.dart';
+import 'package:cricklo/features/account/domain/models/remote/matchwise_stats_model.dart';
 import 'package:cricklo/features/login/domain/entities/location_entity.dart';
 import 'package:cricklo/features/login/domain/entities/user_entitiy.dart';
+import 'package:cricklo/features/account/domain/models/remote/account_stats_model.dart';
 import 'package:cricklo/features/matches/domain/models/remote/match_model.dart';
 import 'package:cricklo/features/tournament/domain/models/remote/tournament_model.dart';
 
@@ -22,6 +24,8 @@ class UserModel {
   final BowlerType? bowlerType;
   final List<MatchModel> userMatches;
   final List<TournamentModel> tournaments;
+  final AccountStatsModel? accountStats;
+  final List<MatchWiseStatsModel> matchwiseStats;
 
   UserModel({
     required this.profileId,
@@ -40,6 +44,8 @@ class UserModel {
     this.bowlerType,
     required this.userMatches,
     required this.tournaments,
+    this.accountStats,
+    required this.matchwiseStats,
   });
 
   factory UserModel.fromEntity(UserEntity entity) {
@@ -63,6 +69,9 @@ class UserModel {
           .toList(),
       tournaments: entity.tournaments
           .map((e) => TournamentModel.fromEntity(e))
+          .toList(),
+      matchwiseStats: entity.matchwiseStats
+          .map((e) => MatchWiseStatsModel.fromEntity(e))
           .toList(),
     );
   }
@@ -130,11 +139,6 @@ class UserModel {
           bowlerType = BowlerType.leftArmSpin;
       }
     }
-    print(
-      (data['tournaments'] as List<dynamic>)
-          .map((e) => TournamentModel.fromJson(e))
-          .toList(),
-    );
     return UserModel(
       unreadNotifications: data["unreadNotifications"] as int? ?? 0,
       profilePic: data['Profile_Photo'],
@@ -154,6 +158,16 @@ class UserModel {
       tournaments: (data['tournaments'] as List<dynamic>)
           .map((e) => TournamentModel.fromJson(e))
           .toList(),
+      accountStats: data['accountStats'] != null
+          ? AccountStatsModel.fromJson(
+              (data['accountStats'] as Map<String, dynamic>),
+            )
+          : null,
+      matchwiseStats: data['matchWiseStats'] != null
+          ? (data['matchWiseStats'] as List<dynamic>)
+                .map((e) => MatchWiseStatsModel.fromJson(e))
+                .toList()
+          : [],
     );
   }
 
@@ -175,6 +189,8 @@ class UserModel {
       userFollow: userFollow,
       userMatches: userMatches.map((e) => e.toEntity()).toList(),
       tournaments: tournaments.map((e) => e.toEntity()).toList(),
+      accountStats: accountStats?.toEntity(),
+      matchwiseStats: matchwiseStats.map((e) => e.toEntity()).toList(),
     );
   }
 
@@ -212,6 +228,7 @@ class UserModel {
     int? following,
     List<MatchModel>? userMatches,
     List<TournamentModel>? tournaments,
+    List<MatchWiseStatsModel>? matchwiseStats,
   }) {
     return UserModel(
       profileId: profileId ?? this.profileId,
@@ -230,6 +247,7 @@ class UserModel {
       userFollow: userFollow ?? this.userFollow,
       userMatches: userMatches ?? this.userMatches,
       tournaments: tournaments ?? this.tournaments,
+      matchwiseStats: matchwiseStats ?? this.matchwiseStats,
     );
   }
 }

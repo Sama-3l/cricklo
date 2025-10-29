@@ -28,6 +28,45 @@ class PlayerOverview extends StatefulWidget {
 class _PlayerOverviewState extends State<PlayerOverview> {
   @override
   Widget build(BuildContext context) {
+    widget.userEntity.matchwiseStats.sort(
+      (a, b) =>
+          DateTime(
+            b.date.year,
+            b.date.month,
+            b.date.day,
+            b.time.hour,
+            b.time.minute,
+          ).compareTo(
+            DateTime(
+              a.date.year,
+              a.date.month,
+              a.date.day,
+              a.time.hour,
+              a.time.minute,
+            ),
+          ),
+    );
+    // Take up to 5 matches
+    final lastFive = widget.userEntity.matchwiseStats.take(5).toList();
+
+    // Batting stats → runs or "-"
+    final batStats = List.generate(
+      5,
+      (i) => i < lastFive.length && lastFive[i].runs != null
+          ? lastFive[i].runs.toString()
+          : "-",
+    );
+
+    // Bowling stats → "runs-wickets" or "-"
+    final bowlStats = List.generate(
+      5,
+      (i) =>
+          i < lastFive.length &&
+              lastFive[i].bowlingRuns != null &&
+              lastFive[i].wickets != null
+          ? "${lastFive[i].bowlingRuns}-${lastFive[i].wickets}"
+          : "-",
+    );
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(top: 24),
       child: ListView(
@@ -123,15 +162,9 @@ class _PlayerOverviewState extends State<PlayerOverview> {
                     children: [
                       Column(
                         children: [
-                          RecentFormStats(
-                            title: "Bat",
-                            stats: ["-", "-", "-", "-", "-"],
-                          ),
+                          RecentFormStats(title: "Bat", stats: batStats),
                           const SizedBox(height: 16),
-                          RecentFormStats(
-                            title: "Bowl",
-                            stats: ["-", "-", "-", "-", "-"],
-                          ),
+                          RecentFormStats(title: "Bowl", stats: bowlStats),
                         ],
                       ),
                     ],
@@ -140,7 +173,7 @@ class _PlayerOverviewState extends State<PlayerOverview> {
               ),
               const SizedBox(height: 32),
               SectionHeader(title: "Yearly Review", showIcon: false),
-              YearlyReview(),
+              YearlyReview(userEntity: widget.userEntity),
               const SizedBox(height: 32),
             ],
           ),

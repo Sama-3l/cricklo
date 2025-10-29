@@ -16,9 +16,11 @@ class StatsTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    return ListView(
-      children: [
-        ConstrainedBox(
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical, // vertical scroll
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal, // horizontal scroll
+        child: ConstrainedBox(
           constraints: BoxConstraints(minWidth: screenWidth),
           child: Table(
             defaultVerticalAlignment: TableCellVerticalAlignment.middle,
@@ -27,8 +29,9 @@ class StatsTable extends StatelessWidget {
               1: IntrinsicColumnWidth(),
               2: IntrinsicColumnWidth(),
               3: IntrinsicColumnWidth(),
+              4: IntrinsicColumnWidth(),
+              5: IntrinsicColumnWidth(),
             },
-
             border: TableBorder(
               horizontalInside: horizontalLine
                   ? BorderSide(
@@ -38,10 +41,6 @@ class StatsTable extends StatelessWidget {
                       width: 0.5,
                     )
                   : BorderSide.none,
-              top: BorderSide.none,
-              bottom: BorderSide.none,
-              left: BorderSide.none,
-              right: BorderSide.none,
               verticalInside: verticalLine
                   ? BorderSide(color: ColorsConstants.defaultBlack, width: 0.5)
                   : BorderSide.none,
@@ -49,7 +48,6 @@ class StatsTable extends StatelessWidget {
             children: [
               // Header row
               TableRow(
-                // decoration: const BoxDecoration(color: Colors.grey),
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -59,71 +57,41 @@ class StatsTable extends StatelessWidget {
                         fontSize: 16,
                         letterSpacing: -0.8,
                       ),
-                      textAlign: TextAlign.left,
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Text(
-                      'T10',
-                      style: TextStyles.poppinsBold.copyWith(
-                        fontSize: 16,
-                        letterSpacing: -0.8,
-                        color: ColorsConstants.accentOrange,
+                  for (final format in ['T10', 'T20', 'T30', 'ODI', 'Test'])
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                      child: Text(
+                        format,
+                        style: TextStyles.poppinsBold.copyWith(
+                          fontSize: 16,
+                          letterSpacing: -0.8,
+                          color: ColorsConstants.accentOrange,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      textAlign: TextAlign.center,
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Text(
-                      'T20',
-                      style: TextStyles.poppinsBold.copyWith(
-                        fontSize: 16,
-                        letterSpacing: -0.8,
-                        color: ColorsConstants.accentOrange,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Text(
-                      'ODI',
-                      style: TextStyles.poppinsBold.copyWith(
-                        fontSize: 16,
-                        letterSpacing: -0.8,
-                        color: ColorsConstants.accentOrange,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
                 ],
               ),
               // Data rows
               ...stats.entries.map(
                 (entry) => TableRow(
                   children: [
-                    // first column left-aligned, larger width
-                    Container(
-                      width: double.infinity,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 12.0),
-                        child: Text(
-                          entry.key,
-                          textAlign: TextAlign.left,
-                          style: TextStyles.poppinsSemiBold.copyWith(
-                            letterSpacing: -0.5,
-                            fontSize: 16,
-                          ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 12.0),
+                      child: Text(
+                        entry.key,
+                        style: TextStyles.poppinsSemiBold.copyWith(
+                          letterSpacing: -0.5,
+                          fontSize: 16,
                         ),
                       ),
                     ),
-                    // rest columns centered
                     for (final value in entry.value)
                       Padding(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 24.0,
+                          horizontal: 20.0,
                           vertical: 12,
                         ),
                         child: Text(
@@ -141,7 +109,7 @@ class StatsTable extends StatelessWidget {
             ],
           ),
         ),
-      ],
+      ),
     );
   }
 }

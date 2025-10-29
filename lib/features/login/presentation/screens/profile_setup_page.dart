@@ -190,6 +190,7 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
                   extra: UserEntity(
                     userMatches: [],
                     tournaments: [],
+                    matchwiseStats: [],
                     userFollow: false,
                     followers: 0,
                     following: 0,

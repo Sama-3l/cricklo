@@ -29,6 +29,7 @@ final dummyCurrUser = UserEntity(
   profilePic: '',
   userMatches: [],
   tournaments: [],
+  matchwiseStats: [],
 );
 
 final PlayerEntity currUser = PlayerEntity(

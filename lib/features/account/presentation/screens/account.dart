@@ -81,6 +81,7 @@ class AccountPage extends StatelessWidget {
                         ),
 
                         StatisticsPage(
+                          userEntity: state.userEntity!,
                           selectedStatisticsTab: state.selectedStatisticsTab,
                           changeStatisticsTab: (index) =>
                               cubit.changeStatisticsTab(index),

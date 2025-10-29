@@ -2,6 +2,8 @@
 import 'dart:io';
 
 import 'package:cricklo/core/utils/constants/enums.dart';
+import 'package:cricklo/features/account/domain/entities/matchwise_stats_entity.dart';
+import 'package:cricklo/features/account/domain/entities/player_stats_entity.dart';
 import 'package:cricklo/features/login/domain/entities/location_entity.dart';
 import 'package:cricklo/features/matches/domain/entities/match_entity.dart';
 import 'package:cricklo/features/tournament/domain/entities/tournament_entity.dart';
@@ -24,6 +26,8 @@ class UserEntity {
   final BowlerType? bowlerType;
   final List<MatchEntity> userMatches;
   final List<TournamentEntity> tournaments;
+  final AccountStatsEntity? accountStats;
+  final List<MatchWiseStatsEntity> matchwiseStats;
 
   UserEntity({
     required this.profileId,
@@ -43,6 +47,8 @@ class UserEntity {
     required this.following,
     required this.userMatches,
     required this.tournaments,
+    this.accountStats, // 🆕
+    required this.matchwiseStats,
   });
 
   UserEntity copyWith({
@@ -63,6 +69,8 @@ class UserEntity {
     int? following,
     List<MatchEntity>? userMatches,
     List<TournamentEntity>? tournaments,
+    final AccountStatsEntity? accountStats,
+    List<MatchWiseStatsEntity>? matchwiseStats,
   }) {
     return UserEntity(
       profileId: profileId ?? this.profileId,
@@ -82,6 +90,8 @@ class UserEntity {
       following: following ?? this.following,
       userMatches: userMatches ?? this.userMatches,
       tournaments: tournaments ?? this.tournaments,
+      accountStats: accountStats ?? this.accountStats,
+      matchwiseStats: matchwiseStats ?? this.matchwiseStats,
     );
   }
 }
