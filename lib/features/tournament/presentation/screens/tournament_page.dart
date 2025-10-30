@@ -97,10 +97,11 @@ class TournamentPage extends StatelessWidget {
                               Routes.teamPage,
                               extra: [team, <MatchEntity>[]],
                             ),
-                            floatingButton:
-                                state.tournamentEntity!.spotsLeft > 0 &&
-                                state.tournamentEntity!.organizerId ==
-                                    GlobalVariables.user!.profileId,
+                            floatingButton: GlobalVariables.user == null
+                                ? state.tournamentEntity!.spotsLeft > 0
+                                : state.tournamentEntity!.spotsLeft > 0 &&
+                                      state.tournamentEntity!.organizerId ==
+                                          GlobalVariables.user!.profileId,
                             onInviteTeams: (teams) => cubit.inviteTeams(
                               context,
                               teams

@@ -403,7 +403,9 @@ class OverallScreen extends StatelessWidget {
                       vertical: 8,
                     ),
                     child: Text(
-                      '0',
+                      teamStats != null
+                          ? teamStats.lowestRunsScored.toString()
+                          : "0",
                       style: TextStyles.poppinsMedium.copyWith(
                         fontSize: 12,
                         letterSpacing: -0.5,
@@ -418,7 +420,9 @@ class OverallScreen extends StatelessWidget {
                       vertical: 8,
                     ),
                     child: Text(
-                      '0',
+                      teamStats != null
+                          ? teamStats.highestRunsScored.toString()
+                          : "0",
                       style: TextStyles.poppinsMedium.copyWith(
                         fontSize: 12,
                         letterSpacing: -0.5,
@@ -450,7 +454,9 @@ class OverallScreen extends StatelessWidget {
                       vertical: 8,
                     ),
                     child: Text(
-                      '0',
+                      teamStats != null
+                          ? teamStats.highestRunsConceded.toString()
+                          : "0",
                       style: TextStyles.poppinsMedium.copyWith(
                         fontSize: 12,
                         letterSpacing: -0.5,
@@ -465,145 +471,9 @@ class OverallScreen extends StatelessWidget {
                       vertical: 8,
                     ),
                     child: Text(
-                      '0',
-                      style: TextStyles.poppinsMedium.copyWith(
-                        fontSize: 12,
-                        letterSpacing: -0.5,
-                        color: ColorsConstants.defaultBlack,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 24, bottom: 8),
-            child: Text(
-              'Toss',
-              style: TextStyles.poppinsSemiBold.copyWith(
-                fontSize: 20,
-                letterSpacing: -1.2,
-                color: ColorsConstants.defaultBlack,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ),
-          Table(
-            defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-            columnWidths: const {
-              0: FlexColumnWidth(), // first column takes remaining width
-              1: FlexColumnWidth(),
-              2: FlexColumnWidth(),
-            },
-
-            border: TableBorder(
-              borderRadius: BorderRadius.circular(8),
-              horizontalInside: BorderSide(
-                color: ColorsConstants.defaultBlack,
-                width: 1,
-              ),
-              top: BorderSide(color: ColorsConstants.defaultBlack, width: 1),
-              bottom: BorderSide(color: ColorsConstants.defaultBlack, width: 1),
-              left: BorderSide(color: ColorsConstants.defaultBlack, width: 1),
-              right: BorderSide(color: ColorsConstants.defaultBlack, width: 1),
-              verticalInside: BorderSide(
-                color: ColorsConstants.defaultBlack,
-                width: 1,
-              ),
-            ),
-            children: [
-              TableRow(
-                decoration: BoxDecoration(
-                  color: ColorsConstants.surfaceOrange,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(8),
-                    topRight: Radius.circular(8),
-                  ),
-                ),
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      'Toss Won',
-                      style: TextStyles.poppinsSemiBold.copyWith(
-                        fontSize: 16,
-                        letterSpacing: -0.8,
-                        color: ColorsConstants.defaultBlack,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 32.0,
-                      vertical: 8,
-                    ),
-                    child: Text(
-                      'Bat First',
-                      style: TextStyles.poppinsSemiBold.copyWith(
-                        fontSize: 16,
-                        letterSpacing: -0.8,
-                        color: ColorsConstants.defaultBlack,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 32.0,
-                      vertical: 8,
-                    ),
-                    child: Text(
-                      'Bowl First',
-                      style: TextStyles.poppinsSemiBold.copyWith(
-                        fontSize: 16,
-                        letterSpacing: -0.8,
-                        color: ColorsConstants.defaultBlack,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ],
-              ),
-              TableRow(
-                // decoration: const BoxDecoration(color: Colors.grey),
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      teamStats == null ? "0" : teamStats.tossWins.toString(),
-                      style: TextStyles.poppinsMedium.copyWith(
-                        fontSize: 12,
-                        letterSpacing: -0.5,
-                        color: ColorsConstants.defaultBlack,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 32.0,
-                      vertical: 8,
-                    ),
-                    child: Text(
-                      teamStats == null ? "0" : teamStats.batFirst.toString(),
-                      style: TextStyles.poppinsMedium.copyWith(
-                        fontSize: 12,
-                        letterSpacing: -0.5,
-                        color: ColorsConstants.defaultBlack,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 32.0,
-                      vertical: 8,
-                    ),
-                    child: Text(
-                      teamStats == null ? "0" : teamStats.bowlFirst.toString(),
+                      teamStats != null
+                          ? teamStats.lowestRunsConceded.toString()
+                          : "0",
                       style: TextStyles.poppinsMedium.copyWith(
                         fontSize: 12,
                         letterSpacing: -0.5,

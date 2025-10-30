@@ -1,3 +1,4 @@
+import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/account/presentation/widgets/profile_tab_bar.dart';
 import 'package:cricklo/features/teams/domain/entities/leaderboard_row_data_entity.dart';
 import 'package:cricklo/features/teams/presentation/screens/team_stats_screens/bat_bowl_field_stats/leaderboard_table.dart';
@@ -187,21 +188,31 @@ class TournamentBowlStatsScreen extends StatelessWidget {
                 children: List.generate(8, (index) {
                   final data = generateLeaderboardData(context, index);
                   final headings = [
-                    ["Wkt", "Inn", "Avg"],
-                    ["Avg", "Inn", "Wkt"],
+                    ["Wkt", "Mtchs", "Avg"],
+                    ["Avg", "Mtchs", "Wkt"],
                     ["Eco", "Bal", "Runs"],
                     ["Mai", "Balls", "Runs"],
-                    ["Balls", "Inn", "Eco"],
-                    ["3w", "Runs", "Inn"],
-                    ["5w", "Runs", "Inn"],
+                    ["Balls", "Mtchs", "Eco"],
+                    ["3w", "Runs", "Mtchs"],
+                    ["5w", "Runs", "Mtchs"],
                     ["Dots", "Balls", "Runs"],
                   ][index];
 
-                  return LeaderboardTable(
-                    headings: headings,
-                    data: data,
-                    loading: state.loading,
-                  );
+                  return data.isEmpty
+                      ? Center(
+                          child: Text(
+                            "No Data",
+                            style: TextStyles.poppinsSemiBold.copyWith(
+                              fontSize: 16,
+                              letterSpacing: -0.8,
+                            ),
+                          ),
+                        )
+                      : LeaderboardTable(
+                          headings: headings,
+                          data: data,
+                          loading: state.loading,
+                        );
                 }),
               ),
             ),

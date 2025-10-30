@@ -43,21 +43,14 @@ class TournamentsScreen extends StatelessWidget {
                       },
                     )
                   : state.tournaments.isEmpty
-                  ? Container(
-                      height: 200,
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: ColorsConstants.defaultWhite,
-                      ),
-                      child: Center(
-                        child: Text(
-                          "No Tournaments Yet",
-                          style: TextStyles.poppinsRegular.copyWith(
-                            fontSize: 16,
-                            letterSpacing: -0.8,
-                            color: ColorsConstants.defaultBlack.withValues(
-                              alpha: 0.5,
-                            ),
+                  ? Center(
+                      child: Text(
+                        "No Tournaments Yet",
+                        style: TextStyles.poppinsRegular.copyWith(
+                          fontSize: 16,
+                          letterSpacing: -0.8,
+                          color: ColorsConstants.defaultBlack.withValues(
+                            alpha: 0.5,
                           ),
                         ),
                       ),

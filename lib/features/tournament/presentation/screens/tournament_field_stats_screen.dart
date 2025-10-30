@@ -1,3 +1,4 @@
+import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/teams/domain/entities/leaderboard_row_data_entity.dart';
 import 'package:cricklo/features/teams/presentation/screens/team_stats_screens/bat_bowl_field_stats/leaderboard_table.dart';
 import 'package:cricklo/features/tournament/presentation/blocs/cubits/TournamentCubit/tournament_cubit.dart';
@@ -32,11 +33,21 @@ class TournamentFieldStatsScreen extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24),
-      child: LeaderboardTable(
-        headings: ["Catch", "RunOut", "Stump"],
-        data: rows,
-        loading: state.loading,
-      ),
+      child: rows.isEmpty
+          ? Center(
+              child: Text(
+                "No Data",
+                style: TextStyles.poppinsSemiBold.copyWith(
+                  fontSize: 16,
+                  letterSpacing: -0.8,
+                ),
+              ),
+            )
+          : LeaderboardTable(
+              headings: ["Catch", "RunOut", "Stump"],
+              data: rows,
+              loading: state.loading,
+            ),
     );
   }
 }

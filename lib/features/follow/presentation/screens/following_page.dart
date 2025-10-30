@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/account/presentation/widgets/stats_table_filter_tab_bar.dart';
 import 'package:cricklo/features/follow/domain/entities/following_match_entity.dart';
@@ -5,10 +6,13 @@ import 'package:cricklo/features/follow/domain/entities/following_player_entity.
 import 'package:cricklo/features/follow/domain/entities/following_team_entity.dart';
 import 'package:cricklo/features/follow/domain/entities/following_tournament_entity.dart';
 import 'package:cricklo/features/follow/presentation/blocs/cubits/FollowingPageCubit/following_page_cubit.dart';
+import 'package:cricklo/features/home/presentation/widgets/shimmer_match_tile.dart';
+import 'package:cricklo/features/tournament/presentation/widgets/shimmer_tournament_tile.dart';
 import 'package:cricklo/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:shimmer_animation/shimmer_animation.dart';
 
 class FollowingPage extends StatefulWidget {
   final String profileId;
@@ -73,10 +77,19 @@ class _FollowingPageState extends State<FollowingPage>
                   child: TabBarView(
                     controller: _tabController,
                     children: [
-                      _LazyTab(child: _buildPlayers(state.players)),
-                      _LazyTab(child: _buildTeams(state.teams)),
-                      _LazyTab(child: _buildMatches(state.matches)),
-                      _LazyTab(child: _buildTournaments(state.tournaments)),
+                      _LazyTab(
+                        child: _buildPlayers(state.players, state.loading),
+                      ),
+                      _LazyTab(child: _buildTeams(state.teams, state.loading)),
+                      _LazyTab(
+                        child: _buildMatches(state.matches, state.loading),
+                      ),
+                      _LazyTab(
+                        child: _buildTournaments(
+                          state.tournaments,
+                          state.loading,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -88,9 +101,90 @@ class _FollowingPageState extends State<FollowingPage>
     );
   }
 
-  Widget _buildPlayers(List<FollowingPlayerEntity> players) {
+  Widget _buildPlayers(List<FollowingPlayerEntity> players, bool loading) {
+    if (loading) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0).copyWith(top: 24),
+        child: ListView.builder(
+          itemCount: 10,
+          physics: NeverScrollableScrollPhysics(),
+          itemBuilder: (context, index) => Shimmer(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Row(
+                children: [
+                  // Profile circle shimmer
+                  Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: ColorsConstants.defaultBlack.withValues(
+                        alpha: 0.2,
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(width: 12),
+
+                  // Name + ID shimmer
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: 120,
+                          height: 14,
+                          decoration: BoxDecoration(
+                            color: ColorsConstants.defaultBlack.withValues(
+                              alpha: 0.2,
+                            ),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        Container(
+                          width: 80,
+                          height: 10,
+                          decoration: BoxDecoration(
+                            color: ColorsConstants.defaultBlack.withValues(
+                              alpha: 0.15,
+                            ),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  // Invite status shimmer
+                  Container(
+                    width: 50,
+                    height: 12,
+                    decoration: BoxDecoration(
+                      color: ColorsConstants.defaultBlack.withValues(
+                        alpha: 0.2,
+                      ),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    }
     if (players.isEmpty) {
-      return const Center(child: Text("Not following any players"));
+      return Center(
+        child: Text(
+          "Not following any players",
+          style: TextStyles.poppinsSemiBold.copyWith(
+            fontSize: 16,
+            letterSpacing: -0.8,
+          ),
+        ),
+      );
     }
     return ListView.builder(
       itemCount: players.length,
@@ -98,10 +192,9 @@ class _FollowingPageState extends State<FollowingPage>
         final p = players[index];
         return ListTile(
           leading: CircleAvatar(
-            backgroundImage: p.profilePicture != null
-                ? NetworkImage(p.profilePicture!)
-                : null,
-            child: p.profilePicture == null ? const Icon(Icons.person) : null,
+            radius: 32,
+            backgroundColor: ColorsConstants.surfaceOrange,
+            backgroundImage: CachedNetworkImageProvider(p.profileId),
           ),
           title: Text(p.name),
           subtitle: Text(p.playerType?.name ?? ''),
@@ -110,16 +203,101 @@ class _FollowingPageState extends State<FollowingPage>
     );
   }
 
-  Widget _buildTeams(List<FollowingTeamEntity> teams) {
+  Widget _buildTeams(List<FollowingTeamEntity> teams, bool loading) {
+    if (loading) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0).copyWith(top: 24),
+        child: ListView.builder(
+          itemCount: 10,
+          physics: NeverScrollableScrollPhysics(),
+          itemBuilder: (context, index) => Shimmer(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Row(
+                children: [
+                  // Profile circle shimmer
+                  Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: ColorsConstants.defaultBlack.withValues(
+                        alpha: 0.2,
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(width: 12),
+
+                  // Name + ID shimmer
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: 120,
+                          height: 14,
+                          decoration: BoxDecoration(
+                            color: ColorsConstants.defaultBlack.withValues(
+                              alpha: 0.2,
+                            ),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        Container(
+                          width: 80,
+                          height: 10,
+                          decoration: BoxDecoration(
+                            color: ColorsConstants.defaultBlack.withValues(
+                              alpha: 0.15,
+                            ),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  // Invite status shimmer
+                  Container(
+                    width: 50,
+                    height: 12,
+                    decoration: BoxDecoration(
+                      color: ColorsConstants.defaultBlack.withValues(
+                        alpha: 0.2,
+                      ),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    }
     if (teams.isEmpty) {
-      return const Center(child: Text("Not following any teams"));
+      return Center(
+        child: Text(
+          "Not following any teams",
+          style: TextStyles.poppinsSemiBold.copyWith(
+            fontSize: 16,
+            letterSpacing: -0.8,
+          ),
+        ),
+      );
     }
     return ListView.builder(
       itemCount: teams.length,
       itemBuilder: (context, index) {
         final t = teams[index];
         return ListTile(
-          leading: CircleAvatar(backgroundImage: NetworkImage(t.teamLogo)),
+          leading: CircleAvatar(
+            radius: 32,
+            backgroundColor: ColorsConstants.surfaceOrange,
+            backgroundImage: CachedNetworkImageProvider(t.teamLogo),
+          ),
           title: Text(t.teamName),
           subtitle: Text("${t.location.city}, ${t.location.state}"),
         );
@@ -127,9 +305,22 @@ class _FollowingPageState extends State<FollowingPage>
     );
   }
 
-  Widget _buildMatches(List<FollowingMatchEntity> matches) {
+  Widget _buildMatches(List<FollowingMatchEntity> matches, bool loading) {
+    if (loading) {
+      return ListView.builder(
+        itemBuilder: (context, index) => ShimmerMatchTile(),
+      );
+    }
     if (matches.isEmpty) {
-      return const Center(child: Text("Not following any matches"));
+      return Center(
+        child: Text(
+          "Not following any matches",
+          style: TextStyles.poppinsSemiBold.copyWith(
+            fontSize: 16,
+            letterSpacing: -0.8,
+          ),
+        ),
+      );
     }
     return ListView.builder(
       itemCount: matches.length,
@@ -147,9 +338,25 @@ class _FollowingPageState extends State<FollowingPage>
     );
   }
 
-  Widget _buildTournaments(List<FollowingTournamentEntity> tournaments) {
+  Widget _buildTournaments(
+    List<FollowingTournamentEntity> tournaments,
+    bool loading,
+  ) {
+    if (loading) {
+      return ListView.builder(
+        itemBuilder: (context, index) => ShimmerTournamentTile(),
+      );
+    }
     if (tournaments.isEmpty) {
-      return const Center(child: Text("Not following any tournaments"));
+      return Center(
+        child: Text(
+          "Not following any tournaments",
+          style: TextStyles.poppinsSemiBold.copyWith(
+            fontSize: 16,
+            letterSpacing: -0.8,
+          ),
+        ),
+      );
     }
     return ListView.builder(
       itemCount: tournaments.length,

@@ -157,6 +157,7 @@ final TeamEntity dummyTeam = TeamEntity(
   matches: [],
   tournaments: [],
   partnershipStats: [],
+  pointsStats: [],
 );
 
 final TeamEntity dummyTeam2 = TeamEntity(
@@ -182,6 +183,7 @@ final TeamEntity dummyTeam2 = TeamEntity(
   matches: [],
   tournaments: [],
   partnershipStats: [],
+  pointsStats: [],
 );
 
 final List<PlayerEntity> dummyPlayers = [

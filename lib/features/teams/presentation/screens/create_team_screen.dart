@@ -138,6 +138,7 @@ class _CreateTeamScreenState extends State<CreateTeamScreen> {
                       matches: [],
                       tournaments: [],
                       partnershipStats: [],
+                      pointsStats: [],
                     );
                     cubit.createTeam(team, context);
                   },

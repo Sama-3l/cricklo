@@ -79,6 +79,6 @@ class FollowingPageCubit extends Cubit<FollowingPageState> {
   }
 
   void updateState() {
-    emit(state.copyWith());
+    emit(state.copyWith(loading: state.loading));
   }
 }

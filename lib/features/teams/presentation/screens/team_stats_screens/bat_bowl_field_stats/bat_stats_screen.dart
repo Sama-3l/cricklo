@@ -1,3 +1,4 @@
+import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/account/presentation/widgets/profile_tab_bar.dart';
 import 'package:cricklo/features/teams/domain/entities/leaderboard_row_data_entity.dart';
 import 'package:cricklo/features/teams/presentation/blocs/cubits/TeamPageCubit/team_page_cubit.dart';
@@ -209,23 +210,33 @@ class BatStatsScreen extends StatelessWidget {
                 children: List.generate(10, (index) {
                   final data = generateLeaderboardData(context, index);
                   final headings = [
-                    ["Runs", "Inn", "Avg"],
+                    ["Runs", "Mtchs", "Avg"],
                     ["Runs", "Ball", "SR"],
-                    ["Avg", "Inn", "Runs"],
-                    ["SR", "Inn", "Runs"],
-                    ["4s", "Inn", "Avg"],
-                    ["6s", "Inn", "Avg"],
-                    ["30s", "Inn", "Avg"],
-                    ["50s", "Inn", "Avg"],
-                    ["100s", "Inn", "Avg"],
-                    ["Balls", "Inn", "Runs"],
+                    ["Avg", "Mtchs", "Runs"],
+                    ["SR", "Mtchs", "Runs"],
+                    ["4s", "Mtchs", "Avg"],
+                    ["6s", "Mtchs", "Avg"],
+                    ["30s", "Mtchs", "Avg"],
+                    ["50s", "Mtchs", "Avg"],
+                    ["100s", "Mtchs", "Avg"],
+                    ["Balls", "Mtchs", "Runs"],
                   ][index];
 
-                  return LeaderboardTable(
-                    headings: headings,
-                    data: data,
-                    loading: state.loading,
-                  );
+                  return data.isEmpty
+                      ? Center(
+                          child: Text(
+                            "No Data",
+                            style: TextStyles.poppinsSemiBold.copyWith(
+                              fontSize: 16,
+                              letterSpacing: -0.8,
+                            ),
+                          ),
+                        )
+                      : LeaderboardTable(
+                          headings: headings,
+                          data: data,
+                          loading: state.loading,
+                        );
                 }),
               ),
             ),

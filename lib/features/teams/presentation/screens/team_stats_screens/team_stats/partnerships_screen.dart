@@ -1,3 +1,4 @@
+import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/teams/domain/entities/partnership_stats_entity.dart';
 import 'package:cricklo/features/teams/presentation/widgets/partnership_stat.dart';
 import 'package:flutter/material.dart';
@@ -11,12 +12,28 @@ class PartnershipsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 16.0),
-      child: ListView.separated(
-        separatorBuilder: (context, index) => const SizedBox(height: 8),
-        itemCount: partnerships.length,
-        itemBuilder: (context, index) =>
-            PartnershipStat(partnership: partnerships[index]),
-      ),
+      child: partnerships.isEmpty
+          ? Column(
+              children: [
+                Expanded(
+                  child: Center(
+                    child: Text(
+                      "No Partnership Stats",
+                      style: TextStyles.poppinsSemiBold.copyWith(
+                        fontSize: 16,
+                        letterSpacing: -0.8,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            )
+          : ListView.separated(
+              separatorBuilder: (context, index) => const SizedBox(height: 8),
+              itemCount: partnerships.length,
+              itemBuilder: (context, index) =>
+                  PartnershipStat(partnership: partnerships[index]),
+            ),
     );
   }
 }

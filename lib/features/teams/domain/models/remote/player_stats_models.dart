@@ -207,6 +207,7 @@ class TeamFieldingStatsModel {
   factory TeamFieldingStatsModel.fromEntity(TeamFieldingStatsEntity entity) =>
       TeamFieldingStatsModel(
         player: PlayerModel.fromEntity(entity.player),
+
         catches: entity.catches,
         stumpings: entity.stumpings,
         runouts: entity.runouts,

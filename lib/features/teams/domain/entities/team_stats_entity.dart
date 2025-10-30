@@ -13,19 +13,15 @@ class TeamStatsEntity {
   final int bowlFirstWins;
   final int bowlFirstLoss;
 
-  final String? highestRunsScoredMatchId;
-  final DateTime? highestRunsScoredDate;
+  final int highestRunsScored;
 
-  final String? lowestRunsScoredMatchId;
-  final DateTime? lowestRunsScoredDate;
+  final int lowestRunsScored;
 
-  final String? highestRunsConcededMatchId;
-  final DateTime? highestRunsConcededDate;
+  final int highestRunsConceded;
 
-  final String? lowestRunsConcededMatchId;
-  final DateTime? lowestRunsConcededDate;
+  final int lowestRunsConceded;
 
-  const TeamStatsEntity({
+  TeamStatsEntity({
     required this.matches,
     required this.wins,
     required this.losses,
@@ -39,13 +35,9 @@ class TeamStatsEntity {
     required this.bowlFirst,
     required this.bowlFirstWins,
     required this.bowlFirstLoss,
-    this.highestRunsScoredMatchId,
-    this.highestRunsScoredDate,
-    this.lowestRunsScoredMatchId,
-    this.lowestRunsScoredDate,
-    this.highestRunsConcededMatchId,
-    this.highestRunsConcededDate,
-    this.lowestRunsConcededMatchId,
-    this.lowestRunsConcededDate,
+    required this.highestRunsScored,
+    required this.lowestRunsScored,
+    required this.highestRunsConceded,
+    required this.lowestRunsConceded,
   });
 }

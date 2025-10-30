@@ -131,36 +131,36 @@ class MatchCenterModel {
             utcEndDateAndTime.minute,
             utcEndDateAndTime.second,
           );
-    // print(map['matchID'] as String);
-    // print(dateAndTime);
-    // print(map['overs'] as int);
-    // print(
-    //   MatchType.values
-    //       .where(
-    //         (e) =>
-    //             e.matchType.toUpperCase() ==
-    //             (map['matchType'] as String).toUpperCase(),
-    //       )
-    //       .first,
-    // );
-    // print(LocationModel.fromJson(map['location']));
-    // print(map['tossWinner'] as String?);
-    // print(
-    //   map['tossChoice'] != null
-    //       ? TossChoice.values.where((e) => e.name == map['tossChoice']).first
-    //       : null,
-    // );
-    // print(map['winner'] as String?);
-    // print(map['abandoned'] as bool);
-    // print(endDateAndTime);
-    // print(teamA);
-    // print(teamB);
-    // print(MatchScorerModel.fromMap(map['scorer'] as Map<String, dynamic>));
-    // print(
-    //   (map['innings'] as List<dynamic>)
-    //       .map<InningsModel>((x) => InningsModel.fromJson(x, teamA, teamB))
-    //       .toList(),
-    // );
+    print(map['matchID'] as String);
+    print(dateAndTime);
+    print(map['overs'] as int);
+    print(
+      MatchType.values
+          .where(
+            (e) =>
+                e.matchType.toUpperCase() ==
+                (map['matchType'] as String).toUpperCase(),
+          )
+          .first,
+    );
+    print(LocationModel.fromJson(map['location']));
+    print(map['tossWinner'] as String?);
+    print(
+      map['tossChoice'] != null
+          ? TossChoice.values.where((e) => e.name == map['tossChoice']).first
+          : null,
+    );
+    print(map['winner'] as String?);
+    print(map['abandoned'] as bool);
+    print(endDateAndTime);
+    print(teamA);
+    print(teamB);
+    print(MatchScorerModel.fromMap(map['scorer'] as Map<String, dynamic>));
+    print(
+      (map['innings'] as List<dynamic>)
+          .map<InningsModel>((x) => InningsModel.fromJson(x, teamA, teamB))
+          .toList(),
+    );
     return MatchCenterModel(
       matchID: map['matchID'] as String,
       dateAndTime: dateAndTime,

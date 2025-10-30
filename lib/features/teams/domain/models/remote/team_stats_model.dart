@@ -15,17 +15,13 @@ class TeamStatsModel {
   final int bowlFirstWins;
   final int bowlFirstLoss;
 
-  final String? highestRunsScoredMatchId;
-  final DateTime? highestRunsScoredDate;
+  final int highestRunsScored;
 
-  final String? lowestRunsScoredMatchId;
-  final DateTime? lowestRunsScoredDate;
+  final int lowestRunsScored;
 
-  final String? highestRunsConcededMatchId;
-  final DateTime? highestRunsConcededDate;
+  final int highestRunsConceded;
 
-  final String? lowestRunsConcededMatchId;
-  final DateTime? lowestRunsConcededDate;
+  final int lowestRunsConceded;
 
   TeamStatsModel({
     required this.matches,
@@ -41,14 +37,10 @@ class TeamStatsModel {
     required this.bowlFirst,
     required this.bowlFirstWins,
     required this.bowlFirstLoss,
-    this.highestRunsScoredMatchId,
-    this.highestRunsScoredDate,
-    this.lowestRunsScoredMatchId,
-    this.lowestRunsScoredDate,
-    this.highestRunsConcededMatchId,
-    this.highestRunsConcededDate,
-    this.lowestRunsConcededMatchId,
-    this.lowestRunsConcededDate,
+    required this.highestRunsScored,
+    required this.lowestRunsScored,
+    required this.highestRunsConceded,
+    required this.lowestRunsConceded,
   });
 
   factory TeamStatsModel.fromJson(Map<String, dynamic> json) {
@@ -66,22 +58,10 @@ class TeamStatsModel {
       bowlFirst: json['bowlFirst'] ?? 0,
       bowlFirstWins: json['bowlFirstWins'] ?? 0,
       bowlFirstLoss: json['bowlFirstLoss'] ?? 0,
-      highestRunsScoredMatchId: json['highestRunsScored']?['matchId'],
-      highestRunsScoredDate: json['highestRunsScored']?['date'] != null
-          ? DateTime.tryParse(json['highestRunsScored']['date'])
-          : null,
-      lowestRunsScoredMatchId: json['lowestRunsScored']?['matchId'],
-      lowestRunsScoredDate: json['lowestRunsScored']?['date'] != null
-          ? DateTime.tryParse(json['lowestRunsScored']['date'])
-          : null,
-      highestRunsConcededMatchId: json['highestRunsConceded']?['matchId'],
-      highestRunsConcededDate: json['highestRunsConceded']?['date'] != null
-          ? DateTime.tryParse(json['highestRunsConceded']['date'])
-          : null,
-      lowestRunsConcededMatchId: json['lowestRunsConceded']?['matchId'],
-      lowestRunsConcededDate: json['lowestRunsConceded']?['date'] != null
-          ? DateTime.tryParse(json['lowestRunsConceded']['date'])
-          : null,
+      highestRunsScored: json['highestRunsScored'] ?? 0,
+      lowestRunsScored: json['lowestRunsScored'] ?? 0,
+      highestRunsConceded: json['highestRunsConceded'] ?? 0,
+      lowestRunsConceded: json['lowestRunsConceded'] ?? 0,
     );
   }
 
@@ -100,30 +80,10 @@ class TeamStatsModel {
       'bowlFirst': bowlFirst,
       'bowlFirstWins': bowlFirstWins,
       'bowlFirstLoss': bowlFirstLoss,
-      'highestRunsScored': highestRunsScoredMatchId != null
-          ? {
-              'matchId': highestRunsScoredMatchId,
-              'date': highestRunsScoredDate?.toIso8601String(),
-            }
-          : null,
-      'lowestRunsScored': lowestRunsScoredMatchId != null
-          ? {
-              'matchId': lowestRunsScoredMatchId,
-              'date': lowestRunsScoredDate?.toIso8601String(),
-            }
-          : null,
-      'highestRunsConceded': highestRunsConcededMatchId != null
-          ? {
-              'matchId': highestRunsConcededMatchId,
-              'date': highestRunsConcededDate?.toIso8601String(),
-            }
-          : null,
-      'lowestRunsConceded': lowestRunsConcededMatchId != null
-          ? {
-              'matchId': lowestRunsConcededMatchId,
-              'date': lowestRunsConcededDate?.toIso8601String(),
-            }
-          : null,
+      'highestRunsScored': highestRunsScored,
+      'lowestRunsScored': lowestRunsScored,
+      'highestRunsConceded': highestRunsConceded,
+      'lowestRunsConceded': lowestRunsConceded,
     };
   }
 
@@ -143,14 +103,10 @@ class TeamStatsModel {
       bowlFirst: bowlFirst,
       bowlFirstWins: bowlFirstWins,
       bowlFirstLoss: bowlFirstLoss,
-      highestRunsScoredMatchId: highestRunsScoredMatchId,
-      highestRunsScoredDate: highestRunsScoredDate,
-      lowestRunsScoredMatchId: lowestRunsScoredMatchId,
-      lowestRunsScoredDate: lowestRunsScoredDate,
-      highestRunsConcededMatchId: highestRunsConcededMatchId,
-      highestRunsConcededDate: highestRunsConcededDate,
-      lowestRunsConcededMatchId: lowestRunsConcededMatchId,
-      lowestRunsConcededDate: lowestRunsConcededDate,
+      highestRunsScored: highestRunsScored,
+      lowestRunsScored: lowestRunsScored,
+      highestRunsConceded: highestRunsConceded,
+      lowestRunsConceded: lowestRunsConceded,
     );
   }
 
@@ -170,14 +126,10 @@ class TeamStatsModel {
       bowlFirst: entity.bowlFirst,
       bowlFirstWins: entity.bowlFirstWins,
       bowlFirstLoss: entity.bowlFirstLoss,
-      highestRunsScoredMatchId: entity.highestRunsScoredMatchId,
-      highestRunsScoredDate: entity.highestRunsScoredDate,
-      lowestRunsScoredMatchId: entity.lowestRunsScoredMatchId,
-      lowestRunsScoredDate: entity.lowestRunsScoredDate,
-      highestRunsConcededMatchId: entity.highestRunsConcededMatchId,
-      highestRunsConcededDate: entity.highestRunsConcededDate,
-      lowestRunsConcededMatchId: entity.lowestRunsConcededMatchId,
-      lowestRunsConcededDate: entity.lowestRunsConcededDate,
+      highestRunsScored: entity.highestRunsScored,
+      lowestRunsScored: entity.lowestRunsScored,
+      highestRunsConceded: entity.highestRunsConceded,
+      lowestRunsConceded: entity.lowestRunsConceded,
     );
   }
 }

@@ -11,6 +11,8 @@ import 'package:cricklo/features/scorer/domain/entities/match_center_entity.dart
 import 'package:cricklo/features/scorer/domain/entities/match_player_entity.dart';
 import 'package:cricklo/features/scorer/domain/entities/overs_entity.dart';
 import 'package:cricklo/features/teams/domain/entities/player_entity.dart';
+import 'package:cricklo/features/tournament/domain/entities/player_stats_entities.dart';
+import 'package:cricklo/features/tournament/domain/entities/tournament_highligh_stat_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -622,5 +624,85 @@ class Methods {
     } else {
       return ["Match tied"];
     }
+  }
+
+  static List<TournamentHighlightStat> computeTournamentHighlights({
+    required List<TournamentBattingStatsEntity> battingStats,
+    required List<TournamentBowlingStatsEntity> bowlingStats,
+  }) {
+    TournamentBattingStatsEntity? getTopBatter(String fieldName) {
+      if (battingStats.isEmpty) return null;
+      battingStats.sort((a, b) {
+        switch (fieldName) {
+          case 'runs':
+            return b.runs.compareTo(a.runs);
+          case 'sixes':
+            return b.sixes.compareTo(a.sixes);
+          case 'fours':
+            return b.fours.compareTo(a.fours);
+          case 'fifties':
+            return b.fifties.compareTo(a.fifties);
+          case 'hundreds':
+            return b.hundreds.compareTo(a.hundreds);
+          default:
+            return 0;
+        }
+      });
+      return battingStats.first;
+    }
+
+    TournamentBowlingStatsEntity? getTopBowler(String fieldName) {
+      if (bowlingStats.isEmpty) return null;
+      bowlingStats.sort((a, b) {
+        if (fieldName == 'wickets') return b.wickets.compareTo(a.wickets);
+        return 0;
+      });
+      return bowlingStats.first;
+    }
+
+    return [
+      if (getTopBatter('runs') != null)
+        TournamentHighlightStat(
+          title: "Most Runs",
+          playerName: getTopBatter('runs')!.playerName,
+          value: getTopBatter('runs')!.runs,
+          logo: getTopBatter('runs')!.teamLogo,
+        ),
+      if (getTopBowler('wickets') != null)
+        TournamentHighlightStat(
+          title: "Most Wickets",
+          playerName: getTopBowler('wickets')!.playerName,
+          value: getTopBowler('wickets')!.wickets,
+          logo: getTopBowler('wickets')!.teamLogo,
+        ),
+      if (getTopBatter('sixes') != null)
+        TournamentHighlightStat(
+          title: "Most Sixes",
+          playerName: getTopBatter('sixes')!.playerName,
+          value: getTopBatter('sixes')!.sixes,
+          logo: getTopBatter('sixes')!.teamLogo,
+        ),
+      if (getTopBatter('fours') != null)
+        TournamentHighlightStat(
+          title: "Most Fours",
+          playerName: getTopBatter('fours')!.playerName,
+          value: getTopBatter('fours')!.fours,
+          logo: getTopBatter('fours')!.teamLogo,
+        ),
+      if (getTopBatter('fifties') != null)
+        TournamentHighlightStat(
+          title: "Most 50s",
+          playerName: getTopBatter('fifties')!.playerName,
+          value: getTopBatter('fifties')!.fifties,
+          logo: getTopBatter('fifties')!.teamLogo,
+        ),
+      if (getTopBatter('hundreds') != null)
+        TournamentHighlightStat(
+          title: "Most 100s",
+          playerName: getTopBatter('hundreds')!.playerName,
+          value: getTopBatter('hundreds')!.hundreds,
+          logo: getTopBatter('hundreds')!.teamLogo,
+        ),
+    ];
   }
 }

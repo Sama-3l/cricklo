@@ -82,8 +82,8 @@ class MainAppCubit extends Cubit<MainAppState> {
             UpdateIndex(
               matchLoading: false,
               tournamentLoading: false,
-              tournaments: [],
-              matches: [],
+              tournaments: state.tournaments,
+              matches: state.matches,
               currentIndex: 0,
               showOptions: false,
               user: null,
@@ -316,7 +316,6 @@ class MainAppCubit extends Cubit<MainAppState> {
         tournamentLoading: false,
       ),
     );
-
     if (user == null) {
       final dio = sl<Dio>();
       final cookieManager =
@@ -391,6 +390,7 @@ class MainAppCubit extends Cubit<MainAppState> {
           },
         );
       } else {
+        getTournaments();
         GlobalVariables.setUser(user);
       }
     } else {

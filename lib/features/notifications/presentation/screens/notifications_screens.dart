@@ -33,7 +33,6 @@ class _NotificationsScreensState extends State<NotificationsScreens> {
           final tournamentTeamInvites = state.tournamentInvites.where(
             (e) => e.notificationType == NotificationType.tournamentTeam,
           );
-          print(tournamentTeamInvites);
           return Scaffold(
             backgroundColor: ColorsConstants.defaultWhite,
             appBar: AppBar(

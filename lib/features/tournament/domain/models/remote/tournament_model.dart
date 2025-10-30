@@ -273,6 +273,7 @@ class TournamentModel {
               (x) => LocationModel.fromJson(x),
             ),
           );
+    print("here");
     return TournamentModel(
       followers: map['followersCount'] as int? ?? 0,
       organizerId:

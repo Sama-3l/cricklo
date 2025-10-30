@@ -56,12 +56,7 @@ class MatchTileHeader extends StatelessWidget {
                               )
                             : Container()
                       : Text(
-                          dateSet
-                              ? Methods.formatDateTime(
-                                  matchEntity.dateAndTime,
-                                  addLineBreak: false,
-                                )
-                              : "Not Scheduled",
+                          "", // ADD TOURNAMENT DETAILS HERE
                           textAlign: TextAlign.end,
                           style: TextStyles.poppinsSemiBold.copyWith(
                             color: ColorsConstants.defaultBlack,

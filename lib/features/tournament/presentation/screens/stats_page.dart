@@ -17,7 +17,7 @@ class StatsPage extends StatelessWidget {
     Widget buildTabContent(int index) {
       switch (index) {
         case 0:
-          return OverallStatsPage();
+          return OverallStatsPage(tournamentEntity: state.tournamentEntity!);
         case 1:
           return TournamentBatStatsScreen();
         case 2:

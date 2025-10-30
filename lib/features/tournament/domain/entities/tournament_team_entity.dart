@@ -85,6 +85,7 @@ class TournamentTeamEntity {
       matches: [],
       tournaments: [],
       partnershipStats: [],
+      pointsStats: [],
     );
   }
 }

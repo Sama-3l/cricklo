@@ -5,6 +5,8 @@ import 'package:cricklo/features/account/presentation/screens/statistics.dart';
 import 'package:cricklo/features/account/presentation/screens/teams_grid.dart';
 import 'package:cricklo/features/account/presentation/widgets/profile_tab_bar.dart';
 import 'package:cricklo/features/matches/domain/entities/match_entity.dart';
+import 'package:cricklo/features/matches/presentation/screens/entity_matches_page.dart';
+import 'package:cricklo/features/tournament/presentation/screens/entity_tournaments_page.dart';
 import 'package:cricklo/injection_container.dart';
 import 'package:cricklo/routes/app_route_constants.dart';
 
@@ -111,8 +113,12 @@ class ProfilePage extends StatelessWidget {
                             extra: [team, <MatchEntity>[]],
                           ),
                         ),
-                        const Center(child: Text("Matches Page")),
-                        const Center(child: Text("Tournaments Page")),
+                        EntityMatchesPage(
+                          matches: state.userEntity!.userMatches,
+                        ),
+                        EntityTournamentsPage(
+                          tournaments: state.userEntity!.tournaments,
+                        ),
                       ],
                     ),
                   ),

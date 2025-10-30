@@ -3,6 +3,8 @@ import 'package:cricklo/features/tournament/domain/entities/player_stats_entitie
 class TournamentBattingStatsModel {
   final String playerName;
   final int runs;
+  final String teamName;
+  final String teamLogo;
   final int balls;
   final int fours;
   final int sixes;
@@ -17,6 +19,8 @@ class TournamentBattingStatsModel {
   TournamentBattingStatsModel({
     required this.playerName,
     required this.runs,
+    required this.teamName,
+    required this.teamLogo,
     required this.balls,
     required this.fours,
     required this.sixes,
@@ -32,6 +36,8 @@ class TournamentBattingStatsModel {
   factory TournamentBattingStatsModel.fromJson(Map<String, dynamic> json) {
     return TournamentBattingStatsModel(
       playerName: json['player']['name'],
+      teamName: json['team']['teamName'] ?? "",
+      teamLogo: json['team']['teamLogo'] ?? "",
       runs: json['runs'] ?? 0,
       balls: json['balls'] ?? 0,
       fours: json['fours'] ?? 0,
@@ -48,6 +54,8 @@ class TournamentBattingStatsModel {
 
   TournamentBattingStatsEntity toEntity() => TournamentBattingStatsEntity(
     playerName: playerName,
+    teamName: teamName,
+    teamLogo: teamLogo,
     runs: runs,
     balls: balls,
     fours: fours,
@@ -64,6 +72,8 @@ class TournamentBattingStatsModel {
   factory TournamentBattingStatsModel.fromEntity(
     TournamentBattingStatsEntity entity,
   ) => TournamentBattingStatsModel(
+    teamName: entity.teamName,
+    teamLogo: entity.teamLogo,
     playerName: entity.playerName,
     runs: entity.runs,
     balls: entity.balls,
@@ -83,6 +93,8 @@ class TournamentBowlingStatsModel {
   final String playerName;
   final int wickets;
   final int runs;
+  final String teamName;
+  final String teamLogo;
   final double overs;
   final int maidens;
   final double average;
@@ -96,6 +108,8 @@ class TournamentBowlingStatsModel {
     required this.playerName,
     required this.wickets,
     required this.runs,
+    required this.teamName,
+    required this.teamLogo,
     required this.overs,
     required this.maidens,
     required this.average,
@@ -108,6 +122,8 @@ class TournamentBowlingStatsModel {
 
   factory TournamentBowlingStatsModel.fromJson(Map<String, dynamic> json) {
     return TournamentBowlingStatsModel(
+      teamName: json['team']['teamName'] ?? "",
+      teamLogo: json['team']['teamLogo'] ?? "",
       playerName: json["player"]["name"],
       wickets: json['wickets'] ?? 0,
       runs: json['runs'] ?? 0,
@@ -124,6 +140,8 @@ class TournamentBowlingStatsModel {
 
   TournamentBowlingStatsEntity toEntity() => TournamentBowlingStatsEntity(
     playerName: playerName,
+    teamName: teamName,
+    teamLogo: teamLogo,
     wickets: wickets,
     runs: runs,
     overs: overs,
@@ -139,6 +157,8 @@ class TournamentBowlingStatsModel {
   factory TournamentBowlingStatsModel.fromEntity(
     TournamentBowlingStatsEntity entity,
   ) => TournamentBowlingStatsModel(
+    teamName: entity.teamName,
+    teamLogo: entity.teamLogo,
     playerName: entity.playerName,
     wickets: entity.wickets,
     runs: entity.runs,
@@ -156,6 +176,8 @@ class TournamentBowlingStatsModel {
 class TournamentFieldingStatsModel {
   final String player;
   final int catches;
+  final String teamName;
+  final String teamLogo;
   final int stumpings;
   final int runouts;
   final int matches;
@@ -163,6 +185,8 @@ class TournamentFieldingStatsModel {
   TournamentFieldingStatsModel({
     required this.player,
     required this.catches,
+    required this.teamName,
+    required this.teamLogo,
     required this.stumpings,
     required this.runouts,
     required this.matches,
@@ -170,6 +194,8 @@ class TournamentFieldingStatsModel {
 
   factory TournamentFieldingStatsModel.fromJson(Map<String, dynamic> json) {
     return TournamentFieldingStatsModel(
+      teamName: json['team']['teamName'] ?? "",
+      teamLogo: json['team']['teamLogo'] ?? "",
       player: json['player']['name'],
       catches: json['catches'] ?? 0,
       stumpings: json['stumpings'] ?? 0,
@@ -179,6 +205,8 @@ class TournamentFieldingStatsModel {
   }
 
   TournamentFieldingStatsEntity toEntity() => TournamentFieldingStatsEntity(
+    teamName: teamName,
+    teamLogo: teamLogo,
     playerName: player,
     catches: catches,
     stumpings: stumpings,
@@ -189,6 +217,8 @@ class TournamentFieldingStatsModel {
   factory TournamentFieldingStatsModel.fromEntity(
     TournamentFieldingStatsEntity entity,
   ) => TournamentFieldingStatsModel(
+    teamName: entity.teamName,
+    teamLogo: entity.teamLogo,
     player: entity.playerName,
     catches: entity.catches,
     stumpings: entity.stumpings,

@@ -179,6 +179,7 @@ class MatchModel {
             matches: [],
             tournaments: [],
             partnershipStats: [],
+            pointsStats: [],
           )
         : TeamModel.fromJson(map['teamAEntity'] as Map<String, dynamic>);
 
@@ -205,6 +206,7 @@ class MatchModel {
             matches: [],
             tournaments: [],
             partnershipStats: [],
+            pointsStats: [],
           )
         : TeamModel.fromJson(map['teamBEntity'] as Map<String, dynamic>);
 

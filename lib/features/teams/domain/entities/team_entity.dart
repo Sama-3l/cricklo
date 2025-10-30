@@ -5,6 +5,7 @@ import 'package:cricklo/features/login/domain/entities/location_entity.dart';
 import 'package:cricklo/features/matches/domain/entities/match_entity.dart';
 import 'package:cricklo/features/teams/domain/entities/partnership_stats_entity.dart';
 import 'package:cricklo/features/teams/domain/entities/player_entity.dart';
+import 'package:cricklo/features/teams/domain/entities/player_points_entity.dart';
 import 'package:cricklo/features/teams/domain/entities/player_stats_entities.dart';
 import 'package:cricklo/features/teams/domain/entities/team_stats_entity.dart';
 import 'package:cricklo/features/tournament/domain/entities/tournament_entity.dart';
@@ -28,6 +29,7 @@ class TeamEntity {
   final List<TeamFieldingStatsEntity> fieldingStats;
   final List<MatchEntity> matches;
   final List<TournamentEntity> tournaments;
+  final List<PlayerPointsEntity> pointsStats;
   final List<PartnershipStatsEntity> partnershipStats;
 
   TeamEntity({
@@ -49,6 +51,7 @@ class TeamEntity {
     required this.fieldingStats,
     required this.matches,
     required this.tournaments,
+    required this.pointsStats,
 
     required this.partnershipStats,
   });
@@ -72,6 +75,7 @@ class TeamEntity {
     List<TeamFieldingStatsEntity>? fieldingStats,
     List<MatchEntity>? matches,
     List<TournamentEntity>? tournaments,
+    List<PlayerPointsEntity>? pointsStats,
 
     List<PartnershipStatsEntity>? partnershipStats,
   }) {
@@ -94,6 +98,7 @@ class TeamEntity {
       fieldingStats: fieldingStats ?? this.fieldingStats,
       matches: matches ?? this.matches,
       tournaments: tournaments ?? this.tournaments,
+      pointsStats: pointsStats ?? this.pointsStats,
       partnershipStats: partnershipStats ?? this.partnershipStats,
     );
   }

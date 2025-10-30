@@ -3,6 +3,7 @@ import 'package:cricklo/features/matches/domain/models/remote/match_model.dart';
 import 'package:cricklo/features/teams/domain/entities/team_entity.dart';
 import 'package:cricklo/features/teams/domain/models/remote/partnership_stats_model.dart';
 import 'package:cricklo/features/teams/domain/models/remote/player_model.dart';
+import 'package:cricklo/features/teams/domain/models/remote/player_points_model.dart';
 import 'package:cricklo/features/teams/domain/models/remote/player_stats_models.dart';
 import 'package:cricklo/features/teams/domain/models/remote/team_stats_model.dart';
 import 'package:cricklo/features/tournament/domain/models/remote/tournament_model.dart';
@@ -25,6 +26,7 @@ class TeamModel {
   final List<MatchModel> matches;
   final List<TournamentModel> tournaments;
   final List<PartnershipStatsModel> partnershipStats;
+  final List<PlayerPointsModel> pointsStats;
 
   TeamModel({
     required this.uuid,
@@ -44,6 +46,7 @@ class TeamModel {
     required this.matches,
     required this.tournaments,
     required this.partnershipStats,
+    required this.pointsStats,
   });
 
   TeamModel copyWith({
@@ -64,6 +67,7 @@ class TeamModel {
     List<MatchModel>? matches,
     List<TournamentModel>? tournaments,
     List<PartnershipStatsModel>? partnershipStats,
+    List<PlayerPointsModel>? pointsStats,
   }) {
     return TeamModel(
       inviteStatus: inviteStatus ?? this.inviteStatus,
@@ -83,6 +87,7 @@ class TeamModel {
       matches: matches ?? this.matches,
       tournaments: tournaments ?? this.tournaments,
       partnershipStats: partnershipStats ?? this.partnershipStats,
+      pointsStats: pointsStats ?? this.pointsStats,
     );
   }
 
@@ -126,9 +131,11 @@ class TeamModel {
       partnershipStats: team.partnershipStats
           .map((e) => PartnershipStatsModel.fromEntity(e))
           .toList(),
+      pointsStats: team.pointsStats
+          .map((e) => PlayerPointsModel.fromEntity(e))
+          .toList(),
     );
   }
-
   factory TeamModel.fromJson(Map<String, dynamic> map) {
     final players = map['teamPlayers'] != null
         ? (map['teamPlayers'] as List<dynamic>)
@@ -194,6 +201,11 @@ class TeamModel {
           : (map["partnerships"] as List<dynamic>)
                 .map((e) => PartnershipStatsModel.fromJson(e))
                 .toList(),
+      pointsStats: map["playerStats"] == null
+          ? []
+          : (map["playerStats"]["points"] as List<dynamic>)
+                .map((e) => PlayerPointsModel.fromJson(e, players))
+                .toList(),
     );
   }
 
@@ -216,6 +228,7 @@ class TeamModel {
       matches: matches.map((e) => e.toEntity()).toList(),
       tournaments: tournaments.map((e) => e.toEntity()).toList(),
       partnershipStats: partnershipStats.map((e) => e.toEntity()).toList(),
+      pointsStats: pointsStats.map((e) => e.toEntity()).toList(),
     );
   }
 }

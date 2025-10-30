@@ -1,6 +1,8 @@
 class TournamentBattingStatsEntity {
   final String playerName;
   final int runs;
+  final String teamName;
+  final String teamLogo;
   final int balls;
   final int fours;
   final int sixes;
@@ -15,6 +17,8 @@ class TournamentBattingStatsEntity {
   TournamentBattingStatsEntity({
     required this.playerName,
     required this.runs,
+    required this.teamName,
+    required this.teamLogo,
     required this.balls,
     required this.fours,
     required this.sixes,
@@ -32,6 +36,8 @@ class TournamentBowlingStatsEntity {
   final String playerName;
   final int wickets;
   final int runs;
+  final String teamName;
+  final String teamLogo;
   final double overs;
   final int maidens;
   final double average;
@@ -45,6 +51,8 @@ class TournamentBowlingStatsEntity {
     required this.playerName,
     required this.wickets,
     required this.runs,
+    required this.teamName,
+    required this.teamLogo,
     required this.overs,
     required this.maidens,
     required this.average,
@@ -59,6 +67,8 @@ class TournamentBowlingStatsEntity {
 class TournamentFieldingStatsEntity {
   final String playerName;
   final int catches;
+  final String teamName;
+  final String teamLogo;
   final int stumpings;
   final int runouts;
   final int matches;
@@ -66,6 +76,8 @@ class TournamentFieldingStatsEntity {
   TournamentFieldingStatsEntity({
     required this.playerName,
     required this.catches,
+    required this.teamName,
+    required this.teamLogo,
     required this.stumpings,
     required this.runouts,
     required this.matches,

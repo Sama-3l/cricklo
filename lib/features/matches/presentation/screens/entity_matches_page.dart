@@ -66,12 +66,9 @@ class _EntityMatchesPageState extends State<EntityMatchesPage> {
                   Center(
                     child: Text(
                       "No Matches Yet",
-                      style: TextStyles.poppinsRegular.copyWith(
+                      style: TextStyles.poppinsSemiBold.copyWith(
                         fontSize: 16,
                         letterSpacing: -0.8,
-                        color: ColorsConstants.defaultBlack.withValues(
-                          alpha: 0.5,
-                        ),
                       ),
                     ),
                   ),
