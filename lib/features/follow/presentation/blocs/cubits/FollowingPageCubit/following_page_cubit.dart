@@ -4,7 +4,7 @@ import 'package:cricklo/features/follow/data/usecases/get_following_usecase.dart
 import 'package:cricklo/features/follow/domain/entities/following_match_entity.dart';
 import 'package:cricklo/features/follow/domain/entities/following_player_entity.dart';
 import 'package:cricklo/features/follow/domain/entities/following_team_entity.dart';
-import 'package:cricklo/features/follow/domain/entities/following_tournament_entity.dart';
+import 'package:cricklo/features/tournament/domain/entities/tournament_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 

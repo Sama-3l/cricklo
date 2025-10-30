@@ -323,6 +323,8 @@ final List<PlayerEntity> dummyPlayers = [
 
 final MatchEntity dummyMatchScheduled = MatchEntity(
   matchCategory: MatchCategory.open,
+  tournamentName: '',
+  matchStatus: MatchStatus.ongoing,
   matchID: "match-0001",
   dateAndTime: DateTime.now().add(Duration(days: 1)),
   overs: 20,
@@ -342,6 +344,8 @@ final MatchEntity dummyMatchScheduled = MatchEntity(
 
 final MatchEntity dummyMatchLive = MatchEntity(
   matchCategory: MatchCategory.open,
+  tournamentName: '',
+  matchStatus: MatchStatus.ongoing,
   matchID: "match-0001",
   dateAndTime: DateTime.now(),
   overs: 20,
@@ -361,6 +365,8 @@ final MatchEntity dummyMatchLive = MatchEntity(
 
 final MatchEntity dummyMatchTossDone = MatchEntity(
   matchCategory: MatchCategory.open,
+  tournamentName: '',
+  matchStatus: MatchStatus.ongoing,
   matchID: "match-0001",
   dateAndTime: DateTime.now(),
   overs: 20,
@@ -388,6 +394,8 @@ final MatchEntity dummyMatchTossDone = MatchEntity(
 
 final MatchEntity dummyMatchInningsTwo = MatchEntity(
   matchCategory: MatchCategory.open,
+  tournamentName: '',
+  matchStatus: MatchStatus.ongoing,
   matchID: "match-0001",
   dateAndTime: DateTime.now(),
   overs: 20,
@@ -421,6 +429,8 @@ final MatchEntity dummyMatchInningsTwo = MatchEntity(
 
 final MatchEntity dummyMatchDone = MatchEntity(
   matchCategory: MatchCategory.open,
+  tournamentName: '',
+  matchStatus: MatchStatus.ongoing,
   matchID: "match-0001",
   dateAndTime: DateTime.now(),
   overs: 20,

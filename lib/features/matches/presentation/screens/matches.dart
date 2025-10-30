@@ -1,4 +1,3 @@
-import 'package:cricklo/core/utils/constants/enums.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/home/presentation/widgets/match_tile.dart';
 import 'package:cricklo/features/home/presentation/widgets/section_header.dart';
@@ -18,15 +17,8 @@ class _MatchesPageState extends State<MatchesPage> {
   @override
   Widget build(BuildContext context) {
     final state = context.read<MainAppCubit>().state;
-    final matches =
-        state.matches
-            .where(
-              (e) =>
-                  e.teamA.inviteStatus != null ||
-                  e.matchCategory != MatchCategory.open,
-            )
-            .toList()
-          ..sort((a, b) => b.dateAndTime.compareTo(a.dateAndTime));
+    final matches = state.matches
+      ..sort((a, b) => b.dateAndTime.compareTo(a.dateAndTime));
 
     return Scaffold(
       backgroundColor: ColorsConstants.onSurfaceGrey,

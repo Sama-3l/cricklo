@@ -1,14 +1,14 @@
 import 'package:cricklo/features/follow/domain/entities/following_player_entity.dart';
 import 'package:cricklo/features/follow/domain/entities/following_team_entity.dart';
 import 'package:cricklo/features/follow/domain/entities/following_match_entity.dart';
-import 'package:cricklo/features/follow/domain/entities/following_tournament_entity.dart';
+import 'package:cricklo/features/tournament/domain/entities/tournament_entity.dart';
 
 class GetFollowingResponseEntity {
   final bool success;
   final List<FollowingPlayerEntity> players;
   final List<FollowingTeamEntity> teams;
   final List<FollowingMatchEntity> matches;
-  final List<FollowingTournamentEntity> tournaments;
+  final List<TournamentEntity> tournaments;
   final String? message;
   final int? status;
   final String? errorCode;

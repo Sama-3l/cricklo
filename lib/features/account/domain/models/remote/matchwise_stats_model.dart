@@ -68,7 +68,6 @@ class MatchWiseStatsModel {
   });
 
   factory MatchWiseStatsModel.fromJson(Map<String, dynamic> json) {
-    print(json);
     return MatchWiseStatsModel(
       matchId: json['matchId'] ?? '',
       date: DateTime.parse(json['date']),

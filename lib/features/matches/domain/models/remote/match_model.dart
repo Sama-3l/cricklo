@@ -11,7 +11,9 @@ class MatchModel {
   final int overs;
   final MatchType matchType;
   final MatchCategory matchCategory;
+  final MatchStatus matchStatus;
   final TeamModel teamA;
+  final String tournamentName;
   bool abandoned;
   bool draw;
   final TeamModel teamB;
@@ -28,9 +30,11 @@ class MatchModel {
     required this.matchID,
     required this.dateAndTime,
     required this.overs,
+    required this.matchStatus,
     this.abandoned = false,
     required this.matchType,
     required this.matchCategory,
+    required this.tournamentName,
     required this.teamA,
     required this.teamB,
     required this.location,
@@ -47,6 +51,7 @@ class MatchModel {
   MatchModel copyWith({
     String? id,
     String? matchID,
+    String? tournamentName,
     DateTime? dateAndTime,
     MatchCategory? matchCategory,
     DateTime? endDateTime,
@@ -58,8 +63,10 @@ class MatchModel {
     bool? draw,
     LocationModel? location,
     Map<String, dynamic>? scorer,
+    MatchStatus? matchStatus,
   }) {
     return MatchModel(
+      tournamentName: tournamentName ?? this.tournamentName,
       matchID: matchID ?? this.matchID,
       dateAndTime: dateAndTime ?? this.dateAndTime,
       matchCategory: matchCategory ?? this.matchCategory,
@@ -72,6 +79,7 @@ class MatchModel {
       location: location ?? this.location,
       scorer: scorer ?? this.scorer,
       abandoned: abandoned ?? this.abandoned,
+      matchStatus: matchStatus ?? this.matchStatus,
     );
   }
 
@@ -93,11 +101,13 @@ class MatchModel {
       'teamAScore': teamAScore?.toJson(),
       'teamBScore': teamBScore?.toJson(),
       'endDateTime': endDateTime?.toIso8601String(),
+      'matchStatus': matchStatus.title,
     };
   }
 
   MatchEntity toEntity() {
     return MatchEntity(
+      tournamentName: tournamentName,
       matchCategory: matchCategory,
       matchID: matchID,
       dateAndTime: dateAndTime,
@@ -115,6 +125,7 @@ class MatchModel {
       teamAScore: teamAScore?.toEntity(),
       teamBScore: teamBScore?.toEntity(),
       endDateTime: endDateTime,
+      matchStatus: matchStatus,
     );
   }
 
@@ -268,13 +279,38 @@ class MatchModel {
     //       ? DateTime.fromMillisecondsSinceEpoch(map['endDateTime'] as int)
     //       : null,
     // );
+    // print(map['status']);
+    // print(MatchStatus.values.map((e) => e.title));
+    // print(
+    //   map['status'] != null
+    //       ? MatchStatus.values
+    //             .where(
+    //               (e) =>
+    //                   e.title.toUpperCase() ==
+    //                   (map['status'] as String).toUpperCase(),
+    //             )
+    //             .first
+    //       : MatchStatus.upcoming,
+    // );
     // print(
     //   MatchModel(
+    //     tournamentName: map['tournament'] != null
+    //         ? map['tournament']['tournamentName'] ?? map['tournament']['name']
+    //         : "",
     //     matchCategory: map['matchCategory'] != null
     //         ? MatchCategory.values
     //               .where((e) => e.title == map['matchCategory'])
     //               .first
     //         : MatchCategory.open,
+    //     matchStatus: map['status'] != null
+    //         ? MatchStatus.values
+    //               .where(
+    //                 (e) =>
+    //                     e.title.toUpperCase() ==
+    //                     (map['status'] as String).toUpperCase(),
+    //               )
+    //               .first
+    //         : MatchStatus.upcoming,
     //     matchID: map['matchId'] as String,
     //     dateAndTime: dateAndTime,
     //     overs: map['overs'] as int,
@@ -318,11 +354,23 @@ class MatchModel {
     //   ),
     // );
     return MatchModel(
+      tournamentName: map['tournament'] != null
+          ? map['tournament']['tournamentName'] ?? map['tournament']['name']
+          : "",
       matchCategory: map['matchCategory'] != null
           ? MatchCategory.values
                 .where((e) => e.title == map['matchCategory'])
                 .first
           : MatchCategory.open,
+      matchStatus: map['status'] != null
+          ? MatchStatus.values
+                .where(
+                  (e) =>
+                      e.title.toUpperCase() ==
+                      (map['status'] as String).toUpperCase(),
+                )
+                .first
+          : MatchStatus.upcoming,
       matchID: map['matchId'] as String,
       dateAndTime: dateAndTime,
       overs: map['overs'] as int,
@@ -368,7 +416,9 @@ class MatchModel {
 
   factory MatchModel.fromEntity(MatchEntity entity) {
     return MatchModel(
+      tournamentName: entity.tournamentName,
       matchID: entity.matchID,
+      matchStatus: entity.matchStatus,
       matchCategory: entity.matchCategory,
       dateAndTime: entity.dateAndTime,
       overs: entity.overs,

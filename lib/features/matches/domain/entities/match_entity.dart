@@ -6,12 +6,14 @@ import 'package:cricklo/features/teams/domain/entities/team_entity.dart';
 
 class MatchEntity {
   final String matchID;
+  final String tournamentName;
   DateTime dateAndTime;
   final int overs;
   final MatchType matchType;
   final MatchCategory matchCategory;
   final TeamEntity teamA;
   bool abandoned;
+  final MatchStatus matchStatus;
   final TeamEntity teamB;
   LocationEntity? location;
   Map<String, dynamic> scorer;
@@ -25,10 +27,12 @@ class MatchEntity {
 
   MatchEntity({
     required this.matchID,
+    required this.tournamentName,
     required this.dateAndTime,
     required this.overs,
     required this.matchCategory,
     this.abandoned = false,
+    required this.matchStatus,
     required this.matchType,
     required this.teamA,
     required this.teamB,
@@ -46,7 +50,9 @@ class MatchEntity {
   MatchEntity copyWith({
     String? id,
     String? matchID,
+    String? tournamentName,
     MatchCategory? matchCategory,
+    MatchStatus? matchStatus,
     DateTime? dateAndTime,
     DateTime? endDateTime,
     int? overs,
@@ -60,7 +66,9 @@ class MatchEntity {
   }) {
     return MatchEntity(
       matchID: matchID ?? this.matchID,
+      tournamentName: tournamentName ?? this.tournamentName,
       matchCategory: matchCategory ?? this.matchCategory,
+      matchStatus: matchStatus ?? this.matchStatus,
       dateAndTime: dateAndTime ?? this.dateAndTime,
       endDateTime: endDateTime ?? this.endDateTime,
       overs: overs ?? this.overs,

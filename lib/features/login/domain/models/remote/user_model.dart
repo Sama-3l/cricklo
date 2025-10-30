@@ -139,6 +139,38 @@ class UserModel {
           bowlerType = BowlerType.leftArmSpin;
       }
     }
+    // print("here");
+    // print(data["unreadNotifications"] as int? ?? 0);
+    // print(data['Profile_Photo']);
+    // print(data['profileId']);
+    // print(data['Name'] ?? '');
+    // print(data['Email'] ?? '');
+    // print(location);
+    // print(playerType);
+    // print(batterType);
+    // print(bowlerType);
+    // print(data['follows'] as bool? ?? false);
+    // print(data['followersCount'] as int? ?? 0);
+    // print(data['followingCount'] as int? ?? 0);
+    // print(
+    //   data['accountStats'] != null
+    //       ? AccountStatsModel.fromJson(
+    //           (data['accountStats'] as Map<String, dynamic>),
+    //         )
+    //       : null,
+    // );
+    // print(
+    //   data['matchWiseStats'] != null
+    //       ? (data['matchWiseStats'] as List<dynamic>)
+    //             .map((e) => MatchWiseStatsModel.fromJson(e))
+    //             .toList()
+    //       : [],
+    // );
+    // print(
+    //   (data['matches'] as List<dynamic>)
+    //       .map((e) => MatchModel.fromJson(e))
+    //       .toList(),
+    // );
     return UserModel(
       unreadNotifications: data["unreadNotifications"] as int? ?? 0,
       profilePic: data['Profile_Photo'],

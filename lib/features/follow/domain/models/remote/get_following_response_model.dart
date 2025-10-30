@@ -2,14 +2,14 @@ import 'package:cricklo/features/follow/domain/entities/get_following_response_e
 import 'package:cricklo/features/follow/domain/models/remote/following_match_model.dart';
 import 'package:cricklo/features/follow/domain/models/remote/following_player_model.dart';
 import 'package:cricklo/features/follow/domain/models/remote/following_team_model.dart';
-import 'package:cricklo/features/follow/domain/models/remote/following_tournament_model.dart';
+import 'package:cricklo/features/tournament/domain/models/remote/tournament_model.dart';
 
 class GetFollowingResponseModel {
   final bool success;
   final List<FollowingPlayerModel> players;
   final List<FollowingTeamModel> teams;
   final List<FollowingMatchModel> matches;
-  final List<FollowingTournamentModel> tournaments;
+  final List<TournamentModel> tournaments;
   final String? message;
   final int? status;
   final String? errorCode;
@@ -57,7 +57,7 @@ class GetFollowingResponseModel {
           .map((e) => FollowingMatchModel.fromJson(e))
           .toList(),
       tournaments: (payload['tournaments'] as List<dynamic>? ?? [])
-          .map((e) => FollowingTournamentModel.fromJson(e))
+          .map((e) => TournamentModel.fromJson(e))
           .toList(),
       message: json['message'] as String?,
       status: json['status'] as int?,

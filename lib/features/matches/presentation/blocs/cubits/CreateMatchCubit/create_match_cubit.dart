@@ -46,6 +46,7 @@ class CreateMatchCubit extends Cubit<CreateMatchState> {
     response.fold((_) {}, (response) {
       if (response.success) {
         final MatchEntity matchEntity = MatchEntity(
+          tournamentName: '',
           matchCategory: MatchCategory.open,
           matchID: response.matchId,
           dateAndTime: Methods.combineDateAndTime(date, time),
@@ -59,6 +60,7 @@ class CreateMatchCubit extends Cubit<CreateMatchState> {
             "name": scorer.name,
             "inviteStatus": "PENDING",
           },
+          matchStatus: MatchStatus.ongoing,
         );
         onComplete(matchEntity);
         GoRouter.of(context).pop();

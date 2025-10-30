@@ -7,9 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class TournamentTile extends StatelessWidget {
-  const TournamentTile({super.key, required this.tournamentEntity});
+  const TournamentTile({
+    super.key,
+    required this.tournamentEntity,
+    this.whiteColor = true,
+  });
 
   final TournamentEntity tournamentEntity;
+  final bool whiteColor;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +27,9 @@ class TournamentTile extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           // color: ColorsConstants.defaultBlack.withValues(alpha: 0.07),
-          color: ColorsConstants.defaultWhite,
+          color: whiteColor
+              ? ColorsConstants.defaultWhite
+              : ColorsConstants.onSurfaceGrey,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,

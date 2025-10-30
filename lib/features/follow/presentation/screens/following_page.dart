@@ -4,10 +4,11 @@ import 'package:cricklo/features/account/presentation/widgets/stats_table_filter
 import 'package:cricklo/features/follow/domain/entities/following_match_entity.dart';
 import 'package:cricklo/features/follow/domain/entities/following_player_entity.dart';
 import 'package:cricklo/features/follow/domain/entities/following_team_entity.dart';
-import 'package:cricklo/features/follow/domain/entities/following_tournament_entity.dart';
 import 'package:cricklo/features/follow/presentation/blocs/cubits/FollowingPageCubit/following_page_cubit.dart';
 import 'package:cricklo/features/home/presentation/widgets/shimmer_match_tile.dart';
+import 'package:cricklo/features/tournament/domain/entities/tournament_entity.dart';
 import 'package:cricklo/features/tournament/presentation/widgets/shimmer_tournament_tile.dart';
+import 'package:cricklo/features/tournament/presentation/widgets/tournament_tile.dart';
 import 'package:cricklo/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -196,8 +197,20 @@ class _FollowingPageState extends State<FollowingPage>
             backgroundColor: ColorsConstants.surfaceOrange,
             backgroundImage: CachedNetworkImageProvider(p.profileId),
           ),
-          title: Text(p.name),
-          subtitle: Text(p.playerType?.name ?? ''),
+          title: Text(
+            p.name,
+            style: TextStyles.poppinsSemiBold.copyWith(
+              fontSize: 16,
+              letterSpacing: -0.8,
+            ),
+          ),
+          subtitle: Text(
+            p.playerType?.name ?? '',
+            style: TextStyles.poppinsMedium.copyWith(
+              fontSize: 12,
+              letterSpacing: -0.5,
+            ),
+          ),
         );
       },
     );
@@ -298,8 +311,20 @@ class _FollowingPageState extends State<FollowingPage>
             backgroundColor: ColorsConstants.surfaceOrange,
             backgroundImage: CachedNetworkImageProvider(t.teamLogo),
           ),
-          title: Text(t.teamName),
-          subtitle: Text("${t.location.city}, ${t.location.state}"),
+          title: Text(
+            t.teamName,
+            style: TextStyles.poppinsSemiBold.copyWith(
+              fontSize: 16,
+              letterSpacing: -0.8,
+            ),
+          ),
+          subtitle: Text(
+            "${t.location.city}, ${t.location.state}",
+            style: TextStyles.poppinsMedium.copyWith(
+              fontSize: 12,
+              letterSpacing: -0.5,
+            ),
+          ),
         );
       },
     );
@@ -338,10 +363,7 @@ class _FollowingPageState extends State<FollowingPage>
     );
   }
 
-  Widget _buildTournaments(
-    List<FollowingTournamentEntity> tournaments,
-    bool loading,
-  ) {
+  Widget _buildTournaments(List<TournamentEntity> tournaments, bool loading) {
     if (loading) {
       return ListView.builder(
         itemBuilder: (context, index) => ShimmerTournamentTile(),
@@ -358,28 +380,19 @@ class _FollowingPageState extends State<FollowingPage>
         ),
       );
     }
-    return ListView.builder(
-      itemCount: tournaments.length,
-      itemBuilder: (context, index) {
-        final t = tournaments[index];
-        return ListTile(
-          leading: ClipRRect(
-            borderRadius: BorderRadius.circular(6),
-            child: Image.network(
-              t.banner,
-              width: 45,
-              height: 45,
-              fit: BoxFit.cover,
-            ),
-          ),
-          title: Text(t.tournamentName),
-          subtitle: Text(
-            "${t.format} • ${t.tournamentType} • "
-            "${DateFormat('dd MMM').format(t.startDate)} - "
-            "${DateFormat('dd MMM').format(t.endDate)}",
-          ),
-        );
-      },
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: ListView.separated(
+        separatorBuilder: (context, index) => const SizedBox(height: 8),
+        itemCount: tournaments.length,
+        itemBuilder: (context, index) {
+          final t = tournaments[index];
+          return SizedBox(
+            height: 300,
+            child: TournamentTile(tournamentEntity: t),
+          );
+        },
+      ),
     );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:cricklo/core/utils/constants/enums.dart';
 import 'package:cricklo/core/utils/constants/global_variables.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/core/utils/constants/widget_decider.dart';
@@ -28,24 +29,10 @@ class MatchTile extends StatelessWidget {
         if (onTap != null) {
           onTap!();
         } else {
-          if (GlobalVariables.user!.profileId ==
-              matchEntity.scorer["profileId"]) {
-            if (matchEntity.winner != null || matchEntity.draw) {
-              GoRouter.of(
-                context,
-              ).pushNamed(Routes.scorerMatchCenter, extra: [matchEntity, true]);
-            } else {
-              GoRouter.of(
-                context,
-              ).pushNamed(Routes.scorerInitialPage, extra: matchEntity);
-            }
-          } else {
-            if (!(DateTime.now()
-                        .difference(matchEntity.dateAndTime)
-                        .inSeconds >=
-                    0 &&
-                matchEntity.tossWinner != null &&
-                matchEntity.winner == null)) {
+          if (GlobalVariables.user != null &&
+              GlobalVariables.user!.profileId ==
+                  matchEntity.scorer["profileId"]) {
+            if (matchEntity.matchStatus != MatchStatus.completed) {
               GoRouter.of(
                 context,
               ).pushNamed(Routes.scorerInitialPage, extra: matchEntity);
@@ -54,7 +41,51 @@ class MatchTile extends StatelessWidget {
                 context,
               ).pushNamed(Routes.scorerMatchCenter, extra: [matchEntity, true]);
             }
+          } else if (matchEntity.matchStatus == MatchStatus.upcoming) {
+            GoRouter.of(
+              context,
+            ).pushNamed(Routes.scorerInitialPage, extra: matchEntity);
+          } else if (matchEntity.matchStatus == MatchStatus.completed) {
+            GoRouter.of(
+              context,
+            ).pushNamed(Routes.scorerMatchCenter, extra: [matchEntity, true]);
           }
+          // if (GlobalVariables.user!.profileId ==
+          //     matchEntity.scorer["profileId"]) {
+          //   if (matchEntity.winner != null || matchEntity.draw) {
+          //     GoRouter.of(
+          //       context,
+          //     ).pushNamed(Routes.scorerMatchCenter, extra: [matchEntity, true]);
+          //   } else {
+          //     GoRouter.of(
+          //       context,
+          //     ).pushNamed(Routes.scorerInitialPage, extra: matchEntity);
+          //   }
+          // } else {
+          //   if (!(DateTime.now()
+          //               .difference(matchEntity.dateAndTime)
+          //               .inSeconds >=
+          //           0 &&
+          //       matchEntity.tossWinner != null &&
+          //       matchEntity.winner == null)) {
+          //     if (matchEntity.winner != null ||
+          //         matchEntity.draw ||
+          //         matchEntity.abandoned) {
+          //       GoRouter.of(context).pushNamed(
+          //         Routes.scorerMatchCenter,
+          //         extra: [matchEntity, true],
+          //       );
+          //     } else {
+          //       GoRouter.of(
+          //         context,
+          //       ).pushNamed(Routes.scorerInitialPage, extra: matchEntity);
+          //     }
+          //   } else {
+          //     GoRouter.of(
+          //       context,
+          //     ).pushNamed(Routes.scorerMatchCenter, extra: [matchEntity, true]);
+          //   }
+          // }
         }
       },
       borderRadius: BorderRadius.circular(12),

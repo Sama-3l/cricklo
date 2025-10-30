@@ -6,20 +6,21 @@ sealed class FollowingPageState {
   final List<FollowingPlayerEntity> players;
   final List<FollowingTeamEntity> teams;
   final List<FollowingMatchEntity> matches;
-  final List<FollowingTournamentEntity> tournaments;
+  final List<TournamentEntity> tournaments;
 
   FollowingPageUpdate copyWith({
     bool? loading,
     List<FollowingPlayerEntity>? players,
     List<FollowingTeamEntity>? teams,
     List<FollowingMatchEntity>? matches,
-    List<FollowingTournamentEntity>? tournaments,
+    List<TournamentEntity>? tournaments,
   }) {
     return FollowingPageUpdate(
       players: players ?? this.players,
       teams: teams ?? this.teams,
       matches: matches ?? this.matches,
       tournaments: tournaments ?? this.tournaments,
+      loading: loading ?? this.loading,
     );
   }
 

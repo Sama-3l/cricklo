@@ -128,3 +128,12 @@ enum MatchCategory {
   final String title;
   const MatchCategory(this.title);
 }
+
+enum MatchStatus {
+  upcoming("Upcoming"),
+  ongoing("Ongoing"),
+  completed("Completed");
+
+  final String title;
+  const MatchStatus(this.title);
+}

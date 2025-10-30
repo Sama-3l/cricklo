@@ -183,7 +183,8 @@ class TournamentModel {
 
   factory TournamentModel.fromJson(Map<String, dynamic> map) {
     MatchType matchType = MatchType.t10;
-    final format = map["format"] as String?;
+    final format =
+        map["format"] as String? ?? map['tournament']["format"] as String?;
     if (format != null) {
       switch (format) {
         case "T10":
@@ -198,7 +199,7 @@ class TournamentModel {
         case "ODI":
           matchType = MatchType.odi;
           break;
-        case "Test":
+        case "TEST":
           matchType = MatchType.test;
           break;
         default:
@@ -207,10 +208,15 @@ class TournamentModel {
       }
     }
     final inviteDeadlineDateTime = DateTime.parse(
-      map['inviteDeadline'] as String,
+      map['inviteDeadline'] as String? ??
+          map['tournament']['inviteDeadline'] as String,
     );
-    final startDateDateTime = DateTime.parse(map['startDate'] as String);
-    final endDateDateTime = DateTime.parse(map['endDate'] as String);
+    final startDateDateTime = DateTime.parse(
+      map['startDate'] as String? ?? map['tournament']['startDate'] as String,
+    );
+    final endDateDateTime = DateTime.parse(
+      map['endDate'] as String? ?? map['tournament']['endDate'] as String,
+    );
     final inviteDeadline = DateTime(
       inviteDeadlineDateTime.year,
       inviteDeadlineDateTime.month,
@@ -235,6 +241,7 @@ class TournamentModel {
       endDateDateTime.minute,
       endDateDateTime.second,
     );
+
     final teams = map['teams'] == null
         ? <TournamentTeamModel>[]
         : List<TournamentTeamModel>.from(
@@ -249,6 +256,7 @@ class TournamentModel {
               (x) => GroupModel.fromJson(x, teams),
             ),
           );
+
     final Map<String, List<MatchModel>> parsedGroups = {};
     if (map['matchesByGroup'] != null) {
       for (final group in map['matchesByGroup']) {
@@ -273,38 +281,75 @@ class TournamentModel {
               (x) => LocationModel.fromJson(x),
             ),
           );
-    print("here");
     return TournamentModel(
       followers: map['followersCount'] as int? ?? 0,
       organizerId:
           map['organizerProfileId'] as String? ??
           map['organizer']['profileId'] as String? ??
           "",
-      id: map['tournamentId'] as String,
-      userFollow: map["follows"] as bool? ?? false,
-      name: map['name'] as String? ?? map['tournamentName'] as String,
-      banner: map['banner'] as String,
+      id: map['tournamentId'] as String? ?? map['tournament']['id'] as String,
+      userFollow:
+          map["follows"] as bool? ?? map['tournament']["follows"] as bool,
+      name:
+          map['name'] as String? ??
+          map['tournamentName'] as String? ??
+          map['tournament']['name'] as String,
+      banner: map['banner'] as String? ?? map['tournament']['banner'] as String,
       inviteDeadline: inviteDeadline,
       startDate: startDate,
       endDate: endDate,
       tournamentType: map['tournamentType'] == null
-          ? TournamentType.knockout
+          ? map['tournament']['tournamentType'] != null
+                ? TournamentType.values
+                      .where(
+                        (e) =>
+                            e.title.toUpperCase() ==
+                            map['tournament']['tournamentType'],
+                      )
+                      .first
+                : TournamentType.knockout
           : TournamentType.values
                 .where((e) => e.title.toUpperCase() == map['tournamentType'])
                 .first,
-      spotsLeft: map['spotsLeft'] as int? ?? 0,
+      spotsLeft:
+          map['spotsLeft'] as int? ?? map['tournament']['spotsLeft'] as int,
       matchType: matchType,
-      ballType: BallType.leather,
-      overs: (map['format'] as String).toLowerCase() == "odi"
+      ballType: map['ballType'] == null
+          ? map['tournament']['ballType'] != null
+                ? BallType.values
+                          .where(
+                            (e) =>
+                                e.title.toUpperCase() ==
+                                map['tournament']['ballType'],
+                          )
+                          .firstOrNull ??
+                      BallType.leather
+                : BallType.leather
+          : BallType.values
+                    .where(
+                      (e) => e.title.toUpperCase() == map['tournamentType'],
+                    )
+                    .firstOrNull ??
+                BallType.leather,
+      overs:
+          (map['format'] as String? ?? map['tournament']['format'] as String)
+                  .toLowerCase() ==
+              "odi"
           ? 50
-          : (map['format'] as String).toLowerCase() == "t10"
+          : (map['format'] as String? ?? map['tournament']['format'] as String)
+                    .toLowerCase() ==
+                "t10"
           ? 10
-          : (map['format'] as String).toLowerCase() == "t20"
+          : (map['format'] as String? ?? map['tournament']['format'] as String)
+                    .toLowerCase() ==
+                "t20"
           ? 20
-          : (map['format'] as String).toLowerCase() == "t30"
+          : (map['format'] as String? ?? map['tournament']['format'] as String)
+                    .toLowerCase() ==
+                "t30"
           ? 30
           : 0,
-      maxTeams: map['maxTeams'] as int? ?? 0,
+      maxTeams: map['maxTeams'] as int? ?? map['tournament']['maxTeams'] as int,
       moderators: map['moderators'] == null
           ? []
           : List<SearchUserModel>.from(
