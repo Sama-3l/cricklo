@@ -475,4 +475,7 @@ final tournament = TournamentEntity(
   groupMatches: [],
   playoffMatches: [],
   groups: [],
+  battingStats: [],
+  bowlingStats: [],
+  fieldingStats: [],
 );

@@ -128,6 +128,7 @@ class TeamPageCubit extends Cubit<TeamPageState> {
         selectedPlayersTab: state.selectedPlayersTab,
         selectedStatsTab: state.selectedStatsTab,
         selectedStatsTabTableType: state.selectedStatsTabTableType,
+        loading: state.loading,
       ),
     );
   }
@@ -141,6 +142,7 @@ class TeamPageCubit extends Cubit<TeamPageState> {
         selectedStatsTab: state.selectedStatsTab,
         selectedStatsTabTableType: state.selectedStatsTabTableType,
         follow: state.follow,
+        loading: state.loading,
       ),
     );
   }
@@ -154,6 +156,7 @@ class TeamPageCubit extends Cubit<TeamPageState> {
         selectedStatsTab: index,
         selectedStatsTabTableType: 0,
         follow: state.follow,
+        loading: state.loading,
       ),
     );
   }
@@ -167,6 +170,7 @@ class TeamPageCubit extends Cubit<TeamPageState> {
         selectedStatsTab: state.selectedStatsTab,
         selectedStatsTabTableType: index,
         follow: state.follow,
+        loading: state.loading,
       ),
     );
   }

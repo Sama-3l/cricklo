@@ -1,6 +1,7 @@
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/home/presentation/widgets/match_tile.dart';
 import 'package:cricklo/features/home/presentation/widgets/section_header.dart';
+import 'package:cricklo/features/home/presentation/widgets/shimmer_match_tile.dart';
 import 'package:cricklo/features/matches/domain/entities/match_entity.dart';
 import 'package:flutter/material.dart';
 
@@ -33,9 +34,28 @@ class _EntityMatchesPageState extends State<EntityMatchesPage> {
           : ColorsConstants.onSurfaceGrey,
       body: Padding(
         padding: EdgeInsets.symmetric(
-          horizontal: widget.removePadding ? 0 : 16.0,
-        ),
-        child: widget.matches.isEmpty
+          horizontal: widget.removePadding || widget.loading ? 0 : 16.0,
+        ).copyWith(top: widget.loading ? 24 : 0),
+        child: widget.loading
+            ? Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: SectionHeader(title: widget.title, showIcon: false),
+                  ),
+                  Expanded(
+                    child: ListView.separated(
+                      itemCount: 20,
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(height: 12),
+                      itemBuilder: (context, index) {
+                        return ShimmerMatchTile();
+                      },
+                    ),
+                  ),
+                ],
+              )
+            : widget.matches.isEmpty
             ? Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

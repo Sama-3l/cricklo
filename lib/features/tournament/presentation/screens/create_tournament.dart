@@ -149,6 +149,9 @@ class _CreateTournamentState extends State<CreateTournament> {
                       groupMatches: [],
                       playoffMatches: [],
                       groups: [],
+                      battingStats: [],
+                      bowlingStats: [],
+                      fieldingStats: [],
                     );
                     GoRouter.of(context).push(
                       Routes.addTournamentVenues,

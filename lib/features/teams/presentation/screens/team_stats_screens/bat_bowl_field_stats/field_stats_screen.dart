@@ -10,6 +10,7 @@ class FieldStatsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<TeamPageCubit>();
+    final state = cubit.state;
     final team = cubit.state.team!;
 
     // Sort players by catches (descending)
@@ -34,6 +35,7 @@ class FieldStatsScreen extends StatelessWidget {
       child: LeaderboardTable(
         headings: ["Catch", "RunOut", "Stump"],
         data: rows,
+        loading: state.loading,
       ),
     );
   }

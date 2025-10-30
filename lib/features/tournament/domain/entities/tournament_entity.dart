@@ -4,6 +4,7 @@ import 'package:cricklo/features/login/domain/entities/location_entity.dart';
 import 'package:cricklo/features/matches/domain/entities/match_entity.dart';
 import 'package:cricklo/features/teams/domain/entities/search_user_entity.dart';
 import 'package:cricklo/features/tournament/domain/entities/group_entity.dart';
+import 'package:cricklo/features/tournament/domain/entities/player_stats_entities.dart';
 import 'package:cricklo/features/tournament/domain/entities/tournament_team_entity.dart';
 
 class TournamentEntity {
@@ -28,6 +29,9 @@ class TournamentEntity {
   final List<MatchEntity> groupMatches;
   final List<MatchEntity> playoffMatches;
   final List<GroupEntity> groups;
+  final List<TournamentBattingStatsEntity> battingStats;
+  final List<TournamentBowlingStatsEntity> bowlingStats;
+  final List<TournamentFieldingStatsEntity> fieldingStats;
 
   TournamentEntity({
     required this.id,
@@ -51,6 +55,9 @@ class TournamentEntity {
     required this.groupMatches,
     required this.playoffMatches,
     required this.groups,
+    required this.battingStats,
+    required this.bowlingStats,
+    required this.fieldingStats,
   });
 
   TournamentEntity copyWith({
@@ -75,6 +82,9 @@ class TournamentEntity {
     List<MatchEntity>? groupMatches,
     List<MatchEntity>? playoffMatches,
     List<GroupEntity>? groups,
+    List<TournamentBattingStatsEntity>? battingStats,
+    List<TournamentBowlingStatsEntity>? bowlingStats,
+    List<TournamentFieldingStatsEntity>? fieldingStats,
   }) {
     return TournamentEntity(
       maxTeams: maxTeams ?? this.maxTeams,
@@ -98,6 +108,9 @@ class TournamentEntity {
       groupMatches: groupMatches ?? this.groupMatches,
       playoffMatches: playoffMatches ?? this.playoffMatches,
       groups: groups ?? this.groups,
+      battingStats: battingStats ?? this.battingStats,
+      bowlingStats: bowlingStats ?? this.bowlingStats,
+      fieldingStats: fieldingStats ?? this.fieldingStats,
     );
   }
 }

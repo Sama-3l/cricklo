@@ -91,12 +91,14 @@ class TeamPage extends StatelessWidget {
                                 ? []
                                 : state.team!.matches,
                             title: "Team Matches",
+                            loading: state.loading,
                           ),
                           EntityTournamentsPage(
                             tournaments: state.team == null
                                 ? []
                                 : state.team!.tournaments,
                             title: "Team Tournaments",
+                            loading: state.loading,
                           ),
                         ],
                       ),

@@ -221,7 +221,11 @@ class BatStatsScreen extends StatelessWidget {
                     ["Balls", "Inn", "Runs"],
                   ][index];
 
-                  return LeaderboardTable(headings: headings, data: data);
+                  return LeaderboardTable(
+                    headings: headings,
+                    data: data,
+                    loading: state.loading,
+                  );
                 }),
               ),
             ),

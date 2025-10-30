@@ -57,6 +57,7 @@ class _TeamOverviewState extends State<TeamOverview> {
         : selectedTab == 2
         ? state.team!.teamStatsEntity!.bowlFirstLoss.abs()
         : 0;
+
     return Padding(
       padding: const EdgeInsets.only(top: 24),
       child: ListView(

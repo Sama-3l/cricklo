@@ -86,7 +86,11 @@ class TournamentTeamModel {
       name: map['teamName'] as String,
       teamLogo: map['teamLogo'] as String,
       teamBanner: map['teamBanner'] as String,
-      players: [],
+      players: map['players'] != null
+          ? (map['players'] as List<dynamic>)
+                .map((e) => TournamentPlayerModel.fromJson(e))
+                .toList()
+          : [],
       location: map["location"] == null
           ? LocationModel(area: "", city: "", state: "", lat: 0, lng: 0)
           : LocationModel.fromJson(map["location"] as Map<String, dynamic>),

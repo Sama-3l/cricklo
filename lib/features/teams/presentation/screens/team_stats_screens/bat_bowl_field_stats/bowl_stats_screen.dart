@@ -197,7 +197,11 @@ class BowlStatsScreen extends StatelessWidget {
                     ["Dots", "Balls", "Runs"],
                   ][index];
 
-                  return LeaderboardTable(headings: headings, data: data);
+                  return LeaderboardTable(
+                    headings: headings,
+                    data: data,
+                    loading: state.loading,
+                  );
                 }),
               ),
             ),

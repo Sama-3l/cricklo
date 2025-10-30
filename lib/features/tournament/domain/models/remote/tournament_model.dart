@@ -5,6 +5,7 @@ import 'package:cricklo/features/matches/domain/models/remote/match_model.dart';
 import 'package:cricklo/features/teams/domain/models/remote/search_user_model.dart';
 import 'package:cricklo/features/tournament/domain/entities/tournament_entity.dart';
 import 'package:cricklo/features/tournament/domain/models/remote/group_model.dart';
+import 'package:cricklo/features/tournament/domain/models/remote/tournament_batting_stats.dart';
 import 'package:cricklo/features/tournament/domain/models/remote/tournament_team_model.dart';
 
 class TournamentModel {
@@ -29,6 +30,9 @@ class TournamentModel {
   final List<MatchModel> groupMatches;
   final List<MatchModel> playoffMatches;
   final List<GroupModel> groups;
+  final List<TournamentBattingStatsModel> battingStats;
+  final List<TournamentBowlingStatsModel> bowlingStats;
+  final List<TournamentFieldingStatsModel> fieldingStats;
 
   TournamentModel({
     required this.id,
@@ -52,6 +56,9 @@ class TournamentModel {
     required this.groupMatches,
     required this.playoffMatches,
     required this.groups,
+    required this.battingStats,
+    required this.bowlingStats,
+    required this.fieldingStats,
   });
 
   TournamentEntity toEntity() {
@@ -77,6 +84,9 @@ class TournamentModel {
       groupMatches: groupMatches.map((e) => e.toEntity()).toList(),
       playoffMatches: playoffMatches.map((e) => e.toEntity()).toList(),
       groups: groups.map((e) => e.toEntity()).toList(),
+      battingStats: battingStats.map((e) => e.toEntity()).toList(),
+      bowlingStats: bowlingStats.map((e) => e.toEntity()).toList(),
+      fieldingStats: fieldingStats.map((e) => e.toEntity()).toList(),
     );
   }
 
@@ -115,6 +125,15 @@ class TournamentModel {
           .map((e) => MatchModel.fromEntity(e))
           .toList(),
       groups: entity.groups.map((e) => GroupModel.fromEntity(e)).toList(),
+      battingStats: entity.battingStats
+          .map((e) => TournamentBattingStatsModel.fromEntity(e))
+          .toList(),
+      bowlingStats: entity.bowlingStats
+          .map((e) => TournamentBowlingStatsModel.fromEntity(e))
+          .toList(),
+      fieldingStats: entity.fieldingStats
+          .map((e) => TournamentFieldingStatsModel.fromEntity(e))
+          .toList(),
     );
   }
 
@@ -303,6 +322,21 @@ class TournamentModel {
               ),
             ),
       groups: groups,
+      battingStats: map["playerStats"] == null
+          ? []
+          : (map["playerStats"]["batting"] as List<dynamic>)
+                .map((e) => TournamentBattingStatsModel.fromJson(e))
+                .toList(),
+      bowlingStats: map["playerStats"] == null
+          ? []
+          : (map["playerStats"]["bowling"] as List<dynamic>)
+                .map((e) => TournamentBowlingStatsModel.fromJson(e))
+                .toList(),
+      fieldingStats: map["playerStats"] == null
+          ? []
+          : (map["playerStats"]["fielding"] as List<dynamic>)
+                .map((e) => TournamentFieldingStatsModel.fromJson(e))
+                .toList(),
     );
   }
 }

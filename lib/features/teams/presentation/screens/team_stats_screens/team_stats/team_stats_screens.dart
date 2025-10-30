@@ -56,9 +56,8 @@ class TeamStatsScreens extends StatelessWidget {
   Widget build(BuildContext context) {
     final cubit = context.read<TeamPageCubit>();
     final state = cubit.state;
-
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0).copyWith(top: 24),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -96,6 +95,7 @@ class TeamStatsScreens extends StatelessWidget {
                   title: "Chases",
                   removePadding: true,
                   whiteTile: true,
+                  loading: state.loading,
                 ),
                 EntityMatchesPage(
                   matches: getTeamChasesAndDefences(
@@ -105,6 +105,7 @@ class TeamStatsScreens extends StatelessWidget {
                   title: "Defences",
                   removePadding: true,
                   whiteTile: true,
+                  loading: state.loading,
                 ),
               ],
             ),

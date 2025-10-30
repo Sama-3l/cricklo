@@ -114,6 +114,9 @@ class TournamentCubit extends Cubit<TournamentState> {
                 groupMatches: response.tournamentEntity!.groupMatches,
                 playoffMatches: response.tournamentEntity!.playoffMatches,
                 followers: response.tournamentEntity!.followers,
+                battingStats: response.tournamentEntity!.battingStats,
+                bowlingStats: response.tournamentEntity!.bowlingStats,
+                fieldingStats: response.tournamentEntity!.fieldingStats,
               ),
             ),
           );

@@ -1,4 +1,5 @@
 import 'package:cricklo/core/utils/constants/enums.dart';
+import 'package:cricklo/features/teams/domain/models/remote/player_model.dart';
 import 'package:cricklo/features/tournament/domain/entities/tournament_player_entity.dart';
 import 'package:cricklo/features/tournament/domain/models/remote/tournament_player_stats_model.dart';
 
@@ -50,6 +51,20 @@ class TournamentPlayerModel {
       batterType: batterType,
       bowlerType: bowlerType,
       stats: stats.map((x) => x.toEntity()).toList(),
+    );
+  }
+
+  PlayerModel toPlayerModel() {
+    return PlayerModel(
+      id: id,
+      playerId: playerId,
+      name: name,
+      captain: captain,
+      teamRole: teamRole,
+      playerType: playerType,
+      batterType: batterType,
+      bowlerType: bowlerType,
+      profilePic: '',
     );
   }
 

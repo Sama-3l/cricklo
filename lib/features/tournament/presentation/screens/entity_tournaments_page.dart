@@ -1,6 +1,7 @@
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/home/presentation/widgets/section_header.dart';
 import 'package:cricklo/features/tournament/domain/entities/tournament_entity.dart';
+import 'package:cricklo/features/tournament/presentation/widgets/shimmer_tournament_tile.dart';
 import 'package:cricklo/features/tournament/presentation/widgets/tournament_tile.dart';
 import 'package:flutter/material.dart';
 
@@ -30,7 +31,19 @@ class EntityTournamentsPage extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Expanded(
-            child: tournaments.isEmpty
+            child: loading
+                ? ListView.separated(
+                    itemCount: 20,
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(height: 16),
+                    itemBuilder: (context, index) {
+                      return SizedBox(
+                        height: 300,
+                        child: ShimmerTournamentTile(),
+                      );
+                    },
+                  )
+                : tournaments.isEmpty
                 ? Center(
                     child: Text(
                       "No Tournaments Yet",
