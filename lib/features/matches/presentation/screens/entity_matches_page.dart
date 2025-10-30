@@ -40,7 +40,9 @@ class _EntityMatchesPageState extends State<EntityMatchesPage> {
             ? Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: widget.removePadding ? 0 : 16,
+                    ),
                     child: SectionHeader(title: widget.title, showIcon: false),
                   ),
                   Expanded(
@@ -49,7 +51,9 @@ class _EntityMatchesPageState extends State<EntityMatchesPage> {
                       separatorBuilder: (context, index) =>
                           const SizedBox(height: 12),
                       itemBuilder: (context, index) {
-                        return ShimmerMatchTile();
+                        return ShimmerMatchTile(
+                          removePadding: widget.removePadding,
+                        );
                       },
                     ),
                   ),

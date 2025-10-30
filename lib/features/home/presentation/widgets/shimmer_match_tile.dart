@@ -3,14 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
 class ShimmerMatchTile extends StatelessWidget {
-  const ShimmerMatchTile({super.key});
+  const ShimmerMatchTile({super.key, this.removePadding = false});
+
+  final bool removePadding;
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width - 32;
 
     return Padding(
-      padding: const EdgeInsets.only(left: 16.0, top: 8, right: 16),
+      padding: EdgeInsets.only(
+        left: removePadding ? 0 : 16.0,
+        top: 8,
+        right: removePadding ? 0 : 16.0,
+      ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12),
         child: Shimmer(
