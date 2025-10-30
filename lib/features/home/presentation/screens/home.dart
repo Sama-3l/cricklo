@@ -16,9 +16,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key, this.userEntity});
+  const HomePage({super.key, this.userEntity, required this.pageController});
 
   final UserEntity? userEntity;
+  final PageController pageController;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -108,7 +109,13 @@ class _HomePageState extends State<HomePage>
                 const SizedBox(height: 24),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: SectionHeader(title: "Matches"),
+                  child: SectionHeader(
+                    title: "Matches",
+                    onTap: () {
+                      cubit.goToTab(1, context);
+                      widget.pageController.jumpToPage(1);
+                    },
+                  ),
                 ),
                 state.matchLoading
                     ? ShimmerMatchTile()
@@ -154,7 +161,13 @@ class _HomePageState extends State<HomePage>
                 const SizedBox(height: 24),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: SectionHeader(title: "Live Tournaments"),
+                  child: SectionHeader(
+                    title: "Live Tournaments",
+                    onTap: () {
+                      cubit.goToTab(2, context);
+                      widget.pageController.jumpToPage(2);
+                    },
+                  ),
                 ),
                 state.tournamentLoading
                     ? ShimmerTournamentTile()

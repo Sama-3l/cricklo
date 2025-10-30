@@ -101,7 +101,10 @@ class _ContentViewState extends State<ContentView> {
               controller: _pageController,
               onPageChanged: (index) => cubit.goToTab(index, context),
               children: [
-                HomePage(userEntity: state.user),
+                HomePage(
+                  userEntity: state.user,
+                  pageController: _pageController,
+                ),
                 MatchesPage(),
                 TournamentsScreen(),
                 AccountPage(userEntity: state.user, userMatches: state.matches),

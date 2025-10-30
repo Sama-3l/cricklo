@@ -19,7 +19,7 @@ class HomeProfileHeader extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: SectionHeader(title: "Following"),
+          child: SectionHeader(title: "Following", showIcon: false),
         ),
         Container(
           margin: EdgeInsets.only(top: 12),

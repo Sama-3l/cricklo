@@ -1,5 +1,6 @@
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class SectionHeader extends StatelessWidget {
   const SectionHeader({
@@ -7,40 +8,45 @@ class SectionHeader extends StatelessWidget {
     required this.title,
     this.subTitle,
     this.showIcon = true,
+    this.onTap,
   });
 
   final String title;
   final String? subTitle;
   final bool showIcon;
+  final Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Column(
-          children: [
-            Text(
-              title,
-              style: TextStyles.poppinsSemiBold.copyWith(
-                fontSize: 20,
-                letterSpacing: -1.2,
-                color: ColorsConstants.defaultBlack,
-              ),
-            ),
-            if (subTitle != null)
+    return GestureDetector(
+      onTap: () => onTap == null ? {} : onTap!(),
+      child: Row(
+        children: [
+          Column(
+            children: [
               Text(
-                subTitle!,
+                title,
                 style: TextStyles.poppinsSemiBold.copyWith(
-                  fontSize: 14,
-                  letterSpacing: -0.6,
-                  color: ColorsConstants.defaultBlack.withValues(alpha: 0.5),
+                  fontSize: 20,
+                  letterSpacing: -1.2,
+                  color: ColorsConstants.defaultBlack,
                 ),
               ),
-          ],
-        ),
-        const Spacer(),
-        if (showIcon) Icon(CupertinoIcons.chevron_right, size: 20),
-      ],
+              if (subTitle != null)
+                Text(
+                  subTitle!,
+                  style: TextStyles.poppinsSemiBold.copyWith(
+                    fontSize: 14,
+                    letterSpacing: -0.6,
+                    color: ColorsConstants.defaultBlack.withValues(alpha: 0.5),
+                  ),
+                ),
+            ],
+          ),
+          const Spacer(),
+          if (showIcon) Icon(CupertinoIcons.chevron_right, size: 20),
+        ],
+      ),
     );
   }
 }
