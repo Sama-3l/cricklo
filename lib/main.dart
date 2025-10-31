@@ -34,8 +34,8 @@ Future<bool> hasInternet() async {
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await initializeDependencies();
   await DotEnv().load(fileName: ".env");
+  await initializeDependencies();
   hasInternet();
 
   if (kDebugMode) {

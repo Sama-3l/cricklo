@@ -1,24 +1,24 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cricklo/core/utils/constants/methods.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/tournament/domain/entities/tournament_entity.dart';
+import 'package:cricklo/features/tournament/domain/entities/tournament_highligh_stat_entity.dart';
 import 'package:flutter/material.dart';
 
 class OverallStatsPage extends StatelessWidget {
-  const OverallStatsPage({super.key, required this.tournamentEntity});
+  const OverallStatsPage({
+    super.key,
+    required this.tournamentEntity,
+    required this.stats,
+  });
 
   final TournamentEntity tournamentEntity;
+  final List<TournamentHighlightStat> stats;
 
   @override
   Widget build(BuildContext context) {
-    final highlights = Methods.computeTournamentHighlights(
-      battingStats: tournamentEntity.battingStats,
-      bowlingStats: tournamentEntity.bowlingStats,
-    );
-
     return Padding(
       padding: const EdgeInsets.only(top: 24.0),
-      child: highlights.isEmpty
+      child: stats.isEmpty
           ? Center(
               child: Text(
                 "No Data",
@@ -35,9 +35,9 @@ class OverallStatsPage extends StatelessWidget {
                 mainAxisSpacing: 0,
                 childAspectRatio: 0.8,
               ),
-              itemCount: highlights.length,
+              itemCount: stats.length,
               itemBuilder: (context, index) {
-                final stat = highlights[index];
+                final stat = stats[index];
                 return Container(
                   margin: const EdgeInsets.all(16),
                   decoration: BoxDecoration(

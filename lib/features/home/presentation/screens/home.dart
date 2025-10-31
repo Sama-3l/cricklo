@@ -1,5 +1,4 @@
 import 'dart:ui';
-import 'package:cricklo/core/utils/constants/enums.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/core/utils/constants/widget_decider.dart';
 import 'package:cricklo/features/home/presentation/widgets/home_profile_header.dart';
@@ -80,15 +79,8 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     final cubit = context.read<MainAppCubit>();
     final state = cubit.state;
-    final allMatches =
-        state.matches
-            .where(
-              (e) =>
-                  e.teamA.inviteStatus != null ||
-                  e.matchCategory != MatchCategory.open,
-            )
-            .toList()
-          ..sort((a, b) => b.dateAndTime.compareTo(a.dateAndTime));
+    final allMatches = state.matches
+      ..sort((a, b) => b.dateAndTime.compareTo(a.dateAndTime));
 
     final matches = allMatches.length > 5
         ? allMatches.sublist(0, 5)
@@ -99,8 +91,7 @@ class _HomePageState extends State<HomePage>
         children: [
           RefreshIndicator(
             onRefresh: () async {
-              cubit.getUserMatches();
-              await cubit.getTournaments();
+              await cubit.init(null);
             },
             color: ColorsConstants.accentOrange,
             child: ListView(

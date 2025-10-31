@@ -43,6 +43,7 @@ class _ScorerMatchInitialScreenState extends State<ScorerMatchInitialScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print("${widget.matchEntity.scorer}");
     return Scaffold(
       backgroundColor: ColorsConstants.defaultWhite,
       appBar: AppBar(
@@ -87,10 +88,13 @@ class _ScorerMatchInitialScreenState extends State<ScorerMatchInitialScreen> {
               color: ColorsConstants.defaultWhite,
               width: double.infinity,
               child: PrimaryButton(
-                disabled: widget.matchEntity.teamA.inviteStatus == null
-                    ? false
-                    : widget.matchEntity.teamA.inviteStatus! == "PENDING" ||
-                          widget.matchEntity.teamB.inviteStatus! == "PENDING",
+                disabled:
+                    widget.matchEntity.teamA.inviteStatus == null ||
+                    widget.matchEntity.teamB.inviteStatus == null ||
+                    widget.matchEntity.teamA.inviteStatus! == "PENDING" ||
+                    widget.matchEntity.teamB.inviteStatus! == "PENDING" ||
+                    widget.matchEntity.scorer["inviteStatus"] == null ||
+                    widget.matchEntity.scorer["inviteStatus"] == "PENDING",
                 child: Text(
                   (widget.matchEntity.tossChoice == null &&
                           widget.matchEntity.tossWinner == null)
@@ -341,7 +345,7 @@ class _ScorerMatchInitialScreenState extends State<ScorerMatchInitialScreen> {
                           ),
                           const Spacer(),
                           Text(
-                            "INVITE ${widget.matchEntity.scorer["inviteStatus"]}",
+                            "INVITE ${widget.matchEntity.scorer["inviteStatus"] ?? "PENDING"}",
                             style: TextStyles.poppinsSemiBold.copyWith(
                               fontSize: 12,
                               letterSpacing: -0.5,

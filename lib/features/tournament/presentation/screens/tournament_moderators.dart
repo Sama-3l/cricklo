@@ -184,11 +184,18 @@ class TournamentModerators extends StatelessWidget {
                                       .profilePic!,
                                 )
                               : null,
-                          child: Icon(
-                            CupertinoIcons.person_fill,
-                            size: 16,
-                            color: ColorsConstants.defaultBlack,
-                          ),
+                          child:
+                              state
+                                      .tournamentEntity!
+                                      .moderators[index]
+                                      .profilePic !=
+                                  null
+                              ? null
+                              : Icon(
+                                  CupertinoIcons.person_fill,
+                                  size: 16,
+                                  color: ColorsConstants.defaultBlack,
+                                ),
                         ),
                         const SizedBox(width: 12),
 

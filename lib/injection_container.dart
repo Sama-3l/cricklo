@@ -136,10 +136,7 @@ Future<void> initializeDependencies() async {
   });
 
   // 🔹 Auth dependencies
-  final authHelper = AuthCookieHelper(
-    cookieJar,
-    'https://cricklo.onrender.com',
-  );
+  final authHelper = AuthCookieHelper(cookieJar, 'http://15.207.248.53:4000');
   sl.registerLazySingleton<AuthCookieHelper>(() => authHelper);
   sl.registerLazySingleton<IAuthRepository>(
     () => IAuthRepositoryImpl(authHelper),

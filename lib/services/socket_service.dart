@@ -24,7 +24,7 @@ class SocketService {
 
     // Namespace included directly in URL
     socket = IO.io(
-      'https://cricklo.onrender.com/api/v1/notify',
+      'http://15.207.248.53:4000/api/v1/notify',
       IO.OptionBuilder()
           .setTransports(['websocket']) // Flutter requires this
           .setExtraHeaders({'cookie': 'token=$token'}) // send JWT as cookie
@@ -68,7 +68,7 @@ class SocketService {
   /// Connect to match room
   void connectToMatchRoom(String matchId, BuildContext context) {
     matchSocket = IO.io(
-      'https://cricklo.onrender.com/match',
+      'http://15.207.248.53:4000/match',
       IO.OptionBuilder()
           .setTransports(['websocket'])
           .setQuery({'matchId': matchId})

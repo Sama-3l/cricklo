@@ -282,16 +282,27 @@ class MatchModel {
     // print(map['status']);
     // print(MatchStatus.values.map((e) => e.title));
     // print(
+    //   MatchStatus.values
+    //       .where(
+    //         (e) =>
+    //             e.title.toUpperCase() ==
+    //             (map['status'] as String).toUpperCase(),
+    //       )
+    //       .firstOrNull,
+    // );
+    // print(
     //   map['status'] != null
     //       ? MatchStatus.values
-    //             .where(
-    //               (e) =>
-    //                   e.title.toUpperCase() ==
-    //                   (map['status'] as String).toUpperCase(),
-    //             )
-    //             .first
+    //                 .where(
+    //                   (e) =>
+    //                       e.title.toUpperCase() ==
+    //                       (map['status'] as String).toUpperCase(),
+    //                 )
+    //                 .firstOrNull ??
+    //             MatchStatus.upcoming
     //       : MatchStatus.upcoming,
     // );
+    // print(map['tournament'] != null);
     // print(
     //   MatchModel(
     //     tournamentName: map['tournament'] != null
@@ -304,12 +315,13 @@ class MatchModel {
     //         : MatchCategory.open,
     //     matchStatus: map['status'] != null
     //         ? MatchStatus.values
-    //               .where(
-    //                 (e) =>
-    //                     e.title.toUpperCase() ==
-    //                     (map['status'] as String).toUpperCase(),
-    //               )
-    //               .first
+    //                   .where(
+    //                     (e) =>
+    //                         e.title.toUpperCase() ==
+    //                         (map['status'] as String).toUpperCase(),
+    //                   )
+    //                   .firstOrNull ??
+    //               MatchStatus.upcoming
     //         : MatchStatus.upcoming,
     //     matchID: map['matchId'] as String,
     //     dateAndTime: dateAndTime,
@@ -364,12 +376,13 @@ class MatchModel {
           : MatchCategory.open,
       matchStatus: map['status'] != null
           ? MatchStatus.values
-                .where(
-                  (e) =>
-                      e.title.toUpperCase() ==
-                      (map['status'] as String).toUpperCase(),
-                )
-                .first
+                    .where(
+                      (e) =>
+                          e.title.toUpperCase() ==
+                          (map['status'] as String).toUpperCase(),
+                    )
+                    .firstOrNull ??
+                MatchStatus.upcoming
           : MatchStatus.upcoming,
       matchID: map['matchId'] as String,
       dateAndTime: dateAndTime,

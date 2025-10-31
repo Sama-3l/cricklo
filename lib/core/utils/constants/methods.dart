@@ -12,6 +12,7 @@ import 'package:cricklo/features/scorer/domain/entities/match_player_entity.dart
 import 'package:cricklo/features/scorer/domain/entities/overs_entity.dart';
 import 'package:cricklo/features/teams/domain/entities/player_entity.dart';
 import 'package:cricklo/features/tournament/domain/entities/player_stats_entities.dart';
+import 'package:cricklo/features/tournament/domain/entities/tournament_entity.dart';
 import 'package:cricklo/features/tournament/domain/entities/tournament_highligh_stat_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -704,5 +705,21 @@ class Methods {
           logo: getTopBatter('hundreds')!.teamLogo,
         ),
     ];
+  }
+
+  static int calculateTournamentSixes(TournamentEntity entity) {
+    int p = 0;
+    for (var stats in entity.battingStats) {
+      p += stats.sixes;
+    }
+    return p;
+  }
+
+  static int calculateTournamentFours(TournamentEntity entity) {
+    int p = 0;
+    for (var stats in entity.battingStats) {
+      p += stats.fours;
+    }
+    return p;
   }
 }

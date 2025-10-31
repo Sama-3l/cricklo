@@ -60,7 +60,7 @@ class CreateMatchCubit extends Cubit<CreateMatchState> {
             "name": scorer.name,
             "inviteStatus": "PENDING",
           },
-          matchStatus: MatchStatus.ongoing,
+          matchStatus: MatchStatus.upcoming,
         );
         onComplete(matchEntity);
         GoRouter.of(context).pop();

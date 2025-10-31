@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cricklo/core/utils/common/primary_button.dart';
+import 'package:cricklo/core/utils/constants/methods.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/home/presentation/widgets/section_header.dart';
 import 'package:cricklo/features/matches/domain/entities/match_entity.dart';
+import 'package:cricklo/features/tournament/domain/entities/tournament_highligh_stat_entity.dart';
 import 'package:cricklo/features/tournament/presentation/blocs/cubits/TournamentCubit/tournament_cubit.dart';
 import 'package:cricklo/features/tournament/presentation/widgets/shimmer_team_item.dart';
 import 'package:cricklo/features/tournament/presentation/widgets/team_item.dart';
@@ -13,7 +15,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class TournamentOverview extends StatelessWidget {
-  const TournamentOverview({super.key});
+  const TournamentOverview({super.key, required this.stats});
+
+  final List<TournamentHighlightStat> stats;
 
   @override
   Widget build(BuildContext context) {
@@ -250,22 +254,33 @@ class TournamentOverview extends StatelessWidget {
             ),
             SizedBox(
               height: 156,
-              child: ListView.separated(
-                itemCount: 10,
-                scrollDirection: Axis.horizontal,
-                separatorBuilder: (context, index) => SizedBox(width: 40),
-                itemBuilder: (context, index) => Padding(
-                  padding: EdgeInsets.only(
-                    left: index == 0 ? 16.0 : 0,
-                    right: index == 9 ? 16.0 : 0,
-                  ),
-                  child: OverviewItem(
-                    topTitle: "Most Runs",
-                    title: 'Aryan Vaish',
-                    subtitle: 'Aviral All Stars',
-                  ),
-                ),
-              ),
+              child: stats.isEmpty
+                  ? Center(
+                      child: Text(
+                        "No Data",
+                        style: TextStyles.poppinsSemiBold.copyWith(
+                          fontSize: 16,
+                          letterSpacing: -0.8,
+                        ),
+                      ),
+                    )
+                  : ListView.separated(
+                      itemCount: stats.length,
+                      scrollDirection: Axis.horizontal,
+                      separatorBuilder: (context, index) => SizedBox(width: 40),
+                      itemBuilder: (context, index) => Padding(
+                        padding: EdgeInsets.only(
+                          left: index == 0 ? 16.0 : 0,
+                          right: index == 9 ? 16.0 : 0,
+                        ),
+                        child: OverviewItem(
+                          topTitle: stats[index].title,
+                          title: stats[index].playerName,
+                          subtitle: stats[index].teamName,
+                          logo: stats[index].logo,
+                        ),
+                      ),
+                    ),
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -296,7 +311,9 @@ class TournamentOverview extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "72",
+                      Methods.calculateTournamentSixes(
+                        state.tournamentEntity!,
+                      ).toString(),
                       style: TextStyles.poppinsBold.copyWith(
                         fontSize: 32,
                         letterSpacing: -1.6,
@@ -314,7 +331,9 @@ class TournamentOverview extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "126",
+                      Methods.calculateTournamentFours(
+                        state.tournamentEntity!,
+                      ).toString(),
                       style: TextStyles.poppinsBold.copyWith(
                         fontSize: 32,
                         letterSpacing: -1.6,

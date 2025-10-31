@@ -1,4 +1,5 @@
 import 'package:cricklo/features/account/presentation/widgets/stats_table_filter_tab_bar.dart';
+import 'package:cricklo/features/tournament/domain/entities/tournament_highligh_stat_entity.dart';
 import 'package:cricklo/features/tournament/presentation/blocs/cubits/TournamentCubit/tournament_cubit.dart';
 import 'package:cricklo/features/tournament/presentation/screens/tournament_overall_stats_page.dart';
 import 'package:cricklo/features/tournament/presentation/screens/tournament_bat_stats_screen.dart';
@@ -8,7 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class StatsPage extends StatelessWidget {
-  const StatsPage({super.key});
+  const StatsPage({super.key, required this.stats});
+
+  final List<TournamentHighlightStat> stats;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +20,10 @@ class StatsPage extends StatelessWidget {
     Widget buildTabContent(int index) {
       switch (index) {
         case 0:
-          return OverallStatsPage(tournamentEntity: state.tournamentEntity!);
+          return OverallStatsPage(
+            tournamentEntity: state.tournamentEntity!,
+            stats: stats,
+          );
         case 1:
           return TournamentBatStatsScreen();
         case 2:

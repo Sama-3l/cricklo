@@ -1,5 +1,6 @@
 import 'package:cricklo/core/utils/constants/enums.dart';
 import 'package:cricklo/core/utils/constants/global_variables.dart';
+import 'package:cricklo/core/utils/constants/methods.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/account/presentation/screens/teams_grid.dart';
 import 'package:cricklo/features/account/presentation/widgets/profile_tab_bar.dart';
@@ -25,6 +26,10 @@ class TournamentPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final highlights = Methods.computeTournamentHighlights(
+      battingStats: tournamentEntity.battingStats,
+      bowlingStats: tournamentEntity.bowlingStats,
+    )..where((e) => e.value != 0);
     final mainTabs = [
       'Home',
       'Matches',
@@ -84,7 +89,7 @@ class TournamentPage extends StatelessWidget {
                       child: IndexedStack(
                         index: state.selectedMainTab,
                         children: [
-                          TournamentOverview(),
+                          TournamentOverview(stats: highlights),
                           TournamentMatchesPage(),
                           TournamentModerators(),
                           TeamsGrid(
@@ -125,7 +130,7 @@ class TournamentPage extends StatelessWidget {
                             ),
                           ),
                           PointsPage(),
-                          StatsPage(),
+                          StatsPage(stats: highlights),
                         ],
                       ),
                     ),
