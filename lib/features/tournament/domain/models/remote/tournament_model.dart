@@ -283,13 +283,15 @@ class TournamentModel {
           );
     return TournamentModel(
       followers: map['followersCount'] as int? ?? 0,
-      organizerId:
-          map['organizerProfileId'] as String? ??
-          map['organizer']['profileId'] as String? ??
-          "",
+      organizerId: map['organizer'] != null
+          ? map['organizer']['profileId'] as String? ?? ""
+          : map['organizerProfileId'] as String,
       id: map['tournamentId'] as String? ?? map['tournament']['id'] as String,
       userFollow:
-          map["follows"] as bool? ?? map['tournament']["follows"] as bool,
+          map["follows"] as bool? ??
+          (map['tournament'] == null
+              ? false
+              : map['tournament']["follows"] as bool? ?? false),
       name:
           map['name'] as String? ??
           map['tournamentName'] as String? ??

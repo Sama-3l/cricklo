@@ -146,6 +146,7 @@ class TeamModel {
               .map<PlayerModel>((e) => PlayerModel.fromJson(e))
               .toList()
         : <PlayerModel>[];
+
     return TeamModel(
       inviteStatus: map['inviteStatus'] as String?,
       uuid: map['id'] as String?,
