@@ -324,11 +324,8 @@ class MainAppCubit extends Cubit<MainAppState> {
 
       final cookieJar = cookieManager.cookieJar;
 
-      final uri = Uri.parse(
-        "https://cricklo.onrender.com",
-      ); // your API base URL
+      final uri = Uri.parse("http://15.207.248.53:4000"); // your API base URL
       final cookies = await cookieJar.loadForRequest(uri);
-
       if (cookies.isNotEmpty) {
         emit(
           UpdateIndex(

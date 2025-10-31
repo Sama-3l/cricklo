@@ -77,7 +77,7 @@ class TournamentMatchesPage extends StatelessWidget {
                             title: "Create Group Matches",
                           )
                         : Text(
-                            "No Moderators Yet",
+                            "No Matches Yet",
                             style: TextStyles.poppinsSemiBold.copyWith(
                               fontSize: 24,
                               letterSpacing: -1.2,

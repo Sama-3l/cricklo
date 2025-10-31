@@ -18,78 +18,92 @@ class OverallStatsPage extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.only(top: 24.0),
-      child: GridView.builder(
-        shrinkWrap: true,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          mainAxisSpacing: 0,
-          childAspectRatio: 0.8,
-        ),
-        itemCount: highlights.length,
-        itemBuilder: (context, index) {
-          final stat = highlights[index];
-          return Container(
-            margin: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              color: ColorsConstants.onSurfaceGrey,
-              boxShadow: [
-                BoxShadow(
-                  color: ColorsConstants.defaultBlack.withValues(alpha: 0.3),
-                  blurRadius: 10,
+      child: highlights.isEmpty
+          ? Center(
+              child: Text(
+                "No Data",
+                style: TextStyles.poppinsSemiBold.copyWith(
+                  fontSize: 16,
+                  letterSpacing: -0.8,
                 ),
-              ],
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CircleAvatar(
-                  radius: 32,
-                  backgroundColor: ColorsConstants.surfaceOrange,
-                  backgroundImage: CachedNetworkImageProvider(stat.logo),
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  "${stat.value}",
-                  style: TextStyles.poppinsBold.copyWith(
-                    color: ColorsConstants.defaultBlack,
-                    fontSize: 24,
-                    letterSpacing: -1.2,
-                  ),
-                ),
-                Text(
-                  stat.title,
-                  style: TextStyles.poppinsSemiBold.copyWith(
-                    fontSize: 12,
-                    color: ColorsConstants.defaultBlack.withValues(alpha: 0.5),
-                    letterSpacing: -0.5,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  stat.playerName,
-                  style: TextStyles.poppinsBold.copyWith(
-                    color: ColorsConstants.defaultBlack,
-                    fontSize: 16,
-                    letterSpacing: -0.8,
-                  ),
-                ),
-                if (stat.teamName.isNotEmpty)
-                  Text(
-                    stat.teamName.toUpperCase(),
-                    style: TextStyles.poppinsSemiBold.copyWith(
-                      color: ColorsConstants.defaultBlack.withValues(
-                        alpha: 0.5,
+              ),
+            )
+          : GridView.builder(
+              shrinkWrap: true,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: 0,
+                childAspectRatio: 0.8,
+              ),
+              itemCount: highlights.length,
+              itemBuilder: (context, index) {
+                final stat = highlights[index];
+                return Container(
+                  margin: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    color: ColorsConstants.onSurfaceGrey,
+                    boxShadow: [
+                      BoxShadow(
+                        color: ColorsConstants.defaultBlack.withValues(
+                          alpha: 0.3,
+                        ),
+                        blurRadius: 10,
                       ),
-                      fontSize: 12,
-                      letterSpacing: -0.5,
-                    ),
+                    ],
                   ),
-              ],
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircleAvatar(
+                        radius: 32,
+                        backgroundColor: ColorsConstants.surfaceOrange,
+                        backgroundImage: CachedNetworkImageProvider(stat.logo),
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        "${stat.value}",
+                        style: TextStyles.poppinsBold.copyWith(
+                          color: ColorsConstants.defaultBlack,
+                          fontSize: 24,
+                          letterSpacing: -1.2,
+                        ),
+                      ),
+                      Text(
+                        stat.title,
+                        style: TextStyles.poppinsSemiBold.copyWith(
+                          fontSize: 12,
+                          color: ColorsConstants.defaultBlack.withValues(
+                            alpha: 0.5,
+                          ),
+                          letterSpacing: -0.5,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        stat.playerName,
+                        style: TextStyles.poppinsBold.copyWith(
+                          color: ColorsConstants.defaultBlack,
+                          fontSize: 16,
+                          letterSpacing: -0.8,
+                        ),
+                      ),
+                      if (stat.teamName.isNotEmpty)
+                        Text(
+                          stat.teamName.toUpperCase(),
+                          style: TextStyles.poppinsSemiBold.copyWith(
+                            color: ColorsConstants.defaultBlack.withValues(
+                              alpha: 0.5,
+                            ),
+                            fontSize: 12,
+                            letterSpacing: -0.5,
+                          ),
+                        ),
+                    ],
+                  ),
+                );
+              },
             ),
-          );
-        },
-      ),
     );
   }
 }

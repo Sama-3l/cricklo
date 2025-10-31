@@ -77,7 +77,7 @@ class TournamentTeamModel {
       won: map['wins'] as int? ?? 0,
       loss: map['losses'] as int? ?? 0,
       points: map['points'] as int? ?? 0,
-      nrr: map['nrr'] as String,
+      nrr: map['nrr'] as String? ?? "",
       eliminated: map['eliminated'] as bool? ?? false,
       inviteStatus: InviteStatus.values.firstWhere(
         (e) => e.title.toUpperCase() == map['inviteStatus'],

@@ -281,6 +281,7 @@ class TournamentModel {
               (x) => LocationModel.fromJson(x),
             ),
           );
+
     return TournamentModel(
       followers: map['followersCount'] as int? ?? 0,
       organizerId: map['organizer'] != null

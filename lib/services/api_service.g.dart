@@ -12,8 +12,7 @@ part of 'api_service.dart';
 
 class _ApiService implements ApiService {
   _ApiService(this._dio, {this.baseUrl, this.errorLogger}) {
-    baseUrl ??=
-        'https://commonwealth-cpu-cameras-ongoing.trycloudflare.com/api/v1/';
+    baseUrl ??= 'http://15.207.248.53:4000/api/v1/';
   }
 
   final Dio _dio;

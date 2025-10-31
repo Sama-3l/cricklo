@@ -30,9 +30,7 @@ import 'package:retrofit/http.dart';
 
 part 'api_service.g.dart';
 
-@RestApi(
-  baseUrl: "https://commonwealth-cpu-cameras-ongoing.trycloudflare.com/api/v1/",
-)
+@RestApi(baseUrl: "http://15.207.248.53:4000/api/v1/")
 abstract class ApiService {
   factory ApiService(Dio dio, {String baseUrl}) = _ApiService;
 
