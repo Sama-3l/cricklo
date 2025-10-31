@@ -50,8 +50,9 @@ class PointsTable extends StatelessWidget {
                       color: ColorsConstants.defaultBlack,
                     ),
                   ),
-                  if (state.tournamentEntity!.organizerId ==
-                      GlobalVariables.user!.profileId) ...[
+                  if (GlobalVariables.user != null &&
+                      state.tournamentEntity!.organizerId ==
+                          GlobalVariables.user!.profileId) ...[
                     const SizedBox(height: 8),
                     SecondaryButton(
                       title: "Add Team",

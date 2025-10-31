@@ -28,8 +28,9 @@ class TournamentModerators extends StatelessWidget {
           horizontal: 16.0,
         ).copyWith(bottom: 16),
         child:
-            state.tournamentEntity!.organizerId ==
-                GlobalVariables.user!.profileId
+            GlobalVariables.user != null &&
+                state.tournamentEntity!.organizerId ==
+                    GlobalVariables.user!.profileId
             ? SizedBox(
                 width: double.infinity,
                 child: PrimaryButton(

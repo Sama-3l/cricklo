@@ -23,7 +23,8 @@ class PointsPage extends StatelessWidget {
             padding: const EdgeInsets.only(top: 24.0),
             child: Column(
               children: [
-                if (state.tournamentEntity!.organizerId ==
+                if (GlobalVariables.user != null &&
+                    state.tournamentEntity!.organizerId ==
                         GlobalVariables.user!.profileId &&
                     state.tournamentEntity!.groupMatches.isEmpty &&
                     !state.loading)
@@ -99,7 +100,8 @@ class PointsPage extends StatelessWidget {
                                         showIcon: false,
                                       ),
                                     ),
-                                    if (state.tournamentEntity!.organizerId ==
+                                    if (GlobalVariables.user != null &&
+                                        state.tournamentEntity!.organizerId ==
                                             GlobalVariables.user!.profileId &&
                                         state
                                             .tournamentEntity!
@@ -255,8 +257,9 @@ class PointsPage extends StatelessWidget {
                       )
                     : state.tournamentEntity == null ||
                           state.tournamentEntity!.groups.isEmpty
-                    ? state.tournamentEntity!.organizerId ==
-                              GlobalVariables.user!.profileId
+                    ? GlobalVariables.user != null &&
+                              state.tournamentEntity!.organizerId ==
+                                  GlobalVariables.user!.profileId
                           ? Expanded(
                               child: Center(
                                 child: Padding(

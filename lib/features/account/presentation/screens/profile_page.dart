@@ -76,53 +76,58 @@ class ProfilePage extends StatelessWidget {
               );
             }
 
-            return Padding(
-              padding: const EdgeInsets.only(top: 24.0),
-              child: Column(
-                children: [
-                  ProfileTabBar(
-                    onTap: (index) => cubit.changeMainTab(index),
-                    mainTabs: mainTabs,
-                    selectedMainTab: state.selectedMainTab,
-                  ),
-
-                  // CONTENT
-                  Expanded(
-                    child: IndexedStack(
-                      index: state.selectedMainTab,
-                      children: [
-                        // Player Overview
-                        PlayerOverview(
-                          userEntity: state.userEntity!,
-                          onFollow: () => cubit.followButton(context),
-                          follow: state.follow,
-                        ),
-
-                        StatisticsPage(
-                          userEntity: state.userEntity!,
-                          selectedStatisticsTab: state.selectedStatisticsTab,
-                          changeStatisticsTab: (index) =>
-                              cubit.changeStatisticsTab(index),
-                        ),
-
-                        TeamsGrid(
-                          loading: state.teamsLoading,
-                          teams: state.teams,
-                          onTap: (team) => GoRouter.of(context).pushNamed(
-                            Routes.teamPage,
-                            extra: [team, <MatchEntity>[]],
-                          ),
-                        ),
-                        EntityMatchesPage(
-                          matches: state.userEntity!.userMatches,
-                        ),
-                        EntityTournamentsPage(
-                          tournaments: state.userEntity!.tournaments,
-                        ),
-                      ],
+            return Container(
+              color: state.selectedMainTab == 3 || state.selectedMainTab == 4
+                  ? ColorsConstants.onSurfaceGrey
+                  : ColorsConstants.defaultWhite,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 24.0),
+                child: Column(
+                  children: [
+                    ProfileTabBar(
+                      onTap: (index) => cubit.changeMainTab(index),
+                      mainTabs: mainTabs,
+                      selectedMainTab: state.selectedMainTab,
                     ),
-                  ),
-                ],
+
+                    // CONTENT
+                    Expanded(
+                      child: IndexedStack(
+                        index: state.selectedMainTab,
+                        children: [
+                          // Player Overview
+                          PlayerOverview(
+                            userEntity: state.userEntity!,
+                            onFollow: () => cubit.followButton(context),
+                            follow: state.follow,
+                          ),
+
+                          StatisticsPage(
+                            userEntity: state.userEntity!,
+                            selectedStatisticsTab: state.selectedStatisticsTab,
+                            changeStatisticsTab: (index) =>
+                                cubit.changeStatisticsTab(index),
+                          ),
+
+                          TeamsGrid(
+                            loading: state.teamsLoading,
+                            teams: state.teams,
+                            onTap: (team) => GoRouter.of(context).pushNamed(
+                              Routes.teamPage,
+                              extra: [team, <MatchEntity>[]],
+                            ),
+                          ),
+                          EntityMatchesPage(
+                            matches: state.userEntity!.userMatches,
+                          ),
+                          EntityTournamentsPage(
+                            tournaments: state.userEntity!.tournaments,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             );
           },

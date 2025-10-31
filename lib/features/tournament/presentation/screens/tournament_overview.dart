@@ -2,12 +2,15 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cricklo/core/utils/common/primary_button.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/home/presentation/widgets/section_header.dart';
+import 'package:cricklo/features/matches/domain/entities/match_entity.dart';
 import 'package:cricklo/features/tournament/presentation/blocs/cubits/TournamentCubit/tournament_cubit.dart';
 import 'package:cricklo/features/tournament/presentation/widgets/shimmer_team_item.dart';
 import 'package:cricklo/features/tournament/presentation/widgets/team_item.dart';
 import 'package:cricklo/features/tournament/presentation/widgets/tournament_details_header.dart';
+import 'package:cricklo/routes/app_route_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class TournamentOverview extends StatelessWidget {
   const TournamentOverview({super.key});
@@ -207,14 +210,27 @@ class TournamentOverview extends StatelessWidget {
                           left: index == 0 ? 16.0 : 0,
                           right: index == 9 ? 16.0 : 0,
                         ),
-                        child: OverviewItem(
-                          topTitle: state
-                              .tournamentEntity!
-                              .teams[index]
-                              .inviteStatus
-                              .title,
-                          title: state.tournamentEntity!.teams[index].name,
-                          logo: state.tournamentEntity!.teams[index].teamLogo,
+                        child: InkWell(
+                          onTap: () {
+                            GoRouter.of(context).push(
+                              Routes.teamPage,
+                              extra: [
+                                state.tournamentEntity!.teams[index]
+                                    .toTeamEntity(),
+                                <MatchEntity>[],
+                              ],
+                            );
+                          },
+                          borderRadius: BorderRadius.circular(72),
+                          child: OverviewItem(
+                            topTitle: state
+                                .tournamentEntity!
+                                .teams[index]
+                                .inviteStatus
+                                .title,
+                            title: state.tournamentEntity!.teams[index].name,
+                            logo: state.tournamentEntity!.teams[index].teamLogo,
+                          ),
                         ),
                       ),
                     ),

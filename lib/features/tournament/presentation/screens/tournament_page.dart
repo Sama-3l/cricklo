@@ -98,7 +98,7 @@ class TournamentPage extends StatelessWidget {
                               extra: [team, <MatchEntity>[]],
                             ),
                             floatingButton: GlobalVariables.user == null
-                                ? state.tournamentEntity!.spotsLeft > 0
+                                ? false
                                 : state.tournamentEntity!.spotsLeft > 0 &&
                                       state.tournamentEntity!.organizerId ==
                                           GlobalVariables.user!.profileId,

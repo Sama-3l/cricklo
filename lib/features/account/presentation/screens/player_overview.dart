@@ -80,8 +80,9 @@ class _PlayerOverviewState extends State<PlayerOverview> {
                   const SizedBox(height: 16),
                   Row(
                     children: [
-                      if (widget.userEntity.profileId !=
-                          GlobalVariables.user!.profileId) ...[
+                      if (GlobalVariables.user != null &&
+                          widget.userEntity.profileId !=
+                              GlobalVariables.user!.profileId) ...[
                         Expanded(
                           child: PrimaryButton(
                             padding: EdgeInsets.symmetric(vertical: 12),
