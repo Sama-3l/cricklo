@@ -43,7 +43,6 @@ class _ScorerMatchInitialScreenState extends State<ScorerMatchInitialScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print("${widget.matchEntity.scorer}");
     return Scaffold(
       backgroundColor: ColorsConstants.defaultWhite,
       appBar: AppBar(

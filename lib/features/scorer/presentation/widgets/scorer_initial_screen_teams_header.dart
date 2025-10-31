@@ -20,9 +20,7 @@ class ScorerInitialScreenTeamsHeader extends StatelessWidget {
               teamId: matchEntity.teamA.id,
               teamLogo: matchEntity.teamA.teamLogo,
               teamName: matchEntity.teamA.name,
-              inviteAccepted:
-                  matchEntity.teamA.inviteStatus == "ACCEPTED" ||
-                  matchEntity.teamA.inviteStatus == null,
+              inviteAccepted: matchEntity.teamA.inviteStatus == "ACCEPTED",
             ),
           ),
           const SizedBox(width: 16),
@@ -32,9 +30,7 @@ class ScorerInitialScreenTeamsHeader extends StatelessWidget {
               teamId: matchEntity.teamB.id,
               teamLogo: matchEntity.teamB.teamLogo,
               teamName: matchEntity.teamB.name,
-              inviteAccepted:
-                  matchEntity.teamB.inviteStatus == "ACCEPTED" ||
-                  matchEntity.teamB.inviteStatus == null,
+              inviteAccepted: matchEntity.teamB.inviteStatus == "ACCEPTED",
             ),
           ),
         ],
