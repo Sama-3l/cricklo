@@ -45,6 +45,10 @@ class MatchTile extends StatelessWidget {
             GoRouter.of(
               context,
             ).pushNamed(Routes.scorerInitialPage, extra: matchEntity);
+          } else if (matchEntity.matchStatus == MatchStatus.ongoing) {
+            GoRouter.of(
+              context,
+            ).pushNamed(Routes.scorerMatchCenter, extra: [matchEntity, true]);
           } else if (matchEntity.matchStatus == MatchStatus.completed) {
             GoRouter.of(
               context,
