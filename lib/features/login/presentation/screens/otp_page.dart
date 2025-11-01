@@ -56,6 +56,7 @@ class _OtpPageState extends State<OtpPage> {
         final cubit = context.read<OtpPageCubit>();
         return Scaffold(
           resizeToAvoidBottomInset: false,
+          backgroundColor: ColorsConstants.defaultWhite,
           appBar: AppBar(
             leading: IconButton(
               onPressed: () => GoRouter.of(context).pop(),

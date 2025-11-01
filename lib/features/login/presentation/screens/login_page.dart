@@ -26,6 +26,7 @@ class _LoginPageState extends State<LoginPage> {
         builder: (context, state) {
           final cubit = context.read<LoginPageCubit>();
           return Scaffold(
+            backgroundColor: ColorsConstants.defaultWhite,
             appBar: AppBar(
               leading: IconButton(
                 onPressed: () =>

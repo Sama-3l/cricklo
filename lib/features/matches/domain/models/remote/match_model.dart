@@ -16,6 +16,8 @@ class MatchModel {
   final String tournamentName;
   bool abandoned;
   bool draw;
+  bool follows;
+  int followCount;
   final TeamModel teamB;
   final LocationModel? location;
   final Map<String, dynamic> scorer;
@@ -40,6 +42,8 @@ class MatchModel {
     required this.location,
     required this.scorer,
     this.draw = false,
+    required this.follows,
+    required this.followCount,
     this.tossWinner,
     this.tossChoice,
     this.winner,
@@ -61,6 +65,8 @@ class MatchModel {
     TeamModel? teamB,
     bool? abandoned,
     bool? draw,
+    bool? follows,
+    int? followCount,
     LocationModel? location,
     Map<String, dynamic>? scorer,
     MatchStatus? matchStatus,
@@ -75,6 +81,8 @@ class MatchModel {
       matchType: matchType ?? this.matchType,
       teamA: teamA ?? this.teamA,
       draw: draw ?? this.draw,
+      follows: follows ?? this.follows,
+      followCount: followCount ?? this.followCount,
       teamB: teamB ?? this.teamB,
       location: location ?? this.location,
       scorer: scorer ?? this.scorer,
@@ -98,6 +106,8 @@ class MatchModel {
       'tossWinner': tossWinner,
       'tossChoice': tossChoice?.name,
       'winner': winner,
+      'follows': follows,
+      'followCount': followCount,
       'teamAScore': teamAScore?.toJson(),
       'teamBScore': teamBScore?.toJson(),
       'endDateTime': endDateTime?.toIso8601String(),
@@ -122,10 +132,12 @@ class MatchModel {
       tossWinner: tossWinner,
       tossChoice: tossChoice,
       winner: winner,
+      follows: follows,
       teamAScore: teamAScore?.toEntity(),
       teamBScore: teamBScore?.toEntity(),
       endDateTime: endDateTime,
       matchStatus: matchStatus,
+      followCount: followCount,
     );
   }
 
@@ -366,6 +378,8 @@ class MatchModel {
     //   ),
     // );
     return MatchModel(
+      follows: map['follows'] as bool? ?? false,
+      followCount: map['followCount'] as int? ?? 0,
       tournamentName: map['tournament'] != null
           ? map['tournament']['tournamentName'] ?? map['tournament']['name']
           : "",
@@ -430,6 +444,8 @@ class MatchModel {
   factory MatchModel.fromEntity(MatchEntity entity) {
     return MatchModel(
       tournamentName: entity.tournamentName,
+      followCount: entity.followCount,
+      follows: entity.follows,
       matchID: entity.matchID,
       matchStatus: entity.matchStatus,
       matchCategory: entity.matchCategory,

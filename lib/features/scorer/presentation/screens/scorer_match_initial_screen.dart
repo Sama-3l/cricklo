@@ -2,6 +2,7 @@ import 'package:cricklo/core/utils/common/primary_button.dart';
 import 'package:cricklo/core/utils/common/textfield.dart';
 import 'package:cricklo/core/utils/constants/enums.dart';
 import 'package:cricklo/core/utils/constants/global_variables.dart';
+import 'package:cricklo/core/utils/constants/methods.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/features/matches/domain/entities/match_entity.dart';
 import 'package:cricklo/features/scorer/presentation/widgets/scorer_dialogs.dart';
@@ -87,13 +88,7 @@ class _ScorerMatchInitialScreenState extends State<ScorerMatchInitialScreen> {
               color: ColorsConstants.defaultWhite,
               width: double.infinity,
               child: PrimaryButton(
-                disabled:
-                    widget.matchEntity.teamA.inviteStatus == null ||
-                    widget.matchEntity.teamB.inviteStatus == null ||
-                    widget.matchEntity.teamA.inviteStatus! == "PENDING" ||
-                    widget.matchEntity.teamB.inviteStatus! == "PENDING" ||
-                    widget.matchEntity.scorer["inviteStatus"] == null ||
-                    widget.matchEntity.scorer["inviteStatus"] == "PENDING",
+                disabled: Methods.isMatchStartButtonActive(widget.matchEntity),
                 child: Text(
                   (widget.matchEntity.tossChoice == null &&
                           widget.matchEntity.tossWinner == null)
@@ -344,7 +339,7 @@ class _ScorerMatchInitialScreenState extends State<ScorerMatchInitialScreen> {
                           ),
                           const Spacer(),
                           Text(
-                            "INVITE ${widget.matchEntity.scorer["inviteStatus"] ?? "PENDING"}",
+                            "INVITE ${widget.matchEntity.tournamentName.isNotEmpty ? "ACCEPTED" : widget.matchEntity.scorer["inviteStatus"] ?? "PENDING"}",
                             style: TextStyles.poppinsSemiBold.copyWith(
                               fontSize: 12,
                               letterSpacing: -0.5,

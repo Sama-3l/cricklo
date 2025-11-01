@@ -1,3 +1,4 @@
+import 'package:cricklo/core/utils/common/primary_button.dart';
 import 'package:cricklo/core/utils/constants/enums.dart';
 import 'package:cricklo/core/utils/constants/methods.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
@@ -6,8 +7,10 @@ import 'package:cricklo/features/scorer/presentation/blocs/cubits/ScorerMatchCen
 import 'package:cricklo/features/scorer/presentation/widgets/ball_data_row.dart';
 import 'package:cricklo/features/scorer/presentation/widgets/score_center.dart';
 import 'package:cricklo/features/scorer/presentation/widgets/summary_stat_row.dart';
+import 'package:cricklo/routes/app_route_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class ScorerSummaryTab extends StatefulWidget {
   const ScorerSummaryTab({super.key});
@@ -127,14 +130,72 @@ class _ScorerSummaryTabState extends State<ScorerSummaryTab> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            SummaryStatRow(
-                              title: "Overs:",
-                              stat:
-                                  "${currInnings.overs} ${state.matchCenterEntity!.matchType != MatchType.test ? "/ ${state.matchCenterEntity!.overs}" : ""}",
-                              horizontalSpace:
-                                  state.matchCenterEntity!.innings.length > 1
-                                  ? 46
-                                  : 20,
+                            Row(
+                              children: [
+                                SummaryStatRow(
+                                  title: "Overs:",
+                                  stat:
+                                      "${currInnings.overs} ${state.matchCenterEntity!.matchType != MatchType.test ? "/ ${state.matchCenterEntity!.overs}" : ""}",
+                                  horizontalSpace:
+                                      state.matchCenterEntity!.innings.length >
+                                          1
+                                      ? 46
+                                      : 20,
+                                ),
+                                const Spacer(),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 16.0),
+                                  child: InkWell(
+                                    borderRadius: BorderRadius.circular(24),
+                                    onTap: () => GoRouter.of(context).push(
+                                      Routes.followersPage,
+                                      extra: [
+                                        state.matchEntity!.matchID,
+                                        EntityType.match,
+                                      ],
+                                    ),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(24),
+                                        border: Border.all(
+                                          width: 1,
+                                          color: ColorsConstants.defaultBlack,
+                                        ),
+                                      ),
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 8,
+                                        vertical: 4,
+                                      ),
+                                      // margin: EdgeInsets.only(top: 16, right: 16),
+                                      child: Center(
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Icon(
+                                              Icons.people,
+                                              size: 12,
+                                              color:
+                                                  ColorsConstants.defaultBlack,
+                                            ),
+                                            const SizedBox(width: 8),
+                                            Text(
+                                              state.matchEntity!.followCount
+                                                  .toString(),
+                                              style: TextStyles.poppinsSemiBold
+                                                  .copyWith(
+                                                    color: ColorsConstants
+                                                        .defaultBlack,
+                                                    fontSize: 12,
+                                                    letterSpacing: -0.8,
+                                                  ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                             SizedBox(
                               height:
@@ -286,6 +347,55 @@ class _ScorerSummaryTabState extends State<ScorerSummaryTab> {
                     color: ColorsConstants.accentOrange,
                   ),
                   child: Center(child: ScoreKeepingCenter()),
+                ),
+              ),
+            if (state.spectator)
+              Expanded(
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0,
+                    ).copyWith(bottom: 32),
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: PrimaryButton(
+                        disabled: false,
+                        color: state.matchEntity!.follows
+                            ? ColorsConstants.defaultBlack
+                            : ColorsConstants.urlBlue,
+                        onPress: () => cubit.followButton(context),
+                        child: state.matchEntity!.follows
+                            ? Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    "Followed",
+                                    style: TextStyles.poppinsSemiBold.copyWith(
+                                      fontSize: 10,
+                                      letterSpacing: -0.5,
+                                      color: ColorsConstants.defaultWhite,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Icon(
+                                    Icons.check_circle_outline_rounded,
+                                    color: ColorsConstants.defaultWhite,
+                                    size: 12,
+                                  ),
+                                ],
+                              )
+                            : Text(
+                                "Follow Tournament",
+                                style: TextStyles.poppinsSemiBold.copyWith(
+                                  fontSize: 10,
+                                  letterSpacing: -0.5,
+                                  color: ColorsConstants.defaultWhite,
+                                ),
+                              ),
+                      ),
+                    ),
+                  ),
                 ),
               ),
           ],

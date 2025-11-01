@@ -30,6 +30,7 @@ class _SetPinPageState extends State<SetPinPage> {
         final cubit = context.read<SetPinCubit>();
         return Scaffold(
           resizeToAvoidBottomInset: false,
+          backgroundColor: ColorsConstants.defaultWhite,
           appBar: AppBar(
             leading: IconButton(
               onPressed: () => GoRouter.of(context).pop(),

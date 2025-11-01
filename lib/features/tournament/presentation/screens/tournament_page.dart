@@ -26,10 +26,6 @@ class TournamentPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final highlights = Methods.computeTournamentHighlights(
-      battingStats: tournamentEntity.battingStats,
-      bowlingStats: tournamentEntity.bowlingStats,
-    )..where((e) => e.value != 0);
     final mainTabs = [
       'Home',
       'Matches',
@@ -44,6 +40,10 @@ class TournamentPage extends StatelessWidget {
       child: BlocBuilder<TournamentCubit, TournamentState>(
         builder: (context, state) {
           final cubit = context.read<TournamentCubit>();
+          final highlights = Methods.computeTournamentHighlights(
+            battingStats: state.tournamentEntity!.battingStats,
+            bowlingStats: state.tournamentEntity!.bowlingStats,
+          ).where((e) => e.value != 0).toList();
           return Scaffold(
             backgroundColor: ColorsConstants.defaultWhite,
             appBar: AppBar(

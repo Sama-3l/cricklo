@@ -668,6 +668,7 @@ class Methods {
           playerName: getTopBatter('runs')!.playerName,
           value: getTopBatter('runs')!.runs,
           logo: getTopBatter('runs')!.teamLogo,
+          teamName: getTopBatter('runs')!.teamName,
         ),
       if (getTopBowler('wickets') != null)
         TournamentHighlightStat(
@@ -675,6 +676,7 @@ class Methods {
           playerName: getTopBowler('wickets')!.playerName,
           value: getTopBowler('wickets')!.wickets,
           logo: getTopBowler('wickets')!.teamLogo,
+          teamName: getTopBowler('wickets')!.teamName,
         ),
       if (getTopBatter('sixes') != null)
         TournamentHighlightStat(
@@ -682,6 +684,7 @@ class Methods {
           playerName: getTopBatter('sixes')!.playerName,
           value: getTopBatter('sixes')!.sixes,
           logo: getTopBatter('sixes')!.teamLogo,
+          teamName: getTopBatter('sixes')!.teamName,
         ),
       if (getTopBatter('fours') != null)
         TournamentHighlightStat(
@@ -689,6 +692,7 @@ class Methods {
           playerName: getTopBatter('fours')!.playerName,
           value: getTopBatter('fours')!.fours,
           logo: getTopBatter('fours')!.teamLogo,
+          teamName: getTopBatter('fours')!.teamName,
         ),
       if (getTopBatter('fifties') != null)
         TournamentHighlightStat(
@@ -696,6 +700,7 @@ class Methods {
           playerName: getTopBatter('fifties')!.playerName,
           value: getTopBatter('fifties')!.fifties,
           logo: getTopBatter('fifties')!.teamLogo,
+          teamName: getTopBatter('fifties')!.teamName,
         ),
       if (getTopBatter('hundreds') != null)
         TournamentHighlightStat(
@@ -703,6 +708,7 @@ class Methods {
           playerName: getTopBatter('hundreds')!.playerName,
           value: getTopBatter('hundreds')!.hundreds,
           logo: getTopBatter('hundreds')!.teamLogo,
+          teamName: getTopBatter('hundreds')!.teamName,
         ),
     ];
   }
@@ -721,5 +727,20 @@ class Methods {
       p += stats.fours;
     }
     return p;
+  }
+
+  static isMatchStartButtonActive(MatchEntity matchEntity) {
+    if (matchEntity.teamA.inviteStatus == null ||
+        matchEntity.teamB.inviteStatus == null) {
+      return false;
+    }
+    if (matchEntity.teamA.inviteStatus! == "PENDING" ||
+        matchEntity.teamB.inviteStatus! == "PENDING") {
+      return true;
+    }
+    if (matchEntity.scorer["inviteStatus"] == null ||
+        matchEntity.scorer["inviteStatus"] == "PENDING") {
+      return true;
+    }
   }
 }

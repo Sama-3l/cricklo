@@ -46,7 +46,9 @@ class CreateMatchCubit extends Cubit<CreateMatchState> {
     response.fold((_) {}, (response) {
       if (response.success) {
         final MatchEntity matchEntity = MatchEntity(
+          follows: false,
           tournamentName: '',
+          followCount: 0,
           matchCategory: MatchCategory.open,
           matchID: response.matchId,
           dateAndTime: Methods.combineDateAndTime(date, time),

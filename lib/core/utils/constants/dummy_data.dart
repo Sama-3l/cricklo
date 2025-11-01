@@ -322,6 +322,8 @@ final List<PlayerEntity> dummyPlayers = [
 ];
 
 final MatchEntity dummyMatchScheduled = MatchEntity(
+  followCount: 0,
+  follows: false,
   matchCategory: MatchCategory.open,
   tournamentName: '',
   matchStatus: MatchStatus.ongoing,
@@ -343,6 +345,8 @@ final MatchEntity dummyMatchScheduled = MatchEntity(
 );
 
 final MatchEntity dummyMatchLive = MatchEntity(
+  followCount: 0,
+  follows: false,
   matchCategory: MatchCategory.open,
   tournamentName: '',
   matchStatus: MatchStatus.ongoing,
@@ -364,6 +368,8 @@ final MatchEntity dummyMatchLive = MatchEntity(
 );
 
 final MatchEntity dummyMatchTossDone = MatchEntity(
+  followCount: 0,
+  follows: false,
   matchCategory: MatchCategory.open,
   tournamentName: '',
   matchStatus: MatchStatus.ongoing,
@@ -393,6 +399,8 @@ final MatchEntity dummyMatchTossDone = MatchEntity(
 );
 
 final MatchEntity dummyMatchInningsTwo = MatchEntity(
+  followCount: 0,
+  follows: false,
   matchCategory: MatchCategory.open,
   tournamentName: '',
   matchStatus: MatchStatus.ongoing,
@@ -428,6 +436,8 @@ final MatchEntity dummyMatchInningsTwo = MatchEntity(
 );
 
 final MatchEntity dummyMatchDone = MatchEntity(
+  followCount: 0,
+  follows: false,
   matchCategory: MatchCategory.open,
   tournamentName: '',
   matchStatus: MatchStatus.ongoing,

@@ -21,6 +21,8 @@ class MatchEntity {
   TossChoice? tossChoice;
   String? winner;
   bool draw;
+  bool follows;
+  int followCount;
   final OverallScoreEntity? teamAScore;
   final OverallScoreEntity? teamBScore;
   final DateTime? endDateTime;
@@ -39,6 +41,8 @@ class MatchEntity {
     required this.location,
     required this.scorer,
     this.draw = false,
+    required this.follows,
+    required this.followCount,
     this.tossWinner,
     this.tossChoice,
     this.winner,
@@ -56,11 +60,13 @@ class MatchEntity {
     DateTime? dateAndTime,
     DateTime? endDateTime,
     int? overs,
+    int? followCount,
     MatchType? matchType,
     TeamEntity? teamA,
     TeamEntity? teamB,
     bool? abandoned,
     bool? draw,
+    bool? follows,
     LocationEntity? location,
     Map<String, dynamic>? scorer,
   }) {
@@ -73,12 +79,14 @@ class MatchEntity {
       endDateTime: endDateTime ?? this.endDateTime,
       overs: overs ?? this.overs,
       draw: draw ?? this.draw,
+      follows: follows ?? this.follows,
       matchType: matchType ?? this.matchType,
       teamA: teamA ?? this.teamA,
       teamB: teamB ?? this.teamB,
       location: location ?? this.location,
       scorer: scorer ?? this.scorer,
       abandoned: abandoned ?? this.abandoned,
+      followCount: followCount ?? this.followCount,
     );
   }
 }

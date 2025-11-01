@@ -6,6 +6,9 @@ import 'package:cricklo/core/utils/constants/enums.dart';
 import 'package:cricklo/core/utils/constants/methods.dart';
 import 'package:cricklo/core/utils/constants/theme.dart';
 import 'package:cricklo/core/utils/constants/widget_decider.dart';
+import 'package:cricklo/features/follow/data/entities/follow_usecase_entity.dart';
+import 'package:cricklo/features/follow/data/usecases/follow_usecase.dart';
+import 'package:cricklo/features/follow/data/usecases/unfollow_usecase.dart';
 import 'package:cricklo/features/matches/domain/entities/match_entity.dart';
 import 'package:cricklo/features/scorer/data/entities/listen_to_match_stream_usecase_entity.dart';
 import 'package:cricklo/features/scorer/data/entities/scorer_request_usecase_entity.dart';
@@ -43,6 +46,8 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
   final ScorerOverEndUsecase _scorerOverEndUsecase;
   final ScorerUpdateUsecase _scorerUpdateUsecase;
   final StartMatchUsecase _startMatchUsecase;
+  final FollowUsecase _followUsecase;
+  final UnFollowUsecase _unFollowUsecase;
   StreamSubscription<Either<Failure, BroadcastWrapperEntity>>? _subscription;
 
   ScorerMatchCenterCubit(
@@ -53,6 +58,8 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
     this._scorerOverEndUsecase,
     this._scorerUpdateUsecase,
     this._startMatchUsecase,
+    this._followUsecase,
+    this._unFollowUsecase,
   ) : super(
         ScorerMatchCenterUpdate(
           loading: false,
@@ -62,6 +69,97 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
           spectator: false,
         ),
       );
+
+  void followButton(BuildContext context) async {
+    if (state.matchEntity!.follows) {
+      state.matchEntity!.followCount--;
+    } else {
+      state.matchEntity!.followCount++;
+    }
+    state.matchEntity!.follows = !state.matchEntity!.follows;
+    emit(state.copyWith());
+    if (state.matchEntity!.follows) {
+      final response = await _followUsecase(
+        FollowUsecaseEntity(
+          entityType: EntityType.match,
+          entityId: state.matchEntity!.matchID,
+        ),
+      );
+      response.fold(
+        (_) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              // behavior: SnackBarBehavior.floating,
+              backgroundColor: ColorsConstants.defaultBlack,
+              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+              content: Text(
+                "Something went wrong",
+                style: TextStyles.poppinsSemiBold.copyWith(
+                  fontSize: 16,
+                  letterSpacing: -0.8,
+                  color: ColorsConstants.defaultWhite,
+                ),
+              ),
+            ),
+          );
+          state.matchEntity!.followCount--;
+          state.matchEntity!.follows = !state.matchEntity!.follows;
+          emit(state.copyWith());
+        },
+        (response) {
+          if (!response.success) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                // behavior: SnackBarBehavior.floating,
+                backgroundColor: ColorsConstants.defaultBlack,
+                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                content: Text(
+                  "Something went wrong",
+                  style: TextStyles.poppinsSemiBold.copyWith(
+                    fontSize: 16,
+                    letterSpacing: -0.8,
+                    color: ColorsConstants.defaultWhite,
+                  ),
+                ),
+              ),
+            );
+            state.matchEntity!.followCount--;
+            state.matchEntity!.follows = !state.matchEntity!.follows;
+            emit(state.copyWith());
+          }
+        },
+      );
+    } else {
+      final response = await _unFollowUsecase(
+        FollowUsecaseEntity(
+          entityType: EntityType.match,
+          entityId: state.matchEntity!.matchID,
+        ),
+      );
+      response.fold((_) {}, (response) {
+        if (!response.success) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              // behavior: SnackBarBehavior.floating,
+              backgroundColor: ColorsConstants.defaultBlack,
+              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+              content: Text(
+                "Something went wrong",
+                style: TextStyles.poppinsSemiBold.copyWith(
+                  fontSize: 16,
+                  letterSpacing: -0.8,
+                  color: ColorsConstants.defaultWhite,
+                ),
+              ),
+            ),
+          );
+          state.matchEntity!.followCount++;
+          state.matchEntity!.follows = !state.matchEntity!.follows;
+          emit(state.copyWith());
+        }
+      });
+    }
+  }
 
   void connectToMatchSocket(BuildContext context, String matchId) {
     _subscription?.cancel();
@@ -294,7 +392,7 @@ class ScorerMatchCenterCubit extends Cubit<ScorerMatchCenterState> {
             oversData: [],
           ),
         );
-        if (response.match!.tossChoice == null) {
+        if (response.match!.tossChoice == null && !state.spectator) {
           final response = await _startMatchUsecase(
             ScorerRequestUsecaseEntity(
               undo: false,

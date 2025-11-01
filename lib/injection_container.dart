@@ -406,6 +406,8 @@ void _scorerMatchDependencies() {
       sl<ScorerOverEndUsecase>(),
       sl<ScorerUpdateUsecase>(),
       sl<StartMatchUsecase>(),
+      sl<FollowUsecase>(),
+      sl<UnFollowUsecase>(),
     ),
   );
 }

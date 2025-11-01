@@ -83,7 +83,7 @@ class MainAppCubit extends Cubit<MainAppState> {
               matchLoading: false,
               tournamentLoading: false,
               tournaments: state.tournaments,
-              matches: state.matches,
+              matches: [],
               currentIndex: 0,
               showOptions: false,
               user: null,
